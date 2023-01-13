@@ -1,0 +1,3 @@
+git pull [원격저장소명] [원격저장소 브랜치명]
+git branch [만들 브랜치명]
+git switch [바꿀 브랜치명]
