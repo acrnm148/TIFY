@@ -32,6 +32,16 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
+    implementation 'com.google.code.gson:gson:2.9.0' //gson
+    implementation "org.springframework.boot:spring-boot-starter-actuator" //actuator : 스프링 상태 확인
+
+    //jwt
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    // lang3
+    implementation 'org.apache.commons:commons-lang3:3.11'
+
+    implementation 'org.springframework.boot:spring-boot-starter-mustache'
 }
 
 tasks.named('test') {
