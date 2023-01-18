@@ -34,3 +34,10 @@
 - 리덕스 설치 : `npm i redux`
 
 - TailwindCSS 세팅 : [Install Tailwind CSS with Create React App - Tailwind CSS](https://tailwindcss.com/docs/guides/create-react-app)
+
+
+
+\- Spring Boot + React.js 개발환경 연동하기
+
+[Spring Boot + React.js 개발환경 연동하기 (velog.io)](https://velog.io/@u-nij/Spring-Boot-React.js-개발환경-세팅)
+

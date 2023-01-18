@@ -1,15 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import reactLogo from "./assets/react.svg";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const [hello, setHello] = useState("say");
+
+  useEffect(() => {
+    axios
+      .get("/api/hello")
+      .then((response) => setHello(response.data))
+      .catch((error) => console.log(error));
+  }, []);
 
   return (
     <div className="App">
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+      <div>백엔드에서 가져온 데이터입니다 : {hello}</div>
+      <h1 className="text-3xl font-bold underline">Hello world!</h1>
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src="/vite.svg" className="logo" alt="Vite logo" />
@@ -31,7 +39,7 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
