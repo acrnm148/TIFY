@@ -41,3 +41,8 @@
 
 [Spring Boot + React.js 개발환경 연동하기 (velog.io)](https://velog.io/@u-nij/Spring-Boot-React.js-개발환경-세팅)
 
+
+
+\- 포트 설정
+
+[vite 호스트와 포트 설정하기(feat. cli 명령어) - 오솔길 (osg.kr)](https://osg.kr/archives/648)
