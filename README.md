@@ -2,7 +2,7 @@
 
 `npm install`
 
-`npx vite` // 서버 실행
+`npx vite --host 0.0.0.0 --port 4000` // 서버 실행
 
 `npm run build` // 제품 모드로 파일을 빌드해서 build 폴더에 생성  
 
