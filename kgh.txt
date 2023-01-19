@@ -2,3 +2,4 @@
 0117 gift hub 
 entity , dto 생성중
 0118 개발중
+0119 대부분 gifthub 기능 구현 완료 약간 entity 수정 필요
