@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.tify.backend.config.auth.PrincipalDetails;
 import com.tify.backend.config.oauth.provider.GoogleUserInfo;
+import com.tify.backend.config.oauth.provider.KakaoUserInfo;
 import com.tify.backend.config.oauth.provider.OAuth2UserInfo;
 import com.tify.backend.entity.User;
 import com.tify.backend.repository.UserRepository;
@@ -44,7 +45,10 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         if (userRequest.getClientRegistration().getRegistrationId().equals("google")) {
             System.out.println("구글 로그인 요청~~");
             oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
-        }  else {
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("kakao")) {
+            System.out.println("카카오 로그인 요청~~");
+            oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
+        } else {
             System.out.println("우리는 구글과 카카오만 지원해요 ㅎㅎ");
         }
 
