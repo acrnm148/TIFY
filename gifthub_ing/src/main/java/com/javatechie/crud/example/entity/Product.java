@@ -35,7 +35,7 @@ public class Product {
     private int likeCount;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "product", orphanRemoval = true)
+    @OneToOne(mappedBy = "product",cascade = CascadeType.ALL, orphanRemoval = true)
     private CartItem cartItem;
 
 }

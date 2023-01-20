@@ -1,0 +1,230 @@
+{
+	"info": {
+		"_postman_id": "c51668de-640a-4af0-9f6d-041f7cc237ad",
+		"name": "TIFY",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23900715"
+	},
+	"item": [
+		{
+			"name": "addproducts",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ncp-iam-access-key",
+						"value": "Ins3y4evD9z8sY45fTXN",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-ncp-apigw-signature-v2",
+						"value": "LhdSd1+NGRRfFn6ZUAWs8qIMBUcf59NjjTdn/N4musU=",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-ncp-apigw-timestamp",
+						"value": "1673368092750",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n    \"name\":\"aadsa\",\r\n    \"quantity\":\"1\",\r\n    \"price\":\"100\",\r\n    \"description\":\"aaaaa\",\r\n    \"imgList\":\"[dasdsadsa]\",\r\n    \"category\":\"2\"\r\n    },\r\n    {\r\n    \"name\":\"bbb\",\r\n    \"quantity\":\"1\",\r\n    \"price\":\"10000\",\r\n    \"description\":\"aaaaa\",\r\n    \"imgList\":\"[dasdsadsa]\",\r\n    \"category\":\"2\"\r\n    },\r\n        {\r\n    \"name\":\"c1234\",\r\n    \"quantity\":\"1\",\r\n    \"price\":\"50000\",\r\n    \"description\":\"aaaaa\",\r\n    \"imgList\":\"[dasdsadsa]\",\r\n    \"category\":\"2\"\r\n    }\r\n]\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/addproducts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"addproducts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "searchproducts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/search/?minPrice=&maxPrice=&name=&category=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"search",
+						""
+					],
+					"query": [
+						{
+							"key": "minPrice",
+							"value": ""
+						},
+						{
+							"key": "maxPrice",
+							"value": ""
+						},
+						{
+							"key": "name",
+							"value": ""
+						},
+						{
+							"key": "category",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EmptyCart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/create-empty-cart",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"create-empty-cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JJIM",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"cartId\":333,\r\n    \"productId\":325,\r\n    \"quantity\":3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/add-to-cart",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"add-to-cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EmptyWish",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/create-empty-wish",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"create-empty-wish"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Gift",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"wishId\":387,\r\n    \"productId\":380,\r\n    \"quantity\":12,\r\n    \"options\":{\r\n        \"opt1\":9999,\r\n        \"opt2\":99992\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/add-to-wish",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"add-to-wish"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MyCartItems",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/cartitems/347",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cartitems",
+						"347"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
