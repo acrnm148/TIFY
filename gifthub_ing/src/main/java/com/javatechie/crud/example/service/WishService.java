@@ -14,7 +14,7 @@ import java.util.List;
 public class WishService {
     private final WishRepository wishRepository;
     private final ProductService productService;
-    private final GiftService giftItemService;
+    private final GiftService giftService;
     ObjectMapper objectMapper = new ObjectMapper();
 
     public Wish saveWish(Wish wish) {
@@ -43,7 +43,7 @@ public class WishService {
         JSONObject map = new JSONObject(message);
         Wish wish =  getWishById(Integer.parseInt(map.getString("wishId")));
         Product product = productService.getProductById(Integer.parseInt(map.getString("productId")));
-        Gift gift = giftItemService.createGift(product, wish, Integer.parseInt(map.getString("quantity")), map.getString("options"));
+        Gift gift = giftService.createGift(product, wish, Integer.parseInt(map.getString("quantity")), map.getString("options"));
         Integer price = (int) (gift.getPurePrice()*1.03/10*10);
 
         List<Gift> giftItems = wish.getGiftItems();

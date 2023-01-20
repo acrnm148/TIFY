@@ -20,7 +20,7 @@ public class CartItem {
     @GeneratedValue
     @Column(name = "item_id")
     private int id;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
@@ -29,6 +29,4 @@ public class CartItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="cart_id") //OrderItem은 하나의 Order만 가진다. => order_id 매핑
     private Cart cart;
-
-    private int quantity;
 }
