@@ -1,15 +1,15 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { Header } from "./fixture/Header";
-import { GiftHubPage } from "./components/pages/GiftHubPage";
-import { WishPage } from "./components/pages/WishPage";
-import { ThanksPage } from "./components/pages/ThanksPage";
-import { FriendsPage } from "./components/pages/FriendsPage";
-import { MyPage} from "./components/pages/MyPage";
-import { LikePage} from "./components/pages/LikePage";
-import { AlramPage} from "./components/pages/AlramPage";
-import { FaqPage } from "./components/pages/FaqPage";
-import { AskPage } from "./components/pages/AskPage";
+import { GiftHubPage } from "./pages/GiftHubPage";
+import { WishPage } from "./pages/WishPage";
+import { ThanksPage } from "./pages/ThanksPage";
+import { FriendsPage } from "./pages/FriendsPage";
+import { MyPage} from "./pages/MyPage";
+import { LikePage} from "./pages/LikePage";
+import { AlramPage} from "./pages/AlramPage";
+import { FaqPage } from "./pages/FaqPage";
+import { AskPage } from "./pages/AskPage";
 import { Footer } from "./fixture/Footer";
 function App() {
 
@@ -22,8 +22,7 @@ function App() {
         <Route path="/wish" element={<WishPage />} />
         <Route path="/thanks" element={<ThanksPage />} />
         <Route path="/friends" element={<FriendsPage />} />
-      </Routes>
-      <Routes>
+   
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/like" element={<LikePage />} />
         <Route path="/alram" element={<AlramPage />} />
