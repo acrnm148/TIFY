@@ -1,13 +1,13 @@
-package com.tify.backend;
+package com.javatechie.crud.example;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BackendApplication {
+public class SpringBootCrudExample2Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(BackendApplication.class, args);
+        SpringApplication.run(SpringBootCrudExample2Application.class, args);
     }
 
 }
