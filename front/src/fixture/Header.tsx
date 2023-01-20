@@ -1,34 +1,42 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import logo from "../assets/tifyLogo.svg"
+import heart from "../assets/iconHeart.svg"
+import alert from "../assets/iconAlert.svg"
+import profile from "../assets/iconProfile.svg"
+import logout from "../assets/iconLogout.svg"
+import "../css/header.styles.css"
 
-import { NavBar } from "./NavBar";
-import { GiftHubPage } from "../components/pages/GiftHubPage";
-import { WishPage } from "../components/pages/WishPage";
-import { ThanksPage } from "../components/pages/ThanksPage";
-import { FriendsPage } from "../components/pages/FriendsPage";
-import { MyPage} from "../components/pages/MyPage";
-import { LikePage} from "../components/pages/LikePage";
-import { AlramPage} from "../components/pages/AlramPage";
-
-function Header() {
-
+export function Header() {
   return (
-    <>
-    <BrowserRouter>
-      <NavBar />
-      <Routes>
-          {/* header */}
-        <Route path="/gifthub" element={<GiftHubPage />} />
-        <Route path="/wish" element={<WishPage />} />
-        <Route path="/thanks" element={<ThanksPage />} />
-        <Route path="/friends" element={<FriendsPage />} />
+    <nav className="navbar-container">
 
-        <Route path="/mypage" element={<MyPage />} />
-        <Route path="/like" element={<LikePage />} />
-        <Route path="/alram" element={<AlramPage />} />
-      </Routes>
-    </BrowserRouter>
-  </>
+      <div className="nav-left">
+      <NavLink to="">
+          <img src={logo} className="logo" alt="Tify logo"/>
+        </NavLink>
+        <div className="nav-cate">
+          <NavLink to="/gifthub" className="nav-cate-item">gifthub</NavLink>
+          <NavLink to="/thanks" className="nav-cate-item">감사하기</NavLink>
+          <NavLink to="/friends" className="nav-cate-item">친구찾기</NavLink> 
+          <NavLink to="/wish" className="nav-cate-item">wish  </NavLink>
+        </div>
+      </div>
+
+      <div>
+        <h3></h3>
+        <NavLink to="/mypage">
+          <img src={profile} className="logo logo-right" alt="Tify logo"/>
+        </NavLink>
+        <NavLink to="/like">
+          <img src={heart} className="logo logo-right" alt="Tify logo"/>
+        </NavLink>
+        <NavLink to="/alram">
+          <img src={alert} className="logo logo-right" alt="Tify logo"/>
+        </NavLink>
+        <NavLink to="">
+          <img src={logout} className="logo logo-right" alt="Tify logo"/>
+        </NavLink>
+      </div>
+    </nav>
   );
 }
-
-export default Header;
