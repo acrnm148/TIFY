@@ -4,9 +4,13 @@
     display: inline-block;
     margin-right: 20px;
 }
+.logo-left{
+    width: 90px;
+    height: 91px;
+}
 .navbar-container{
     background-color: white;
-    border: solid 1px;
+    border: solid 1px white;
     display: fixed;
     padding: 20px;
     width: 100vw;
@@ -15,6 +19,8 @@
     top: 0;
     display: flex;
     justify-content: space-between;
+    margin-left: 24px;
+    margin-right: 24px;
 }
 .nav-left{
     display: flex;

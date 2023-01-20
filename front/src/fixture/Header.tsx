@@ -12,7 +12,7 @@ export function Header() {
 
       <div className="nav-left">
       <NavLink to="">
-          <img src={logo} className="logo" alt="Tify logo"/>
+          <img src={logo} className="logo logo-left" alt="Tify logo"/>
         </NavLink>
         <div className="nav-cate">
           <NavLink to="/gifthub" className="nav-cate-item">gifthub</NavLink>

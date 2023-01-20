@@ -11,6 +11,10 @@ import { AlramPage} from "./pages/AlramPage";
 import { FaqPage } from "./pages/FaqPage";
 import { AskPage } from "./pages/AskPage";
 import { Footer } from "./fixture/Footer";
+
+import {MainPage} from "./pages/MainPage";
+
+import "./css/styles.css"
 function App() {
 
   return (
@@ -18,6 +22,7 @@ function App() {
     <BrowserRouter>
       <Header />
       <Routes>
+        <Route path="" element={ <MainPage /> } />
         <Route path="/gifthub" element={<GiftHubPage />} />
         <Route path="/wish" element={<WishPage />} />
         <Route path="/thanks" element={<ThanksPage />} />
@@ -29,11 +34,9 @@ function App() {
 
         <Route path="/faq" element={<FaqPage />}/>
         <Route path="/ask" element={<AskPage />} />
+        
       </Routes>
       <Footer />
-
-
-
 
     </BrowserRouter>
   </>
