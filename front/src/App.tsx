@@ -1,46 +1,42 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import "./App.css";
-import Login from "./Login";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
+import { Header } from './fixture/Header';
+import { GiftHubPage } from './pages/GiftHubPage';
+import { WishPage } from './pages/WishPage';
+import { ThanksPage } from './pages/ThanksPage';
+import { FriendsPage } from './pages/FriendsPage';
+import { MyPage } from './pages/MyPage';
+import { LikePage } from './pages/LikePage';
+import { AlramPage } from './pages/AlramPage';
+import { FaqPage } from './pages/FaqPage';
+import { AskPage } from './pages/AskPage';
+import { Login } from './pages/Login';
+import { Footer } from './fixture/Footer';
+
+import { MainPage } from './pages/MainPage';
+
+import './css/styles.css';
 function App() {
-  const [count, setCount] = useState(0);
-  const [hello, setHello] = useState("say");
-
-  useEffect(() => {
-    axios
-      .get("/api/hello")
-      .then((response) => setHello(response.data))
-      .catch((error) => console.log(error));
-  }, []);
-
   return (
-    <div className="App">
-      <div>백엔드에서 가져온 데이터입니다 : {hello}</div>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      <Login />
-    </div>
+    <BrowserRouter>
+      <Header />
+      <Routes>
+        <Route path="" element={<MainPage />} />
+        <Route path="/gifthub" element={<GiftHubPage />} />
+        <Route path="/wish" element={<WishPage />} />
+        <Route path="/thanks" element={<ThanksPage />} />
+        <Route path="/friends" element={<FriendsPage />} />
+
+        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/like" element={<LikePage />} />
+        <Route path="/alram" element={<AlramPage />} />
+
+        <Route path="/faq" element={<FaqPage />} />
+        <Route path="/ask" element={<AskPage />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+      <Footer />
+    </BrowserRouter>
   );
 }
 

@@ -1,0 +1,21 @@
+.search-bar-container{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-top: 2vh;
+    width: 100vw;
+}
+
+.serach-bar{
+    margin-top: 20px;
+    width: 60vw;
+    height: 52px;
+    border: 1px solid #C1C1C1;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+}
+.serach-bar input {
+    width: 57vw;
+    background-color: none;
+}

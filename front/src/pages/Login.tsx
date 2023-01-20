@@ -1,6 +1,6 @@
-import "./Login.css";
+import '../css/login.css';
 
-function Login() {
+export function Login() {
   return (
     <div className="grayBackground">
       <div className="insideBox">
@@ -19,7 +19,7 @@ function Login() {
               <input type="checkbox" name="color" value="blue" /> 로그인 정보
               저장
             </label>
-            <button type="submit" className="loginButton">
+            <button type="submit" className="loginButton font-roboto font-bold">
               Login
             </button>
             <button className="findPassword">Forgot password?</button>
@@ -29,5 +29,3 @@ function Login() {
     </div>
   );
 }
-
-export default Login;

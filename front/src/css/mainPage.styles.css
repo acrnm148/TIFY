@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+.main-container{
+    display: inline-block;
+    max-width: 1250px;
+    width : 100vw;
+}
+.main-components{
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    max-height: 100vh;
+}
+.catch-prase {
+    width: 50%
+}
+.phone-video{
+
+}
+.phone-image {
+    width: 20vw;
+    margin: 2vh;
+}
+
+.catch-prase *{
+    text-align: right;
+}
+.catch-prase {
+    padding-top: 17vh;
+    margin-left: 24px;
+}
+.catch-prase > h1 {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 59.6px;
+    line-height: 70px;
+    text-align: right;
+    font-variant: small-caps;
+    
+}
+.catch-prase  button {
+    float : right;
+    /* Auto layout */
+    padding: 17px 84px;
+    gap: 10px;
+    border: none;
+    background-image:url("../assets/buttonGradient.svg");
+    /* background: radial-gradient(71.83% 71.82% at 49.82% 57.27%, #FE3360 0%, #FE3360 36.98%, rgba(254, 51, 96, 0.791562) 55.73%, rgba(254, 51, 96, 0.574062) 67.71%, rgba(254, 51, 96, 0.339394) 80.21%, rgba(254, 51, 96, 0.28) 87.5%, rgba(255, 255, 255, 0.42) 100%) warning: gradient uses a rotation that is not supported by CSS and may not behave as expected; */
+    border-radius: 10px;
+    margin: 5vw;
+}
+
+.catch-prase div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 96px;
+    float : right;
+    
+}
