@@ -17,11 +17,9 @@
 .title {
   /* LOGIN to TIFY */
 
-  position: absolute;
-  left: 204px;
-  top: 23px;
+  justify-content: center;
 
-  font-family: "Roboto";
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 800;
   font-size: 36.65px;
@@ -40,12 +38,12 @@
 .loginBox {
   position: absolute;
   width: 631px;
-  height: 413px;
   left: 20px;
-  top: 101px;
+  margin-top: 30px;
 
   background: #ffffff;
   border-radius: 15px;
+  padding: 60px;
 }
 
 .emailBox {
@@ -56,10 +54,8 @@
   top: 166px; */
   /* position: absolute; */
   width: 417px;
-  height: 315px;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 65px;
 }
 
 .email {
@@ -71,7 +67,7 @@
   right: 0px;
   top: 0px;
 
-  font-family: "NanumGothic";
+  font-family: 'NanumGothic';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -93,9 +89,8 @@
   /* position: absolute; */
   width: 100%;
   height: 48px;
-  left: 127px;
-  right: 128px;
-  top: 384px;
+
+  font-family: 'NanumGothic';
 
   /* Foundation/Red/Normal */
 
@@ -120,4 +115,30 @@
 
 #emailForm {
   margin-bottom: 20px;
+}
+
+.line {
+  color: #e0e0e0;
+  width: 40px;
+  margin: 10px;
+  margin-top: 40px;
+}
+
+.processTab {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.processBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.processtext {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 5px;
 }

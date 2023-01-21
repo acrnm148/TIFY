@@ -10,7 +10,8 @@ import { LikePage } from './pages/LikePage';
 import { AlramPage } from './pages/AlramPage';
 import { FaqPage } from './pages/FaqPage';
 import { AskPage } from './pages/AskPage';
-import { Login } from './pages/Login';
+import { LoginPage } from './pages/LoginPage';
+import { JoinFirstPage } from './pages/JoinFirstPage';
 import { Footer } from './fixture/Footer';
 
 import { MainPage } from './pages/MainPage';
@@ -33,7 +34,8 @@ function App() {
 
         <Route path="/faq" element={<FaqPage />} />
         <Route path="/ask" element={<AskPage />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/join1" element={<JoinFirstPage />} />
       </Routes>
       <Footer />
     </BrowserRouter>

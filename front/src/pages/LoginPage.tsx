@@ -1,6 +1,6 @@
-import '../css/login.css';
+import '../css/login.styles.css';
 
-export function Login() {
+export function LoginPage() {
   return (
     <div className="grayBackground">
       <div className="insideBox">
@@ -22,7 +22,7 @@ export function Login() {
             <button type="submit" className="loginButton font-roboto font-bold">
               Login
             </button>
-            <button className="findPassword">Forgot password?</button>
+            <button className="findPassword font-bold">Forgot password?</button>
           </div>
         </div>
       </div>
