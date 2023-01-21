@@ -3,7 +3,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin-top: 20vh;
+    /* margin-top: 20vh; */
     width: 100vw;
 }
 .gift-category-icon img{

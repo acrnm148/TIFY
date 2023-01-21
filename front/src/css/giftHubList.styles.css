@@ -1,0 +1,29 @@
+.gift-list-con-container{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+.gift-list-container{
+    width: 61.5%;
+}
+@media (min-width : 1025px)
+{
+
+}
+@media (max-width : 1024px)
+{
+    .gift-list-container{
+        width: 71.5%;
+    }
+}
+@media (max-width : 768px)
+{
+    .gift-list-container{
+        width: 95%;
+    }
+}
+
+.gift-list{
+    display: flex;
+    flex-wrap: wrap;
+}

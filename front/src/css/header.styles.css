@@ -21,6 +21,7 @@
     justify-content: space-between;
     margin-left: 24px;
     margin-right: 24px;
+    padding-bottom: 0;
 }
 .nav-left{
     display: flex;

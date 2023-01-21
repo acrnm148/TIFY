@@ -2,60 +2,112 @@
 
 .main-container{
     display: inline-block;
-    max-width: 1250px;
     width : 100vw;
+
 }
 .main-components{
     display: flex;
     flex-direction: row;
     width: 100vw;
     max-height: 100vh;
+    padding-bottom: 7vh;
 }
-.catch-prase {
-    width: 50%
-}
-.phone-video{
-
-}
-.phone-image {
-    width: 20vw;
-    margin: 2vh;
-}
-
 .catch-prase *{
     text-align: right;
-}
-.catch-prase {
-    padding-top: 17vh;
-    margin-left: 24px;
 }
 .catch-prase > h1 {
     font-family: 'Roboto';
     font-style: normal;
-    font-weight: 900;
-    font-size: 59.6px;
-    line-height: 70px;
     text-align: right;
     font-variant: small-caps;
-    
 }
 .catch-prase  button {
     float : right;
-    /* Auto layout */
-    padding: 17px 84px;
+    padding: 1vw 6vw 1vw 6vw;
     gap: 10px;
     border: none;
     background-image:url("../assets/buttonGradient.svg");
     /* background: radial-gradient(71.83% 71.82% at 49.82% 57.27%, #FE3360 0%, #FE3360 36.98%, rgba(254, 51, 96, 0.791562) 55.73%, rgba(254, 51, 96, 0.574062) 67.71%, rgba(254, 51, 96, 0.339394) 80.21%, rgba(254, 51, 96, 0.28) 87.5%, rgba(255, 255, 255, 0.42) 100%) warning: gradient uses a rotation that is not supported by CSS and may not behave as expected; */
+    background-size: cover;
     border-radius: 10px;
-    margin: 5vw;
+    /* margin: 5vw; */
+    margin-top: 2vw;
+    width: 100%;
+    height: 100%;
 }
-
 .catch-prase div{
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding-left: 96px;
     float : right;
     
+}
+.catch-prase  button{
+    color: white;
+    font-weight: 600;
+}
+/* media */
+@media (min-width : 1025px)
+{
+    .catch-prase {
+        min-width: 52%;
+        max-width: 55%;
+        width: max-content;
+        padding-top: 20vh;
+    }
+    .phone-image {
+        width: 24vw;
+        margin: 5vh;
+        margin-top: 1vh;
+    }
+    
+    .catch-prase > h1 {
+        font-weight: 900;
+        font-size: 3em;
+        line-height: 1.25em;
+        white-space: nowrap;
+    }
+}
+@media (max-width : 1024px)
+{
+    .catch-prase {
+        width: 50%;
+        padding-top: 15vh;
+        margin-left: 24px;
+    }
+    .phone-image {
+        width: 23vw;
+        margin: 2vh;
+    }
+    
+    .catch-prase > h1 {
+        font-weight: 800;
+        font-size: 2em;
+        line-height: 40px;
+    }
+    .catch-prase  button{
+        font-weight: 500;
+        font-size: 95%;
+    }
+}
+@media (max-width : 768px)
+{
+    .catch-prase {
+        width: 50%;
+        padding-top: 5vh;
+        margin-left: 24px;
+    }
+    .phone-image {
+        width: 27vw;
+        margin: 2vh;
+    }
+    
+    .catch-prase > h1 {
+        font-weight: 800;
+        font-size: 1.6em;
+        line-height: 40px;
+    }
+    .catch-prase  button{
+        font-weight: 500;
+        font-size: 80%;
+    }
 }

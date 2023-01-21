@@ -1,0 +1,37 @@
+.gift-item-card-container{
+    margin: 2px;
+}
+.gift-image {
+    background-color: rgb(217, 217, 217);
+}
+
+@media (min-width : 1025px)
+{
+    .gift-item-card-container{
+        width: 20vw;
+        height: 30vw;
+    }
+    .gift-image {
+        height:18.3vw;
+    }
+}
+@media (max-width : 1024px)
+{
+    .gift-item-card-container{
+        width: 23vw;
+        height: 33vw;
+    }
+    .gift-image {
+        height:21.3vw;
+    }
+}
+@media (max-width : 768px)
+{
+    .gift-item-card-container{
+        width: 30vw;
+        height: 43vw;
+    }
+    .gift-image {
+        height:28.3vw;
+    }
+}

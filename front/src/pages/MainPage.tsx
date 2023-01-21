@@ -5,6 +5,20 @@ import {SearchBar} from "../components/SearchBar";
 import "../css/mainPage.styles.css"
 
 export function MainPage() {
+    const giftList =[
+        {
+          name : "삼성비스포크1",
+          price : 100000 
+        },
+        {
+          name : "삼성비스포크2",
+          price : 200000 
+        },
+        {
+          name : "삼성비스포크3",
+          price : 300000 
+        },
+      ]
     return (
         <div className="main-container">
             <div className="main-components">
@@ -24,7 +38,7 @@ export function MainPage() {
             <div>
                 <GiftHubCategory />
                 <SearchBar />
-                <GiftRecommendList />
+                <GiftRecommendList giftList={giftList}/>
             </div>
             
         </div>

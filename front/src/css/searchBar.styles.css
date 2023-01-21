@@ -15,7 +15,33 @@
     display: flex;
     justify-content: center;
 }
-.serach-bar input {
-    width: 57vw;
-    background-color: none;
+@media (min-width : 1025px)
+{
+    .serach-bar{
+        width: 60%;
+    }
+    .serach-bar input {
+        width: 57vw;
+        background-color: none;
+    }
+}
+@media (max-width : 1024px)
+{
+    .serach-bar{
+        width: 70%;
+    }
+    .serach-bar input {
+        width: 67vw;
+        background-color: none;
+    }
+}
+@media (max-width : 768px)
+{
+    .serach-bar{
+        width: 90%;
+    }
+    .serach-bar input {
+        width: 87vw;
+        background-color: none;
+    }
 }
