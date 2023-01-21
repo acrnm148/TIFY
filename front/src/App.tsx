@@ -12,6 +12,8 @@ import { FaqPage } from './pages/FaqPage';
 import { AskPage } from './pages/AskPage';
 import { LoginPage } from './pages/LoginPage';
 import { JoinFirstPage } from './pages/JoinFirstPage';
+import { JoinSecondPage } from './pages/JoinSecondPage';
+import { JoinThirdPage } from './pages/JoinThirdPage';
 import { Footer } from './fixture/Footer';
 
 import { MainPage } from './pages/MainPage';
@@ -36,6 +38,8 @@ function App() {
         <Route path="/ask" element={<AskPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/join1" element={<JoinFirstPage />} />
+        <Route path="/join2" element={<JoinSecondPage />} />
+        <Route path="/join3" element={<JoinThirdPage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
