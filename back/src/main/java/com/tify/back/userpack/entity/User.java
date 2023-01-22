@@ -1,5 +1,6 @@
-package com.tify.back.entity;
+package com.tify.back.userpack.entity;
 
+import com.tify.back.gifthub.entity.Cart;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -52,4 +53,7 @@ public class User {
     @CreationTimestamp //자동 생성
     @Column(name = "createDate", nullable = false, updatable = false)
     private Timestamp createDate;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    private Cart cart;
 }
