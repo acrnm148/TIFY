@@ -45,11 +45,10 @@ public class WishService {
 //        TypeReference<Map<String, String>> typeReference = new TypeReference<Map<String,String>>() {};
 //        Map<String, String> map = objectMapper.readValue(message, typeReference);
         JSONObject map = new JSONObject(message);
-        Wish wish =  getWishById(Long.getLong(map.getString("wishId")));
-        Product product = productService.getProductById(Long.getLong(map.getString("productId")));
-        Gift gift = giftService.createGift(product, wish, Integer.parseInt(map.getString("quantity")), map.getString("options"));
+        Wish wish =  getWishById(map.getLong("wishId"));
+        Product product = productService.getProductById(map.getLong("productId"));
+        Gift gift = giftService.createGift(product, wish, map.getInt("quantity"), map.getString("options"));
         Integer price = (int) (gift.getPurePrice()*1.03/10*10);
-
         List<Gift> giftItems = wish.getGiftItems();
         giftItems.add(gift);
         wish.setTotPrice(wish.getTotPrice() + price);

@@ -35,9 +35,15 @@ public class CartController {
     }
     // wish 생성창에서 장바구니에 있는 item 목록 요청시
     // cart 목록 들어갈 때, 진짜 아잍메 목록임.
-    @GetMapping("/cartitems/{id}")
+    @GetMapping("/{id}/cartitems")
     public List<CartItem> getCartItems(@PathVariable Long id) throws Exception {
         return cartService.getCartById(id).getCartItems();
+    }
+
+    //단일 아이템 정보 detail (찜에서 바로 wish 생성시 사용)
+    @GetMapping("/cartitem/{itemId}")
+    public CartItem getCartItem(@PathVariable Long itemId) throws Exception {
+        return cartItemService.getCartItemById(itemId);
     }
 
     @DeleteMapping("/{cartId}/delete-cart-item/{cartItemId}")
