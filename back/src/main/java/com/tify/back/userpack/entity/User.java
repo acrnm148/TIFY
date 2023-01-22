@@ -1,10 +1,8 @@
 package com.tify.back.userpack.entity;
 
+import com.tify.back.common.BaseEntity;
 import com.tify.back.gifthub.entity.Cart;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -12,16 +10,19 @@ import java.sql.Timestamp;
 
 // ORM - Object Relation Mapping
 
+@ToString
 @Builder
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "user_table")
 public class User {
     @Id // primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
-    private int user_id;
+    private Long user_id;
     @Column(name = "nickname", length = 50)
     private String nickname;
     @Column(name = "username", length = 50)
@@ -54,6 +55,6 @@ public class User {
     @Column(name = "createDate", nullable = false, updatable = false)
     private Timestamp createDate;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
-    private Cart cart;
+//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+//    private Cart cart;
 }

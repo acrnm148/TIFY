@@ -1,6 +1,7 @@
 package com.tify.back.gifthub.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tify.back.gifthub.dto.ProductSummary;
 import com.tify.back.gifthub.entity.Product;
 import com.tify.back.gifthub.repository.ProductRepository;
 import com.tify.back.gifthub.service.CartService;
@@ -56,7 +57,11 @@ public class ProductController {
     public List<Product> getProducts() {
         return productService.getProducts();
     }
-//    @GetMapping("/product/{id}")
+
+    // 이름, 가경, 대표이미지 정보만 가져온다. (like count 정렬 완료)
+    @GetMapping("/gifthub/list")
+    public List<ProductSummary> getGifthubList() throws Exception { return productRepository.findAllProjectedBy();}
+    //    @GetMapping("/product/{id}")
 //    public Product findProductById(@PathVariable int id) {
 //        return productService.getProductById(id);
 //    }
