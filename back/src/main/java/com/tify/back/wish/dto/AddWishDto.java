@@ -22,7 +22,7 @@ public class AddWishDto {
     private Date startDate;
     private Date endDate;
     private Integer wishCard;
-    //url이라 스트링이 맞을듯 카드이미지가 공통코드라 숫자인가????
+    //url이라 스트링이 맞을듯 카드이미지가 공통코드라 숫자인가?????
     private String addr1;
     private String addr2;
     private String zipCode;
