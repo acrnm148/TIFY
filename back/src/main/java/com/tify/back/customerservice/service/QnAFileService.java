@@ -45,6 +45,10 @@ public class QnAFileService {
         }
     }
 
+    public String deleteFile(QnAFile file) {
+        fileRepository.deleteById(file.getId());
+        return "deleted";
+    }
     public String storeFile(MultipartFile file,Long qnaId) {
         // cleanPath : 역슬래시를 /슬래시로 바꿔줌
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());

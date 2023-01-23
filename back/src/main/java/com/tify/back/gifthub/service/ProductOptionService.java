@@ -33,6 +33,11 @@ public class ProductOptionService {
         return productOptionRepository.findById(id).orElse(null);
     }
     public String deleteproductOption(Long id) {
+        ProductOption productOption = productOptionRepository.findById(id).orElse(null);
+        List<ProductOptionDetail> opt_details = productOptionDetailService.getproductOptionDetails();
+        for (ProductOptionDetail detail : opt_details) {
+            productOptionDetailService.deleteproductOptionDetail(detail.getId());
+        }
         productOptionRepository.deleteById(id);
         return "productOption removed !!" + id;
     }

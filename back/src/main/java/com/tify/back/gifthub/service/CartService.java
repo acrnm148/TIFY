@@ -42,10 +42,6 @@ public class CartService {
     public Cart getCartById(Long id) {
         return cartRepository.findById(id).orElse(null);
     }
-    public String deleteCart(Long id) {
-        cartRepository.deleteById(id);
-        return "img removed !!" + id;
-    }
 
     //회원가입 컨트롤러 생기면 user id 또는 cart id 로 cart 탐색 변경
     public Cart addCartItem(String message) throws Exception {
@@ -81,12 +77,12 @@ public class CartService {
         return saveCart(cart);
     }
 
-    public Cart deleteCartItem(Long cartId, Long CartItemId) throws Exception {
+    public Cart deleteItemInCart(Long cartId, Long cartItemId) throws Exception {
 //        TypeReference<Map<String, String>> typeReference = new TypeReference<Map<String,String>>() {};
 //        Map<String, String> map = objectMapper.readValue(message, typeReference);
 
         Cart cart =  getCartById(cartId);
-        CartItem cartItem = cartItemService.getCartItemById(CartItemId);
+        CartItem cartItem = cartItemService.getCartItemById(cartItemId);
         Integer price = cartItem.getValue();
 
         List<CartItem> cartItems = cart.getCartItems();
@@ -98,6 +94,17 @@ public class CartService {
         cart.setQuantity(cart.getQuantity() - 1);
         cart.setCartItems(cartItems);
         return saveCart(cart);
+    }
+
+    public String deleteCart(Long cartId) {
+        Cart cart =  getCartById(cartId);
+        List<CartItem> cartItems = cart.getCartItems();
+
+        for (CartItem cartItem : cartItems) {
+            cartItemService.deleteCartItem(cartItem.getId());
+        }
+        cartRepository.deleteById(cartId);
+        return "delete success!!" + cartId;
     }
 
 }

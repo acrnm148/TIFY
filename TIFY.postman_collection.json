@@ -7,444 +7,899 @@
 	},
 	"item": [
 		{
-			"name": "addproducts",
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
-			},
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "x-ncp-iam-access-key",
-						"value": "Ins3y4evD9z8sY45fTXN",
-						"type": "text",
-						"disabled": true
-					},
-					{
-						"key": "x-ncp-apigw-signature-v2",
-						"value": "LhdSd1+NGRRfFn6ZUAWs8qIMBUcf59NjjTdn/N4musU=",
-						"type": "text",
-						"disabled": true
-					},
-					{
-						"key": "x-ncp-apigw-timestamp",
-						"value": "1673368092750",
-						"type": "text",
-						"disabled": true
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "[\r\n    {\r\n        \"name\":\"123b\",\r\n        \"quantity\":\"1\",\r\n        \"price\":\"10000\",\r\n        \"description\":\"aaaaa\",\r\n        \"repImg\":\"321321\",\r\n        \"images\":[\r\n            {\r\n                \"idx\":1,\r\n                \"url\":\"dsadasdas\"\r\n            },\r\n            {\r\n                \"idx\":2,\r\n                \"url\":\"321312as\"\r\n            }\r\n        ],\r\n        \"options\":[\r\n                {\r\n                \"title\":\"Color\",\r\n                \"idx\":2,\r\n                \"details\":[\r\n                    {\r\n                        \"content\":\"white\",\r\n                        \"value\":500,\r\n                        \"idx\":1\r\n                    },\r\n                    {\r\n                        \"content\":\"black\",\r\n                        \"value\":600,\r\n                        \"idx\":2\r\n                    }\r\n                ]\r\n            }\r\n\r\n        ],\r\n        \"category\":\"2\"\r\n    },\r\n        {\r\n        \"name\":\"4444\",\r\n        \"quantity\":\"1\",\r\n        \"price\":\"10000\",\r\n        \"description\":\"aaaaa\",\r\n        \"repImg\":\"321321\",\r\n        \"images\":[\r\n            {\r\n                \"idx\":1,\r\n                \"url\":\"dsadasdas\"\r\n            },\r\n            {\r\n                \"idx\":2,\r\n                \"url\":\"321312as\"\r\n            }\r\n        ],\r\n        \"options\":[\r\n                {\r\n                \"title\":\"Color\",\r\n                \"idx\":2,\r\n                \"details\":[\r\n                    {\r\n                        \"content\":\"white\",\r\n                        \"value\":500,\r\n                        \"idx\":1\r\n                    },\r\n                    {\r\n                        \"content\":\"black\",\r\n                        \"value\":600,\r\n                        \"idx\":2\r\n                    }\r\n                ]\r\n            }\r\n\r\n        ],\r\n        \"category\":\"2\"\r\n    }\r\n]\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/addproducts",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"addproducts"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "searchproducts",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/search/?minPrice=&maxPrice=&name=&category=",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"search",
-						""
-					],
-					"query": [
-						{
-							"key": "minPrice",
-							"value": ""
+			"name": "고객센터",
+			"item": [
+				{
+					"name": "업로드파일 test",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/rkdrl/OneDrive/바탕 화면/서명.png"
+								},
+								{
+									"key": "id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "이렇게 올립니다. ㅎㅎ",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "제목은 대",
+									"type": "text"
+								}
+							]
 						},
-						{
-							"key": "maxPrice",
-							"value": ""
-						},
-						{
-							"key": "name",
-							"value": ""
-						},
-						{
-							"key": "category",
-							"value": ""
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "EmptyCart",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/create-empty-cart",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"create-empty-cart"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "JJIM",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"cartId\":1,\r\n    \"productId\":1,\r\n    \"quantity\":3,\r\n    \"options\":{\r\n        \"Color\":\"white\"\r\n    }\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/add-to-cart",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"add-to-cart"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "EmptyWish",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/create-empty-wish",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"create-empty-wish"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Gift",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"wishId\":1,\r\n    \"productId\":1,\r\n    \"quantity\":12,\r\n    \"options\":{\r\n        \"opt1\":9999,\r\n        \"opt2\":99992\r\n    }\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/add-to-wish",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"add-to-wish"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "MyCartItems",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/cartitems/347",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"cartitems",
-						"347"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "delete-cart-item",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/1/delete-cart-item/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"1",
-						"delete-cart-item",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "addProduct",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "    {\r\n        \"name\":\"bbb\",\r\n        \"quantity\":\"1\",\r\n        \"price\":\"10000\",\r\n        \"description\":\"aaaaa\",\r\n        \"repImg\":\"321321\",\r\n        \"images\":[\r\n            {\r\n                \"idx\":1,\r\n                \"url\":\"dsadasdas\"\r\n            },\r\n            {\r\n                \"idx\":2,\r\n                \"url\":\"321312as\"\r\n            }\r\n        ],\r\n        \"options\":[\r\n                {\r\n                \"title\":\"Color\",\r\n                \"idx\":2,\r\n                \"details\":[\r\n                            {\r\n                                \"content\":\"white\",\r\n                                \"value\":500,\r\n                                \"idx\":1\r\n                            },\r\n                            {\r\n                                \"content\":\"black\",\r\n                                \"value\":600,\r\n                                \"idx\":2\r\n                            }\r\n                        ]\r\n                }\r\n        ],\r\n        \"category\":\"2\"\r\n    }",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/addproduct",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"addproduct"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "delete cartItem",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/cart/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"cart",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "mainpage_gifthubList",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/gifthub/list",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"gifthub",
-						"list"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "단일 카트아이템",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/cartitem/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"cartitem",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "업로드파일 test",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"type": "file",
-							"src": "/C:/Users/rkdrl/OneDrive/바탕 화면/서명.png"
-						},
-						{
-							"key": "id",
-							"value": "1",
-							"type": "text"
-						},
-						{
-							"key": "content",
-							"value": "이렇게 올립니다. ㅎㅎ",
-							"type": "text"
-						},
-						{
-							"key": "title",
-							"value": "제목은 대",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:8080/uploadFile",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"uploadFile"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "makeQnA",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "title",
-							"value": "제목입니다. ",
-							"type": "text"
-						},
-						{
-							"key": "content",
-							"value": "이거이거 ㅎ ",
-							"type": "text"
-						},
-						{
-							"key": "type",
-							"value": "22",
-							"type": "text"
-						},
-						{
-							"key": "id",
-							"value": "1",
-							"type": "text"
-						},
-						{
-							"key": "userId",
-							"value": "1",
-							"type": "text"
-						},
-						{
-							"key": "files",
-							"type": "file",
-							"src": [
-								"/C:/Users/rkdrl/OneDrive/바탕 화면/1.png",
-								"/C:/Users/rkdrl/OneDrive/바탕 화면/2.png",
-								"/C:/Users/rkdrl/OneDrive/바탕 화면/2학기 버스노선.PNG"
+						"url": {
+							"raw": "http://localhost:8080/uploadFile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"uploadFile"
 							]
 						}
-					]
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/qna",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"qna"
-					]
+				{
+					"name": "QNA 작성",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "제목입니다. ",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "이거이거 ㅎ ",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "22",
+									"type": "text"
+								},
+								{
+									"key": "id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "files",
+									"type": "file",
+									"src": [
+										"/C:/Users/rkdrl/OneDrive/바탕 화면/1.png",
+										"/C:/Users/rkdrl/OneDrive/바탕 화면/2.png",
+										"/C:/Users/rkdrl/OneDrive/바탕 화면/2학기 버스노선.PNG"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/qna",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"qna"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "QNA 페이지단위 조회(10개)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "제목입니다. ",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "이거이거 ㅎ ",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "22",
+									"type": "text"
+								},
+								{
+									"key": "id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "files",
+									"type": "file",
+									"src": [
+										"/C:/Users/rkdrl/OneDrive/바탕 화면/1.png",
+										"/C:/Users/rkdrl/OneDrive/바탕 화면/2.png",
+										"/C:/Users/rkdrl/OneDrive/바탕 화면/2학기 버스노선.PNG"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/qna/list/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"qna",
+								"list",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "QNA 단일 정보",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "제목입니다. ",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "이거이거 ㅎ ",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "22",
+									"type": "text"
+								},
+								{
+									"key": "id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "files",
+									"type": "file",
+									"src": [
+										"/C:/Users/rkdrl/OneDrive/바탕 화면/1.png",
+										"/C:/Users/rkdrl/OneDrive/바탕 화면/2.png",
+										"/C:/Users/rkdrl/OneDrive/바탕 화면/2학기 버스노선.PNG"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/qna/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"qna",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "QNA 단일 삭제",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "제목입니다. ",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "이거이거 ㅎ ",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "22",
+									"type": "text"
+								},
+								{
+									"key": "id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "files",
+									"type": "file",
+									"src": [
+										"/C:/Users/rkdrl/OneDrive/바탕 화면/1.png",
+										"/C:/Users/rkdrl/OneDrive/바탕 화면/2.png",
+										"/C:/Users/rkdrl/OneDrive/바탕 화면/2학기 버스노선.PNG"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/qna/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"qna",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "QNA 단일 수정",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "제목입니다. ",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "이거이거 ㅎ ",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "22",
+									"type": "text"
+								},
+								{
+									"key": "id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "files",
+									"type": "file",
+									"src": [
+										"/C:/Users/rkdrl/OneDrive/바탕 화면/1.png",
+										"/C:/Users/rkdrl/OneDrive/바탕 화면/2.png",
+										"/C:/Users/rkdrl/OneDrive/바탕 화면/2학기 버스노선.PNG"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/qna/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"qna",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "qna검색 페이징",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/qna/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"qna",
+								"0"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "Gifthub",
+			"item": [
+				{
+					"name": "단일상품추가",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\":\"bbb\",\r\n        \"quantity\":\"1\",\r\n        \"price\":\"10000\",\r\n        \"description\":\"aaaaa\",\r\n        \"repImg\":\"321321\",\r\n        \"images\":[\r\n            {\r\n                \"idx\":1,\r\n                \"url\":\"dsadasdas\"\r\n            },\r\n            {\r\n                \"idx\":2,\r\n                \"url\":\"321312as\"\r\n            }\r\n        ],\r\n        \"options\":[\r\n                {\r\n                \"title\":\"Color\",\r\n                \"idx\":2,\r\n                \"details\":[\r\n                            {\r\n                                \"content\":\"white\",\r\n                                \"value\":500,\r\n                                \"idx\":1\r\n                            },\r\n                            {\r\n                                \"content\":\"black\",\r\n                                \"value\":600,\r\n                                \"idx\":2\r\n                            }\r\n                        ]\r\n                }\r\n        ],\r\n        \"category\":\"2\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/gifthub/product",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gifthub",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "상품정보 삭제",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"id\":1,\r\n        \"name\":\"updatedBBB\",\r\n        \"quantity\":\"1\",\r\n        \"price\":\"10000\",\r\n        \"description\":\"aaaaa\",\r\n        \"repImg\":\"321321\",\r\n        \"images\":[\r\n            {\r\n                \"idx\":1,\r\n                \"url\":\"dsadasdas\"\r\n            },\r\n            {\r\n                \"idx\":2,\r\n                \"url\":\"321312as\"\r\n            }\r\n        ],\r\n        \"options\":[\r\n                {\r\n                \"title\":\"Color\",\r\n                \"idx\":2,\r\n                \"details\":[\r\n                            {\r\n                                \"content\":\"white\",\r\n                                \"value\":500,\r\n                                \"idx\":1\r\n                            },\r\n                            {\r\n                                \"content\":\"black\",\r\n                                \"value\":600,\r\n                                \"idx\":2\r\n                            }\r\n                        ]\r\n                }\r\n        ],\r\n        \"category\":\"2\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/gifthub/product/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gifthub",
+								"product",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "상품정보 수정",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"id\":3,\r\n        \"name\":\"updatedBBB\",\r\n        \"quantity\":\"1\",\r\n        \"price\":\"10000\",\r\n        \"description\":\"aaaaa\",\r\n        \"repImg\":\"321321\",\r\n        \"images\":[\r\n            {\r\n                \"idx\":1,\r\n                \"url\":\"dsadasdas\"\r\n            },\r\n            {\r\n                \"idx\":2,\r\n                \"url\":\"321312as\"\r\n            }\r\n        ],\r\n        \"options\":[\r\n                {\r\n                \"title\":\"Color\",\r\n                \"idx\":2,\r\n                \"details\":[\r\n                            {\r\n                                \"content\":\"white\",\r\n                                \"value\":500,\r\n                                \"idx\":1\r\n                            },\r\n                            {\r\n                                \"content\":\"black\",\r\n                                \"value\":600,\r\n                                \"idx\":2\r\n                            }\r\n                        ]\r\n                }\r\n        ],\r\n        \"category\":\"2\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/gifthub/product",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gifthub",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "단일상품검색(detail)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/gifthub/product/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gifthub",
+								"product",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "다중상품추가",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-ncp-iam-access-key",
+								"value": "Ins3y4evD9z8sY45fTXN",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "x-ncp-apigw-signature-v2",
+								"value": "LhdSd1+NGRRfFn6ZUAWs8qIMBUcf59NjjTdn/N4musU=",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "x-ncp-apigw-timestamp",
+								"value": "1673368092750",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"name\":\"123b\",\r\n        \"quantity\":\"1\",\r\n        \"price\":\"10000\",\r\n        \"description\":\"aaaaa\",\r\n        \"repImg\":\"321321\",\r\n        \"images\":[\r\n            {\r\n                \"idx\":1,\r\n                \"url\":\"dsadasdas\"\r\n            },\r\n            {\r\n                \"idx\":2,\r\n                \"url\":\"321312as\"\r\n            }\r\n        ],\r\n        \"options\":[\r\n                {\r\n                \"title\":\"Color\",\r\n                \"idx\":2,\r\n                \"details\":[\r\n                    {\r\n                        \"content\":\"white\",\r\n                        \"value\":500,\r\n                        \"idx\":1\r\n                    },\r\n                    {\r\n                        \"content\":\"black\",\r\n                        \"value\":600,\r\n                        \"idx\":2\r\n                    }\r\n                ]\r\n            }\r\n\r\n        ],\r\n        \"category\":\"2\"\r\n    },\r\n        {\r\n        \"name\":\"4444\",\r\n        \"quantity\":\"1\",\r\n        \"price\":\"10000\",\r\n        \"description\":\"aaaaa\",\r\n        \"repImg\":\"321321\",\r\n        \"images\":[\r\n            {\r\n                \"idx\":1,\r\n                \"url\":\"dsadasdas\"\r\n            },\r\n            {\r\n                \"idx\":2,\r\n                \"url\":\"321312as\"\r\n            }\r\n        ],\r\n        \"options\":[\r\n                {\r\n                \"title\":\"Color\",\r\n                \"idx\":2,\r\n                \"details\":[\r\n                    {\r\n                        \"content\":\"white\",\r\n                        \"value\":500,\r\n                        \"idx\":1\r\n                    },\r\n                    {\r\n                        \"content\":\"black\",\r\n                        \"value\":600,\r\n                        \"idx\":2\r\n                    }\r\n                ]\r\n            }\r\n\r\n        ],\r\n        \"category\":\"2\"\r\n    }\r\n]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/gifthub/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gifthub",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "모든 상품 목록",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/gifthub/products?page=0&max_result=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gifthub",
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0",
+									"description": "index 0부터 시작."
+								},
+								{
+									"key": "max_result",
+									"value": "10",
+									"description": "받아오는 결과 최대 , 기본 10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "메인용 상품정보(요약정보)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/gifthub/main",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gifthub",
+								"main"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "상품검색_필터링",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/gifthub/search/?minPrice=&maxPrice=&name=&category=&max_result=&page=",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gifthub",
+								"search",
+								""
+							],
+							"query": [
+								{
+									"key": "minPrice",
+									"value": "",
+									"description": "최소가 (생략시 0) "
+								},
+								{
+									"key": "maxPrice",
+									"value": "",
+									"description": "최대가 (생략시 999999999) "
+								},
+								{
+									"key": "name",
+									"value": "",
+									"description": "상품명(포함) (생략시 모든 이름)"
+								},
+								{
+									"key": "category",
+									"value": "",
+									"description": "카테고리코드 (생략시 모든 카테고리) "
+								},
+								{
+									"key": "min_result",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "max_result",
+									"value": "",
+									"description": "받아오는 개수 (기본값 10)"
+								},
+								{
+									"key": "page",
+									"value": "",
+									"description": "페이지 (기본값 0)"
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "빈 Cart 생성",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/cart",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "카트 자체 삭제",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/cart/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cart",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "카트 정보",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/cart/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cart",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "카트 정보(리스트)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/cart/1/list",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cart",
+								"1",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "카트에 담기(좋아요)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cartId\":1,\r\n    \"productId\":1,\r\n    \"quantity\":3,\r\n    \"options\":{\r\n        \"Color\":\"white\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/cart/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cart",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "단일 카트아이템",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/cartitem/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cartitem",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "카트내부 아이템 삭제",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/cart/cartitem/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cart",
+								"cartitem",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "빈 WIsh 생성",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/wish",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"wish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "임시Gift",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"wishId\":1,\r\n    \"productId\":1,\r\n    \"quantity\":12,\r\n    \"options\":{\r\n        \"opt1\":9999,\r\n        \"opt2\":99992\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/add-to-wish",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"add-to-wish"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

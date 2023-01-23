@@ -1,16 +1,21 @@
 package com.tify.back.customerservice.controller;
 
 import com.tify.back.customerservice.dto.FileUploadDTO;
+import com.tify.back.customerservice.entity.FAQ;
 import com.tify.back.customerservice.entity.QnA;
 import com.tify.back.customerservice.entity.QnAFile;
 import com.tify.back.customerservice.repository.QnAFileRepository;
 import com.tify.back.customerservice.service.QnAFileService;
 import com.tify.back.customerservice.service.QnAService;
+import com.tify.back.exception.FAQNotFoundException;
 import com.tify.back.userpack.entity.User;
 
 import com.tify.back.userpack.service.UserService;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -31,15 +36,49 @@ public class QnAController {
 
     private final QnAFileRepository qnaFileRepository;
 
-    @GetMapping
-    public List<QnA> findAll() {
-        return qnaService.findAll();
+    //10개씩
+    @GetMapping(value = "/list/{page}", produces = "application/json")
+    public List<QnA> findAll(@PathVariable Integer page) {
+        int maxResult = 10;
+        Pageable pageable = PageRequest.of(page, Math.min(10, maxResult), Sort.by("createdDate").descending());
+        List<QnA> qnas = qnaService.findAll(pageable);
+        return qnas;
     }
 
-//    @PostMapping
-//    public QnA save(@RequestBody QnA qna) {
-//        return qnaService.save(qna);
-//    }
+    @GetMapping(value = "/{id}", produces = "application/json")
+    public QnA findById(@PathVariable Long id) {
+        return qnaService.findById(id);
+    }
+
+    @PutMapping(value ="/{qnaId}")
+    public QnA updateFAQ(@PathVariable Long qnaId
+            ,@RequestParam("id") Long id
+            ,@RequestParam("userId") Long userId
+            ,@RequestParam("title") String title
+            ,@RequestParam("content") String content
+            ,@RequestParam("type") Integer type
+            ,@RequestParam("files") MultipartFile[] files) {
+        QnA existingQnA = qnaService.findById(qnaId);
+        existingQnA.setTitle(title);
+        existingQnA.setContent(content);
+        existingQnA.setType(type);
+        List<QnAFile> aleadyfiles = existingQnA.getFiles();
+        for (QnAFile qnaFile : aleadyfiles) {
+            qnaFileService.deleteFile(qnaFile);
+        }
+
+        List<QnAFile> includes = new ArrayList<>();
+
+        List<FileUploadDTO> fileList = Arrays.asList(files)
+                .stream()
+                .map(file -> uploadFile(file,existingQnA.getId()))
+                .collect(Collectors.toList());
+
+        includes.addAll(qnaFileRepository.findByQnAId(existingQnA.getId()));
+        existingQnA.setFiles(includes);
+        System.out.println(includes.size());
+        return qnaService.save(existingQnA);
+    }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
@@ -84,11 +123,8 @@ public class QnAController {
         user.setProviderId("321");
         user.setCreateDate(Timestamp.valueOf("2000-01-01 00:00:00"));
         user.setUsername("dsadsa");
-        System.out.println(userId);
-        System.out.println("1111111111111111111111111111111111111");
-        System.out.println(user.toString());
+
         user = userService.save(user);
-        System.out.println(user.toString());
 
 
 //        qna.setUser(userRepository.findById(userId).orElse(null));
@@ -100,10 +136,7 @@ public class QnAController {
                 .stream()
                 .map(file -> uploadFile(file,qna.getId()))
                 .collect(Collectors.toList());
-        for (FileUploadDTO file : fileList) {
-//            System.out.println(file.getFileDownloadUri());
-            System.out.println("11111111111111=-================================================================");
-        }
+
         includes.addAll(qnaFileRepository.findByQnAId(qna.getId()));
         System.out.println( qnaFileRepository.findByQnAId(qna.getId()).size() );
         qna.setFiles(includes);
