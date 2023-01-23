@@ -2,8 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { Header } from './fixture/Header';
 import { GiftHubPage } from './pages/GiftHubPage';
-import { MakeWishPage } from './pages/MakeWishPage';
-import { CheckWishPage } from './pages/CheckWishPage';
+import { WishPage } from './pages/WishPage';
 import { ThanksPage } from './pages/ThanksPage';
 import { FriendsPage } from './pages/FriendsPage';
 import { MyPage } from './pages/MyPage';
@@ -27,8 +26,7 @@ function App() {
       <Routes>
         <Route path="" element={<MainPage />} />
         <Route path="/gifthub" element={<GiftHubPage />} />
-        <Route path="/makewish" element={<MakeWishPage />} />
-        <Route path="/checkwish" element={<CheckWishPage />} />
+        <Route path="/wish" element={<WishPage />} />
         <Route path="/thanks" element={<ThanksPage />} />
         <Route path="/friends" element={<FriendsPage />} />
 
