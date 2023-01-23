@@ -3,6 +3,7 @@ package com.tify.back.gifthub.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.tify.back.exception.ProductNotFoundException;
 import com.tify.back.gifthub.entity.Img;
 import com.tify.back.gifthub.entity.Product;
 import com.tify.back.gifthub.entity.ProductOption;
@@ -10,6 +11,8 @@ import com.tify.back.gifthub.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,26 +33,38 @@ public class ProductService {
         return productRepository.saveAll(products);
     }
 
-    public List<Product> getProducts() {
-        return productRepository.findAll();
+    public Page<Product> getProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
     public Product getProductById(Long id) {
-        return productRepository.findById(id).orElse(null);
+        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found"));
     }
     public Product getProductByName(String name) {
         return productRepository.findByName(name);
     }
     public String deleteProduct(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found"));
+        List<Img> imgs = product.getImgList();
+        List<ProductOption> productOptions = product.getOptions();
+        for (Img img : imgs) {
+            imgService.deleteImg(img.getId());
+        }
+        for (ProductOption productOption : productOptions) {
+            productOptionService.deleteproductOption(productOption.getId());
+        }
         productRepository.deleteById(id);
         return "product removed !!" + id;
     }
 
-    public List<Product> searchProducts(int minPrice, int maxPrice, String name, Integer category) {
-        return productRepository.findByPriceBetweenAndNameContainingAndCategory(minPrice, maxPrice, name, category);
+    public Page<Product> searchProducts(int minPrice, int maxPrice, String name, Integer category, Pageable pageable) {
+        return productRepository.findByPriceBetweenAndNameContainingAndCategory(minPrice, maxPrice, name, category, pageable);
     }
-    public List<Product> searchProducts2(int minPrice, int maxPrice, String name) {
-        return productRepository.findByPriceBetweenAndNameContaining(minPrice,maxPrice,name);
+    public Page<Product> searchProducts2(int minPrice, int maxPrice, String name, Pageable pageable) {
+        return productRepository.findByPriceBetweenAndNameContaining(minPrice,maxPrice, name, pageable);
+    }
+    public List<Product> searchProducts3(int minPrice, int maxPrice, String name) {
+        return productRepository.findByMyMethod(minPrice, maxPrice, name);
     }
 
     public static void addImg(Product product, Img img) {
@@ -105,7 +120,7 @@ public class ProductService {
 
     public Product updateProduct(String message) throws Exception {
         JSONObject map = new JSONObject(message);
-        Product existingProduct = productRepository.findById(map.getLong("productId")).orElse(null);
+        Product existingProduct = productRepository.findById(map.getLong("id")).orElse(null);
         List<ProductOption> opts = new ArrayList<>();
         //여러개의 큰 옵션
         JSONArray optionlist = map.getJSONArray("options");

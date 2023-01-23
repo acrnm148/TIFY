@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/wish")
 public class WishController {
 
     private final ProductService productService;
@@ -23,12 +24,12 @@ public class WishController {
     private final WishService wishService;
     private final GiftService giftService;
 
-    @PostMapping("/create-empty-wish")
+    @PostMapping
     public Wish empty_wish(@RequestBody Wish wish) throws Exception {
         return wishService.saveWish(wish);
     }
 
-    @PostMapping("/add-to-wish")
+    @PostMapping("/add")
     public Wish addToWish(@RequestBody String message) throws Exception {
         return wishService.addGift(message);
     }
