@@ -1,6 +1,6 @@
 import "../css/makeWishPage.styles.css"
 import addHeart from "../assets/addHeart.svg";
-import React, { useState } from 'react';
+import React, { Component, useState } from 'react';
 
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
@@ -9,10 +9,14 @@ import {addDays} from "date-fns";
 import moment from 'moment'; //현재(한국)시간 불러오기
 import { ko } from 'date-fns/esm/locale'; // 한국어 불러오기
 
-
+import Postcode from "../components/Post"
 export function MakeWishPage() {
-  const formList = ['제목', '내용', '주소']
+  // declare {Post}: Component;
+
+  const formList = ['제목', '내용']
   const wishOption = ['생일', '결혼', '입학', '졸업','출산', '독립', '비혼', '건강']
+  
+  // calendar 
   const [range, setRange] = useState<any[]>([
     {
       endDate: addDays(new Date(), 0),
@@ -28,6 +32,17 @@ export function MakeWishPage() {
   const dateKo = (date: { getFullYear: () => any; getMonth: () => number; getDate: () => any; }) => `${date.getFullYear()}년 ${zero(date.getMonth() + 1)}월 ${zero(date.getDate())}일`;
   const startDate = dateKo(range[0].startDate)
   const endDate = dateKo(range[0].endDate)
+
+  // address
+  const [enroll_company, setEnroll_company] = useState({ address : '',},)
+  const [popup, setPopup] = useState(false);
+  const handleInput = (e:any) => {
+    setEnroll_company({
+      ...enroll_company,
+      [e.target.name]:e.target.value,
+    })
+  }
+  
   return (
       <>
       <div className="page-name-block">
@@ -94,6 +109,20 @@ export function MakeWishPage() {
               <div>
                 <img src={addHeart} alt="" />
               </div>
+            </div>
+          </div>
+          <div className="address-form-container">
+            <label htmlFor="태그">주소</label>
+            <span>주소 input 클릭시 주소찾기 창 연결</span>
+            <div className="address-form">
+              <input type="text" placeholder="주소"required={true} name="address" onChange={handleInput} value={enroll_company.address} disabled/>
+              <Postcode company={enroll_company} setcompany={setEnroll_company}/>
+            </div>
+          </div>
+          <div>
+            <label htmlFor="상세주소">상세주소</label>
+            <div className="input-form">
+              <input type='text' name="상세주소"/>
             </div>
           </div>
         </div>
