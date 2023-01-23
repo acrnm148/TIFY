@@ -31,7 +31,8 @@ export function Footer() {
               <NavLink to="/gifthub">gifthub</NavLink>
               <NavLink to="/friends">친구찾기</NavLink>
               <NavLink to="/thanks">감사하기</NavLink>
-              <NavLink to="/wish">wish</NavLink>
+              <NavLink to="/wish">위시만들기</NavLink>
+              <NavLink to="/wish">위시확인</NavLink>
             </div>
             <div className="footer-navigation">
               <NavLink to="/">제휴문의</NavLink>
