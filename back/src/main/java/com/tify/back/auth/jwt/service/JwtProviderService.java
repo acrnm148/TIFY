@@ -7,6 +7,7 @@ import com.tify.back.auth.jwt.JwtProperties;
 import com.tify.back.auth.jwt.JwtToken;
 import com.tify.back.auth.jwt.refreshToken.RefreshToken;
 import com.tify.back.model.User;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,5 +100,14 @@ public class JwtProviderService {
         return null;
     }
 
+    /**
+     * JWT 토큰의 만료시간
+     */
+    public Long getExpiration(String accessToken) {
+        Date expiration = Jwts.parserBuilder().setSigningKey(JwtProperties.SECRET.getBytes())
+                .build().parseClaimsJws(accessToken).getBody().getExpiration();
+        long now = new Date().getTime();
+        return expiration.getTime() - now;
+    }
 
 }

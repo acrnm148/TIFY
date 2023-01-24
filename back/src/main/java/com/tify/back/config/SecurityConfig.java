@@ -8,6 +8,7 @@ import com.tify.back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,6 +25,7 @@ public class SecurityConfig {
     private final CorConfig config;
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final RedisTemplate<String, String> redisTemplate; //mod
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -72,7 +74,7 @@ public class SecurityConfig {
             http
                     .addFilter(config.corsFilter())
                     .addFilter(new JwtAuthenticationFilter(authenticationManager, jwtService)) //AuthenticationManger가 있어야 된다.(파라미터로)
-                    .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository, jwtService));
+                    .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository, jwtService, redisTemplate)); //mod
 
         }
     }

@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 //@Repository
 public interface EmailAuthRepository extends JpaRepository<EmailAuth, Long>, EmailAuthCustomRepository {
     public EmailAuth findByEmail(String email);
+    public int deleteByEmail(String userid);
 }

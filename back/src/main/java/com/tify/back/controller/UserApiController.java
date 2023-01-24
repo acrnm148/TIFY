@@ -3,13 +3,16 @@ package com.tify.back.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tify.back.auth.jwt.JwtToken;
+import com.tify.back.auth.jwt.service.JwtProviderService;
 import com.tify.back.auth.jwt.service.JwtService;
 import com.tify.back.dto.UserProfileDto;
+import com.tify.back.dto.UserUpdateDto;
 import com.tify.back.dto.request.EmailAuthRequestDto;
 import com.tify.back.dto.request.JoinRequestDto;
 import com.tify.back.dto.request.LoginRequestDto;
 import com.tify.back.dto.response.JoinResponseDto;
 import com.tify.back.dto.response.LoginResponseDto;
+import com.tify.back.oauth.provider.profile.NaverProfile;
 import com.tify.back.service.EmailService;
 import com.tify.back.service.UserService;
 import com.tify.back.model.User;
@@ -24,6 +27,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Tag(name = "user", description = "유저 API")
 @RestController
@@ -45,6 +50,9 @@ public class UserApiController {
     private final KakaoService kakaoService;
     private final NaverService naverService;
     private final GoogleService googleService;
+    private final JwtProviderService jwtProviderService;
+
+    private final RedisTemplate<String, String> redisTemplate;
 
     @GetMapping("/home")
     public String home() {
@@ -119,54 +127,53 @@ public class UserApiController {
 
     /**
      * 회원 탈퇴
-
+     */
     @DeleteMapping("/account/signout")
     public ResponseEntity<?> signout(@RequestHeader("Authorization") String token) { //@RequestHeader(value = "Authorization") String token) {
         try {
             token = token.substring(7);
-            System.out.println(token+"~~~teset~~~");
             if (jwtService.validAccessToken(token) == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰이 만료되었습니다.");
             }
-            User user = userService.getUser(token);
-            userService.deleteUser(user.getUserid());
-            SecurityContextHolder.clearContext();
+            String userid = userService.getUserid(token);
+            userService.deleteUser(userid);
+            System.out.println("탈퇴되었습니다.");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch(Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("헤더에 토큰이 없습니다.");
         }
     }
-     */
+
 
     /**
      * 회원 정보 수정
      */
+    @PostMapping("/account/update")
+    public ResponseEntity<?> updateUserInfo(@RequestBody UserUpdateDto userUpdateDto) { //@RequestHeader(value = "Authorization") String token) {
+        try {
+            User updatedUser = userService.updateUserInfo(userUpdateDto);
+            if (updatedUser != null) {
+                System.out.println("수정되었습니다.");
+            } else {
+                System.out.println("수정에 실패했습니다.");
+            }
+            return ResponseEntity.ok().body(updatedUser);
+        } catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수정에 실패했습니다..");
+        }
+    }
+
 
     /**
      * 로그아웃
-
-    public ResponseEntity<?> logout(UserRequestDto.Logout logout) {
-        // 1. Access Token 검증
-        if (!jwtTokenProvider.validateToken(logout.getAccessToken())) {
-            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
-        }
-
-        // 2. Access Token 에서 User email 을 가져옵니다.
-        Authentication authentication = jwtTokenProvider.getAuthentication(logout.getAccessToken());
-
-        // 3. Redis 에서 해당 User email 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
-        if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
-            // Refresh Token 삭제
-            redisTemplate.delete("RT:" + authentication.getName());
-        }
-
-        // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장하기
-        Long expiration = jwtTokenProvider.getExpiration(logout.getAccessToken());
-        redisTemplate.opsForValue()
-                .set(logout.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
-
-        return response.success("로그아웃 되었습니다.");
-    } */
+     */
+    @PostMapping("/account/logout")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
+        token = token.substring(7);
+        userService.logout(token);
+        System.out.println("로그아웃 완료");
+        return ResponseEntity.ok().body("로그아웃 되었습니다.");
+    }
 
     /**
      *   JWT를 이용한 카카오 로그인

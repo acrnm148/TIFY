@@ -6,11 +6,13 @@ import com.tify.back.auth.jwt.JwtProperties;
 import com.tify.back.auth.jwt.service.JwtService;
 import com.tify.back.model.User;
 import com.tify.back.repository.UserRepository;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -23,11 +25,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private UserRepository userRepository;
     private JwtService jwtService;
+    private RedisTemplate<String, String> redisTemplate; //mod
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository, JwtService jwtService) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository, JwtService jwtService, RedisTemplate<String, String> redisTemplate) {
         super(authenticationManager);
         this.userRepository = userRepository;
         this.jwtService = jwtService;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -53,6 +57,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         System.out.println("jwtHeader:" + jwtHeader);
         String token = request.getHeader(JwtProperties.HEADER_STRING);
         String userId = jwtService.validAccessToken(token);
+
+        //로그아웃된 토큰인지 검사
+        if (!validBlackToken(token)) {
+            System.out.println("로그아웃된 토큰입니다.");
+            return;
+        }
 
         /**
          * 정상적인 access 토큰 사용자
@@ -83,4 +93,19 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
     }
+
+    /**
+     * 로그아웃된 토큰인지 확인
+     */
+    private boolean validBlackToken(String accessToken) {
+        //Redis에 있는 엑세스 토큰인 경우 로그아웃 처리된 엑세스 토큰임.
+        String blackToken = redisTemplate.opsForValue().get(accessToken);
+        if(StringUtils.hasText(blackToken)) {
+            System.out.println("로그아웃 처리된 엑세스 토큰입니다.");
+            return false;
+            //throw new IllegalStateException("로그아웃 처리된 엑세스 토큰입니다.");
+        }
+        return true;
+    }
+
 }
