@@ -29,7 +29,7 @@ function App() {
         <Route path="/gifthub" element={<GiftHubPage />} />
         <Route path="/makewish" element={<MakeWishPage />} />
         <Route path="/checkwish" element={<CheckWishPage />} />
-        <Route path="/thanks" element={<ThanksPage />} />
+        <Route path="/thanks/:wishId/:conId" element={<ThanksPage />} />
         <Route path="/friends" element={<FriendsPage />} />
 
         <Route path="/mypage" element={<MyPage />} />

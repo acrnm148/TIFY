@@ -21,9 +21,10 @@ export function Header() {
         onMouseOver={() => {setShowWishDetail(true); setHideWishDetail(false);}}
         onMouseLeave={() => {setHideWishDetail(true); setShowWishDetail(false);}}
         >
-          <NavLink to="/gifthub" className="nav-cate-item">gifthub</NavLink>
-          <NavLink to="/thanks" className="nav-cate-item">감사하기</NavLink>
+          {/* <NavLink to="/qna" className="nav-cate-item">문의하기</NavLink> */}
+          <NavLink to="/gifthub" className="nav-cate-item">기프트허브</NavLink>
           <NavLink to="/friends" className="nav-cate-item">친구찾기</NavLink> 
+          <NavLink to="/thanks" className="nav-cate-item">감사하기</NavLink>
           <div className="nav-cate-item wish" 
             
             >위시

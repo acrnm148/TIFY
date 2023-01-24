@@ -4,6 +4,7 @@ import { GiftHubCategory } from "../components/GiftHubCategory";
 import { GiftRecommendList } from "../components/GiftRecommendList";
 import {SearchBar} from "../components/SearchBar";
 import "../css/mainPage.styles.css"
+import "../css/styles.css"
 import { configureStore, createSlice, PayloadAction} from '@reduxjs/toolkit'
 // redux test------------------------------------------------------------------
 const user = { firstName: 'gh', nickName:'기프트허브', wish: 1};
@@ -70,7 +71,7 @@ function CatchPrase(){
             <h1>원하는 선물로</h1>
             <h1>축하를 주고받아 보세요!</h1>
             <div>
-                <button>위시만들기</button>
+                <button className="gradient-button">위시만들기</button>
             </div>
         </div>
     )

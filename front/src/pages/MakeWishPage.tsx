@@ -1,4 +1,5 @@
 import "../css/makeWishPage.styles.css"
+import "../css/styles.css"
 import addHeart from "../assets/addHeart.svg";
 import React, { Component, useState } from 'react';
 

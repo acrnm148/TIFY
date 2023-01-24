@@ -1,1 +1,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/* page name */
+.page-name-block {
+    height: 177px;
+    width: auto;
+    display: inline;
+}
+.page-name{
+    height: 177px;
+    background-image: url('https://user-images.githubusercontent.com/87971876/214181333-88e367a5-d443-405f-824f-a012adf7d9b4.svg');
+    /* overflow: auto; */
+    width: 550px;
+    margin-left: 24px;
+}
+
+.check-wish{
+    background-image: url('https://user-images.githubusercontent.com/87971876/214183142-fa873e3b-d5be-4e97-bd28-77c3a640d95e.svg');
+}
+
+/* gradient button */
+.gradient-button {
+    float : right;
+    padding: 1vw 6vw 1vw 6vw;
+    gap: 10px;
+    border: none;
+    background-image:url("../assets/buttonGradient.svg");
+    /* background: radial-gradient(71.83% 71.82% at 49.82% 57.27%, #FE3360 0%, #FE3360 36.98%, rgba(254, 51, 96, 0.791562) 55.73%, rgba(254, 51, 96, 0.574062) 67.71%, rgba(254, 51, 96, 0.339394) 80.21%, rgba(254, 51, 96, 0.28) 87.5%, rgba(255, 255, 255, 0.42) 100%) warning: gradient uses a rotation that is not supported by CSS and may not behave as expected; */
+    background-size: cover;
+    border-radius: 10px;
+    margin-top: 2vw;
+    height: 52px;
+    color: white;
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 400;
+}

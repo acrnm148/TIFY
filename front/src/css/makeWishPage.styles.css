@@ -1,16 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
 
-.page-name-block {
-    height: 222px;
-    width: auto;
-    display: inline;
-}
-.page-name{
-    height: 222px;
-    background-image: url('https://user-images.githubusercontent.com/87971876/213893097-a966b259-7366-4a59-8866-ff1e1de7e4fc.svg');
-    width: 550px;
-    margin-left: 24px;
-}
 .input-form{
     display: flex;
     flex-direction: column;
