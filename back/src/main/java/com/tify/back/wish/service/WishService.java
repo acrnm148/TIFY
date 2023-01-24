@@ -1,19 +1,18 @@
 package com.tify.back.wish.service;
 
 
-import com.tify.back.gifthub.entity.Wish;
 import com.tify.back.wish.dto.AddWishDto;
-import com.tify.back.wish.repository.Wish2Repository;
+import com.tify.back.wish.entity.Wish;
+import com.tify.back.wish.repository.WishRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class Wish2Service {
-    private final Wish2Repository wishRepository;
+public class WishService {
+    private final WishRepository wishRepository;
     // 위시 데이터 저장 서비스
     public boolean saveWish(AddWishDto dto) {
-        System.out.println("saveWish Service");
         Wish wishEntity = new Wish();
         wishEntity.setGiftItems(dto.getGiftItem());
         wishEntity.setTotPrice(dto.getTotalPrice());

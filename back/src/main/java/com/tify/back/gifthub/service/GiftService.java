@@ -2,8 +2,8 @@ package com.tify.back.gifthub.service;
 
 import com.tify.back.gifthub.entity.Gift;
 import com.tify.back.gifthub.entity.Product;
-import com.tify.back.gifthub.entity.Wish;
 import com.tify.back.gifthub.repository.GiftRepository;
+import com.tify.back.wish.entity.Wish;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Iterator;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
