@@ -12,7 +12,7 @@
     "@mobiscroll/react": "https://npm.mobiscroll.com/@mobiscroll/react-trial/-/react-trial-5.21.2.tgz",
     "@reduxjs/toolkit": "^1.9.1",
     "@types/react-date-range": "^1.4.4",
-    "axios": "^1.2.4",
+    "axios": "^1.2.3",
     "http-proxy-middleware": "^2.0.6",
     "moment": "^2.29.4",
     "rc-slider": "^10.1.0",

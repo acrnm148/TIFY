@@ -5,7 +5,7 @@ interface GiftProps {
         name : string;
         price : number;
     }
-    key : number; 
+    key : number;
 }
 export function GiftItem({ gift, key } : GiftProps){
     return(
