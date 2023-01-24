@@ -18,6 +18,16 @@
   margin-right: auto;
 }
 
+.login-inside-box {
+  /* position: relative; */
+  width: 672px;
+  /* height: 824px; */
+  top: 140px;
+  padding-top: 140px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .title {
   /* LOGIN to TIFY */
 
@@ -156,4 +166,24 @@
   font-weight: bold;
   margin-top: 50px;
   margin-bottom: 30px;
+}
+
+.cross-line-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+.cross-line {
+  height: 0px;
+  border: 1px solid #a1a3a2;
+  width: 200px;
+}
+
+.icon-box {
+  display: flex;
+  justify-content: space-evenly;
+  width: 300px;
+  /* background-color: black; */
 }

@@ -31,7 +31,12 @@ export function JoinFirstPage() {
           <div className="emailBox">
             <p className="m-1">이메일</p>
             <form className="emailForm">
-              <input type="text" className="inputBox" id="emailForm" />
+              <input
+                type="text"
+                className="inputBox"
+                id="emailForm"
+                placeholder="name@example.com"
+              />
             </form>
             <button type="submit" className="loginButton font-bold">
               이메일 인증 요청

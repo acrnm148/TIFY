@@ -47,7 +47,12 @@ export function JoinSecondPage() {
             </form>
             <p className="m-1">닉네임</p>
             <form className="buttonForm">
-              <input type="text" className="inputBox" id="emailForm" />
+              <input
+                type="text"
+                className="inputBox"
+                id="emailForm"
+                placeholder="2~10자리 한글/영어"
+              />
               <button className="formSideButton">중복확인</button>
             </form>
             <p className="m-1">비밀번호</p>
