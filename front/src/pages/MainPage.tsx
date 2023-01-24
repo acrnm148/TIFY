@@ -20,29 +20,27 @@ let userSlice = createSlice({
         }
     }
 })
-export let store =  configureStore({
-    reducer: {
-        user : userSlice.reducer
-    },
-})
 
-export type RootState = ReturnType<typeof store.getState>
-export let {madewish, changeNickName} = userSlice.actions
+// export type RootState = ReturnType<typeof store.getState>
+// export let {madewish, changeNickName} = userSlice.actions
 // ------------------------------------------------------------------
 
 export function MainPage() {
     let [giftList, giftListChange] =useState([
         {
           name : "삼성비스포크1",
-          price : 100000 
+          price : 100000,
+          giftId : 1,
         },
         {
           name : "삼성비스포크2",
-          price : 200000 
+          price : 200000,
+          giftId : 2,
         },
         {
           name : "삼성비스포크3",
-          price : 300000 
+          price : 300000,
+          giftId : 3,
         },
       ]);
     return (
@@ -76,4 +74,5 @@ function CatchPrase(){
         </div>
     )
 }
-  
+    
+// export default userSlice;
