@@ -32,7 +32,7 @@ public class PhonebookService {
 
     private PhonebookDto convertToDto(Phonebook phonebook) {
         PhonebookDto phonebookDto = new PhonebookDto();
-        phonebookDto.setId(phonebook.getId());
+        phonebookDto.setUserId(phonebook.getUserId());
         phonebookDto.setName(phonebook.getName());
         phonebookDto.setPhoneNumber(phonebook.getPhoneNumber());
         return phonebookDto;
@@ -40,7 +40,7 @@ public class PhonebookService {
 
     private Phonebook convertToEntity(PhonebookDto phonebookDto) {
         Phonebook phonebook = new Phonebook();
-        phonebook.setId(phonebookDto.getId());
+        phonebook.setId(phonebookDto.getUserId());
         phonebook.setName(phonebookDto.getName());
         phonebook.setPhoneNumber(phonebookDto.getPhoneNumber());
         return phonebook;

@@ -1,6 +1,7 @@
-package com.tify.back.gifthub.entity;
+package com.tify.back.wish.entity;
 
-import java.util.Date;
+import com.tify.back.gifthub.entity.Gift;
+import com.tify.back.userpack.entity.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Setter
@@ -26,14 +28,14 @@ public class Wish {
     private List<Gift> giftItems = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "max_amount")
     private int totPrice;
 
     @Column(name = "now_amount")
-    private String nowPrice;
+    private Integer nowPrice;
 
     private String title;
     private String content;

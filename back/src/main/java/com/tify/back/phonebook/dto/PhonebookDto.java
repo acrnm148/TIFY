@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class PhonebookDto {
 
-    private Long id;
+    private Long userId;
     private String name;
     private String phoneNumber;
 

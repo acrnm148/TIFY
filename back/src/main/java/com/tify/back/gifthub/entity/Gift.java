@@ -1,6 +1,7 @@
 package com.tify.back.gifthub.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tify.back.wish.entity.Wish;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
