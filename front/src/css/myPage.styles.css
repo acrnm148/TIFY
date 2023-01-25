@@ -1,0 +1,45 @@
+.mypage-div {
+  margin-left: 90px;
+  margin-top: 80px;
+}
+
+.side-div > .profile-div {
+  width: 125px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-div > .profile-name {
+  font-weight: bold;
+  font-size: 22px;
+}
+
+.profile-div > .profile-nickname {
+  font-size: 14px;
+}
+
+.side-menu-div {
+  width: 265px;
+}
+
+.side-menu-div > .side-menu {
+  display: flex;
+  align-items: center;
+  color: #4f5150;
+  font-size: 14px;
+  height: 60px;
+  padding-left: 20px;
+}
+
+.side-menu-div > .active-menu {
+  background: #bbdaf7;
+  border-radius: 0px 40px 40px 0px;
+}
+
+.side-menu-div > .side-menu > p {
+  margin-left: 30px;
+}
+
+.side-menu > img {
+  width: 24px;
+}
