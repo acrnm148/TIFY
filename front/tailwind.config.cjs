@@ -8,7 +8,7 @@ module.exports = {
       secondary: 'a',
     },
     fontFamily: {
-      roboto: 'roboto',
+      Roboto: 'Roboto',
     },
   },
   plugins: [],
