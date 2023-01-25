@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mobiscroll/react": "https://npm.mobiscroll.com/@mobiscroll/react-trial/-/react-trial-5.21.2.tgz",
     "@reduxjs/toolkit": "^1.9.1",
     "@types/react-date-range": "^1.4.4",
     "axios": "^1.2.3",
