@@ -3,6 +3,8 @@ package com.tify.back.service.gifthub;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.tify.back.exception.NoOptionsException;
+import com.tify.back.exception.NoProductImgsException;
 import com.tify.back.exception.ProductNotFoundException;
 
 import com.tify.back.model.gifthub.Img;
@@ -79,44 +81,59 @@ public class ProductService {
         Product product = new Product();
         product = this.saveProduct(product);
         JSONObject map = new JSONObject(message);
-
+//여러개의 큰 옵션
         List<ProductOption> opts = new ArrayList<>();
-        //여러개의 큰 옵션
-        JSONArray optionlist = map.getJSONArray("options");
 
-        for(int i=0; i<optionlist.length() ; i++){
-            JSONObject option = optionlist.getJSONObject(i);
-            List<JSONObject> details = new ArrayList<>();
-            System.out.println(option.toString());
-            JSONArray detaillist = option.getJSONArray("details");
-            for (int j = 0; j < detaillist.length(); j++) {
-                details.add(detaillist.getJSONObject(j));
+        try {
+            JSONArray optionlist = map.getJSONArray("options");
+
+            for(int i=0; i<optionlist.length() ; i++){
+                JSONObject option = optionlist.getJSONObject(i);
+                List<JSONObject> details = new ArrayList<>();
+                System.out.println(option.toString());
+                JSONArray detaillist = option.getJSONArray("details");
+                for (int j = 0; j < detaillist.length(); j++) {
+                    details.add(detaillist.getJSONObject(j));
+                }
+                String title = option.getString("title");
+                int idx = option.getInt("idx");
+                opts.add(productOptionService.createProductOption(product, title, idx, details));
             }
-            String title = option.getString("title");
-            int idx = option.getInt("idx");
-            opts.add(productOptionService.createProductOption(product, title, idx, details));
-        }
+        } catch (Exception e) {
+            throw new NoOptionsException("No options found");
+        } finally {
+            List<Img> images = new ArrayList<>();
+            try {
+                JSONArray imagelist = map.getJSONArray("images");
+                for (int i = 0; i < imagelist.length(); i++) {
+                    JSONObject image = imagelist.getJSONObject(i);
+                    Img img = new Img(product,image.getString("url"),image.getInt("idx"));
+                    images.add(img);
+                    imgService.saveImg(img);
+                }
+            } catch (Exception e) {
+                throw new NoProductImgsException("No images found");
+            } finally {
+                try {
+                    product.setCategory(map.getInt("category"));
+                } catch (Exception e) {
+                    product.setCategory(0);
+                } finally {
+                    product.setName(map.getString("name"));
+                    String price = map.getString("price").replaceAll(",","");
+                    product.setPrice(Integer.parseInt(price));
+                    product.setQuantity(map.getInt("quantity"));
 
-        JSONArray imagelist = map.getJSONArray("images");
-        List<Img> images = new ArrayList<>();
-        for (int i = 0; i < imagelist.length(); i++) {
-            JSONObject image = imagelist.getJSONObject(i);
-            Img img = new Img(product,image.getString("url"),image.getInt("idx"));
-            images.add(img);
-            imgService.saveImg(img);
-        }
-
-        product.setName(map.getString("name"));
-        product.setPrice(map.getInt("price"));
-        product.setQuantity(map.getInt("quantity"));
-        product.setCategory(map.getInt("category"));
-        product.setDescription(map.getString("description"));
-        product.setImgList(images);
-        product.setOptions(opts);
-        product.setRepImg(map.getString("repImg"));
+                    product.setDescription(map.getString("description"));
+                    product.setImgList(images);
+                    product.setOptions(opts);
+                    product.setRepImg(map.getString("repImg"));
 
 //        this.saveProduct(product);// fk가 없는 상태로 img 저장하려하면 오류뜸
-        return product;
+                    return product;
+                }
+            }
+        }
     }
 
     public Product updateProduct(String message) throws Exception {
@@ -158,7 +175,6 @@ public class ProductService {
         existingProduct.setName(map.getString("name"));
         existingProduct.setPrice(map.getInt("price"));
         existingProduct.setQuantity(map.getInt("quantity"));
-        existingProduct.setCategory(map.getInt("category"));
         existingProduct.setDescription(map.getString("description"));
         existingProduct.setImgList(images);
         existingProduct.setOptions(opts);
