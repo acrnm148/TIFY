@@ -1,6 +1,6 @@
 package com.tify.back.auth;
 
-import com.tify.back.model.User;
+import com.tify.back.model.users.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

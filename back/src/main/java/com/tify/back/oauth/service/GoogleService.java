@@ -2,11 +2,10 @@ package com.tify.back.oauth.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tify.back.model.User;
+import com.tify.back.model.users.User;
 import com.tify.back.oauth.provider.Token.GoogleToken;
 import com.tify.back.oauth.provider.profile.GoogleProfile;
-import com.tify.back.oauth.provider.profile.KakaoProfile;
-import com.tify.back.repository.UserRepository;
+import com.tify.back.repository.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +15,6 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 
 @Service

@@ -4,7 +4,7 @@ package com.tify.back.config;
 import com.tify.back.auth.jwt.filter.JwtAuthenticationFilter;
 import com.tify.back.auth.jwt.filter.JwtAuthorizationFilter;
 import com.tify.back.auth.jwt.service.JwtService;
-import com.tify.back.repository.UserRepository;
+import com.tify.back.repository.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +32,7 @@ public class SecurityConfig {
         return web -> web.ignoring()
                 .antMatchers("/swagger-ui/**")
                 .antMatchers("/account/**","/", "/home","/refresh/**")
+                .antMatchers("/gifthub/**")
                 .antMatchers("/api/oauth/token/kakao","/login/oauth2/code/kakao", "/account/auth/login/kakao")
                 .antMatchers("/login/oauth2/code/naver", "/api/oauth/token/naver", "/account/auth/login/naver")
                 .antMatchers("/login/oauth2/code/google", "/api/oauth/token/google", "/account/auth/login/google");

@@ -6,11 +6,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.tify.back.auth.jwt.JwtProperties;
 import com.tify.back.auth.jwt.JwtToken;
 import com.tify.back.auth.jwt.refreshToken.RefreshToken;
-import com.tify.back.model.User;
 import io.jsonwebtoken.Jwts;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 

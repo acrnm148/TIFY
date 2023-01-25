@@ -2,10 +2,10 @@ package com.tify.back.oauth.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tify.back.model.User;
+import com.tify.back.model.users.User;
 import com.tify.back.oauth.provider.Token.NaverToken;
 import com.tify.back.oauth.provider.profile.NaverProfile;
-import com.tify.back.repository.UserRepository;
+import com.tify.back.repository.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

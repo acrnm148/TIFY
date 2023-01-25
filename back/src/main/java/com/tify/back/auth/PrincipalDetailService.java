@@ -1,7 +1,7 @@
 package com.tify.back.auth;
 
-import com.tify.back.model.User;
-import com.tify.back.repository.UserRepository;
+import com.tify.back.model.users.User;
+import com.tify.back.repository.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

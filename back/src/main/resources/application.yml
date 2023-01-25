@@ -53,7 +53,16 @@ spring:
         order_inserts: true
         order_updates: true
         format_sql: true
-
+  #file system
+  servlet:
+    multipart:
+      enabled: true
+      location: C:/Temp
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
+file:
+  uploadDir: ./88files
 
 #    <!--  transport.protocol">smtp</prop>
 #    <prop key="mail.smtp.auth">true</prop>

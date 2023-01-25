@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tify.back.auth.PrincipalDetails;
 import com.tify.back.auth.jwt.JwtToken;
 import com.tify.back.auth.jwt.service.JwtService;
-import com.tify.back.model.User;
+import com.tify.back.model.users.User;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
