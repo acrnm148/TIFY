@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+.grayBackground {
+  /* height: 964px; */
+  /* height: 2000px; */
+
+  background: #f9fafb;
+  width: 100vw;
+  padding-bottom: 200px;
+}
+
+.insideBox {
+  position: relative;
+  width: 672px;
+  /* height: 824px; */
+  top: 140px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login-inside-box {
+  /* position: relative; */
+  width: 672px;
+  /* height: 824px; */
+  top: 140px;
+  padding-top: 140px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.title {
+  /* LOGIN to TIFY */
+
+  justify-content: center;
+
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 36.65px;
+  line-height: 125.5%;
+  /* identical to box height, or 46px */
+
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.07em;
+
+  /* Rectangle 112/700 */
+
+  color: #6c6883;
+}
+
+.loginBox {
+  margin-top: 30px;
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 60px;
+}
+
+.emailBox {
+  /* position: relative; */
+  /* height: 92px;
+  left: 127px;
+  right: 128px;
+  top: 166px; */
+  /* position: absolute; */
+  width: 417px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.email {
+  /* Label */
+
+  position: absolute;
+  height: 16px;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+
+  font-family: 'NanumGothic';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  /* identical to box height, or 114% */
+
+  /* text/600 */
+
+  color: #4f5150;
+}
+
+.loginButton {
+  /* display: flex; */
+  flex-direction: row;
+  align-items: center;
+  padding: 12px 16px;
+  gap: 8px;
+
+  /* position: absolute; */
+  width: 100%;
+  height: 48px;
+
+  font-family: 'NanumGothic';
+
+  /* Foundation/Red/Normal */
+
+  background: #fe3360 !important;
+  box-shadow: 0px 8px 20px rgba(78, 96, 255, 0.16);
+  border-radius: 8px;
+  color: white;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.inputBox {
+  border: 1px solid #c1c1c1;
+  border-radius: 8px;
+  width: 417px;
+  height: 52px;
+}
+
+.findPassword {
+  float: right;
+}
+
+#emailForm {
+  margin-bottom: 20px;
+  padding-left: 15px;
+}
+
+#buttonForm {
+  margin-bottom: 20px;
+  padding-left: 15px;
+}
+
+.line {
+  color: #e0e0e0;
+  width: 40px;
+  margin: 10px;
+  margin-top: 40px;
+}
+
+.processTab {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.processBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+}
+
+.processtext {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 5px;
+}
+
+.welcome {
+  text-align: center;
+  font-size: 22.7px;
+  font-weight: bold;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.cross-line-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+.cross-line {
+  height: 0px;
+  border: 1px solid #a1a3a2;
+  width: 200px;
+}
+
+.icon-box {
+  display: flex;
+  justify-content: space-evenly;
+  width: 300px;
+  /* background-color: black; */
+}
