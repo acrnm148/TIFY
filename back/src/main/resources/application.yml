@@ -41,6 +41,7 @@ spring:
   jpa:
     generate-ddl: true
     hibernate:
+      ## none || update || create
       ddl-auto: create
     show-sql: true
     properties:
