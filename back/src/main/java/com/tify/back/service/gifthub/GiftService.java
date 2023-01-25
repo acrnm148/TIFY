@@ -1,18 +1,11 @@
 package com.tify.back.service.gifthub;
 
-<<<<<<< HEAD:back/src/main/java/com/tify/back/service/gifthub/GiftService.java
 
 import com.tify.back.model.gifthub.Gift;
 import com.tify.back.model.gifthub.Product;
 import com.tify.back.repository.gifthub.GiftRepository;
 
 import com.tify.back.model.wish.Wish;
-=======
-import com.tify.back.gifthub.entity.Gift;
-import com.tify.back.gifthub.entity.Product;
-import com.tify.back.gifthub.repository.GiftRepository;
-import com.tify.back.wish.entity.Wish;
->>>>>>> 1687efce5b9f2b654e3e374326a0e2ba6ad7ede9:back/src/main/java/com/tify/back/gifthub/service/GiftService.java
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.json.JSONObject;

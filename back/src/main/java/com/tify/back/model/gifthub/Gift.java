@@ -1,11 +1,7 @@
 package com.tify.back.model.gifthub;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-<<<<<<< HEAD:back/src/main/java/com/tify/back/model/gifthub/Gift.java
 import com.tify.back.model.wish.Wish;
-=======
-import com.tify.back.wish.entity.Wish;
->>>>>>> 1687efce5b9f2b654e3e374326a0e2ba6ad7ede9:back/src/main/java/com/tify/back/gifthub/entity/Gift.java
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

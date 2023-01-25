@@ -1,14 +1,7 @@
-<<<<<<<< HEAD:back/src/main/java/com/tify/back/model/wish/Wish.java
 package com.tify.back.model.wish;
 
 import com.tify.back.model.gifthub.Gift;
 import com.tify.back.model.users.User;
-========
-package com.tify.back.wish.entity;
-
-import com.tify.back.gifthub.entity.Gift;
-import com.tify.back.userpack.entity.User;
->>>>>>>> 1687efce5b9f2b654e3e374326a0e2ba6ad7ede9:back/src/main/java/com/tify/back/wish/entity/Wish.java
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
