@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .antMatchers("/swagger-ui/**")
                 .antMatchers("/account/**","/", "/home","/refresh/**")
                 .antMatchers("/gifthub/**")
+                .antMatchers("/custom/**")
                 .antMatchers("/api/oauth/token/kakao","/login/oauth2/code/kakao", "/account/auth/login/kakao")
                 .antMatchers("/login/oauth2/code/naver", "/api/oauth/token/naver", "/account/auth/login/naver")
                 .antMatchers("/login/oauth2/code/google", "/api/oauth/token/google", "/account/auth/login/google");

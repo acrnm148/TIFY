@@ -101,6 +101,3 @@ configurations {
     querydsl.extendsFrom compileClasspath
 }
 // QueryDSL 설정 end
-task clean {
-    delete 'build'
-}
