@@ -16,15 +16,18 @@ export function GiftHubPage() {
   let [giftList, setGiftList] =useState([
     {
       name : "삼성비스포크1",
-      price : 100000 
+      price : 100000,
+      giftId : 1,
     },
     {
       name : "삼성비스포크2",
-      price : 200000 
+      price : 200000,
+      giftId : 2,
     },
     {
       name : "삼성비스포크3",
-      price : 300000 
+      price : 300000,
+      giftId : 3,
     },
   ]);
 
@@ -76,11 +79,11 @@ export function GiftHubPage() {
           <GiftHubList giftList={giftList} />
         </div>
         
-        <div>
+        {/* <div>
           <h1>User Redux Test</h1>
           <h1>{state.user.nickName}</h1>
           <button onClick={()=>{dispatch(changeNickName('새로운닉네임'))}}>버튼</button>
-        </div>
+        </div> */}
       </div>
      
 

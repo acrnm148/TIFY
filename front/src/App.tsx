@@ -20,6 +20,7 @@ import { Footer } from './fixture/Footer';
 import { MainPage } from './pages/MainPage';
 
 import './css/styles.css';
+import { GiftHubDetailPage } from './pages/GiftHubDetailPage';
 function App() {
   return (
     <BrowserRouter>
@@ -27,6 +28,7 @@ function App() {
       <Routes>
         <Route path="" element={<MainPage />} />
         <Route path="/gifthub" element={<GiftHubPage />} />
+        <Route path="/gifthub/:giftId" element={<GiftHubDetailPage />} />
         <Route path="/makewish" element={<MakeWishPage />} />
         <Route path="/checkwish" element={<CheckWishPage />} />
         <Route path="/thanks/:wishId/:conId" element={<ThanksPage />} />
