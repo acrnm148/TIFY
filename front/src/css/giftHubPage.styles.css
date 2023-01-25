@@ -1,0 +1,150 @@
+.gift-sortig{
+    display: flex;
+    flex-direction: row;
+}
+.filter-bar-container{
+    display: inline-block;
+    width: 100vw;
+    height: 104px;
+    margin-top: 14px;
+    border: #C1C1C1;
+    border-radius: 8px;
+/* text/200 */
+
+}
+
+.gift-sortig{
+    margin-top: 14px;
+    margin-bottom: 14px;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+
+.gift-sortig p {
+    margin-right: 10px;
+}
+
+.filter-bar{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.filter-bar input{
+    border: 1px solid #C1C1C1;
+    border-radius: 10px;
+    height: 14vh;
+}
+
+.gift-sortig > div {
+    display: flex;
+    justify-content: left;
+}
+@media (min-width : 1025px)
+{
+    .filter-bar input{
+        width: 60%;
+    }
+    .gift-sortig > div {
+        width: 60%;
+    }
+    .slider-container{
+        width: 60%;
+    }
+    .price-slider {
+        width: 50%;
+    }
+}
+@media (max-width : 1024px)
+{
+    .filter-bar input{
+        width: 70%;
+    }
+    .gift-sortig > div {
+        width: 70%;
+    }
+    .slider-container{
+        width: 70%;
+    }
+    .price-slider {
+        width: 60%;
+    }
+}
+@media (max-width : 768px)
+{
+    .filter-bar input{
+        width: 90%;
+    }
+    .gift-sortig > div {
+        width: 90%;
+    }
+    .slider-container{
+        width: 90%;
+    }
+    .price-slider {
+        width: 80%;
+    }
+}
+
+
+/* slider */
+.slider-container{
+    height: 110px;
+    border: 1px solid #C1C1C1;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 7px;
+}
+.price-slider {
+    max-height: 500px;
+    margin: auto;
+  }
+  .price-thumb {
+    cursor: pointer;
+    position: absolute;
+    z-index: 100;
+    background: #ffffff;
+    border: 5px solid #3774ff;
+    border-radius: 100%;
+    display: block;
+    box-shadow: 0 0 2px 0 rgb(0 0 0 / 44%);
+  }
+  .price-thumb.active {
+    background-color: grey;
+  }
+  .price-track {
+    position: relative;
+    background: #ddd;
+  }
+  .price-track.price-track-0 {
+    background: #83a9ff;
+  }
+  .price-slider .price-track {
+    top: 20px;
+    height: 4px;
+  }
+  .price-slider .price-thumb {
+    top: 12px;
+    width: 10px;
+    outline: none;
+    height: 10px;
+    line-height: 38px;
+  }
+  .slider-filter{
+      width: 3em;
+  }
+  .slider-numbers{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+  }
+  .slider-numbers-range{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+  }
+  .slider-con-numbers-range{
+      width: 80%;
+  }
