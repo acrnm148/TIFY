@@ -15,7 +15,6 @@ public class MyFilter1 implements Filter {
         HttpServletResponse rep = (HttpServletResponse)response;
 
         System.out.println("Testing ...");
-        System.out.println(req.getServerName()+" ~~ "+req.getServerPort() + " ~~ "+ req.getRequestURI() +" ~~ ");
 //        if(req.getMethod().equals("POST")) {
 //            String headerAuth = req.getHeader("Authorization");
 //            System.out.println("myFilter1: " + headerAuth);
