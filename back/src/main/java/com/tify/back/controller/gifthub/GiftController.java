@@ -1,0 +1,58 @@
+package com.tify.back.controller.gifthub;
+
+import com.tify.back.model.gifthub.Gift;
+import com.tify.back.model.wish.Wish;
+import com.tify.back.service.gifthub.GiftService;
+import com.tify.back.service.gifthub.OrderService;
+import com.tify.back.service.gifthub.ProductService;
+import com.tify.back.service.wish.WishService;
+import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/gift")
+public class GiftController {
+    private final GiftService giftService;
+    private final OrderService orderService;
+    private final WishService wishService;
+    private final ProductService productService;
+
+    @GetMapping("/detail/{id}")
+    public Gift getGift(@PathVariable Long id) {
+        return giftService.getGiftById(id);
+    }
+
+    @PostMapping
+    public Gift makeGift(@RequestBody String message) throws JSONException {
+        return giftService.createGift(message);
+    }
+
+    @DeleteMapping("/detail/{id}")
+    public String deleteGift(@PathVariable Long id) {
+        return giftService.deleteGift(id);
+    }
+
+    @PutMapping("/detail/{id}")
+    public Gift updateGift(@PathVariable Long id, @RequestBody Gift gift) {
+        Gift existingGift = giftService.getGiftById(id);
+        existingGift.setUserOption(gift.getUserOption());
+        existingGift.setIdx(gift.getIdx());
+        existingGift.setFinishYN(gift.getFinishYN());
+        existingGift.setGathered(gift.getGathered());
+        existingGift.setQuantity(gift.getQuantity());
+        existingGift.setFinishYN(gift.getFinishYN());
+        existingGift.setMaxAmount(gift.getMaxAmount());
+        existingGift.setSuccessYN(gift.getSuccessYN());
+        existingGift.setPurePrice(gift.getPurePrice());
+        existingGift.setEndDate(gift.getEndDate());
+        existingGift.setType(gift.getType());
+        // wish, product는 생성시, order는 order 생성시.
+        return giftService.updateGift(existingGift);
+    }
+
+}

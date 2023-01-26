@@ -13,6 +13,12 @@ import org.springframework.stereotype.Service;
 public class WishService {
     private final WishRepository wishRepository;
     // 위시 데이터 저장 서비스
+    public Wish pureSave(Wish wish) {
+        return wishRepository.save(wish);
+    }
+    public Wish findWishById(Long id) {
+        return wishRepository.findById(id).orElse(null);
+    }
     public boolean saveWish(AddWishDto dto) {
         Wish wishEntity = new Wish();
         wishEntity.setGiftItems(dto.getGiftItem());

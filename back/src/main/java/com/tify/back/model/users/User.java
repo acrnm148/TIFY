@@ -54,16 +54,17 @@ public class User {
     /**
      * 연결
 
-    @OneToOne(mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     private List<Noti> notis = new ArrayList<> ();
 
-    @OneToOne(mappedBy = "user")
+
+    @OneToMany(mappedBy = "user")
     private List<Order> orders = new ArrayList<> ();
 
-    @OneToOne(mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     private List<Friend> friends = new ArrayList<> ();
 
-    @OneToOne(mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     private List<Pay> pay = new ArrayList<> ();
 
     @OneToMany(mappedBy = "user")
@@ -72,8 +73,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<QnA> qnas = new ArrayList<> ();
 
-    @OneToMany(mappedBy = "user")
-    private List<Cart> carts = new ArrayList<> ();
+    @OneToOne(mappedBy = "user")
+    private Cart cart;
 
     @OneToMany(mappedBy = "user")
     private List<Wish> wishes = new ArrayList<> ();
