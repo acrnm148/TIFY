@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @Tag(name = "user", description = "유저 API")
+@RestMapping("/api")
 @RestController
 @RequiredArgsConstructor
 public class UserApiController {
