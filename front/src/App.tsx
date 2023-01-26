@@ -6,7 +6,7 @@ import { MakeWishPage } from './pages/MakeWishPage';
 import { CheckWishPage } from './pages/CheckWishPage';
 import { ThanksPage } from './pages/ThanksPage';
 import { FriendsPage } from './pages/FriendsPage';
-import { MyPage } from './pages/MyPage';
+import { MyPage } from './pages/mypage/MyPage';
 import { LikePage } from './pages/LikePage';
 import { AlramPage } from './pages/AlramPage';
 import { FaqPage } from './pages/FaqPage';
@@ -15,6 +15,8 @@ import { LoginPage } from './pages/LoginPage';
 import { JoinFirstPage } from './pages/JoinFirstPage';
 import { JoinSecondPage } from './pages/JoinSecondPage';
 import { JoinThirdPage } from './pages/JoinThirdPage';
+import { MyWish } from './components/Mywish';
+import { Joined } from './components/Joined';
 import { Footer } from './fixture/Footer';
 
 import { MainPage } from './pages/MainPage';
@@ -34,7 +36,11 @@ function App() {
         <Route path="/thanks/:wishId/:conId" element={<ThanksPage />} />
         <Route path="/friends" element={<FriendsPage />} />
 
-        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/mypage" element={<MyPage />}>
+          <Route path="mywish" element={<MyWish />} />
+          <Route path="joined" element={<Joined />} />
+        </Route>
+
         <Route path="/like" element={<LikePage />} />
         <Route path="/alram" element={<AlramPage />} />
 

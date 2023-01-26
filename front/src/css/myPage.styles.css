@@ -1,12 +1,21 @@
 .mypage-div {
   margin-left: 90px;
   margin-top: 80px;
+  display: flex;
+}
+
+.side-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 265px;
+  margin-right: 20px;
 }
 
 .side-div > .profile-div {
   width: 125px;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .profile-div > .profile-name {
@@ -38,8 +47,63 @@
 
 .side-menu-div > .side-menu > p {
   margin-left: 30px;
+  font-weight: bold;
 }
 
 .side-menu > img {
   width: 24px;
+}
+
+.my-wish-div {
+  width: 1000px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.my-wish-div > .wish-box {
+  width: 300px;
+  height: 300px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.wish-box > .p-date {
+  text-align: right;
+  font-size: 9px;
+  color: #a1a3a2;
+}
+
+.wish-box > .p-proceed {
+  text-align: right;
+  font-size: 14px;
+  color: #fe3360;
+}
+
+.wish-box > .p-done {
+  text-align: right;
+  font-size: 14px;
+  color: #a1a3a2;
+}
+
+.wish-box > .category-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.category-div > .wish-title {
+  text-align: center;
+  font-weight: bold;
+  width: 100%;
+  font-size: 18px;
+}
+
+.wish-box > .profile-div {
+  margin-top: auto;
+  background-color: black;
+}
+
+.donator-div {
+  margin-top: 50px;
 }
