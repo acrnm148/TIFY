@@ -52,7 +52,7 @@ public class UserApiController {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    @GetMapping("home")
+    @GetMapping("/api/home")
     public String home() {
         return "home";
     }
