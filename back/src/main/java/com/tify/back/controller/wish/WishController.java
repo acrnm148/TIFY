@@ -42,4 +42,9 @@ public class WishController {
         return wishRepository.findAll();
     }
 
+    @PostMapping// test용 빈 wish 만드는 컨트롤러
+    public Wish makeWish(String message) {
+        Wish wish = new Wish();
+        return wishService.pureSave(wish);
+    }
 }
