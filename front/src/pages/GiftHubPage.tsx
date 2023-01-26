@@ -2,17 +2,18 @@ import { GiftHubCategory } from "../components/GiftHubCategory";
 import { SearchBar } from "../components/SearchBar";
 import { GiftHubList } from "../components/GiftHubList";
 import "../css/giftHubPage.styles.css";
-import { useRef, useState } from "react";
-import {useDispatch, useSelector, Provider } from 'react-redux';
-import {RootState, changeNickName, store} from './MainPage';
-import {Dispatch} from 'redux';
+import { useEffect, useState } from "react";
 import iconFilter from "../assets/iconFilter.svg";
 
 // slider
 import ReactSlider from "react-slider";
+import axios from "axios";
 
 
 export function GiftHubPage() {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+	const [priceRange, setPriceRange] = useState([0, 100]);
+  const [category, setCategory] = useState<number>();
   let [giftList, setGiftList] =useState([
     {
       name : "삼성비스포크1",
@@ -31,10 +32,26 @@ export function GiftHubPage() {
     },
   ]);
 
-// redux test------------------------------------------------------------------
-    const state = useSelector((state:RootState) =>state);
-    const dispatch :Dispatch = useDispatch();
-
+  let max_result = 10//디폴트
+  let page = 1
+  // 기본값은 상품목록에서 보여주는 Recommend 리스트는 검색어가 없을 때 store에 저장한 리스트 표출
+// (검색어 | 카테고리 선택 | 상품리스트에 변경)이 있을 때 실행되는 함수 
+  useEffect(() => {
+    const fetchData = async () => {
+      const API_URL = `http://i8e208.p.ssafy.io/api?minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&name=${searchQuery}&category=${category}&max_result=${max_result}&page=${page}",`;
+        axios.get(API_URL
+          ).then((e)=>{
+            console.log('데이터를 받아옴')
+            console.log(e.data)
+            let copy = [...giftList,e.data];
+            // let copy = [...giftList,{name:'new', price:9999, gitId:4}];
+            setGiftList(copy)
+          }).catch((err) => {
+            console.log('error', err)
+          });
+        }
+      fetchData();
+    },[searchQuery, priceRange, giftList, category]);
 
     return (
       <div>        
@@ -78,12 +95,6 @@ export function GiftHubPage() {
         <div>
           <GiftHubList giftList={giftList} />
         </div>
-        
-        {/* <div>
-          <h1>User Redux Test</h1>
-          <h1>{state.user.nickName}</h1>
-          <button onClick={()=>{dispatch(changeNickName('새로운닉네임'))}}>버튼</button>
-        </div> */}
       </div>
      
 

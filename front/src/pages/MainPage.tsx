@@ -1,36 +1,27 @@
-import { useState } from 'react';
+import axios, { AxiosPromise } from 'axios';
+import { useEffect, useState } from 'react';
 import phone from '../assets/phone.svg';
 import { GiftHubCategory } from '../components/GiftHubCategory';
 import { GiftRecommendList } from '../components/GiftRecommendList';
 import { SearchBar } from '../components/SearchBar';
 import '../css/mainPage.styles.css';
 import '../css/styles.css';
-import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
-// redux test------------------------------------------------------------------
-const user = { firstName: 'gh', nickName: '기프트허브', wish: 1 };
-let userSlice = createSlice({
-  name: 'user',
-  initialState: user,
-  reducers: {
-    madewish(state) {
-      state.wish += 1;
-    },
-    changeNickName(state, action: PayloadAction<string>) {
-      state.nickName = action.payload;
-    },
-  },
-});
-export let store = configureStore({
-  reducer: {
-    user: userSlice.reducer,
-  },
-});
+import {GiftList } from '../interface/interface';
 
-export type RootState = ReturnType<typeof store.getState>;
-export let { madewish, changeNickName } = userSlice.actions;
-// ------------------------------------------------------------------
 
 export function MainPage() {
+  // let [giftList, setGiftList] = useState<GiftList[]>([]);
+  
+  // useEffect(() => {
+  //   async function fetchdata() {
+  //     const API_URL = '/gifthub/main/';
+  //     // http://i8e208.p.ssafy.io/gifthub/main 
+  //     const {data} = await axios.get(API_URL);
+  //     console.log(data);
+  //   }
+  //   fetchdata()
+  // });
+
   let [giftList, giftListChange] = useState([
     {
       name: '삼성비스포크1',

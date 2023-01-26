@@ -7,7 +7,7 @@ interface GiftProps {
     }
     key : number;
 }
-export function GiftItem({ gift, key } : GiftProps){
+export function GiftItem({ gift } : GiftProps, key:number){
     return(
         <div className="gift-item-card-container">
             <div className="gift-item-card">

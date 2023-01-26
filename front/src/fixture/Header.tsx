@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 export function Header() {
   const [showWishDetail, setShowWishDetail] =useState<boolean>(false)
-  const [hideWishDetail, setHideWishDetail] = useState<boolean>(false)
+  const [hideWishDetail, setHideWishDetail] = useState<boolean>(true)
   return (
     <nav className="navbar-container">
 
