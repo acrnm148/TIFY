@@ -1,44 +1,44 @@
 import axios, { AxiosPromise } from 'axios';
 import { useEffect, useState } from 'react';
 import phone from '../assets/phone.svg';
-import { GiftHubCategory } from '../components/GiftHubCategory';
+import GiftHubCategory from '../components/GiftHubCategory';
 import { GiftRecommendList } from '../components/GiftRecommendList';
-import { SearchBar } from '../components/SearchBar';
+import  SearchBar  from '../components/SearchBar';
 import '../css/mainPage.styles.css';
 import '../css/styles.css';
 import {GiftList } from '../interface/interface';
 
 
 export function MainPage() {
-  // let [giftList, setGiftList] = useState<GiftList[]>([]);
+  let [giftList, setGiftList] = useState<GiftList[]>([]);
   
-  // useEffect(() => {
-  //   async function fetchdata() {
-  //     const API_URL = '/gifthub/main/';
-  //     // http://i8e208.p.ssafy.io/gifthub/main 
-  //     const {data} = await axios.get(API_URL);
-  //     console.log(data);
-  //   }
-  //   fetchdata()
-  // });
+  useEffect(() => {
+    async function fetchdata() {
+      const API_URL = '/gifthub/main/';
+      // http://i8e208.p.ssafy.io/gifthub/main 
+      const {data} = await axios.get(API_URL);
+      console.log(data);
+    }
+    fetchdata()
+  });
 
-  let [giftList, giftListChange] = useState([
-    {
-      name: '삼성비스포크1',
-      price: 100000,
-      giftId: 1,
-    },
-    {
-      name: '삼성비스포크2',
-      price: 200000,
-      giftId: 2,
-    },
-    {
-      name: '삼성비스포크3',
-      price: 300000,
-      giftId: 3,
-    },
-  ]);
+  // let [giftList, giftListChange] = useState([
+  //   {
+  //     name: '삼성비스포크1',
+  //     price: 100000,
+  //     giftId: 1,
+  //   },
+  //   {
+  //     name: '삼성비스포크2',
+  //     price: 200000,
+  //     giftId: 2,
+  //   },
+  //   {
+  //     name: '삼성비스포크3',
+  //     price: 300000,
+  //     giftId: 3,
+  //   },
+  // ]);
   return (
     <div className="main-container">
       <div className="main-components">
@@ -48,9 +48,9 @@ export function MainPage() {
         </div>
       </div>
       <div>
-        <GiftHubCategory />
-        <SearchBar />
-        <GiftRecommendList giftList={giftList} />
+        {/* <GiftHubCategory /> */}
+        {/* <SearchBar /> */}
+        {/* <GiftRecommendList giftList={giftList} /> */}
       </div>
     </div>
   );
