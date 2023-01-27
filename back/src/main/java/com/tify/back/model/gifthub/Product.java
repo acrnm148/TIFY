@@ -21,12 +21,13 @@ public class Product {
     @Column(name = "product_name")
     private String name;
 
-    @Column(name = "rep_img")
+    @Column(name = "rep_img",length = 1000)
     private String repImg;
     @OneToMany(mappedBy = "product",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Img> imgList = new ArrayList<>();
     private int quantity; // count 대신
     private int price;
+    @Column(length = 1000)
     private String description;
 
     @Column(name = "category_id")
