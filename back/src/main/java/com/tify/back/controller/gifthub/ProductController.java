@@ -22,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/gifthub")
+@RequestMapping("/api/gifthub")
 public class ProductController {
 
     private final ProductService productService;
@@ -39,7 +39,7 @@ public class ProductController {
     //https://devjaewoo.tistory.com/88 error 참고.
     // 상품 등록 단일 json 형태
     @PostMapping("/product")
-    public Product test(@RequestBody String message) throws Exception {
+    public Product addProduct(@RequestBody String message) throws Exception {
         return productService.createProduct(message);
     }
     

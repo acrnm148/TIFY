@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/qna")
+@RequestMapping("/api/qna")
 public class QnAController {
     private final QnAService qnaService;
     private final QnAFileService qnaFileService;

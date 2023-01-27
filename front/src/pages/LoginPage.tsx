@@ -1,6 +1,5 @@
 import '../css/login.styles.css';
 import iconGoogle from '../assets/iconGoogle.svg';
-import iconKakao from '../assets/iconKakao.svg';
 
 export function LoginPage() {
   return (
@@ -51,7 +50,6 @@ export function LoginPage() {
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <div className="icon-box">
             <img src={iconGoogle} alt="" />
-            <img src={iconKakao} alt="" />
           </div>
         </div>
       </div>

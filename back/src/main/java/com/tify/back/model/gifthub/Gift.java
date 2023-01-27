@@ -19,37 +19,35 @@ public class Gift {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "gift_id")
     private Long id;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
-
     @JsonIgnore // json 할때 무시하고 json 생성, image에서 product는 mapping용이면 충분
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="wish_id") //OrderItem은 하나의 Order만 가진다. => order_id 매핑
     private Wish wish;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "gift")
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+//    @OneToMany
+//    private List<Thank> thanks;
+
     private int quantity; // 수량
-    private String options; // json 형태
-
     //state
-
-    private String user_option;
+    @Column(name = "user_option")
+    private String userOption;// json 형태
     private String type;
     private String finishYN;
     @Temporal(TemporalType.DATE)
     private Date endDate;
-
     @Column(name = "max_amount")
     private Integer maxAmount;
-
-    @Column(name = "price")
+    @Column(name = "pure_price")
     private int purePrice; // 상품 가격(수량 옵션)
-
+    private int gathered; // 모인 돈
     private String successYN;
-
-    private String addr1;
-    private String addr2;
-    private String zipCode;
-
     private Integer idx;
 }

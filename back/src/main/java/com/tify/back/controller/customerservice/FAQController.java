@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/faq")
+@RequestMapping("/api/faq")
 public class FAQController {
 
     private final FAQService faqService;
