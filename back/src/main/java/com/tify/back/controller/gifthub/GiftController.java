@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/gift")
+@RequestMapping("/api/gift")
 public class GiftController {
     private final GiftService giftService;
     private final OrderService orderService;

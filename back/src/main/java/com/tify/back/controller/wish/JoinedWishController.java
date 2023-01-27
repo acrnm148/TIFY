@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/join")
+@RequestMapping("/api/join")
 public class JoinedWishController {
     private final JoinedWishService joinedWishService;
     private final JoinedWishRepository joinedWishRepository;

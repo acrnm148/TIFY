@@ -38,6 +38,7 @@ import java.util.Map;
 @Tag(name = "user", description = "유저 API")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class UserApiController {
 
     private final UserRepository userRepository;

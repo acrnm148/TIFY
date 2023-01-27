@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/custom/test")
+@RequestMapping("/api/custom/test")
 public class CustomerTestController {
     @RequestMapping(value = "/")
     public String index() {

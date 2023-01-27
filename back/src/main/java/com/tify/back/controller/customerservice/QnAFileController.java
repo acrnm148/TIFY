@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class QnAFileController {
     private final QnAFileService qnaFileService;
 
