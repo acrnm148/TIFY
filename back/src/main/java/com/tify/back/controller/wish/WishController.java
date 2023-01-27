@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/wish")
+@RequestMapping("/api/wish")
 public class WishController {
     private final WishService wishService;
     private final WishRepository wishRepository;
