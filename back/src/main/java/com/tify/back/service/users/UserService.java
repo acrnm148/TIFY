@@ -19,6 +19,7 @@ import com.tify.back.model.users.User;
 import com.tify.back.repository.users.EmailAuthCustomRepository;
 import com.tify.back.repository.users.EmailAuthRepository;
 import com.tify.back.repository.users.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -304,4 +305,11 @@ public class UserService {
     public User save(User user) {
         return userRepository.save(user);
     }
+
+
+    public List<User> searchUserByNickname(String nickname) {
+        return userRepository.findByNicknameLike(nickname);
+    }
+
+
 }
