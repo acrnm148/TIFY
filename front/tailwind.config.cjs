@@ -5,7 +5,6 @@ module.exports = {
     extend: {},
     colors: {
       primary: '#FE3360',
-      secondary: 'a',
     },
     fontFamily: {
       Roboto: 'Roboto',
