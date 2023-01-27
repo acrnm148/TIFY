@@ -17,7 +17,7 @@ export function Joined() {
   );
 }
 
-function JoinedWishCardActive(props) {
+function JoinedWishCardActive(props: { title: string }) {
   return (
     <div className="joined-wish-box shadow-xl">
       <p className="p-date">완료까지 7일</p>
@@ -34,7 +34,7 @@ function JoinedWishCardActive(props) {
   );
 }
 
-function JoinedWishCardDeactive(props) {
+function JoinedWishCardDeactive(props: { title: string }) {
   return (
     <div className="joined-wish-box shadow-xl">
       <p className="p-date">22.01.02 ~ 22.01.26</p>

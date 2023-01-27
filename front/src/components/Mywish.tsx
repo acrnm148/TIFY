@@ -69,7 +69,7 @@ function Donator() {
   );
 }
 
-function WishCardActive(props) {
+function WishCardActive(props: { title: string }) {
   return (
     <div className="wish-box shadow-xl">
       <p className="p-date">완료까지 7일</p>
@@ -83,7 +83,7 @@ function WishCardActive(props) {
   );
 }
 
-function WishCardDeactive(props) {
+function WishCardDeactive(props: { title: string }) {
   return (
     <div className="wish-box shadow-xl">
       <p className="p-date">완료까지 7일</p>

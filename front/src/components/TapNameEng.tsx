@@ -1,6 +1,6 @@
 import '../css/tapName.styles.css';
 
-function TapNameEng(props) {
+function TapNameEng(props: { title: string; content: string }) {
   return (
     <div className="tap-box">
       <div className="side-bar"></div>

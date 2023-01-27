@@ -36,10 +36,9 @@ export function MyPage() {
   );
 }
 
-function Sidebar(props) {
+function Sidebar(props: { tapId: string }) {
   return (
     <div className="side-div">
-      {console.log(props.tapId)}
       <div className="profile-div">
         <img src={iconProfileSample} alt="사진추가하기" />
         <p className="profile-name">정인모</p>
