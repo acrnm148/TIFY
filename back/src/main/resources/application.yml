@@ -9,7 +9,7 @@ server:
 
 spring:
   redis:
-    host: localhost
+    host: localhost #i8e208.p.ssafy.io
     port: 6379
   mail:
     host: smtp.gmail.com
