@@ -24,12 +24,12 @@ public class WishService {
     public boolean saveWish(AddWishDto dto) {
         Wish wishEntity = new Wish();
         wishEntity.setGiftItems(dto.getGiftItem());
-        try {
-            List<Gift> giftItems = objectMapper.readValue((JsonParser) dto.getGiftItem(), new TypeReference<List<Gift>>(){});
-            wishEntity.setGiftItems(giftItems);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            List<Gift> giftItems = objectMapper.readValue((JsonParser) dto.getGiftItem(), new TypeReference<List<Gift>>(){});
+//            wishEntity.setGiftItems(giftItems);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         wishEntity.setTotPrice(dto.getTotalPrice());
         wishEntity.setNowPrice(dto.getNowPrice());
         wishEntity.setTitle(dto.getWishTitle());
