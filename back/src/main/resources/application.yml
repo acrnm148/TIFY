@@ -3,7 +3,7 @@ server:
   ssl:
     enabled: true
     key-store-type: PKC512
-    key-store: /root/key.p12
+    key-store: /var/www/html/key.p12
     key-store-password: 
 
 
