@@ -302,7 +302,9 @@ public class UserService {
     }
 
     // test용 계정 생성
+    @Transactional
     public User save(User user) {
+        user.setRoles("USER");
         return userRepository.save(user);
     }
 
