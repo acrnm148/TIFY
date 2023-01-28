@@ -1,5 +1,6 @@
 package com.tify.back.controller.gifthub;
 
+import com.tify.back.dto.gifthub.GiftDto;
 import com.tify.back.model.gifthub.Gift;
 import com.tify.back.model.wish.Wish;
 import com.tify.back.service.gifthub.GiftService;
@@ -27,10 +28,10 @@ public class GiftController {
         return giftService.getGiftById(id);
     }
 
-    @PostMapping
-    public Gift makeGift(@RequestBody String message) throws JSONException {
-        return giftService.createGift(message);
-    }
+//    @PostMapping
+//    public GiftDto makeGift(@RequestBody GiftDto giftDto) throws JSONException {
+//        return giftService.createGift(giftDto);
+//    }
 
     @DeleteMapping("/detail/{id}")
     public String deleteGift(@PathVariable Long id) {
@@ -49,7 +50,6 @@ public class GiftController {
         existingGift.setMaxAmount(gift.getMaxAmount());
         existingGift.setSuccessYN(gift.getSuccessYN());
         existingGift.setPurePrice(gift.getPurePrice());
-        existingGift.setEndDate(gift.getEndDate());
         existingGift.setType(gift.getType());
         // wish, product는 생성시, order는 order 생성시.
         return giftService.updateGift(existingGift);
