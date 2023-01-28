@@ -4,5 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum FriendStatus {
-    REQUESTED, ACCEPTED, REJECTED, BLOCKED
+    REQUESTED, ACCEPTED, REJECTED, BLOCKED, RECEIVED
 }
+
+
+
+
+

@@ -6,7 +6,6 @@ import com.tify.back.model.friend.FriendStatus;
 import com.tify.back.repository.friend.FriendRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -53,5 +52,12 @@ public class FriendService {
             return friendRepository.save(friend);
         }
         return null;
+    }
+    public List<Friend> getPendingRequests(long userId) {
+        return friendRepository.findByUserIdAndStatus(userId, FriendStatus.REQUESTED);
+    }
+
+    public List<Friend> getReceivedRequests(long userId) {
+        return friendRepository.findByFriendIdAndStatus(userId, FriendStatus.REQUESTED);
     }
 }
