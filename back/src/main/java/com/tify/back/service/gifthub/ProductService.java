@@ -3,6 +3,10 @@ package com.tify.back.service.gifthub;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.tify.back.dto.gifthub.ImgDto;
+import com.tify.back.dto.gifthub.ProductDto;
+import com.tify.back.dto.gifthub.ProductOptionDetailDto;
+import com.tify.back.dto.gifthub.ProductOptionDto;
 import com.tify.back.exception.NoOptionsException;
 import com.tify.back.exception.NoProductImgsException;
 import com.tify.back.exception.ProductNotFoundException;
@@ -10,6 +14,8 @@ import com.tify.back.exception.ProductNotFoundException;
 import com.tify.back.model.gifthub.Img;
 import com.tify.back.model.gifthub.Product;
 import com.tify.back.model.gifthub.ProductOption;
+import com.tify.back.model.gifthub.ProductOptionDetail;
+import com.tify.back.repository.gifthub.ProductOptionDetailRepository;
 import com.tify.back.repository.gifthub.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
@@ -27,7 +33,10 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ImgService imgService;
     private final ProductOptionService productOptionService;
+    private final ProductOptionDetailService productOptionDetailService;
     ObjectMapper objectMapper = new ObjectMapper();
+    private final ProductOptionDetailRepository productOptionDetailRepository;
+
     public Product saveProduct(Product product) {
         return productRepository.save(product);
     }
@@ -72,6 +81,44 @@ public class ProductService {
 
     public static void addImg(Product product, Img img) {
         product.getImgList().add(img);
+    }
+
+    public String temp(String message) {
+        return message;
+    }
+    @Transactional
+    public Product pyProduct(ProductDto dto) {
+        Product product = dto.toEntity();
+        productRepository.save(product);
+
+        List<Img> imgList = product.getImgList();
+        for (ImgDto imgDto : dto.getImages()) {
+            Img img = imgDto.toEntity();
+            img.setProduct(product);
+            imgService.saveImg(img);
+            imgList.add(img);
+        }
+
+        List<ProductOption> options = new ArrayList<>();
+        for (ProductOptionDto optionDto : dto.getOptions()) {
+            ProductOption productOption = optionDto.toEntity();
+            productOption.setProduct(product);
+            productOptionService.saveProductOption(productOption);
+            List<ProductOptionDetail> details = new ArrayList<>();
+
+            for (ProductOptionDetailDto detailDto : optionDto.getDetails()) {
+                ProductOptionDetail productOptionDetail = detailDto.toEntity();
+                productOptionDetail.setProductOption(productOption);
+                productOptionDetailService.saveProductOptionDetail(productOptionDetail);
+                details.add(productOptionDetail);
+            }
+            productOption.setDetails(details);
+            productOptionService.saveProductOption(productOption);
+            options.add(productOption);
+        }
+        product.setOptions(options);
+        product.setImgList(imgList);
+        return productRepository.save(product);
     }
 
     @Transactional

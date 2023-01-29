@@ -2,6 +2,7 @@ package com.tify.back.controller.gifthub;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.tify.back.dto.gifthub.ProductDto;
 import com.tify.back.dto.gifthub.ProductSummary;
 import com.tify.back.model.gifthub.Product;
 import com.tify.back.repository.gifthub.ProductRepository;
@@ -42,7 +43,16 @@ public class ProductController {
     public Product addProduct(@RequestBody String message) throws Exception {
         return productService.createProduct(message);
     }
-    
+
+    @PostMapping("/pyproduct")
+    public Product testProduct(@RequestBody ProductDto dto) throws Exception {
+        return productService.pyProduct(dto);
+    }
+//    @PostMapping("/testproduct")
+//    public String testProduct(@RequestBody String message) throws Exception {
+//        System.out.println(message);
+//        return productService.temp(message);
+//    }
     // 상품 여러개 한번에 등록 [ json, json, ... ] 형태
     @PostMapping("/products") //여러개 한번에 찜하진 않을듯.
     public List<Product> addProducts(@RequestBody String messages) throws Exception {
