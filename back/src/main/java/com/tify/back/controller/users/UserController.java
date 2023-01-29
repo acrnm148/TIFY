@@ -1,7 +1,10 @@
 package com.tify.back.controller.users;
+import com.tify.back.dto.users.UserDTO;
 import com.tify.back.model.users.User;
 import com.tify.back.repository.users.UserRepository;
 import com.tify.back.service.users.UserService;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +19,18 @@ public class UserController {
 	}
 
 	@GetMapping("/searchuser/{nickname}")
-	public List<User> searchUserByNickname(@PathVariable String nickname) {
-		return userService.searchUserByNickname(nickname);
+	public List<UserDTO> searchUserByNickname(@PathVariable String nickname) {
+		List<User> users = userService.searchUserByNickname(nickname);
+		List<UserDTO> userDTOs = new ArrayList<>();
+		for (User user : users) {
+			UserDTO userDTO = new UserDTO();
+			userDTO.setId(user.getId());
+			userDTO.setProfileImg(user.getProfileImg());
+			userDTO.setNickname(user.getNickname());
+			userDTO.setEmail(user.getEmail());
+			userDTOs.add(userDTO);
+		}
+		return userDTOs;
 	}
 
 	@PostMapping("/tempuser")
