@@ -1,66 +1,68 @@
 import React, { useState } from 'react';
-// import KakaoPay from 'kakao-pay-js-sdk';
+import axios from "axios";
+import { useLocation } from 'react-router-dom';
 
-const jsKey = '360c30adb7c0e91ff0faab9145a3ea7e';
-// SDK는 한 번만 초기화해야 한다.
-// 중복되는 초기화를 막기 위해 isInitialized()로 SDK 초기화 여부를 판단한다.
-if (!window.Kakao.isInitialized()) {
-  // JavaScript key를 인자로 주고 SDK 초기화
-  window.Kakao.init(jsKey);
-  // SDK 초기화 여부를 확인하자.
-  console.log(window.Kakao.isInitialized());
-}
+const location = useLocation();
 
-
-interface Props {
-  price: number;
-}
-
-const PayingService: React.FC<Props> = ({ price }) => {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handlePayment = async () => {
-    setIsLoading(true);
-    try {
-      const kakaoPay = new KakaoPay({
-        merchantId: 'YOUR_MERCHANT_ID', // Replace with your merchant ID
-        key: 'YOUR_KEY', // Replace with your key
-      });
-
-      const payload = {
-        amount: price,
-        item_name: '축하하기',
-        item_code: 'item_code',
-        tax_free_amount: 0,
-        vat_amount: 0,
-        buyer_name: 'John Doe',
-        buyer_email: 'johndoe@example.com',
-        buyer_tel: '01234567890',
-        buyer_addr: 'address',
-        buyer_postcode: '123456',
-        custom_data: {
-          custom_key: 'custom_value',
-        },
-      };
-
-      const { tid } = await kakaoPay.startPayment(payload);
-      console.log(`Transaction ID: ${tid}`);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
+class PayingService extends React.Component {
+  giftName = location.state.giftName
+  giftPrice = location.state.giftPrice
+  state = {
+    // 응답에서 가져올 값들
+    next_redirect_pc_url: "",
+    tid: "",
+    // 요청에 넘겨줄 매개변수들
+    params: {
+      cid: "TC0ONETIME",
+      partner_order_id: "partner_order_id",
+      partner_user_id: "partner_user_id",
+      item_name: this.giftName,
+      quantity: 1,
+      total_amount: this.giftPrice,
+      vat_amount: 200,
+      tax_free_amount: 0,
+      approval_url: "http://localhost:5173/congrats/kakaopay/result", //결제 성공시 url => 결제가 성공되었습니다
+      fail_url: "http://localhost:5173/congrats/kakaopay/result", //결제 실패시 url => 작성중이던 페이지로
+      cancel_url: "http://localhost:5173/congrats/kakaopay/result", // 결제 취소시 url => 작성중이던 페이지로
+    },
   };
+  componentDidMount() {
+    const { params } = this.state;
+    axios({
+      // 프록시에 카카오 도메인을 설정했으므로 결제 준비 url만 주자
+      url: "/v1/payment/ready",
+      // 결제 준비 API는 POST 메소드라고 한다.
+      method: "POST",
+      headers: {
+        // 카카오 developers에 등록한 admin키를 헤더에 줘야 한다.
+        Authorization: "KakaoAK ca400177396e50742c260c10224231f9",
+        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+      },
+      params,
+    }).then((response) => {
+      // 응답에서 필요한 data만 뽑는다.
+      const {
+        data: { next_redirect_pc_url, tid }
+      } = response;
 
-  return (
-    <>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <button onClick={handlePayment}>Pay ${price}</button>
-      )}
-    </>
-  );
-};
+      console.log(next_redirect_pc_url);
+      console.log(tid);
+      window.localStorage.setItem("tid", tid); // localStorage에 tid
+      this.setState({ next_redirect_pc_url, tid }); // 응답 data로 state 갱신
+      
+      window.location.href = next_redirect_pc_url;
+    });
+  }
 
+  render() {
+    const { next_redirect_pc_url } = this.state;
+
+    return (<div>
+      <h2>결제요청중...</h2>
+      </div>);
+  }
+}
 export default PayingService;
+
+// 위의 과정까지는 결제요청완료
+// pg_token=28fdad2c08a69a771b69 받은 토큰으로 승인요청해야 완전히 결제완료

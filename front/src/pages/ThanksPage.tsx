@@ -6,7 +6,7 @@ import circleArrowL from "../assets/iconArrowLeft.svg";
 import circleArrowR from "../assets/iconArrowRight.svg";
 import iconPlus from "../assets/iconPlus.svg";
 import axios from 'axios';
-import { MakeCardComponent } from '../components/MakeCardComponent';
+import MakeCardComponent from '../components/MakeCardComponent';
 
 export function ThanksPage() {
   let navigate = useNavigate();

@@ -23,7 +23,8 @@ import { CongratsCardPage } from './pages/CongratsCardPage'
 
 import { Footer } from './fixture/Footer';
 import { MainPage } from './pages/MainPage';
-
+import PayingService from './components/PayingService';
+import PayResult from './components/PayResult';
 
 import './css/styles.css';
 import { GiftHubDetailPage } from './pages/GiftHubDetailPage';
@@ -40,8 +41,13 @@ function App() {
         <Route path="/thanks/:wishId/:conId" element={<ThanksPage />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/congrats/:wishId" element={<CongratsPage />} />
-        <Route path="/congrats/:wishId/giftcard" element={<CongratsCardPage />} />
-        <Route path="/congrats/:wishId/giftpay" element={<CongratsPayPage />} />
+        <Route path="/congrats/:wishId/giftcard" element={<CongratsCardPage />} >
+        </Route>
+        <Route path='/congrats/kakaopay' element={<PayingService />} />
+        <Route path="/congrats/:wishId/giftpay" element={<CongratsPayPage />}>
+          <Route path='kakaopay' element={<PayingService />} />
+        </Route>
+        <Route path='/congrats/kakaopay/result' element={<PayResult />} />
 
         <Route path="/mypage" element={<MyPage />}>
           <Route path="mywish" element={<MyWish />} />
