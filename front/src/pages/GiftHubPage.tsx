@@ -21,7 +21,7 @@ export function GiftHubPage() {
 // (검색어 | 카테고리 선택 | 상품리스트에 변경)이 있을 때 실행되는 함수 
   useEffect(() => {
     const fetchData = async () => {
-      const API_URL = '/api/gifthub/search';
+      const API_URL = 'http://i8e208.p.ssafy.io/api/gifthub/search';
         axios.get(API_URL, {
           params: {
             minPrice: priceRange[0],
@@ -36,10 +36,10 @@ export function GiftHubPage() {
           ).then((e)=>{
             console.log('데이터를 받아옴')
             console.log(e.data)
-            let copy = [...giftList,e.data]; // let copy = [...giftList,{name:'new', price:9999, gitId:4}];
-            if (giftList.length > 0){
-              setGiftList(copy)
-            }
+            // let copy = [...giftList,e.data]; // let copy = [...giftList,{name:'new', price:9999, gitId:4}];
+            // if (giftList.length > 0){
+            //   setGiftList(copy)
+            // }
           }).catch((err) => {
             console.log('error', err)
           });

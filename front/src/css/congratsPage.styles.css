@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+.congrats-page-container{
+    
+    /* border: 1px solid lavender; */
+
+    width: auto;
+    min-height: 800px;
+    margin-left: 54px;
+    margin-right: 54px;
+    height: auto;
+    background-image: url('https://user-images.githubusercontent.com/87971876/215250292-4d85d3c3-f278-4a15-96cc-5d2a66b4a8b1.png');
+    justify-content: center;
+    display: flex;
+    align-items: flex-start;
+}
+
+.wish-components{
+    width: 80%;
+    height: auto;
+    /* border: 3px solid pink; */
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Nanum Gothic' sans-serif;
+}
+.wish-components-title {
+    display: flex;
+    justify-content: left;
+    width: 100%;
+}
+.wish-components h1{
+    font-family: 'Black Han Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 43px;
+    line-height: 54px;
+    background: linear-gradient(180deg, #FE3360 0%, #FF7062 91.67%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    /* text-fill-color: transparent; */
+    
+}
+.wish-card-box{
+    width: 100%;
+    /* border: 1px solid blue; */
+    display: flex;
+    justify-content: space-around;
+    
+}
+.wish-card{
+    width: 523px;
+    height: 312px;
+    border: 1px solid #FE3360;
+    border-radius: 8px;
+}
+.wish-card-cover{
+    background-image: url('https://user-images.githubusercontent.com/87971876/215254369-d144dcd7-00ae-4f1c-b740-c219c6e30821.png');
+    overflow: cover;
+}
+.wish-card-content{
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), conic-gradient(from 156.54deg at 37.79% 55.75%, rgba(232, 0, 36, 0.63) -6.92deg, rgba(245, 15, 0, 0.88) 148.13deg, rgba(255, 68, 97, 0.45) 255deg, rgba(232, 0, 36, 0.63) 353.08deg, rgba(245, 15, 0, 0.88) 508.13deg);
+    opacity: 0.8;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    color: white;
+}
+.wish-card-content h1{
+    font-size: large;
+}
+.wish-gift-list{
+    width: 100%;
+    min-height: 150px;
+    /* border: 1px solid #FE3360; */
+    border-radius: 8px;
+    background: radial-gradient(71.83% 71.82% at 49.82% 57.27%, #FE3360 0%, #FE3360 36.98%, rgba(254, 51, 96, 0.791562) 55.73%, rgba(254, 51, 96, 0.574062) 67.71%, rgba(254, 51, 96, 0.339394) 80.21%, rgba(254, 51, 96, 0.28) 87.5%, rgba(255, 255, 255, 0.42) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+    opacity: 0.8;
+    box-shadow: 0px 4px 4px rgba(229, 85, 77, 0.2);
+    border-radius: 10px;
+    margin-top: 1em;
+}
+
+.wish-congrats-btns{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1em;
+}
+.wish-congrats-btns .button {
+    width: 523px;
+    border: 1px solid #FE3360;
+    border-radius: 8px;
+    padding: 3px;
+    height: 52px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.wish-congrats-btns .color{
+    border: 1px solid #E52E56;
+    border-radius: 10px;
+    color: #E52E56;
+}
+.wish-congrats-btns .gray{
+    border: 1px solid #828483;
+    border-radius: 10px;
+    color: #828483;
+}
+.wish-gift>div{
+    width: 94px;
+    height: 94px;
+    border: 1px solid #828483;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column-reverse;
+}
+.wish-gift-list{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.gift-bar-gray{
+    width: 81px;
+    background-color: gray;
+    height: 10px;
+    margin: 5px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}

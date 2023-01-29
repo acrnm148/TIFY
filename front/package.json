@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.1",
+    "@types/kakao-js-sdk": "^1.39.1",
     "@types/react-date-range": "^1.4.4",
     "axios": "^1.2.3",
     "express": "^4.18.2",

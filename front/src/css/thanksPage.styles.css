@@ -100,6 +100,20 @@
     justify-content: left;
     margin-top: 10px;
 }
+.thanks-input label{
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 14px;
+    /* identical to box height */
+
+
+    /* text/600 */
+
+    color: #4F5150;
+    padding: 5px;
+}
 .thanks-input input{
     height: 52px;
     border: solid 1px #C1C1C1;
@@ -112,7 +126,7 @@
     margin-top: 7px;
 }
 
-.photo-btn{
+.thanks-photo-btn{
     width: inherit-20px;
     height: 150px;
     border: solid 1px #BBDAF7;
@@ -123,6 +137,10 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+}
+.thanks-photo-btn h1{
+    font-size: 88px;
+    color: #BBDAF7;
 }
 
 .thanks-form-btn{

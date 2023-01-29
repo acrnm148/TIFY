@@ -9,6 +9,14 @@ import { List } from "reselect/es/types";
 import ReactSlider from "react-slider";
 import 'rc-slider/assets/index.css';
 
+
+// [TODO] wish정보 props로 받아서 표출 
+const wishTitle = '졸업해버렸습니다'
+const wishCategory = '졸업'
+const wishDday = 34
+const wishAchieved=33
+const wishId = 1
+
 export function CheckWishPage() {
   const [isWish, setIsWish] = useState<Boolean>(false)
   const [wishGoing, setWishGoing] = useState<Boolean>(true)
@@ -61,17 +69,11 @@ export function CheckWishPage() {
     )
   }
   const CongratCardList = () =>{
-    // wish정보 props로 받아서 표출 
-    const wishCount = 12
-    const wishCategory = '결혼'
-    const wishDday = 34
-    const wishAchieved=33
-    const wishId = 1
 
     return(
       <>
         <div className="congrat-card-container">
-          {wishGoing? <WishOpened /> : <WishOnGoing wishCount={wishCount} wishCategory={wishCategory} wishDday={wishDday} wishAchieved={wishAchieved} wishId={wishId}/>}
+          {wishGoing? <WishOpened /> : <WishOnGoing wishTitle={wishTitle} wishCategory={wishCategory} wishDday={wishDday} wishAchieved={wishAchieved} wishId={wishId}/>}
           <div className="congrat-card-list">
             {congratsList.map((c, i:number) =>(
               // to={`/thanks/${wishId}/${c.id}`}
@@ -91,13 +93,14 @@ export function CheckWishPage() {
       </div>
     )
   }
-  const WishOnGoing = (props:{wishCount:number, wishCategory:string, wishDday:number, wishAchieved:number, wishId:number}) => {
+  const WishOnGoing = (props:{wishTitle:string, wishCategory:string, wishDday:number, wishAchieved:number, wishId:number}) => {
     // const left = {left : {props.wishAchieved}}
     return(
-      <div className="wish-on-going-background">
+      <NavLink to={`/congrats/${wishId}`} className="wish-on-going-background" >
         <div className="wish-on-going-box">
-          <h3>{username}님의 {props.wishCount}번째 {props.wishCategory}위시</h3>
-          <p>{props.wishDday}일 뒤 축하편지를 확인하세요</p>
+          <h3 className="font-lg">{username}님의 {props.wishCategory}위시</h3>
+          <p className="font-xl">"{props.wishTitle}"</p>
+          <p  className="font-lg">{props.wishDday}일 뒤 축하편지를 확인하세요</p>
           <div className="slider-and-label-container">
             {/* <h3 style={left}>{props.wishAchieved}</h3> */}
             <div className="slider-and-label">
@@ -113,7 +116,7 @@ export function CheckWishPage() {
             </div>
           </div>
         </div>
-      </div>
+      </NavLink>
     )
   }
   const IsWishLayout = () =>{
