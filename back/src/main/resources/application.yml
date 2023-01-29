@@ -1,11 +1,5 @@
 server:
   port: 10080
-  ssl:
-    enabled: true
-    key-store-type: PKC512
-    key-store: /var/www/html/key.p12
-    key-store-password: 
-
 
 spring:
   redis:
