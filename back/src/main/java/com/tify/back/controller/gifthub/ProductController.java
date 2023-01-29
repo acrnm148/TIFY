@@ -45,7 +45,7 @@ public class ProductController {
     }
 
     @PostMapping("/pyproduct")
-    public Product testProduct(@RequestBody ProductDto dto) throws Exception {
+    public Product testProduct(@RequestBody ProductDto dto) {
         return productService.pyProduct(dto);
     }
 //    @PostMapping("/testproduct")
