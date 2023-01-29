@@ -45,19 +45,6 @@ public class WishService {
             gifts.add(gift);
         }
         wish.setJoinCount(0);
-//        wishEntity.setTotPrice(dto.getTotalPrice());
-//        wishEntity.setNowPrice(dto.getNowPrice());
-//        wishEntity.setTitle(dto.getWishTitle());
-//        wishEntity.setContent(dto.getWishContent());
-//        wishEntity.setCategory(dto.getCategory());
-//        wishEntity.setFinishYN(dto.getFinishYN());
-//        wishEntity.setStartDate(dto.getStartDate());
-//        wishEntity.setEndDate(dto.getEndDate());
-//        wishEntity.setCardImageCode(dto.getWishCard());
-//        wishEntity.setAddr1(dto.getAddr1());
-//        wishEntity.setAddr2(dto.getAddr2());
-//        wishEntity.setZipCode(dto.getZipCode());
-        // 실제 데이터베이스에 데이터저장
         wish.setGiftItems(gifts);
         try {
             wishRepository.save(wish);
