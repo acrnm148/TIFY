@@ -27,7 +27,7 @@ public class FAQController {
     }
 
     @PostMapping
-    public FAQ addFAQ(FAQ faq) {
+    public FAQ addFAQ(@RequestBody FAQ faq) {
         return faqService.save(faq);
     }
 
@@ -41,7 +41,7 @@ public class FAQController {
     }
     //requestbody 쓰면 form data 오류걸림
     @PutMapping(value ="/{id}")
-    public FAQ updateFAQ(@PathVariable Long id,FAQ faq) {
+    public FAQ updateFAQ(@PathVariable Long id,@RequestBody FAQ faq) {
         FAQ existingFAQ = faqService.findById(id).orElseThrow(() -> new FAQNotFoundException("FAQ with id " + id + " not found"));
         existingFAQ.setContent(faq.getContent());
         existingFAQ.setIdx(faq.getIdx());
