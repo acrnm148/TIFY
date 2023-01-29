@@ -63,22 +63,42 @@ function Sidebar(props: { tapId: string }) {
           <img src={iconSidebar2Engaged} alt="" />
           <p>참여한 위시</p>
         </NavLink>
-        <div className="side-menu">
+        <NavLink
+          to="friend"
+          className={`side-menu 
+          ${props.tapId == 'friend' && 'active-menu'} 
+          `}
+        >
           <img src={iconSidebar3Friends} alt="" />
           <p>일촌</p>
-        </div>
-        <div className="side-menu">
+        </NavLink>
+        <NavLink
+          to="info"
+          className={`side-menu 
+          ${props.tapId == 'info' && 'active-menu'} 
+          `}
+        >
           <img src={iconSidebar4Privacy} alt="" />
           <p>개인정보</p>
-        </div>
-        <div className="side-menu">
+        </NavLink>
+        <NavLink
+          to="phone"
+          className={`side-menu 
+          ${props.tapId == 'phone' && 'active-menu'} 
+          `}
+        >
           <img src={iconSidebar5Addressbook} alt="" />
           <p>주소록</p>
-        </div>
-        <div className="side-menu">
+        </NavLink>
+        <NavLink
+          to="order"
+          className={`side-menu 
+          ${props.tapId == 'order' && 'active-menu'} 
+          `}
+        >
           <img src={iconSidebar6Postbox} alt="" />
           <p>주문조회</p>
-        </div>
+        </NavLink>
       </div>
     </div>
   );

@@ -17,6 +17,10 @@ import { JoinSecondPage } from './pages/JoinSecondPage';
 import { JoinThirdPage } from './pages/JoinThirdPage';
 import { MyWish } from './components/Mywish';
 import { Joined } from './components/Joined';
+import { Friend } from './components/Friend';
+import { MyInfo } from './components/MyInfo';
+import { PhoneBook } from './components/PhoneBook';
+import { OrderList } from './components/OrderList';
 import { Footer } from './fixture/Footer';
 
 import { MainPage } from './pages/MainPage';
@@ -39,6 +43,10 @@ function App() {
         <Route path="/mypage" element={<MyPage />}>
           <Route path="mywish" element={<MyWish />} />
           <Route path="joined" element={<Joined />} />
+          <Route path="friend" element={<Friend />} />
+          <Route path="info" element={<MyInfo />} />
+          <Route path="phone" element={<PhoneBook />} />
+          <Route path="order" element={<OrderList />} />
         </Route>
 
         <Route path="/like" element={<LikePage />} />
