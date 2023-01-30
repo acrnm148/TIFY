@@ -11,7 +11,7 @@ function retryHandler(){
   }
 
 class PayResult extends React.Component {
-  constructor(props) {
+  constructor(props: {} | Readonly<{}>) {
     super(props);
     const { params } = this.state;
     // const {location: { search }} = props;

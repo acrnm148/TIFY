@@ -15,7 +15,7 @@ import { useState } from "react";
             console.log(query, '가 ENTER로 전송되었습니다')
         }
 
-        const handleOnKeyPress = (e) => {
+        const handleOnKeyPress = (e: { key: string; }) => {
             if (e.key === 'Enter'){
                 sumbitQ()
             }
