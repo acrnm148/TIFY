@@ -12,6 +12,8 @@ import com.tify.back.dto.users.request.JoinRequestDto;
 import com.tify.back.dto.users.request.LoginRequestDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
+import com.tify.back.model.users.EmailAuth;
+import com.tify.back.repository.users.EmailAuthRepository;
 import com.tify.back.service.users.EmailService;
 import com.tify.back.service.users.UserService;
 import com.tify.back.model.users.User;
@@ -33,6 +35,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Tag(name = "user", description = "유저 API")
@@ -41,6 +45,7 @@ import java.util.Map;
 @RequestMapping("/api")
 public class UserApiController {
 
+    private final EmailAuthRepository emailAuthRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final UserService userService;
@@ -94,8 +99,25 @@ public class UserApiController {
         System.out.println("전송된 링크 진입");
         //User user = userService.confirmEmail(requestDto);
         String authToken = userService.confirmEmail(requestDto);
-        System.out.println("이메일 인증 성공, 이메일 토큰: "+authToken);
-        return ResponseEntity.ok().body("이메일 인증 성공, 이메일 토큰: "+authToken);
+        //System.out.println("이메일 인증 성공, 이메일 토큰: "+authToken);
+        //return ResponseEntity.ok().body("이메일 인증 성공, 이메일 토큰: "+authToken);
+        return ResponseEntity.ok().body(authToken);
+    }
+
+    /**
+     * 이메일 인증 했는지 체크
+     */
+    @Operation(summary = "comfirm email", description = "이메일 체크")
+    @GetMapping("/account/checkEmailState")
+    public ResponseEntity<?> checkEmailState(String email) { //json으로 전달이 안됨
+        System.out.println("이메일 인증 했는지 체크");
+        List<EmailAuth> emailAuths = new ArrayList<>();
+        emailAuths = emailAuthRepository.findByEmail(email);
+        if (emailAuths.size() == 0) {
+            return ResponseEntity.ok().body("N");
+        }
+        return ResponseEntity.ok().body("Y");
+
     }
     
     /**

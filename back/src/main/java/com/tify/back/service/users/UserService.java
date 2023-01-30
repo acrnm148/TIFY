@@ -69,6 +69,11 @@ public class UserService {
                         .build());
         */
 
+        Boolean emailState = false;
+        if (emailRepository.findByEmail(requestDto.getEmail()).size() != 0) {
+            emailState = true;
+        }
+
         //회원가입
         User user = userRepository.save(
                 User.builder()
@@ -87,7 +92,7 @@ public class UserService {
                         .email(requestDto.getEmail())
                         .password(bCryptPasswordEncoder.encode(requestDto.getPassword()))
                         .provider(requestDto.getProvider())
-                        .emailAuth(true)
+                        .emailAuth(emailState)
                         .createTime(LocalDateTime.now())
                         .build());
 
@@ -95,8 +100,8 @@ public class UserService {
         //System.out.println("emailAuth 저장된 내용: "+emailAuth.getAuthToken()+" ");
         //emailService.send(emailAuth.getEmail(), emailAuth.getAuthToken());
         //String authToken = sendEmailAuth(requestDto.getEmail());
-        EmailAuth emailAuth = emailRepository.findByEmail(requestDto.getEmail());
-        String authToken = emailAuth.getAuthToken();
+        List<EmailAuth> emailAuth = emailRepository.findByEmail(requestDto.getEmail());
+        String authToken = emailAuth.get(0).getAuthToken();
         System.out.println("회원가입 중 authToken 확인: "+authToken);
 
         return JoinResponseDto.builder()
