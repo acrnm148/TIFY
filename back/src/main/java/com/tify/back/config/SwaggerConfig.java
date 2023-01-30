@@ -20,7 +20,6 @@ import java.util.ArrayList;
 @Configuration
 public class SwaggerConfig {
 
-    /*
     @Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
@@ -34,23 +33,5 @@ public class SwaggerConfig {
                 .info(new Info().title("TIFY API")
                         .description("TIFY API 명세서입니다.")
                         .version("v0.0.1"));
-    }
-    */
-    private ApiInfo metadata() {
-        return new ApiInfoBuilder()
-                .title("TIFY")
-                .description("Spring Boot Rest API")
-                .version("1.0")
-                .build();
-    }
-
-
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any()) // 모든 경로를 문서화
-                .build()
-                .apiInfo(metadata());
     }
 }
