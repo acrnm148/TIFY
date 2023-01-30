@@ -61,6 +61,9 @@ spring:
       file-size-threshold: 2KB
       max-file-size: 200MB
       max-request-size: 215MB
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 file:
   uploadDir: ./88files
 
