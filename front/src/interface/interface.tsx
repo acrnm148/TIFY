@@ -2,6 +2,8 @@ export interface Gift {
   name: string;
   price: number;
   giftId: number;
+  repImg : string;
+  id : number;
 }
 export interface GiftList {
   product_id: number;

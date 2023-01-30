@@ -68,7 +68,7 @@ export function ThanksPage() {
     return(
       <div className='thanks-card-container'>
         <div className='form-title'>감사카드 보내기</div>
-        <MakeCardComponent phone={cardPhone} card="감사" disable={true} cardEng="thanks"/>
+        <MakeCardComponent phone={cardPhone} card="감사" disable='true' cardEng="thanks"/>
         <div className='thanks-input'>
             <div className='thanks-form-btn'>감사보내기</div>
         </div>

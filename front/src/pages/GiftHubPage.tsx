@@ -9,19 +9,20 @@ import iconFilter from "../assets/iconFilter.svg";
 import ReactSlider from "react-slider";
 import axios from "axios";
 
+
 export function GiftHubPage() {
-  const [searchQuery, setSearchQuery] = useState<string>();
-	const [priceRange, setPriceRange] = useState([0, 100]);
-  const [category, setCategory] = useState<number>();
-  let [giftList, setGiftList] =useState([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+	const [priceRange, setPriceRange] = useState([0, 100000000]);
+  const [category, setCategory] = useState<number|null>();
+  let [giftList, setGiftList] =useState<Array<any>>([]);
 
   let max_result = 10//디폴트
-  let page = 1
+  let page = 0
   // 기본값은 상품목록에서 보여주는 Recommend 리스트는 검색어가 없을 때 store에 저장한 리스트 표출
 // (검색어 | 카테고리 선택 | 상품리스트에 변경)이 있을 때 실행되는 함수 
   useEffect(() => {
     const fetchData = async () => {
-      const API_URL = 'http://i8e208.p.ssafy.io/api/gifthub/search';
+      const API_URL = 'https://i8e208.p.ssafy.io/api/gifthub/search/';
         axios.get(API_URL, {
           params: {
             minPrice: priceRange[0],
@@ -36,10 +37,10 @@ export function GiftHubPage() {
           ).then((e)=>{
             console.log('데이터를 받아옴')
             console.log(e.data)
-            // let copy = [...giftList,e.data]; // let copy = [...giftList,{name:'new', price:9999, gitId:4}];
-            // if (giftList.length > 0){
-            //   setGiftList(copy)
-            // }
+            console.log(e)
+            let copy:Array<any> = [...e.data.content]; // let copy = [...giftList,{name:'new', price:9999, gitId:4}];
+            setGiftList(copy)
+            console.log('giftList', giftList);
           }).catch((err) => {
             console.log('error', err)
           });
@@ -54,8 +55,12 @@ export function GiftHubPage() {
         setSearchQuery(q);
       }
       const getCategory = (c:number) => {
-        console.log(c+'카테고리를 받았습니다');
-        setCategory(c)
+        // console.log(c+'카테고리를 받았습니다');4
+        setCategory(c) 
+        if (c===0){
+          setCategory(null) 
+        }
+        console.log(category, '카테고리임')
       }
       return (
         <>
@@ -65,10 +70,13 @@ export function GiftHubPage() {
       )
     }
     {/* 
-  [TODO] 전체카테고리 옵션 생성하기
-  [TODO] 카테고리 선택 시 giftList 요청   
+  [TODO] 전체카테고리 옵션 생성하기 V
+  [TODO] 카테고리 선택 시 giftList 요청 V
   [TODO] 가격범위 필터 선택시 giftList 요청
   [TODO] 인기순 높은가격순 낮은가격순 선택 시 현재의 giftList에서 sorting front에서 처리해야함
+  [TODO] 검색 결과가 없을 때 '검색 결과가 없습니다' 표출
+  [TODO] 이미지가 없을 때 기본이미지 표출
+  [TODO] 검색어 유지..
 */}
     return (
       <div>        
@@ -108,9 +116,9 @@ export function GiftHubPage() {
             <p>낮은가격순</p>
           </div>
         </div>
+        
 
         <div>
-          <h1>{searchQuery}</h1>
           <GiftHubList giftList={giftList} />
         </div>
       </div>

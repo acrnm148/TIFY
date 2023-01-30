@@ -12,7 +12,7 @@
         height: 30vw;
     }
     .gift-image {
-        height:18.3vw;
+        /* height:18.3vw; */
     }
 }
 @media (max-width : 1024px)
