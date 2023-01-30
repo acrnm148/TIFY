@@ -40,26 +40,49 @@ export function JoinSecondPage() {
     try {
       setIsLoading(true);
       console.log(userid);
-      const config: object = { 'Content-Type': 'application/json' };
-      await axios.post(
-        '/api/account/signin',
-        {
-          userid,
-          password,
-          addr1,
-          addr2,
-          birthYear,
-          birth,
-          gender,
-          tel,
-          email: userid,
-          username,
-          nickname,
-          zipcode,
-          authToken,
-        },
-        config,
-      );
+      const config: object = {
+        'Content-Type': 'application/json',
+        'Accept-Encoding': 'gzip, deflate, br',
+        Connection: 'keep-alive',
+      };
+      // console.log({
+      //   userid,
+      //   password,
+      //   addr1,
+      //   addr2,
+      //   birthYear,
+      //   birth,
+      //   gender,
+      //   tel,
+      //   email: userid,
+      //   username,
+      //   nickname,
+      //   zipcode,
+      //   authToken,
+      // });
+      await axios
+        .post(
+          '/api/account/signin',
+          {
+            userid,
+            password,
+            addr1,
+            addr2,
+            birthYear,
+            birth,
+            gender,
+            tel,
+            email: userid,
+            username,
+            nickname,
+            zipcode,
+            authToken,
+          },
+          config,
+        )
+        .then((res) => {
+          console.log(res);
+        });
       setIsLoading(false);
     } catch (err) {
       setIsLoading(false);
@@ -156,7 +179,7 @@ export function JoinSecondPage() {
               <button className="formSideButton">주소찾기</button>
             </form>
             <p className="m-1">상세주소</p>
-            <form className="emailForm" onSubmit={handleSubmit}>
+            <form className="emailForm" onSubmit={handleSubmit} method="get">
               <input type="text" className="inputBox" id="emailForm" />
               <button type="submit" className="loginButton font-bold">
                 가입하기
