@@ -12,15 +12,15 @@ import {GiftList } from '../interface/interface';
 export function MainPage() {
   let [giftList, setGiftList] = useState<GiftList[]>([]);
   
-  useEffect(() => {
-    async function fetchdata() {
-      const API_URL = 'https://i8e208.p.ssafy.io/api/gifthub/main';
-      // http://i8e208.p.ssafy.io/api/gifthub/main 
-      const {data} = await axios.get(API_URL);
-      console.log(data);
-    }
-    fetchdata()
-  });
+  // useEffect(() => {
+  //   async function fetchdata() {
+  //     const API_URL = 'https://i8e208.p.ssafy.io/api/gifthub/main';
+  //     // http://i8e208.p.ssafy.io/api/gifthub/main 
+  //     const {data} = await axios.get(API_URL);
+  //     console.log(data);
+  //   }
+  //   fetchdata()
+  // });
 
   // let [giftList, giftListChange] = useState([
   //   {
@@ -39,6 +39,9 @@ export function MainPage() {
   //     giftId: 3,
   //   },
   // ]);
+  const propFunction = (x:number) =>{
+    console.log('부모컴포넌트에서받음', x)
+  }
   return (
     <div className="main-container">
       <div className="main-components">
@@ -48,7 +51,7 @@ export function MainPage() {
         </div>
       </div>
       <div>
-        {/* <GiftHubCategory /> */}
+        <GiftHubCategory propFunction={propFunction}/>
         {/* <SearchBar /> */}
         {/* <GiftRecommendList giftList={giftList} /> */}
       </div>
