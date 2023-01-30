@@ -2,11 +2,17 @@ import React, { useState } from 'react';
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
 
-const location = useLocation();
-
-class PayingService extends React.Component {
+let giftName = ''
+let giftPrice = ''
+function callProps(){
+  const location = useLocation()
   giftName = location.state.giftName
   giftPrice = location.state.giftPrice
+  return [giftName, giftPrice]
+}
+
+class PayingService extends React.Component {
+  // result = callProps()
   state = {
     // 응답에서 가져올 값들
     next_redirect_pc_url: "",
@@ -16,9 +22,9 @@ class PayingService extends React.Component {
       cid: "TC0ONETIME",
       partner_order_id: "partner_order_id",
       partner_user_id: "partner_user_id",
-      item_name: this.giftName,
+      item_name: '선물골라서 이름 받아아하는데 안오네 ㅠ',
       quantity: 1,
-      total_amount: this.giftPrice,
+      total_amount: 53412,
       vat_amount: 200,
       tax_free_amount: 0,
       approval_url: "http://localhost:5173/congrats/kakaopay/result", //결제 성공시 url => 결제가 성공되었습니다
