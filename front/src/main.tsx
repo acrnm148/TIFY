@@ -6,11 +6,11 @@ import App from './App';
 import './index.css';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-let store =  configureStore({
+let store = configureStore({
   reducer: {
-      // user : userSlice.reducer
-  }
-})
+    // user : userSlice.reducer
+  },
+});
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>

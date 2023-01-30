@@ -2,8 +2,76 @@ import '../css/login.styles.css';
 import coloredCheckIcon from '../assets/iconColoredCheck.svg';
 import checkIcon from '../assets/iconCheck.svg';
 import defaultProfile from '../assets/iconDefaultProfile.svg';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export function JoinSecondPage() {
+  const [userid, setEmail] = useState('');
+  const [password, setPassword] = useState('kangsuna0289!');
+  const [confirmPassword, setConfirmPassword] = useState('kangsuna0289!');
+  const [addr1, setAddr1] = useState('부산시 해운대구');
+  const [addr2, setAddr2] = useState('104동 402호');
+  const [birthYear, setBirthyear] = useState('1999');
+  const [birth, setBirth] = useState('0923');
+  const [gender, setGender] = useState('F');
+  const [tel, setTel] = useState('010-1234-5667');
+  const [username, setName] = useState('강수나');
+  const [nickname, setNickname] = useState('수나캉');
+  const [zipcode, setZipcode] = useState('12345');
+
+  const [authToken, setAuthToken] = useState('');
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    setEmail(query.get('email') || '');
+    setAuthToken(query.get('authToken') || '');
+  }, []);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+    try {
+      setIsLoading(true);
+      console.log(userid);
+      const config: object = { 'Content-Type': 'application/json' };
+      await axios.post(
+        '/api/account/signin',
+        {
+          userid,
+          password,
+          addr1,
+          addr2,
+          birthYear,
+          birth,
+          gender,
+          tel,
+          email: userid,
+          username,
+          nickname,
+          zipcode,
+          authToken,
+        },
+        config,
+      );
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      setError('Error confirming email. Please try again later.');
+      console.log(err);
+    }
+  };
+
+  if (isLoading) {
+    return <p>Confirming email...</p>;
+  }
+
   return (
     <div className="grayBackground">
       <div className="insideBox">
@@ -88,12 +156,12 @@ export function JoinSecondPage() {
               <button className="formSideButton">주소찾기</button>
             </form>
             <p className="m-1">상세주소</p>
-            <form className="emailForm">
+            <form className="emailForm" onSubmit={handleSubmit}>
               <input type="text" className="inputBox" id="emailForm" />
+              <button type="submit" className="loginButton font-bold">
+                가입하기
+              </button>
             </form>
-            <button type="submit" className="loginButton font-bold">
-              가입하기
-            </button>
           </div>
         </div>
       </div>

@@ -71,7 +71,7 @@ function App() {
         <Route path="/ask" element={<AskPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/join1" element={<JoinFirstPage />} />
-        <Route path="/join2" element={<JoinSecondPage />} />
+        <Route path="/account/confirmEmail" element={<JoinSecondPage />} />
         <Route path="/join3" element={<JoinThirdPage />} />
       </Routes>
       <Footer />
