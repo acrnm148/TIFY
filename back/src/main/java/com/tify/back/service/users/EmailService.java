@@ -29,7 +29,7 @@ public class EmailService {
         SimpleMailMessage smm = new SimpleMailMessage();
         smm.setTo(email);//+"@gmail.com"
         smm.setSubject("[TIFY] 회원가입 이메일 인증");
-        smm.setText("http://localhost:8080/account/confirmEmail?email="+email+"&authToken="+authToken);
+        smm.setText("https://i8e208.p.ssafy.io/api/account/confirmEmail?email="+email+"&authToken="+authToken);
 
         System.out.println(smm);
         javaMailSender.send(smm);
