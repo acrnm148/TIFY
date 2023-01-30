@@ -135,6 +135,7 @@ public class UserService {
         EmailAuth emailAuth = emailCustomRepository.findValidAuthByEmail(requestDto.getEmail(), requestDto.getAuthToken(), LocalDateTime.now()).get();
         //User user = userRepository.findByEmail(requestDto.getEmail());
         emailAuth.useToken(); //이메일 인증 상태 true 로 바꿔줌
+
         //System.out.println("이메일 인증 상태 변경:"+emailAuth.getExpired()+" / "+user.getEmailAuth());
         //user.emailVerifiedSuccess(); //이메일 인증 성공
         //return user;
