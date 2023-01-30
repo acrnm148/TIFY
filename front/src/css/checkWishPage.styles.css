@@ -102,14 +102,7 @@
     justify-content: center;
     align-items: center;
 }
-.wish-on-going-box h3{
-    font-weight: 400;
-    font-size: 2vw;
-}
-.wish-on-going-box p{
-    font-weight: 400;
-    font-size: 0.9vw;
-}
+
 /* slider */
 .slider-and-label-container{
     display: flex;
@@ -151,3 +144,10 @@
     top: 20px;
     height: 5px;
   }
+
+.font-lg{
+    font-size: 22.7px;
+}
+.font-xl{
+    font-size: 37.7px;
+}

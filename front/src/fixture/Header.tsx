@@ -1,18 +1,23 @@
 import { NavLink } from 'react-router-dom';
 import logo from '../assets/tifyLogo.svg';
-import heart from '../assets/iconHeart.svg';
+import heart from '../assets/iconLikeCart.svg';
 import alert from '../assets/iconAlert.svg';
 import profile from '../assets/iconProfile.svg';
 import logout from '../assets/iconLogout.svg';
 import '../css/header.styles.css';
 import { useState } from 'react';
 
+
+
 export function Header() {
   const [showWishDetail, setShowWishDetail] =useState<boolean>(false)
   const [hideWishDetail, setHideWishDetail] = useState<boolean>(true)
-  return (
-    <nav className="navbar-container">
-      <div className="nav-left">
+  const [checkUser, setCheckUser] = useState<boolean>(true)
+
+
+  const NavLeft = () =>{
+    return(
+      <>
         <NavLink to="">
           <img src={logo} className="logo logo-left" alt="Tify logo" />
         </NavLink>
@@ -54,10 +59,21 @@ export function Header() {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="header-right">
-        <h3></h3>
+      </>
+    )
+  }
+  // 로그아웃 버튼 클릭 시 유저 정보 지우기
+  // 유저 로그아웃 상태일 경우 <로그인|회원가입> 컴포넌트 
+  // 로그인 상태일 경우 <마이페이지|카드|알람|로그아웃>컴포넌트
+  const logOut = () =>{
+    setCheckUser(false)
+    return(
+      <></>
+    )
+  }
+  const LoggedInNav = () =>{
+    return(
+      <>
         <NavLink to="/mypage/mywish">
           <img src={profile} className="logo logo-right" alt="Tify logo" />
         </NavLink>
@@ -67,9 +83,36 @@ export function Header() {
         <NavLink to="/alram">
           <img src={alert} className="logo logo-right" alt="Tify logo" />
         </NavLink>
-        <NavLink to="">
+        <button onClick={logOut}>
           <img src={logout} className="logo logo-right" alt="Tify logo" />
-        </NavLink>
+        </button>
+      </>
+    )
+  }
+  
+  const LoggedOutNav = () => {
+    return(
+      <>
+        <div>
+          <button className='loginbtn login'>Login</button>
+          <button className='loginbtn join'>Join</button>
+        </div>
+      </>
+    )
+  }
+
+
+
+  return (
+    <nav className="navbar-container">
+      <div className="nav-left">
+        <NavLeft />
+      </div>
+
+      <div className="header-right">
+        {
+          checkUser ? <LoggedInNav /> : <LoggedOutNav />
+        }
       </div>
     </nav>
   );

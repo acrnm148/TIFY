@@ -14,8 +14,8 @@ export function MainPage() {
   
   useEffect(() => {
     async function fetchdata() {
-      const API_URL = '/gifthub/main/';
-      // http://i8e208.p.ssafy.io/gifthub/main 
+      const API_URL = 'https://i8e208.p.ssafy.io/api/gifthub/main';
+      // http://i8e208.p.ssafy.io/api/gifthub/main 
       const {data} = await axios.get(API_URL);
       console.log(data);
     }

@@ -6,7 +6,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/api": 'http://i8e208.p.ssafy.io'
+      "/api": 'http://i8e208.p.ssafy.io',
+      "/v1" : "https://kapi.kakao.com",
     }
   },
   build: {

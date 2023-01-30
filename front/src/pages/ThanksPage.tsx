@@ -6,11 +6,12 @@ import circleArrowL from "../assets/iconArrowLeft.svg";
 import circleArrowR from "../assets/iconArrowRight.svg";
 import iconPlus from "../assets/iconPlus.svg";
 import axios from 'axios';
+import MakeCardComponent from '../components/MakeCardComponent';
 
 export function ThanksPage() {
   let navigate = useNavigate();
   let {wishId, conId} = useParams()
-
+  let cardPhone = '010-0151-4796';
   // 사진업로드
   const API_HOST = ''
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -67,31 +68,10 @@ export function ThanksPage() {
     return(
       <div className='thanks-card-container'>
         <div className='form-title'>감사카드 보내기</div>
-        <div className='thanks-card'>
-          <div className='thanks-input'>
-            <label htmlFor="제목">제목</label>
-            <input className='input-small'type="text" name='제목'/>
-          </div>
-          <div className='thanks-input'>
-            <label htmlFor="연락처">연락처</label>
-            <input className='input-small'type="text" name='연락처' placeholder='010-1010-1010' disabled/>
-          </div>
-          <div  className='thanks-input'>
-            <label htmlFor="내용">내용</label>
-            <textarea name="내용" id="" placeholder='카드 내용을 입력하세요'></textarea>
-          </div>
-          <div className='thanks-input'>
-            <label htmlFor="">사진</label>
-            <input className='img-input' type="file" accept="image/*" ref={inputRef} onChange={onUploadImage} name="thumbnail"/>
-            <div className='photo-btn' onClick={onUploadImageButtonClick}>
-              <img src={iconPlus} alt="사진추가하기" />
-            </div>
-          </div>
-          <div className='thanks-input'>
-            <div className='thanks-form-btn'>감사카드 전송</div>
-          </div>
+        <MakeCardComponent phone={cardPhone} card="감사" disable={true} cardEng="thanks"/>
+        <div className='thanks-input'>
+            <div className='thanks-form-btn'>감사보내기</div>
         </div>
-        
       </div>
     )
   }

@@ -50,9 +50,10 @@
   width: max-content;
   display: flex;
   justify-content: space-around;
+  /* align-items: center; */
 }
 .logo-right {
-  height: 1em;
+  height: 1.2em;
 }
 .wish {
   font-weight: 700;
@@ -83,8 +84,42 @@
 .wish-detail a:hover {
   color: #828483;
 }
+.header-right{
+  max-width: 30%;
+  min-width: 15%;
+  display: flex;
+  padding-bottom: 50px;
+  align-items: center;
+}
 @media (max-width: 768px) {
   .header-right {
     display: none;
+    
   }
+}
+
+.loginbtn{
+  width: 78px;
+  height: 28px;
+  border-radius: 8px;
+
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+
+  align-items: center;
+  text-align: center;
+  letter-spacing: 0.3px;
+  
+  margin-left: 5px;
+}
+.login {
+  background: #FFF1EF;
+  color: #FE3360;
+}
+.join {
+  background: #FE3360;
+  color: #FFEAE7;
 }
