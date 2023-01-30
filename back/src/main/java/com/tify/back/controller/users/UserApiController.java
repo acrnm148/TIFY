@@ -126,6 +126,10 @@ public class UserApiController {
     @Operation(summary = "send email auth", description = "이메일 인증 진행")
     @GetMapping("/account/sendEmailAuth")
     public ResponseEntity<?> sendEmailAuth(@RequestParam("email") String email) {
+        System.out.println("이메일 인증 - 이미 가입된 메일 체크 :"+userService.validateDuplicated(email));
+        if (userService.validateDuplicated(email)) {
+            return ResponseEntity.ok().body("이미 인증이 완료된 이메일입니다.");
+        }
         userService.sendEmailAuth(email);
         return ResponseEntity.ok().body(email); //인증된 이메일 리턴
     }
