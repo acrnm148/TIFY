@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
-import "../css/CongratsPage.styles.css"
+import "../css/congratsPage.styles.css"
 
 export function CongratsPage() {
     
