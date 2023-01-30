@@ -128,6 +128,4 @@ public class ProductController {
     public String deleteProduct(@PathVariable Long id) {
         return productService.deleteProduct(id);
     }
-
-
 }
