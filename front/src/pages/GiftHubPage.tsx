@@ -35,12 +35,12 @@ export function GiftHubPage() {
         }
 
           ).then((e)=>{
-            console.log('데이터를 받아옴')
-            console.log(e.data)
-            console.log(e)
+            // console.log('데이터를 받아옴')
+            // console.log(e.data)
+            // console.log(e)
             let copy:Array<any> = [...e.data.content]; // let copy = [...giftList,{name:'new', price:9999, gitId:4}];
             setGiftList(copy)
-            console.log('giftList', giftList);
+            // console.log('giftList', giftList);
           }).catch((err) => {
             console.log('error', err)
           });
@@ -51,7 +51,7 @@ export function GiftHubPage() {
 
     const ParentComponent = () => {
       const getQuery = (q:string) => {
-        console.log(q+'쿼리를 받았습니다');
+        // console.log(q+'쿼리를 받았습니다');
         setSearchQuery(q);
       }
       const getCategory = (c:number) => {
@@ -60,7 +60,7 @@ export function GiftHubPage() {
         if (c===0){
           setCategory(null) 
         }
-        console.log(category, '카테고리임')
+        // console.log(category, '카테고리임')
       }
       return (
         <>
