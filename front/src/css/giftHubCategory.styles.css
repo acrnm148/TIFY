@@ -7,9 +7,11 @@
     justify-content: center;
     /* margin-top: 20vh; */
     width: 100vw;
+    
 }
 .gift-category-icon img{
     margin: 5px;
+    cursor: pointer;
 }
 .gift-category-icon p{
     /* 한글 sm */

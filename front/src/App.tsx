@@ -24,6 +24,7 @@ import { OrderList } from './components/OrderList';
 import { CongratsPage } from './pages/CongratsPage';
 import { CongratsPayPage } from './pages/CongratsPayPage';
 import { CongratsCardPage } from './pages/CongratsCardPage';
+import GiftItemDetailPage from './pages/GiftItemDetailPage';
 
 import { Footer } from './fixture/Footer';
 import { MainPage } from './pages/MainPage';
@@ -54,6 +55,7 @@ function App() {
           <Route path="kakaopay" element={<PayingService />} />
         </Route>
         <Route path="/congrats/kakaopay/result" element={<PayResult />} />
+        <Route path='/gifthub/:giftId' element={<GiftItemDetailPage />} />
 
         <Route path="/mypage" element={<MyPage />}>
           <Route path="mywish" element={<MyWish />} />
