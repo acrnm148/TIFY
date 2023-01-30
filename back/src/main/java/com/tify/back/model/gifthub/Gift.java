@@ -41,8 +41,6 @@ public class Gift {
     private String userOption;// json 형태
     private String type;
     private String finishYN;
-    @Temporal(TemporalType.DATE)
-    private Date endDate;
     @Column(name = "max_amount")
     private Integer maxAmount;
     @Column(name = "pure_price")

@@ -15,22 +15,22 @@ public class WishController {
     private final WishService wishService;
     private final WishRepository wishRepository;
     @PostMapping("/add")
-    public Integer addWish(@RequestBody AddWishDto dto){
+    public String addWish(@RequestBody AddWishDto dto){
 
         //유효성 검사
         if(dto.getWishTitle().equals(""))
         {
             // 타이틀이 입력되지않았을때
-            return 3;
+            return "no title given";
         }
 
         boolean result = wishService.saveWish(dto);
 
         if(result)
         {
-            return 0;
+            return "wish created!";
         }else {
-            return 1;
+            return "failed to create wish!";
         }
     }
     @GetMapping("/detail")
