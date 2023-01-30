@@ -28,6 +28,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.json.HTTP;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -109,7 +110,7 @@ public class UserApiController {
      */
     @Operation(summary = "comfirm email", description = "이메일 체크")
     @GetMapping("/account/checkEmailState")
-    public ResponseEntity<?> checkEmailState(String email) { //json으로 전달이 안됨
+    public ResponseEntity<?> checkEmailState(String email) {
         System.out.println("이메일 인증 했는지 체크");
         List<EmailAuth> emailAuths = new ArrayList<>();
         emailAuths = emailAuthRepository.findByEmail(email);
@@ -271,6 +272,19 @@ public class UserApiController {
         Map<String, String> jsonResponse = jwtService.recreateTokenResponse(jwtToken);
 
         return jsonResponse;
+    }
+
+    /**
+     * 닉네임 중복 확인
+     */
+    @Operation(summary = "check duplicated nickname", description = "닉네임 중복 확인")
+    @Parameter(description = "nickname을 파라미터로 받습니다. 중복되면 Y, 중복이 아니라면 N을 리턴합니다.")
+    @GetMapping("/dupCheck")
+    public ResponseEntity<?> checkDuplicatedNickname(@RequestParam("nickname") String nickname) {
+        if (userRepository.findByNickname(nickname) != null) {
+            return ResponseEntity.status(HttpStatus.MULTI_STATUS).body("Y");
+        }
+        return ResponseEntity.ok().body("N");
     }
 
 }
