@@ -3,7 +3,7 @@ server:
 
 spring:
   redis:
-    host: localhost #i8e208.p.ssafy.io
+    host: i8e208.p.ssafy.io
     port: 6379
   mail:
     host: smtp.gmail.com
@@ -22,12 +22,12 @@ spring:
           writetimeout: 5000
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/tify?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
-    username: root
-    password: 1234
-#    url: jdbc:mysql://i8e208.p.ssafy.io:3306/tify?useSSL=false&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
-#    username: tify
-#    password: tify88rising!
+    # url: jdbc:mysql://localhost:3306/tify?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
+    # username: root
+    # password: 1234
+    url: jdbc:mysql://i8e208.p.ssafy.io:3306/tify?useSSL=false&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
+    username: tify
+    password: tify88rising!
     hikari:
       pool-name: jpa-hikari-pool
       maximum-pool-size: 5
