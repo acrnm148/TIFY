@@ -7,16 +7,13 @@ import logout from '../assets/iconLogout.svg';
 import '../css/header.styles.css';
 import { useState } from 'react';
 
-
-
 export function Header() {
-  const [showWishDetail, setShowWishDetail] =useState<boolean>(false)
-  const [hideWishDetail, setHideWishDetail] = useState<boolean>(true)
-  const [checkUser, setCheckUser] = useState<boolean>(true)
+  const [showWishDetail, setShowWishDetail] = useState<boolean>(false);
+  const [hideWishDetail, setHideWishDetail] = useState<boolean>(true);
+  const [checkUser, setCheckUser] = useState<boolean>(true);
 
-
-  const NavLeft = () =>{
-    return(
+  const NavLeft = () => {
+    return (
       <>
         <NavLink to="">
           <img src={logo} className="logo logo-left" alt="Tify logo" />
@@ -60,19 +57,17 @@ export function Header() {
           </div>
         </div>
       </>
-    )
-  }
+    );
+  };
   // 로그아웃 버튼 클릭 시 유저 정보 지우기
-  // 유저 로그아웃 상태일 경우 <로그인|회원가입> 컴포넌트 
+  // 유저 로그아웃 상태일 경우 <로그인|회원가입> 컴포넌트
   // 로그인 상태일 경우 <마이페이지|카드|알람|로그아웃>컴포넌트
-  const logOut = () =>{
-    setCheckUser(false)
-    return(
-      <></>
-    )
-  }
-  const LoggedInNav = () =>{
-    return(
+  const logOut = () => {
+    setCheckUser(false);
+    return <></>;
+  };
+  const LoggedInNav = () => {
+    return (
       <>
         <NavLink to="/mypage/mywish">
           <img src={profile} className="logo logo-right" alt="Tify logo" />
@@ -87,21 +82,23 @@ export function Header() {
           <img src={logout} className="logo logo-right" alt="Tify logo" />
         </button>
       </>
-    )
-  }
-  
+    );
+  };
+
   const LoggedOutNav = () => {
-    return(
+    return (
       <>
         <div>
-          <button className='loginbtn login'>Login</button>
-          <button className='loginbtn join'>Join</button>
+          <NavLink to="/login">
+            <button className="loginbtn login">Login</button>
+          </NavLink>
+          <NavLink to="/join1">
+            <button className="loginbtn join">Join</button>
+          </NavLink>
         </div>
       </>
-    )
-  }
-
-
+    );
+  };
 
   return (
     <nav className="navbar-container">
@@ -110,9 +107,7 @@ export function Header() {
       </div>
 
       <div className="header-right">
-        {
-          checkUser ? <LoggedInNav /> : <LoggedOutNav />
-        }
+        {checkUser ? <LoggedInNav /> : <LoggedOutNav />}
       </div>
     </nav>
   );
