@@ -28,6 +28,7 @@ import GiftItemDetailPage from './pages/GiftItemDetailPage';
 
 import { Footer } from './fixture/Footer';
 import { MainPage } from './pages/MainPage';
+import { NotFound } from './pages/NotFound';
 import PayingService from './components/PayingService';
 import PayResult from './components/PayResult';
 
@@ -55,7 +56,7 @@ function App() {
           <Route path="kakaopay" element={<PayingService />} />
         </Route>
         <Route path="/congrats/kakaopay/result" element={<PayResult />} />
-        <Route path='/gifthub/:giftId' element={<GiftItemDetailPage />} />
+        <Route path="/gifthub/:giftId" element={<GiftItemDetailPage />} />
 
         <Route path="/mypage" element={<MyPage />}>
           <Route path="mywish" element={<MyWish />} />
@@ -73,8 +74,9 @@ function App() {
         <Route path="/ask" element={<AskPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/join1" element={<JoinFirstPage />} />
-        <Route path="/account/confirmEmail" element={<JoinSecondPage />} />
+        <Route path="/join2/:email" element={<JoinSecondPage />} />
         <Route path="/join3" element={<JoinThirdPage />} />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
       <Footer />
     </BrowserRouter>

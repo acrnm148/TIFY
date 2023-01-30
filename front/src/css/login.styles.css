@@ -136,15 +136,12 @@
   border-radius: 8px;
   width: 417px;
   height: 52px;
+  margin-bottom: 20px;
+  padding-left: 15px;
 }
 
 .findPassword {
   float: right;
-}
-
-#emailForm {
-  margin-bottom: 20px;
-  padding-left: 15px;
 }
 
 #buttonForm {

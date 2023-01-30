@@ -3,31 +3,32 @@ import coloredCheckIcon from '../assets/iconColoredCheck.svg';
 import checkIcon from '../assets/iconCheck.svg';
 import defaultProfile from '../assets/iconDefaultProfile.svg';
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 export function JoinSecondPage() {
-  const [userid, setEmail] = useState('');
-  const [password, setPassword] = useState('kangsuna0289!');
-  const [confirmPassword, setConfirmPassword] = useState('kangsuna0289!');
+  const [userid, setUserid] = useState('');
+  const [password, setPassword] = useState('abc123!!');
+  const [confirmPassword, setConfirmPassword] = useState('abc123!!');
   const [addr1, setAddr1] = useState('부산시 해운대구');
   const [addr2, setAddr2] = useState('104동 402호');
   const [birthYear, setBirthyear] = useState('1999');
   const [birth, setBirth] = useState('0923');
   const [gender, setGender] = useState('F');
   const [tel, setTel] = useState('010-1234-5667');
-  const [username, setName] = useState('강수나');
+  const [username, setUsername] = useState('강수나');
   const [nickname, setNickname] = useState('수나캉');
   const [zipcode, setZipcode] = useState('12345');
-
   const [authToken, setAuthToken] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // const { email: emailFromParams } = useParams();
+
+  const { email } = useParams();
   useEffect(() => {
-    const query = new URLSearchParams(window.location.search);
-    setEmail(query.get('email') || '');
-    setAuthToken(query.get('authToken') || '');
+    setUserid(email || '');
   }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -45,21 +46,21 @@ export function JoinSecondPage() {
         'Accept-Encoding': 'gzip, deflate, br',
         Connection: 'keep-alive',
       };
-      // console.log({
-      //   userid,
-      //   password,
-      //   addr1,
-      //   addr2,
-      //   birthYear,
-      //   birth,
-      //   gender,
-      //   tel,
-      //   email: userid,
-      //   username,
-      //   nickname,
-      //   zipcode,
-      //   authToken,
-      // });
+      console.log({
+        userid,
+        password,
+        addr1,
+        addr2,
+        birthYear,
+        birth,
+        gender,
+        tel,
+        email: userid,
+        username,
+        nickname,
+        zipcode,
+        authToken,
+      });
       await axios
         .post(
           '/api/account/signin',
@@ -127,22 +128,25 @@ export function JoinSecondPage() {
               <input
                 type="text"
                 className="inputBox"
-                id="emailForm"
                 disabled
-                placeholder={'name@example.com'}
+                placeholder={userid}
               />
             </form>
             <p className="m-1">이름</p>
-            <form className="emailForm">
-              <input type="text" className="inputBox" id="emailForm" />
-            </form>
+            <input
+              type="text"
+              className="inputBox"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
             <p className="m-1">닉네임</p>
             <form className="buttonForm">
               <input
                 type="text"
                 className="inputBox"
-                id="emailForm"
                 placeholder="2~10자리 한글/영어"
+                value={nickname}
+                onChange={(e) => setNickname(e.target.value)}
               />
               <button className="formSideButton">중복확인</button>
             </form>
@@ -151,36 +155,46 @@ export function JoinSecondPage() {
               <input
                 type="text"
                 className="inputBox"
-                id="emailForm"
                 placeholder={'영문 소문자, 숫자, 특수문자를 포함한 8~12자리'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </form>
             <p className="m-1">비밀번호 확인</p>
             <form className="emailForm">
-              <input type="text" className="inputBox" id="emailForm" />
+              <input
+                type="text"
+                className="inputBox"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
             </form>
             <p className="m-1">생년월일</p>
             <form className="emailForm">
-              <input type="text" className="inputBox" id="emailForm" />
-              <input type="text" className="inputBox" id="emailForm" />
+              <input
+                type="text"
+                className="inputBox"
+                value={birthYear}
+                onChange={(e) => setBirthyear(e.target.value)}
+              />
+              <input
+                type="text"
+                className="inputBox"
+                value={birth}
+                onChange={(e) => setBirth(e.target.value)}
+              />
             </form>
             <p className="m-1">연락처</p>
             <form className="emailForm">
               <input
                 type="text"
                 className="inputBox"
-                id="emailForm"
                 placeholder={'000 - 0000 - 0000'}
+                value={tel}
+                onChange={(e) => setTel(e.target.value)}
               />
             </form>
-            <p className="m-1">주소</p>
-            <form className="buttonForm">
-              <input type="text" className="inputBox" id="emailForm" />
-              <button className="formSideButton">주소찾기</button>
-            </form>
-            <p className="m-1">상세주소</p>
             <form className="emailForm" onSubmit={handleSubmit} method="get">
-              <input type="text" className="inputBox" id="emailForm" />
               <button type="submit" className="loginButton font-bold">
                 가입하기
               </button>
