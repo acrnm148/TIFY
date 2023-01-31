@@ -46,7 +46,7 @@ export function GiftHubPage() {
 
           ).then((e)=>{
             // console.log('데이터를 받아옴')
-            // console.log(e.data)
+            console.log(e.data)
             // console.log(e)
             let copy:Array<any> = [...e.data.content]; // let copy = [...giftList,{name:'new', price:9999, gitId:4}];
             setGiftList(copy)

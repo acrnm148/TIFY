@@ -57,15 +57,17 @@
 .wish-card-item{
     width: 215px;
     height: 128px;
-    background-color: #C1C1C1;
-    border: solid 1px #C1C1C1;
+    background-image: url('https://user-images.githubusercontent.com/87971876/215888313-74ec7287-2138-4ebb-8423-340b2e501deb.png');
+    overflow: cover;
+    /* background-color: #C1C1C1; */
+    /* border: solid 1px #C1C1C1; */
     border-radius: 8px;
     margin-left: 10px;
 }
 .wish-card-gift{
     width: 138px;
     height: 128px;
-    background-color: #C1C1C1;
+    /* background-color: #C1C1C1; */
     border: solid 1px #C1C1C1;
     border-radius: 8px;
     margin-left: 10px;
@@ -195,4 +197,28 @@
 }
 .address-form-container span{
     color:#C1C1C1 ;
+}
+
+.make-wish-btn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 17px 0px;
+    gap: 10px;
+    background: radial-gradient(71.83% 71.82% at 49.82% 57.27%, #FE3360 0%, #FE3360 36.98%, rgba(254, 51, 96, 0.791562) 55.73%, rgba(254, 51, 96, 0.574062) 67.71%, rgba(254, 51, 96, 0.339394) 80.21%, rgba(254, 51, 96, 0.28) 87.5%, rgba(255, 255, 255, 0.42) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+    width: 582px;
+    border: 1px solid #FFF1EF;
+    border-radius: 10px;
+}
+.make-wish-btn-con{
+    margin-top:50px;
+    margin-bottom: 50px;
+    width: 882px;
+    display: flex;
+    justify-content: center;
+}
+
+.add-gift-icon{
+    cursor: pointer;
 }

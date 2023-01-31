@@ -1,7 +1,7 @@
 import "../css/searchBar.styles.css"
 import search from "../assets/iconSearch.svg";
 import { useState } from "react";    
-const SearchBar = (props: { propFunction: (arg0: string) => void,  initailQuery:string}) => {
+const SearchBar = (props: { initailQuery:string, propFunction: (arg0: string) => void}) => {
     // 검색어 입력했을 때 부모 컴포넌트에서 리랜더링 되기때문에 검색바의 쿼리도 재설정되었었는데 초기값을 prop받아서 유지하도록함..대박
     // 이전 : const [query, setQuery] = useState("");
     const [query, setQuery] = useState(props.initailQuery);

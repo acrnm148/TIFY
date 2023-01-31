@@ -5,7 +5,7 @@ export interface Gift {
   repImg : string;
   id : number;
   options : string[];
-  imgList : [{url : string}];
+  imgList : {url : string}[];
 }
 export interface GiftList {
   product_id: number;
