@@ -22,9 +22,6 @@ spring:
           writetimeout: 5000
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    #url: jdbc:mysql://13.125.214.115:3306/tify?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
-    #username: rising88
-    #password: Tify123!
     url: jdbc:mysql://i8e208.p.ssafy.io:3306/tify?useSSL=false&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
     username: tify
     password: tify88rising!
@@ -61,16 +58,14 @@ spring:
       file-size-threshold: 2KB
       max-file-size: 200MB
       max-request-size: 215MB
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 file:
   uploadDir: ./88files
 
-#    <!--  transport.protocol">smtp</prop>
-#    <prop key="mail.smtp.auth">true</prop>
-#    <!-- gmail의 경우 보안문제 업데이트로 인해 SSLSocketFactory를 추가해야 smtp 사용 가능. -->
-#    <prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
-#    <prop key="mail.smtp.starttls.enable">true</prop>
-#    <prop key="mail.debug">true</prop>
-#    <prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
-
+#iamport Keys
+imp_key: 8753437
+imp_secret: fec4af82c2d97e8fa4ebdb2c6a8ffb5d021b5794
 
 

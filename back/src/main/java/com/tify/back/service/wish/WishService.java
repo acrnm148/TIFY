@@ -62,5 +62,16 @@ public class WishService {
 
     }
 
+    public String deleteWishById(Long id){
+        Wish wish = wishRepository.findById(id).orElse(null);
+        List<Gift> gifts = wish.getGiftItems();
+        for (Gift gift : gifts) {
+            giftService.deleteGift(gift.getId());
+        }
+        wishRepository.delete(wish);
+        return wish.getUser().getEmail() + "의 wish" + wish.getId() + " 번 위시 " + "successfully deleted";
+
+    }
+
 }
 

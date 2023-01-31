@@ -45,10 +45,10 @@ public class ProductController {
     }
 
     @PostMapping("/pyproduct")
-    public Product testProduct(@RequestBody ProductDto dto) throws Exception {
+    public Product testProduct(@RequestBody ProductDto dto) {
         return productService.pyProduct(dto);
     }
-//    @PostMapping("/testproduct")
+    //    @PostMapping("/testproduct")
 //    public String testProduct(@RequestBody String message) throws Exception {
 //        System.out.println(message);
 //        return productService.temp(message);
@@ -128,6 +128,4 @@ public class ProductController {
     public String deleteProduct(@PathVariable Long id) {
         return productService.deleteProduct(id);
     }
-
-
 }

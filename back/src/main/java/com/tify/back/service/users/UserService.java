@@ -14,12 +14,15 @@ import com.tify.back.dto.users.request.JoinRequestDto;
 import com.tify.back.dto.users.request.LoginRequestDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
+import com.tify.back.model.gifthub.Cart;
 import com.tify.back.model.users.EmailAuth;
 import com.tify.back.model.users.User;
 import com.tify.back.repository.users.EmailAuthCustomRepository;
 import com.tify.back.repository.users.EmailAuthRepository;
 import com.tify.back.repository.users.UserRepository;
 import java.util.List;
+
+import com.tify.back.service.gifthub.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -49,6 +52,7 @@ public class UserService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     private final StringRedisTemplate redisTemplate;
+    private final CartService cartService;
 
     /**
      * DTO로 들어온 값으로 회원가입
@@ -69,6 +73,11 @@ public class UserService {
                         .build());
         */
 
+        Boolean emailState = false;
+        if (emailRepository.findByEmail(requestDto.getEmail()).size() != 0) {
+            emailState = true;
+        }
+
         //회원가입
         User user = userRepository.save(
                 User.builder()
@@ -87,7 +96,7 @@ public class UserService {
                         .email(requestDto.getEmail())
                         .password(bCryptPasswordEncoder.encode(requestDto.getPassword()))
                         .provider(requestDto.getProvider())
-                        .emailAuth(true)
+                        .emailAuth(emailState)
                         .createTime(LocalDateTime.now())
                         .build());
 
@@ -95,10 +104,19 @@ public class UserService {
         //System.out.println("emailAuth 저장된 내용: "+emailAuth.getAuthToken()+" ");
         //emailService.send(emailAuth.getEmail(), emailAuth.getAuthToken());
         //String authToken = sendEmailAuth(requestDto.getEmail());
-        EmailAuth emailAuth = emailRepository.findByEmail(requestDto.getEmail());
-        String authToken = emailAuth.getAuthToken();
+        List<EmailAuth> emailAuth = emailRepository.findByEmail(requestDto.getEmail());
+        if (emailAuth.size() == 0) {
+            System.out.println("이메일 인증이 필요합니다.");
+            return null;
+        }
+        String authToken = emailAuth.get(0).getAuthToken();
         System.out.println("회원가입 중 authToken 확인: "+authToken);
 
+        // 유저 고유 cart 생성.
+        Cart cart = new Cart();
+        cart.setUser(user);
+        cartService.saveCart(cart);
+        user.setCart(cart);
         return JoinResponseDto.builder()
                 .userid(user.getUserid())
                 .email(user.getEmail())
@@ -135,6 +153,7 @@ public class UserService {
         EmailAuth emailAuth = emailCustomRepository.findValidAuthByEmail(requestDto.getEmail(), requestDto.getAuthToken(), LocalDateTime.now()).get();
         //User user = userRepository.findByEmail(requestDto.getEmail());
         emailAuth.useToken(); //이메일 인증 상태 true 로 바꿔줌
+
         //System.out.println("이메일 인증 상태 변경:"+emailAuth.getExpired()+" / "+user.getEmailAuth());
         //user.emailVerifiedSuccess(); //이메일 인증 성공
         //return user;
@@ -218,8 +237,8 @@ public class UserService {
     public User updateUserInfo(UserUpdateDto dto) {
         User user = userRepository.findByUserid(dto.getUserid());
         if (dto.getTel() == null || dto.getNickname() == null ||
-           dto.getZipcode() == null || dto.getAddr1() == null ||
-            dto.getAddr2()==null) {
+                dto.getZipcode() == null || dto.getAddr1() == null ||
+                dto.getAddr2()==null) {
             System.out.println("입력란이 비었습니다.");
             return null;
         }
@@ -235,7 +254,7 @@ public class UserService {
         } else {
             user.setProfileImg(dto.getProfileImg());
         }
-        
+
         //비밀번호 변경
         System.out.println("현재 암호화된 비밀번호: "+user.getPassword());
         User userById = userRepository.findByUserid(dto.getUserid());
@@ -280,7 +299,7 @@ public class UserService {
         refreshTokenRepository.deleteById(rf.getId());//자식에서 삭제
     }
 
-    
+
     /**
      * accesstoken 복호화해서 유저 아이디 추출
      */
