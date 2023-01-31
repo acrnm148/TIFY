@@ -16,12 +16,9 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
     private Long id;
-
-
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
-
 //    private int quantity;
     @JsonIgnore // json 할때 무시하고 json 생성, image에서 product는 mapping용이면 충분
     @ManyToOne(fetch = FetchType.LAZY)

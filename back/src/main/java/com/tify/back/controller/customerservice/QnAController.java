@@ -7,12 +7,14 @@ import com.tify.back.model.customerservice.QnA;
 import com.tify.back.model.customerservice.QnAFile;
 import com.tify.back.model.users.User;
 import com.tify.back.repository.customerservice.QnAFileRepository;
+import com.tify.back.repository.customerservice.QnARepository;
 import com.tify.back.repository.users.UserRepository;
 import com.tify.back.service.customerservice.QnAFileService;
 import com.tify.back.service.customerservice.QnAService;
 import com.tify.back.service.users.UserService;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -36,14 +38,16 @@ public class QnAController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final QnAFileRepository qnaFileRepository;
+    private final QnARepository qnARepository;
 
     //10개씩
-    @GetMapping(value = "/list/{page}", produces = "application/json")
-    public List<QnA> findAll(@PathVariable Integer page) {
-        int maxResult = 10;
-        Pageable pageable = PageRequest.of(page, Math.min(10, maxResult), Sort.by("createdDate").descending());
-        List<QnA> qnas = qnaService.findAll(pageable);
-        return qnas;
+    @GetMapping(produces = "application/json")
+    public Page<QnA> findAll(@RequestParam(value = "page", required = false) Integer page,
+                             @RequestParam(value = "max_result", required = false) Integer max_result) {
+        if (page == null) { page = 0; }
+        if (max_result == null) {max_result = 0; }
+        Pageable pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("createdDate").descending());
+        return qnARepository.pagingAll(pageable);
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
