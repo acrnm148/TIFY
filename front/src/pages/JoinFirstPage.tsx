@@ -3,17 +3,33 @@ import coloredCheckIcon from '../assets/iconColoredCheck.svg';
 import checkIcon from '../assets/iconCheck.svg';
 import { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export function JoinFirstPage() {
   const [email, setEmail] = useState('');
+  const [doRequest, setDoRequest] = useState(false);
+
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setDoRequest(true);
+
     try {
       setIsLoading(true);
-      await axios.get(`api/account/sendEmailAuth?email=${email}`);
+      await axios
+        .get(
+          `https://i8e208.p.ssafy.io/api/account/sendEmailAuth?email=${email}`,
+        )
+        .then((r) => {
+          console.log('요청 보냄!');
+          console.log(doRequest);
+          console.log(r);
+          alert(
+            '요청하신 주소로 인증 요청 메일을 보냈습니다. 확인 후 완료 버튼을 눌러주세요.',
+          );
+        });
       setIsLoading(false);
     } catch (err) {
       setIsLoading(false);
@@ -21,8 +37,13 @@ export function JoinFirstPage() {
     }
   };
 
-  if (isLoading) {
-    return <p>Sending email...</p>;
+  const navigate = useNavigate();
+  function GoNext() {
+    navigate('/join2', {
+      state: {
+        emailData: email,
+      },
+    });
   }
 
   return (
@@ -52,20 +73,38 @@ export function JoinFirstPage() {
           </div>
           <div className="emailBox">
             <p className="m-1">이메일</p>
-            <form className="emailForm" onSubmit={handleSubmit}>
-              <input
-                type="email"
-                className="inputBox"
-                id="emailForm"
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <button type="submit" className="loginButton font-bold">
-                이메일 인증 요청
-              </button>
-            </form>
+            {doRequest ? (
+              <form className="emailForm" onSubmit={GoNext}>
+                <input
+                  type="email"
+                  className="inputBox"
+                  id="emailForm"
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled
+                />
+                <button type="submit" className="loginButton font-bold">
+                  이메일 인증 완료
+                </button>
+              </form>
+            ) : (
+              <form className="emailForm" onSubmit={handleSubmit}>
+                <input
+                  type="email"
+                  className="inputBox"
+                  id="emailForm"
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+                <button type="submit" className="loginButton font-bold">
+                  이메일 인증 요청
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </div>
