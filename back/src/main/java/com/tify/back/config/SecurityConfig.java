@@ -30,14 +30,14 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
-//                    .antMatchers("/**");
-                .antMatchers("/swagger-ui/**")
-                .antMatchers("/api/**")
-                .antMatchers("/account/**","/", "/home","/refresh/**")
-                .antMatchers("/gifthub/**")
-                .antMatchers("/api/oauth/token/kakao","/login/oauth2/code/kakao", "/account/auth/login/kakao")
-                .antMatchers("/login/oauth2/code/naver", "/api/oauth/token/naver", "/account/auth/login/naver")
-                .antMatchers("/login/oauth2/code/google", "/api/oauth/token/google", "/account/auth/login/google");
+                    .antMatchers("/**");
+                //.antMatchers("/swagger-ui/**")
+                //.antMatchers("/api/**")
+                //.antMatchers("/account/**","/", "/home","/refresh/**")
+                //.antMatchers("/gifthub/**")
+                //.antMatchers("/api/oauth/token/kakao","/login/oauth2/code/kakao", "/account/auth/login/kakao")
+                //.antMatchers("/login/oauth2/code/naver", "/api/oauth/token/naver", "/account/auth/login/naver")
+                //.antMatchers("/login/oauth2/code/google", "/api/oauth/token/google", "/account/auth/login/google");
     }
 
     @Bean
