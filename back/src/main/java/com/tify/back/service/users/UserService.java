@@ -99,7 +99,7 @@ public class UserService {
         //System.out.println("emailAuth 저장된 내용: "+emailAuth.getAuthToken()+" ");
         //emailService.send(emailAuth.getEmail(), emailAuth.getAuthToken());
         //String authToken = sendEmailAuth(requestDto.getEmail());
-        EmailAuth emailAuth = emailRepository.findByEmail(requestDto.getEmail());
+        EmailAuth emailAuth = (EmailAuth) emailRepository.findByEmail(requestDto.getEmail());
         String authToken = emailAuth.getAuthToken();
         System.out.println("회원가입 중 authToken 확인: "+authToken);
         // 유저 고유 cart 생성.
