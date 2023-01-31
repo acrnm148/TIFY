@@ -14,12 +14,15 @@ import com.tify.back.dto.users.request.JoinRequestDto;
 import com.tify.back.dto.users.request.LoginRequestDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
+import com.tify.back.model.gifthub.Cart;
 import com.tify.back.model.users.EmailAuth;
 import com.tify.back.model.users.User;
 import com.tify.back.repository.users.EmailAuthCustomRepository;
 import com.tify.back.repository.users.EmailAuthRepository;
 import com.tify.back.repository.users.UserRepository;
 import java.util.List;
+
+import com.tify.back.service.gifthub.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -49,6 +52,7 @@ public class UserService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     private final StringRedisTemplate redisTemplate;
+    private final CartService cartService;
 
     /**
      * DTO로 들어온 값으로 회원가입
@@ -98,7 +102,11 @@ public class UserService {
         EmailAuth emailAuth = emailRepository.findByEmail(requestDto.getEmail());
         String authToken = emailAuth.getAuthToken();
         System.out.println("회원가입 중 authToken 확인: "+authToken);
-
+        // 유저 고유 cart 생성.
+        Cart cart = new Cart();
+        cart.setUser(user);
+        cartService.saveCart(cart);
+        user.setCart(cart);
         return JoinResponseDto.builder()
                 .userid(user.getUserid())
                 .email(user.getEmail())

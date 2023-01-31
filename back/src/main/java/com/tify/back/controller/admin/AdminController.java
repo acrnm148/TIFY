@@ -3,11 +3,13 @@ package com.tify.back.controller.admin;
 import com.tify.back.dto.admin.EditWishDto;
 import com.tify.back.dto.admin.UserListMap;
 import com.tify.back.dto.admin.createUserDto;
+import com.tify.back.model.gifthub.Cart;
 import com.tify.back.model.gifthub.Product;
 import com.tify.back.model.users.User;
 import com.tify.back.model.wish.Wish;
 import com.tify.back.repository.users.UserRepository;
 import com.tify.back.repository.wish.WishRepository;
+import com.tify.back.service.gifthub.CartService;
 import com.tify.back.service.users.UserService;
 import com.tify.back.service.wish.WishService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,6 +31,7 @@ public class AdminController {
     private final UserRepository userRepository;
     private final WishRepository wishRepository;
     private final WishService wishService;
+    private final CartService cartService;
 //    @GetMapping("/userlist")
 //    public List<User> getUserList() {}
 
@@ -38,7 +41,13 @@ public class AdminController {
     @PostMapping("/user")
     public User createUser(@RequestBody createUserDto dto) {
     //		User user = dto.toEntity();
-        return userService.save(new User());
+        User user = new User();
+        userService.save(user);
+        Cart cart = new Cart();
+        cart.setUser(user);
+        cartService.saveCart(cart);
+        user.setCart(cart);
+        return userService.save(user);
     }
 
     @Operation(summary = "admin page userList", description = "관리자페이지 유저목록")
