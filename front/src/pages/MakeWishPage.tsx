@@ -114,7 +114,6 @@ export function MakeWishPage() {
           </div>
           <div className="address-form-container">
             <label htmlFor="태그">주소</label>
-            <span>주소 input 클릭시 주소찾기 창 연결</span>
             <div className="address-form">
               <input type="text" placeholder="주소"required={true} name="address" onChange={handleInput} value={enroll_company.address} disabled/>
               <Postcode company={enroll_company} setcompany={setEnroll_company}/>

@@ -24,6 +24,7 @@ import { OrderList } from './components/OrderList';
 import { CongratsPage } from './pages/CongratsPage';
 import { CongratsPayPage } from './pages/CongratsPayPage';
 import { CongratsCardPage } from './pages/CongratsCardPage';
+import PayingPort from './components/PayingPort';
 
 import { Footer } from './fixture/Footer';
 import { MainPage } from './pages/MainPage';
@@ -54,7 +55,8 @@ function App() {
           <Route path="kakaopay" element={<PayingService />} />
         </Route>
         <Route path="/congrats/kakaopay/result" element={<PayResult />} />
-
+        <Route path='/congrats/import' element={<PayingPort />} />
+        
         <Route path="/mypage" element={<MyPage />}>
           <Route path="mywish" element={<MyWish />} />
           <Route path="joined" element={<Joined />} />

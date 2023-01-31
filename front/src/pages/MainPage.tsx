@@ -6,42 +6,31 @@ import { GiftRecommendList } from '../components/GiftRecommendList';
 import  SearchBar  from '../components/SearchBar';
 import '../css/mainPage.styles.css';
 import '../css/styles.css';
-import {GiftList } from '../interface/interface';
 
 
 export function MainPage() {
-  let [giftList, setGiftList] = useState<GiftList[]>([]);
+  let [giftList, setGiftList] = useState<Array<any>>([]);
   
-  // useEffect(() => {
-  //   async function fetchdata() {
-  //     const API_URL = 'https://i8e208.p.ssafy.io/api/gifthub/main';
-  //     // http://i8e208.p.ssafy.io/api/gifthub/main 
-  //     const {data} = await axios.get(API_URL);
-  //     console.log(data);
-  //   }
-  //   fetchdata()
-  // });
+  useEffect(() => {
+    async function fetchdata() {
+      const API_URL = 'https://i8e208.p.ssafy.io/api/gifthub/main';
+      axios.get(API_URL
+        ).then((r) => { 
+          console.log(r)
+          let copy:Array<any> = [...r.data];
+          setGiftList(copy)
+        }).catch((r) => { console.log(r)}
+        )}
+    fetchdata();
+  },[]);
 
-  // let [giftList, giftListChange] = useState([
-  //   {
-  //     name: '삼성비스포크1',
-  //     price: 100000,
-  //     giftId: 1,
-  //   },
-  //   {
-  //     name: '삼성비스포크2',
-  //     price: 200000,
-  //     giftId: 2,
-  //   },
-  //   {
-  //     name: '삼성비스포크3',
-  //     price: 300000,
-  //     giftId: 3,
-  //   },
-  // ]);
   const propFunction = (x:number) =>{
     console.log('부모컴포넌트에서받음', x)
   }
+  function getQuery(arg0: string): void {
+    throw new Error('Function not implemented.');
+  }
+
   return (
     <div className="main-container">
       <div className="main-components">
@@ -52,8 +41,8 @@ export function MainPage() {
       </div>
       <div>
         <GiftHubCategory propFunction={propFunction}/>
-        {/* <SearchBar /> */}
-        {/* <GiftRecommendList giftList={giftList} /> */}
+        <SearchBar propFunction={getQuery} initailQuery={''}/>
+        <GiftRecommendList giftList={giftList} />
       </div>
     </div>
   );

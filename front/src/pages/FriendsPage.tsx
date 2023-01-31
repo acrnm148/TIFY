@@ -1,28 +1,31 @@
+import React, {  useState,  } from "react";
+import Slider from "@mui/material/Slider";
 
-import React from 'react';
-// import '@mobiscroll/react/dist/css/mobiscroll.min.css';
-// import { Datepicker} from '@mobiscroll/react';
 
 export function FriendsPage() {
-    const [openPicker, setOpenPicker] = React.useState(false);
-    const [date, setDate] = React.useState(new Date());
+    const [min, max] = [0, 1000000]
+    const step = 1000
+    const [value, setValue] = useState<number[]>([20, 37]);
     
-    
-    const boxInputProps = {
-        className: '',
-        inputStyle: 'box',
-        placeholder: 'Please Select...'
+    const handleChange = (event: Event, newValue: number | number[]) => {
+        setValue(newValue as number[]);
+        console.log(value)
     };
-    
+
     return (
         <>
-                {/* <div className="form-group">
-                    <div className="row">
-                        <div className="col-12">
-                            <Datepicker  controls={['calendar']} select="range" inputProps={boxInputProps} />
-                        </div>
-                    </div>
-                </div> */}
+            <h1>테스트중</h1>
+            <div>{value[0]}원 ~ {value[1]}원</div>
+            <Slider
+                getAriaLabel={() => 'Temperature range'}
+                value={value}
+                onChange={handleChange}
+                valueLabelDisplay="auto"
+                aria-labelledby="range-slider"
+                step={step}
+                min = {min}
+                max = {max}
+                />
         </>
     ); 
 }
