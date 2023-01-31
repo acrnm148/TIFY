@@ -9,6 +9,7 @@ import com.tify.back.model.gifthub.CartItem;
 import com.tify.back.model.gifthub.Product;
 import com.tify.back.model.gifthub.ProductOptionDetail;
 import com.tify.back.repository.gifthub.CartRepository;
+import com.tify.back.repository.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class CartService {
     private final CartItemService cartItemService;
     private final ProductOptionDetailService productOptionDetailService;
     ObjectMapper objectMapper = new ObjectMapper();
+    private final UserRepository userRepository;
 
     public Cart saveCart(Cart cart) {
         return cartRepository.save(cart);
@@ -44,11 +46,11 @@ public class CartService {
     }
 
     //회원가입 컨트롤러 생기면 user id 또는 cart id 로 cart 탐색 변경
-    public Cart addCartItem(String message) throws Exception {
+    public CartItem addCartItem(String message) throws Exception {
 //        TypeReference<Map<String, String>> typeReference = new TypeReference<Map<String,String>>() {};
 //        Map<String, String> map = objectMapper.readValue(message, typeReference);
         JSONObject map = new JSONObject(message);
-        Cart cart =  getCartById(map.getLong("cartId"));
+        Cart cart = cartRepository.findByUserId(map.getLong("userId"));
         Product product = productService.getProductById(map.getLong("productId"));
         CartItem cartItem = cartItemService.createCartItem(product, cart, map.getInt("quantity"), map.getString("options"));
 
@@ -74,7 +76,8 @@ public class CartService {
         cart.setPrice(total + cartItem.getValue());
         cart.setQuantity(cart.getQuantity() + 1);
         cart.setCartItems(cartItems);
-        return saveCart(cart);
+        saveCart(cart);
+        return cartItem;
     }
 
     public Cart deleteItemInCart(Long cartId, Long cartItemId) throws Exception {

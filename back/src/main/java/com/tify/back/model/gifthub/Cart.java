@@ -1,6 +1,7 @@
 package com.tify.back.model.gifthub;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tify.back.model.users.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,8 @@ public class Cart {
     private int price;
     private int quantity;// count 대신
 
-    @OneToOne(fetch=FetchType.LAZY) //cart가 주인
+    @JsonIgnore
+    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL) //cart가 주인
     @JoinColumn(name = "user_id")
     private User user;
 }
