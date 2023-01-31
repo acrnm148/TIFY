@@ -12,6 +12,8 @@ import com.tify.back.dto.users.request.JoinRequestDto;
 import com.tify.back.dto.users.request.LoginRequestDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
+import com.tify.back.model.users.EmailAuth;
+import com.tify.back.repository.users.EmailAuthRepository;
 import com.tify.back.service.users.EmailService;
 import com.tify.back.service.users.UserService;
 import com.tify.back.model.users.User;
@@ -33,6 +35,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Tag(name = "user", description = "유저 API")
@@ -41,6 +45,7 @@ import java.util.Map;
 @RequestMapping("/api")
 public class UserApiController {
 
+    private final EmailAuthRepository emailAuthRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final UserService userService;
@@ -52,6 +57,7 @@ public class UserApiController {
     private final JwtProviderService jwtProviderService;
 
     private final RedisTemplate<String, String> redisTemplate;
+
 
     @GetMapping("/home")
     public String home() {
@@ -94,19 +100,40 @@ public class UserApiController {
         System.out.println("전송된 링크 진입");
         //User user = userService.confirmEmail(requestDto);
         String authToken = userService.confirmEmail(requestDto);
-        System.out.println("이메일 인증 성공, 이메일 토큰: "+authToken);
-        return ResponseEntity.ok().body("이메일 인증 성공, 이메일 토큰: "+authToken);
+        //System.out.println("이메일 인증 성공, 이메일 토큰: "+authToken);
+        //return ResponseEntity.ok().body("이메일 인증 성공, 이메일 토큰: "+authToken);
+        return ResponseEntity.ok().body(authToken);
     }
-    
+    /**
+     * 이메일 인증 했는지 체크
+     */
+    @Operation(summary = "comfirm email", description = "이메일 체크")
+    @GetMapping("/account/checkEmailState")
+    public ResponseEntity<?> checkEmailState(String email) {
+        System.out.println("이메일 인증 했는지 체크");
+        List<EmailAuth> emailAuths = new ArrayList<>();
+        emailAuths = emailAuthRepository.findByEmail(email);
+        if (emailAuths.size() == 0) {
+            return ResponseEntity.ok().body("N");
+        }
+        return ResponseEntity.ok().body("Y");
+
+    }
+
     /**
      * 회원가입 - 이메일 인증 요청
      */
     @Operation(summary = "send email auth", description = "이메일 인증 진행")
     @GetMapping("/account/sendEmailAuth")
     public ResponseEntity<?> sendEmailAuth(@RequestParam("email") String email) {
+        System.out.println("이메일 인증 - 이미 가입된 메일 체크 :"+userService.validateDuplicated(email));
+        if (userService.validateDuplicated(email)) {
+            return ResponseEntity.ok().body("이미 인증이 완료된 이메일입니다.");
+        }
         userService.sendEmailAuth(email);
         return ResponseEntity.ok().body(email); //인증된 이메일 리턴
     }
+
 
     /**
      * 회원 조회
@@ -144,6 +171,7 @@ public class UserApiController {
     }
 
 
+
     /**
      * 회원 정보 수정
      */
@@ -161,6 +189,7 @@ public class UserApiController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수정에 실패했습니다..");
         }
     }
+
 
 
     /**
@@ -245,6 +274,19 @@ public class UserApiController {
         Map<String, String> jsonResponse = jwtService.recreateTokenResponse(jwtToken);
 
         return jsonResponse;
+    }
+
+    /**
+     * 닉네임 중복 확인
+     */
+    @Operation(summary = "check duplicated nickname", description = "닉네임 중복 확인")
+    @Parameter(description = "nickname을 파라미터로 받습니다. 중복되면 Y, 중복이 아니라면 N을 리턴합니다.")
+    @GetMapping("/dupCheck")
+    public ResponseEntity<?> checkDuplicatedNickname(@RequestParam("nickname") String nickname) {
+        if (userRepository.findByNickname(nickname) != null) {
+            return ResponseEntity.status(HttpStatus.MULTI_STATUS).body("Y");
+        }
+        return ResponseEntity.ok().body("N");
     }
 
 }
