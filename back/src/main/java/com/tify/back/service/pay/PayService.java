@@ -28,9 +28,6 @@ public class PayService {
 
         Gift gift = giftRepository.findById(payRequestDto.getGiftId()).get();
 
-        //여기서 결제
-        //iamportService.
-
         Pay pay = payRepository.save(
                 Pay.builder()
                         .gift(gift)
@@ -51,13 +48,14 @@ public class PayService {
     }
 
     /**
-     * 펀딩 금액 모으기
+     * 기프트 펀딩 완료
      */
     @Transactional
     public boolean validateGathered(Gift gift) {
         if (gift.getGathered() >= gift.getMaxAmount()) {
             gift.setFinishYN("Y");
             gift.setSuccessYN("Y");
+            gift.setFinishDate(LocalDateTime.now());
             return true;
         }
         else return false;

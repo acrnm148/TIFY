@@ -1,5 +1,5 @@
 server:
-  port: 10080
+  port: 8081
 
 spring:
   redis:
