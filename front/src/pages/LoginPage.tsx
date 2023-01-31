@@ -3,7 +3,51 @@ import iconGoogle from '../assets/iconGoogle.svg';
 import iconKakaoLogo from '../assets/iconKakaoLogo.svg';
 import iconNaverLogo from '../assets/iconnaverLogo.png';
 
+import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { useForm } from 'react-hook-form';
+
+import { Login } from '../components/Auth';
+import React, { useState } from 'react';
+import { setRefreshToken } from '../storage/Cookie';
+import { SET_TOKEN } from '../store/Auth';
+
 export function LoginPage() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [userid, setUserid] = useState('octover1025@naver.com');
+  const [password, setPassword] = useState('123');
+
+  const onValid = () => {
+    setPassword('');
+    Login(userid, password).then((response) => {
+      setRefreshToken(response.refresh_token);
+      dispatch(SET_TOKEN(response.access_token));
+      console.log('로그인 성공!!');
+      return navigate('/');
+    });
+  };
+
+  // const onValid = async () => {
+  //   setPassword('');
+  //   await Login(userid, password)
+  //     .then(() => {
+  //       // console.log(res);
+  //       // setRefreshToken(res.refresh_token);
+  //       // dispatch(SET_TOKEN(res.access_token));
+  //       console.log('로그인 성공!!');
+  //       return navigate('/');
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+
+  // function SubmitLogin() {
+  //   Login(userid, password);
+  // }
+
   return (
     <div className="grayBackground">
       <div className="login-inside-box">
@@ -27,7 +71,11 @@ export function LoginPage() {
               <input type="checkbox" name="color" value="blue" /> 로그인 정보
               저장
             </label>
-            <button type="submit" className="loginButton font-roboto font-bold">
+            <button
+              type="submit"
+              className="loginButton font-roboto font-bold"
+              onClick={onValid}
+            >
               Login
             </button>
             <button className="findPassword font-bold">Forgot password?</button>

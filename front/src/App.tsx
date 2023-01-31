@@ -34,7 +34,49 @@ import PayResult from './components/PayResult';
 
 import './css/styles.css';
 import { GiftHubDetailPage } from './pages/GiftHubDetailPage';
+
+import { useReducer } from 'react';
+import { Login } from './components/Auth';
+
+const initialState = {
+  authenticated: false,
+  token: null,
+};
+
+function reducer(state: any, action: any) {
+  switch (action.type) {
+    case 'SET_TOKEN':
+      return { ...state, token: action.token, authenticated: action.result };
+    default:
+      return state;
+  }
+}
+
 function App() {
+  // const [state, dispatch] = useReducer(reducer, initialState);
+  // const { authenticated } = state;
+  // console.log(state, '-------------------------');
+
+  // function handleLogin(id: string, password: string) {
+  //   let token = Login(id, password);
+
+  //   if (token) {
+  //     console.log('로그인 성공!');
+  //     dispatch({
+  //       type: 'SET_TOKEN',
+  //       token: token,
+  //       result: true,
+  //     });
+  //   } else {
+  //     console.log('로그인 실패');
+  //     dispatch({
+  //       type: 'SET_TOKEN',
+  //       token: null,
+  //       result: false,
+  //     });
+  //   }
+  // }
+
   return (
     <BrowserRouter>
       <Header />
