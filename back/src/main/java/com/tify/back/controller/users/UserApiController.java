@@ -85,7 +85,7 @@ public class UserApiController {
     public ResponseEntity<?> join(@RequestBody JoinRequestDto joinRequestDto){ //authToken, email 받아옴
         JoinResponseDto responseDto = userService.register(joinRequestDto);
         if (responseDto == null) {
-            return ResponseEntity.status(HttpStatus.MULTI_STATUS).body("존재하는 유저입니다.");
+            return ResponseEntity.status(HttpStatus.MULTI_STATUS).body("이메일 인증을 하지 않았거나 존재하는 유저입니다.");
         }
         //login(new LoginRequestDto(responseDto.getUserid(), responseDto.getPassword()));
         return ResponseEntity.ok().body(responseDto);

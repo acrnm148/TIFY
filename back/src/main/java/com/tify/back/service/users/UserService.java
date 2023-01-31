@@ -101,6 +101,10 @@ public class UserService {
         //emailService.send(emailAuth.getEmail(), emailAuth.getAuthToken());
         //String authToken = sendEmailAuth(requestDto.getEmail());
         List<EmailAuth> emailAuth = emailRepository.findByEmail(requestDto.getEmail());
+        if (emailAuth.size() == 0) {
+            System.out.println("이메일 인증이 필요합니다.");
+            return null;
+        }
         String authToken = emailAuth.get(0).getAuthToken();
         System.out.println("회원가입 중 authToken 확인: "+authToken);
 

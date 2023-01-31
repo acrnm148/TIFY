@@ -13,6 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     public int deleteByUserid(String userid);
     public User findByPassword(String nowPassword);
     public User findByEmail(String email);
+    public User findByNickname(String nickname);
 
     @Query("SELECT u FROM User u WHERE u.nickname LIKE %:nickname%")
     List<User> findByNicknameLike(String nickname);
