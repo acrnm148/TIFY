@@ -1,5 +1,7 @@
 import '../css/login.styles.css';
 import iconGoogle from '../assets/iconGoogle.svg';
+import iconKakaoLogo from '../assets/iconKakaoLogo.svg';
+import iconNaverLogo from '../assets/iconnaverLogo.png';
 
 export function LoginPage() {
   return (
@@ -49,7 +51,15 @@ export function LoginPage() {
         </div>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <div className="icon-box">
-            <img src={iconGoogle} alt="" />
+            <a href="https://i8e208.p.ssafy.io/api/account/auth/login/kakao?code=puiWop6ESY_F1tRrVYqncnvDHiCO5P_dmbZ35luLvdi5BFkeHOLSpQl3Y-Opv47gs4ONSgo9dVwAAAGF4Ysfnw">
+              <img src={iconKakaoLogo} />
+            </a>
+            <a
+              href="https://i8e208.p.ssafy.io/api/account/auth/login/naver?code=H8BZAWjxo98GRC5NML"
+              style={{ height: '75px', width: '75px' }}
+            >
+              <img src={iconNaverLogo} />
+            </a>
           </div>
         </div>
       </div>
