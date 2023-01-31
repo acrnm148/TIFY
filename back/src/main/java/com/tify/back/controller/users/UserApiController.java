@@ -28,7 +28,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.json.HTTP;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +58,7 @@ public class UserApiController {
 
     private final RedisTemplate<String, String> redisTemplate;
 
+
     @GetMapping("/home")
     public String home() {
         return "home";
@@ -85,7 +85,7 @@ public class UserApiController {
     public ResponseEntity<?> join(@RequestBody JoinRequestDto joinRequestDto){ //authToken, email 받아옴
         JoinResponseDto responseDto = userService.register(joinRequestDto);
         if (responseDto == null) {
-            return ResponseEntity.status(HttpStatus.MULTI_STATUS).body("이메일 인증을 하지 않았거나 존재하는 유저입니다.");
+            return ResponseEntity.status(HttpStatus.MULTI_STATUS).body("존재하는 유저입니다.");
         }
         //login(new LoginRequestDto(responseDto.getUserid(), responseDto.getPassword()));
         return ResponseEntity.ok().body(responseDto);
@@ -104,7 +104,6 @@ public class UserApiController {
         //return ResponseEntity.ok().body("이메일 인증 성공, 이메일 토큰: "+authToken);
         return ResponseEntity.ok().body(authToken);
     }
-
     /**
      * 이메일 인증 했는지 체크
      */
@@ -120,7 +119,7 @@ public class UserApiController {
         return ResponseEntity.ok().body("Y");
 
     }
-    
+
     /**
      * 회원가입 - 이메일 인증 요청
      */
@@ -134,6 +133,7 @@ public class UserApiController {
         userService.sendEmailAuth(email);
         return ResponseEntity.ok().body(email); //인증된 이메일 리턴
     }
+
 
     /**
      * 회원 조회
@@ -171,6 +171,7 @@ public class UserApiController {
     }
 
 
+
     /**
      * 회원 정보 수정
      */
@@ -188,6 +189,7 @@ public class UserApiController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수정에 실패했습니다..");
         }
     }
+
 
 
     /**

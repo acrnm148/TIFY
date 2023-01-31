@@ -2,6 +2,7 @@ package com.tify.back.model.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tify.back.auth.jwt.refreshToken.RefreshToken;
+import com.tify.back.model.gifthub.Cart;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -51,6 +52,9 @@ public class User {
     @JoinColumn(name = "refreshToken_id")
     private RefreshToken jwtRefreshToken;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "user")
+    private Cart cart;
     /**
      * 연결
 
@@ -73,8 +77,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<QnA> qnas = new ArrayList<> ();
 
-    @OneToOne(mappedBy = "user")
-    private Cart cart;
 
     @OneToMany(mappedBy = "user")
     private List<Wish> wishes = new ArrayList<> ();

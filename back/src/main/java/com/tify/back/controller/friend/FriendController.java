@@ -37,6 +37,10 @@ public class FriendController {
         friends.addAll(receivedRequests);
         return friends;
     }
+    @GetMapping("/friends/{userId1}/{userId2}")
+    public FriendStatus getFriendshipStatus(@PathVariable long userId1, @PathVariable long userId2) {
+        return friendService.getFriendshipStatus(userId1, userId2);
+    }
 
     @PostMapping("/friends")
     public Friend addFriend(@RequestBody FriendDTO friendDTO) {
@@ -47,4 +51,5 @@ public class FriendController {
     public Friend acceptFriend(@RequestBody FriendAcceptanceDTO friendAcceptanceDTO) {
         return friendAcceptanceDTO.isAccepted() ? friendService.acceptFriend(friendAcceptanceDTO.getFriendId()) : friendService.rejectFriend(friendAcceptanceDTO.getFriendId());
     }
+    //친구 수락할때는 friendID는 친구요청의 id, accepted는 true는 수락 false는 거절
 }

@@ -17,6 +17,24 @@ public class FriendService {
     public List<Friend> getFriends(long userId) {
         return friendRepository.findByUserIdAndStatus(userId, FriendStatus.ACCEPTED);
     }
+    public FriendStatus getFriendshipStatus(long userId1, long userId2) {
+        Friend friend = friendRepository.findByUserIdAndFriendIdAndStatus(userId1, userId2, FriendStatus.ACCEPTED);
+        if (friend != null) {
+            return FriendStatus.ACCEPTED;
+        }
+
+        friend = friendRepository.findByUserIdAndFriendIdAndStatus(userId1, userId2, FriendStatus.REQUESTED);
+        if (friend != null) {
+            return FriendStatus.REQUESTED;
+        }
+
+        friend = friendRepository.findByUserIdAndFriendIdAndStatus(userId2, userId1, FriendStatus.REQUESTED);
+        if (friend != null) {
+            return FriendStatus.RECEIVED;
+        }
+
+        return FriendStatus.NONE;
+    }
 
     public Friend addFriend(FriendDTO friendDTO) {
         // check if mutual friend already exists
