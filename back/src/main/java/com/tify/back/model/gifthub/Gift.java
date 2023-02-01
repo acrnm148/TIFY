@@ -7,7 +7,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Setter
 @Getter
@@ -48,4 +51,11 @@ public class Gift {
     private int gathered; // 모인 돈
     private String successYN;
     private Integer idx;
+
+    private LocalDateTime finishDate;
+    private String giftImgUrl;
+    private String giftUrl;
+
+    @OneToMany(mappedBy= "gift")
+    private List<GiftOption> giftOption = new ArrayList<>();
 }

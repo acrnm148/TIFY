@@ -7,6 +7,7 @@ import com.tify.back.auth.jwt.JwtProperties;
 import com.tify.back.auth.jwt.refreshToken.RefreshToken;
 import com.tify.back.auth.jwt.refreshToken.RefreshTokenRepository;
 import com.tify.back.auth.jwt.service.JwtProviderService;
+import com.tify.back.dto.users.SearchedUserDto;
 import com.tify.back.dto.users.UserProfileDto;
 import com.tify.back.dto.users.UserUpdateDto;
 import com.tify.back.dto.users.request.EmailAuthRequestDto;
@@ -14,14 +15,18 @@ import com.tify.back.dto.users.request.JoinRequestDto;
 import com.tify.back.dto.users.request.LoginRequestDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
+import com.tify.back.model.friend.FriendStatus;
 import com.tify.back.model.gifthub.Cart;
 import com.tify.back.model.users.EmailAuth;
 import com.tify.back.model.users.User;
 import com.tify.back.repository.users.EmailAuthCustomRepository;
 import com.tify.back.repository.users.EmailAuthRepository;
 import com.tify.back.repository.users.UserRepository;
+
+import java.util.ArrayList;
 import java.util.List;
 
+import com.tify.back.service.friend.FriendService;
 import com.tify.back.service.gifthub.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -41,7 +46,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
-
+    private final FriendService friendService;
     private final EmailService emailService;
     private final JwtProviderService jwtProviderService; //얘 추가하고 오류
 
@@ -104,7 +109,8 @@ public class UserService {
         //System.out.println("emailAuth 저장된 내용: "+emailAuth.getAuthToken()+" ");
         //emailService.send(emailAuth.getEmail(), emailAuth.getAuthToken());
         //String authToken = sendEmailAuth(requestDto.getEmail());
-        List<EmailAuth> emailAuth = emailRepository.findByEmail(requestDto.getEmail());
+        List<EmailAuth> emailAuth = new ArrayList<>();
+        emailAuth = emailRepository.findByEmail(requestDto.getEmail());
         if (emailAuth.size() == 0) {
             System.out.println("이메일 인증이 필요합니다.");
             return null;
@@ -328,8 +334,27 @@ public class UserService {
     }
 
 
-    public List<User> searchUserByNickname(String nickname) {
-        return userRepository.findByNicknameLike(nickname);
+    public List<SearchedUserDto> searchUserByNickname(String nickname, Long myId) {
+        List<User> users = userRepository.findByNicknameLike(nickname);
+        List<SearchedUserDto> searchedUsers = new ArrayList<>();
+        if (searchedUsers != null) {
+            for (User user : users) {
+                //SearchedUserDto searchedUser = new SearchedUserDto();
+                //Long id = userRepository.findByEmail(myId)
+                FriendStatus friendStatus = friendService.getFriendshipStatus(myId, user.getId());
+                SearchedUserDto searchedUser = SearchedUserDto.builder()
+                        .id(user.getId())
+                        .profileImg(user.getProfileImg())
+                        .nickname(user.getNickname())
+                        .email(user.getEmail())
+                        .state(friendStatus)
+                        .build();
+
+                searchedUsers.add(searchedUser);
+            }
+        }
+
+        return searchedUsers;
     }
 
 
