@@ -57,7 +57,7 @@ public class Wish {
     private Date endDate;
 
     @Column(name = "card_img_code")
-    private Integer cardImageCode;
+    private String cardImageCode;
 
     private String addr1;
     private String addr2;

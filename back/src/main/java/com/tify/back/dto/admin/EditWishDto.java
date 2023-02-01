@@ -14,7 +14,7 @@ public class EditWishDto {
     private String content;
     private String finishYN;
     private Date endDate;
-    private int cardImageCode;
+    private String cardImageCode;
     private String addr1;
     private String addr2;
     private String zipCode;
