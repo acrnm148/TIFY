@@ -48,23 +48,34 @@
     border: solid 1px #C1C1C1;
     border-radius: 8px;
     margin-bottom: 10px;
-    width: 80vw;
+    width: 100vw;
     max-width: 882px;
     height: 160px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
 }
 .wish-card-item{
     width: 215px;
     height: 128px;
-    background-image: url('https://user-images.githubusercontent.com/87971876/215888313-74ec7287-2138-4ebb-8423-340b2e501deb.png');
+    /* background-image: url('https://user-images.githubusercontent.com/87971876/215888313-74ec7287-2138-4ebb-8423-340b2e501deb.png'); */
     overflow: cover;
-    /* background-color: #C1C1C1; */
-    /* border: solid 1px #C1C1C1; */
+    /* background-color: #efefef; */
+    border: solid 1px #C1C1C1;
     border-radius: 8px;
     margin-left: 10px;
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
 }
+
 .wish-card-gift{
     width: 138px;
     height: 128px;
@@ -222,6 +233,11 @@
 
 .add-gift-icon{
     cursor: pointer;
+}
+.add-gift-icon-con{
+    width: 164x;
+    display: flex;
+    justify-content: center;
 }
 .make-wish-btn > *{
     margin-bottom: 10px;

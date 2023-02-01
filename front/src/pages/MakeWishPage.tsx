@@ -1,7 +1,7 @@
 import "../css/makeWishPage.styles.css"
 import "../css/styles.css"
 import addHeart from "../assets/addHeart.svg";
-import React, { Component, useState } from 'react';
+import React, { Component, useCallback, useRef, useState } from 'react';
 
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
@@ -35,15 +35,18 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
+//[TODO] 카드 선택 옵션중에 한가지만 하고 선택된 카드 표시
+// [TODO] 주소 찾기할때 우편번호 자동으로 입력되도록
+// [TODO] 찜하기목록 불러오기
+// [TODO] 카테고리 선택 mui..
 export function MakeWishPage() {
   // declare {Post}: Component;
-
-  const formList = ['제목', '내용']
   const wishOption = ['생일', '결혼', '입학', '졸업','출산', '독립', '비혼', '건강']
+  const cardList = [1, 2, 3, 4, 5, 6, 7] // [TODO] 카드 디자인하고 주소 보관
   const [category, setCategory] = useState()
   const [title, setTitle] = useState<string>()
   const [content, setContent] = useState<string>()
+  const [selcetCard, setSelectCard] = useState()
   const [addr2, setAddr2] = useState<string>()
   // calendar 
   const [range, setRange] = useState<any[]>([
@@ -61,6 +64,11 @@ export function MakeWishPage() {
   const dateFomat = (date: { getFullYear: () => any; getMonth: () => number; getDate: () => any; }) => `${date.getFullYear()}-${zero(date.getMonth() + 1)}-${zero(date.getDate())}`;
   const startDate = dateFomat(range[0].startDate)
   const endDate = dateFomat(range[0].endDate)
+
+  const [imgBase64, setImgBase64] = useState(""); // 파일 base64
+  const [imgFile, setImgFile] = useState(null);	//파일	
+  // photo
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   // address
   const [enroll_company, setEnroll_company] = useState({ address : '',},)
@@ -168,7 +176,7 @@ export function MakeWishPage() {
             "category":category,
             "startDate" : startDate, 
             "endDate":endDate,
-            "wishCard":"", //string
+            // "wishCard":"", //string
             "addr1": enroll_company.address,
             "addr2":addr2,
           },
@@ -187,6 +195,40 @@ export function MakeWishPage() {
     setCategory(e.target.value)
   }
   
+  // 사진 등록
+  const handleChangeFile = (event:any) => {
+    let reader = new FileReader();
+
+    reader.onloadend = () => {
+      // 2. 읽기가 완료되면 아래코드가 실행됩니다.
+      const base64 = reader.result;
+      if (base64) {
+        setImgBase64(base64.toString()); // 파일 base64 상태 업데이트
+      }
+    }
+    if (event.target.files[0]) {
+      reader.readAsDataURL(event.target.files[0]); // 1. 파일을 읽어 버퍼에 저장합니다.
+      setImgFile(event.target.files[0]); // 파일 상태 업데이트
+      console.log(imgFile, 'imgFile') // 
+    }
+  }
+  const onUploadImageButtonClick = useCallback(() => {
+      inputRef.current?.click();
+    }, []);
+
+  const CardList = (): JSX.Element[] => {
+    const filteredTitles = cardList.map(
+      (c) => {
+        return <div className={`wish-card-item`} onClick={CardClicked} id={c}/>
+      }
+    );
+    return filteredTitles;
+  };
+
+  function CardClicked(e){
+    // console.log(e.target.id)
+    setSelectCard(e.target.id)
+  }
   return (
       <>
       {
@@ -232,31 +274,35 @@ export function MakeWishPage() {
               locale={ko}
               dateDisplayFormat="yyyy년 MM월 dd일"
               />          
-            <h1>위시 시작 일 : <span>{startDate}</span></h1>
-            <h1>위시 종료 : <span>{endDate}</span></h1>
-            <h1>위시 진행 일 : <span>{duration}</span> 일</h1>
+
             </div>
           </div>
           <div>
             <label htmlFor="">카드</label>
             <div className="wish-card-container">
-              <div className="wish-card">
-                <div className="wish-card-item" />
-              </div>
-              <div>
-              </div>
+                <div className="wish-card">
+                  <div className="wish-card-item" onClick={onUploadImageButtonClick} style={{"border":"none"}} id="0">
+                    <input type="file" name="imgFile" accept="image/*" ref={inputRef} id="imgFile" onChange={handleChangeFile} style={{"display":"none"}}/>
+                    <img src={addHeart} alt="직접추가하기"/>
+                  </div>
+                  {imgBase64 &&
+                    <div className="wish-card-item" onClick={CardClicked} id="0">
+                      <img src={imgBase64} alt="등록한사진"  id="0" />
+                    </div>
+                  }
+                  {CardList () }
+                  
+                </div>
               
             </div>
           </div>
           <div >
             <label htmlFor="">선물</label>
             <div className="wish-card-container">
-              <div className="wish-card">
-                <div className="wish-card-gift"><CartList w='wishCard'/></div>
-                
-              </div>
-              <div>
-                <img className="add-gift-icon" onClick={handleOpen} src={addHeart} alt="" />
+              <div >
+                <div className="add-gift-icon-con" onClick={handleOpen}>
+                  <img className="add-gift-icon" src={addHeart} alt="" />
+                </div>
                 <Modal
                   aria-labelledby="transition-modal-title"
                   aria-describedby="transition-modal-description"
@@ -274,6 +320,10 @@ export function MakeWishPage() {
                     </Box>
                   </Fade>
                 </Modal>
+              </div>
+              <div className="wish-card">
+                <div className="wish-card-gift"><CartList w='wishCard'/></div>
+                
               </div>
             </div>
           </div>

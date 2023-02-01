@@ -5,7 +5,7 @@ import { GiftHubPage } from './pages/GiftHubPage';
 import { MakeWishPage } from './pages/MakeWishPage';
 import { CheckWishPage } from './pages/CheckWishPage';
 import { ThanksPage } from './pages/ThanksPage';
-import { FriendsPage } from './pages/FriendsPage';
+import FriendsPage from './pages/FriendsPage';
 import { MyPage } from './pages/mypage/MyPage';
 import { LikePage } from './pages/LikePage';
 import { AlramPage } from './pages/AlramPage';
