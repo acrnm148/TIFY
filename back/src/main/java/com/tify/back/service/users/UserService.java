@@ -20,6 +20,8 @@ import com.tify.back.model.users.User;
 import com.tify.back.repository.users.EmailAuthCustomRepository;
 import com.tify.back.repository.users.EmailAuthRepository;
 import com.tify.back.repository.users.UserRepository;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import com.tify.back.service.gifthub.CartService;
@@ -73,6 +75,11 @@ public class UserService {
                         .build());
         */
 
+        Boolean emailState = false;
+        if (emailRepository.findByEmail(requestDto.getEmail()).size() != 0) {
+            emailState = true;
+        }
+
         //회원가입
         User user = userRepository.save(
                 User.builder()
@@ -91,7 +98,7 @@ public class UserService {
                         .email(requestDto.getEmail())
                         .password(bCryptPasswordEncoder.encode(requestDto.getPassword()))
                         .provider(requestDto.getProvider())
-                        .emailAuth(true)
+                        .emailAuth(emailState)
                         .createTime(LocalDateTime.now())
                         .build());
 
@@ -99,9 +106,15 @@ public class UserService {
         //System.out.println("emailAuth 저장된 내용: "+emailAuth.getAuthToken()+" ");
         //emailService.send(emailAuth.getEmail(), emailAuth.getAuthToken());
         //String authToken = sendEmailAuth(requestDto.getEmail());
-        EmailAuth emailAuth = (EmailAuth) emailRepository.findByEmail(requestDto.getEmail());
-        String authToken = emailAuth.getAuthToken();
+        List<EmailAuth> emailAuth = new ArrayList<>();
+        emailAuth = emailRepository.findByEmail(requestDto.getEmail());
+        if (emailAuth.size() == 0) {
+            System.out.println("이메일 인증이 필요합니다.");
+            return null;
+        }
+        String authToken = emailAuth.get(0).getAuthToken();
         System.out.println("회원가입 중 authToken 확인: "+authToken);
+
         // 유저 고유 cart 생성.
         Cart cart = new Cart();
         cart.setUser(user);
@@ -143,6 +156,7 @@ public class UserService {
         EmailAuth emailAuth = emailCustomRepository.findValidAuthByEmail(requestDto.getEmail(), requestDto.getAuthToken(), LocalDateTime.now()).get();
         //User user = userRepository.findByEmail(requestDto.getEmail());
         emailAuth.useToken(); //이메일 인증 상태 true 로 바꿔줌
+
         //System.out.println("이메일 인증 상태 변경:"+emailAuth.getExpired()+" / "+user.getEmailAuth());
         //user.emailVerifiedSuccess(); //이메일 인증 성공
         //return user;
@@ -277,7 +291,7 @@ public class UserService {
         UserProfileDto user = getUser(accessToken);
         String refreshToken = user.getRefreshToken();
 
-        //1. accessToken을 redisTemplate 블랙리스트에 추가
+        //1. accessToken redisTemplate 블랙리스트 추가
         ValueOperations<String, String> logoutValueOperations = redisTemplate.opsForValue();
         logoutValueOperations.set(accessToken, "logout"); // redis set 명령어
 
