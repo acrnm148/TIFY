@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { createSlice } from '@reduxjs/toolkit';
 
 // interface ResState {
 //   id: number;
@@ -6,6 +7,21 @@ import axios from 'axios';
 //   accessToken: string;
 //   refreshToken: string;
 // }
+
+export const tokenSlice = createSlice({
+  name: 'authToken',
+  initialState: {
+    accessToken: null,
+  },
+  reducers: {
+    SET_TOKEN: (state, action) => {
+      state.accessToken = action.payload;
+    },
+    DELETE_TOKEN: (state) => {
+      state.accessToken = null;
+    },
+  },
+});
 
 export async function Login(id: string, password: string) {
   try {

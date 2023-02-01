@@ -14,6 +14,7 @@ export function JoinFirstPage() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log(doRequest);
     setDoRequest(true);
 
     try {

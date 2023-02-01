@@ -11,6 +11,9 @@ import { Login } from '../components/Auth';
 import React, { useState } from 'react';
 import { setRefreshToken } from '../storage/Cookie';
 import { SET_TOKEN } from '../store/Auth';
+import { useSelector } from 'react-redux';
+import { LogOut } from '../components/LogOut';
+import { SignOut } from '../components/SignOut';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -21,12 +24,17 @@ export function LoginPage() {
 
   const onValid = () => {
     setPassword('');
-    Login(userid, password).then((response) => {
-      setRefreshToken(response.refresh_token);
-      dispatch(SET_TOKEN(response.access_token));
-      console.log('로그인 성공!!');
-      return navigate('/');
-    });
+    Login(userid, password)
+      .then((response) => {
+        setRefreshToken(response.refresh_token);
+        dispatch(SET_TOKEN(response.access_token));
+
+        console.log('로그인 성공!!');
+        return navigate('/');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   // const onValid = async () => {
@@ -61,11 +69,16 @@ export function LoginPage() {
                 className="inputBox"
                 id="emailForm"
                 placeholder="name@example.com"
+                onChange={(e) => setUserid(e.target.value)}
               />
             </form>
             <p>비밀번호</p>
             <form>
-              <input type="text" className="inputBox" />
+              <input
+                type="text"
+                className="inputBox"
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </form>
             <label>
               <input type="checkbox" name="color" value="blue" /> 로그인 정보
@@ -82,6 +95,8 @@ export function LoginPage() {
           </div>
         </div>
       </div>
+      <LogOut />
+      <SignOut />
       <div>
         <div className="cross-line-box">
           <div className="cross-line"></div>
@@ -99,11 +114,11 @@ export function LoginPage() {
         </div>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <div className="icon-box">
-            <a href="https://i8e208.p.ssafy.io/api/account/auth/login/kakao?code=puiWop6ESY_F1tRrVYqncnvDHiCO5P_dmbZ35luLvdi5BFkeHOLSpQl3Y-Opv47gs4ONSgo9dVwAAAGF4Ysfnw">
+            <a href="https://kauth.kakao.com/oauth/authorize?client_id=097d883a03c0da953d919d990701da5f&redirect_uri=https://i8e208.p.ssafy.io/login/oauth2/code/kakao&response_type=code">
               <img src={iconKakaoLogo} />
             </a>
             <a
-              href="https://i8e208.p.ssafy.io/api/account/auth/login/naver?code=H8BZAWjxo98GRC5NML"
+              href="https://nid.naver.com/oauth2.0/authorize?client_id=n4ayopJ7b7D_4KefcRcb&redirect_uri=https://i8e208.p.ssafy.io/login/oauth2/code/naver&response_type=code"
               style={{ height: '75px', width: '75px' }}
             >
               <img src={iconNaverLogo} />
