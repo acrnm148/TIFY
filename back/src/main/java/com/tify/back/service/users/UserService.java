@@ -277,7 +277,7 @@ public class UserService {
         UserProfileDto user = getUser(accessToken);
         String refreshToken = user.getRefreshToken();
 
-        //1. accessToken redisTemplate 블랙리스트 추가
+        //1. accessToken을 redisTemplate 블랙리스트에 추가
         ValueOperations<String, String> logoutValueOperations = redisTemplate.opsForValue();
         logoutValueOperations.set(accessToken, "logout"); // redis set 명령어
 
