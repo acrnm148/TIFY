@@ -102,4 +102,10 @@ public class CartController {
     public Cart getCart(@PathVariable Long userId) throws Exception {
         return cartRepository.findByUserId(userId);
     }
+
+    @Operation(summary = "wish 생성시 불러올 찜 목록", description = "wish 생성시 찜목록")
+    @GetMapping("/forwish/{userId}")
+    public List<CartItem> getCartForWish(@PathVariable Long userId) throws Exception {
+        return cartRepository.findByUserId(userId).getCartItems();
+    }
 }
