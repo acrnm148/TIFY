@@ -1,10 +1,14 @@
 package com.tify.back.model.wish;
 
+import com.tify.back.model.pay.Pay;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +34,8 @@ public class Thkcard {
 	@Column(name = "image_url")
 	private String imageUrl;
 
-	@Column(name = "pay_id")
-	private Long payId;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "pay_id")
+	private Pay pay;
+
 }

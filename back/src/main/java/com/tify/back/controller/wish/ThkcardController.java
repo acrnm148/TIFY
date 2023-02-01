@@ -1,8 +1,11 @@
 package com.tify.back.controller.wish;
 
 import com.tify.back.dto.wish.ThkcardDto;
+import com.tify.back.model.pay.Pay;
 import com.tify.back.model.wish.Thkcard;
+import com.tify.back.repository.wish.ThkcardRepository;
 import com.tify.back.service.wish.ThkcardService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,13 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/thkcards")
 public class ThkcardController {
 	private final ThkcardService thkcardService;
-
-	public ThkcardController(ThkcardService thkcardService) {
-		this.thkcardService = thkcardService;
-	}
+	private final ThkcardRepository thkcardRepository;
 
 	@PostMapping
 	public Thkcard saveThkcard(@RequestBody ThkcardDto thkcardDto) {
@@ -26,12 +27,12 @@ public class ThkcardController {
 		thkcard.setPhoneNumber(thkcardDto.getPhoneNumber());
 		thkcard.setContent(thkcardDto.getContent());
 		thkcard.setImageUrl(thkcardDto.getImageUrl());
-		thkcard.setPayId(thkcardDto.getPayId());
+		thkcard.setPay(thkcardDto.getPay());
 		return thkcardService.saveThkcard(thkcard);
 	}
 
-	@GetMapping("/{payId}")
-	public Thkcard findThkcardByPayId(@PathVariable Long payId) {
-		return thkcardService.findByPayId(payId);
+	@GetMapping("/{pay_id}")
+	public Thkcard findThkcardByPay(@PathVariable Long pay_id) {
+		return thkcardService.findByPayId(pay_id);
 	}
 }
