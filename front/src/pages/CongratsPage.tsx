@@ -36,18 +36,12 @@ export function CongratsPage() {
             price: '100,000,000',
         },
     ])
-    // wishGift 정보 딕셔너리로 받아서 wishGiftList에 [...wishGiftList...wishGift]
-    //     {
-    //         image : '',
-    //         name : '',
-    //         achived : (20/81) *100, // 81px 고정 회색바의 퍼센트
-    //     }
 
 
     const WishCardCover = () =>{
         return(
             <div className="wish-card wish-card-cover">
-            {/* // [TODO] 숫자로 받은 카드정보로 카드이미지 불러오기 */}
+            {/* // [TODO] 받은 카드이미지 주소로 표출 */}
                 카드다
             </div>
         )

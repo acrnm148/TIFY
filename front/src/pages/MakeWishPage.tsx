@@ -21,6 +21,8 @@ import axios from "axios";
 import {GiftItem} from "../components/GiftItem"
 import { GiftHubList } from "../components/GiftHubList";
 import { Gift } from "../interface/interface";
+import { CongratsPage } from "./CongratsPage";
+import BlueLogoTify from "../assets/BlueLogoTify.svg";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -56,9 +58,9 @@ export function MakeWishPage() {
   const duration = Math.abs((range[0].endDate - range[0].startDate) / (1000 * 60 * 60 * 24))+1
   
   const zero = (num: string | number) => num < 10 && num >= 0 ? "0" + num : num;
-  const dateKo = (date: { getFullYear: () => any; getMonth: () => number; getDate: () => any; }) => `${date.getFullYear()}년 ${zero(date.getMonth() + 1)}월 ${zero(date.getDate())}일`;
-  const startDate = dateKo(range[0].startDate)
-  const endDate = dateKo(range[0].endDate)
+  const dateFomat = (date: { getFullYear: () => any; getMonth: () => number; getDate: () => any; }) => `${date.getFullYear()}-${zero(date.getMonth() + 1)}-${zero(date.getDate())}`;
+  const startDate = dateFomat(range[0].startDate)
+  const endDate = dateFomat(range[0].endDate)
 
   // address
   const [enroll_company, setEnroll_company] = useState({ address : '',},)
@@ -93,9 +95,6 @@ export function MakeWishPage() {
             method: 'get',
             url: API_URL,
             headers: {}, 
-            params:{
-              page:1,
-            }
         }).then((con) => {
             console.log('상품 리스트불러오기 성공', con)
             setCartList(con.data)
@@ -149,59 +148,51 @@ export function MakeWishPage() {
       </>
     )
   }
-  const wishData = {
-      userId : userId,
-      giftItems:[
-        {
-          productId: 1,
-          quantity: 1,
-          userOption: ''
-        }
-        // wishCart?.map((w) =>{
-        //   return(
-        //     {
-        //       productId: w.giftId,
-        //       quantity: 1,
-        //       userOption: w.options,
-        //       type: "string",
-        //     }
-        //     )
-        // })
-        
-      ],
-      wishTitle:title,
-      wishContent :content,
-      category:category,
-      startDate :startDate,
-      endDate:endDate,
-      wishCard:0,
-      addr1: enroll_company.address,
-      addr2:addr2,
-  }
+  const [finished, setFinished] = useState(false)
   const MakeWish = () =>{
     const makeWish = async() =>{
-      const API_URL = `http://i8e208.p.ssafy.io:8081/api/wish/add/`;
+      const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';
         axios({
           url : API_URL,
           method: "POST",
-          headers:{"Content-type" : "application/json"},
-          data : {wishData},
+          data : {
+            "userId": userId,
+            "giftItems": [
+              {
+                "productId": 1
+              }
+            ],
+            "totalPrice": 5,
+            "wishTitle": title,
+            "wishContent" :content,
+            "category":category,
+            "startDate" : startDate, 
+            "endDate":endDate,
+            "wishCard":"", //string
+            "addr1": enroll_company.address,
+            "addr2":addr2,
+          },
+          headers:{"Content-type" : "application/json"}
         }).then((con) => {
           console.log('위시생성 성공', con)
-          // setCartList(con.data)
+          setFinished(true)
         }).catch((err) => {
           console.log('위시생성 실패', err)
         })
       }
       makeWish();
-      // post(API_URL,JSON.stringify(wishData)
   }
 
   const handleCategory = (e:any)=>{
     setCategory(e.target.value)
   }
+  
   return (
       <>
+      {
+
+        finished ? <FinishedWishComponent /> :
+      
       <div className="page-name-block">
         <div className="page-name" />
         <div className="make-wish-form">
@@ -253,7 +244,6 @@ export function MakeWishPage() {
                 <div className="wish-card-item" />
               </div>
               <div>
-                <img src={addHeart} alt="" />
               </div>
               
             </div>
@@ -262,7 +252,6 @@ export function MakeWishPage() {
             <label htmlFor="">선물</label>
             <div className="wish-card-container">
               <div className="wish-card">
-                {/* <div className="wish-card-gift">선물</div> */}
                 <div className="wish-card-gift"><CartList w='wishCard'/></div>
                 
               </div>
@@ -306,6 +295,27 @@ export function MakeWishPage() {
           </div>
         </div>
       </div>
+      }
       </>
+    )
+  }
+
+
+  const FinishedWishComponent = () => {
+    
+    return(
+      <div className="finish-wish-container">
+        <div className="preview-wish">
+          <CongratsPage />
+          <img src={BlueLogoTify} alt="" />
+        </div>
+        <div className="finish-wish-comment">
+          <h1>
+            위시생성이 완료되었습니다!
+          </h1>
+          <p>생성한 위시는 일촌들에게 자동으로 알림이 전달됩니다.</p>
+          <div></div>
+        </div>
+      </div>
     )
   }

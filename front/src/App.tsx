@@ -30,6 +30,7 @@ import { Footer } from './fixture/Footer';
 import { MainPage } from './pages/MainPage';
 import PayingService from './components/PayingService';
 import PayResult from './components/PayResult';
+import WishSuccess from './components/WishSuccess';
 
 import './css/styles.css';
 import { GiftHubDetailPage } from './pages/GiftHubDetailPage';
@@ -56,6 +57,7 @@ function App() {
         </Route>
         <Route path="/congrats/kakaopay/result" element={<PayResult />} />
         <Route path='/congrats/import' element={<PayingPort />} />
+        <Route path='/makewish/success' element={<WishSuccess />} />
         
         <Route path="/mypage" element={<MyPage />}>
           <Route path="mywish" element={<MyWish />} />

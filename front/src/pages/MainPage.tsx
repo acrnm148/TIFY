@@ -47,7 +47,6 @@ export function MainPage() {
     </div>
   );
 }
-
 function CatchPrase() {
   return (
     <div className="catch-prase">
