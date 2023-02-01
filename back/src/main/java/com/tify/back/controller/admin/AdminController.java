@@ -41,7 +41,7 @@ public class AdminController {
     @PostMapping("/user")
     public User createUser(@RequestBody createUserDto dto) {
     //		User user = dto.toEntity();
-        User user = new User();
+        User user = dto.toEntity();
         userService.save(user);
         Cart cart = new Cart();
         cart.setUser(user);
