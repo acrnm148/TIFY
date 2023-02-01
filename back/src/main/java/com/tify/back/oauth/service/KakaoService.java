@@ -26,7 +26,7 @@ public class KakaoService {
 
     private final String client_id = "097d883a03c0da953d919d990701da5f";
     private final String client_secret = "af5un2n5wi857RPKyB7wBFPKhjBBebd4";
-    private final String redirect_uri = "http://localhost:8080/login/oauth2/code/kakao";
+    private final String redirect_uri = "https://i8e208.p.ssafy.io/login/oauth2/code/kakao";
     private final String accessTokenUri = "https://kauth.kakao.com/oauth/token";
     private final String UserInfoUri = "https://kapi.kakao.com/v2/user/me";
 
