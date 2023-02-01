@@ -1,8 +1,30 @@
 import '../css/login.styles.css';
 import coloredCheckIcon from '../assets/iconColoredCheck.svg';
 import checkIcon from '../assets/iconCheck.svg';
+import { useState } from 'react';
+import axios from 'axios';
 
 export function JoinFirstPage() {
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      setIsLoading(true);
+      await axios.get(`api/account/sendEmailAuth?email=${email}`);
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      setError('Error sending email. Please try again later.');
+    }
+  };
+
+  if (isLoading) {
+    return <p>Sending email...</p>;
+  }
+
   return (
     <div className="grayBackground">
       <div className="insideBox">
@@ -30,17 +52,20 @@ export function JoinFirstPage() {
           </div>
           <div className="emailBox">
             <p className="m-1">이메일</p>
-            <form className="emailForm">
+            <form className="emailForm" onSubmit={handleSubmit}>
               <input
-                type="text"
+                type="email"
                 className="inputBox"
                 id="emailForm"
                 placeholder="name@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
+              <button type="submit" className="loginButton font-bold">
+                이메일 인증 요청
+              </button>
             </form>
-            <button type="submit" className="loginButton font-bold">
-              이메일 인증 요청
-            </button>
           </div>
         </div>
       </div>
