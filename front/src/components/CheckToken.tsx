@@ -11,39 +11,39 @@ export function CheckToken(key: string) {
   const refreshToken = getCookieToken();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const checkAuthToken = async () => {
-      // 리프레쉬 토큰이 없다면
-      if (refreshToken === undefined) {
-        // access 토큰 없애고, 인증 여부를 Failed로 한다.
-        dispatch(DELETE_TOKEN());
-        setIsAuth('Failed');
-        // 리프레쉬 토큰 있으면
-      } else {
-        // 인증 확인
-        if (authenticated && new Date().getTime() < expireTime) {
-          setIsAuth('Success');
-        } else {
-          const response = await requestToken(refreshToken);
+  // useEffect(() => {
+  //   const checkAuthToken = async () => {
+  //     // 리프레쉬 토큰이 없다면
+  //     if (refreshToken === undefined) {
+  //       // access 토큰 없애고, 인증 여부를 Failed로 한다.
+  //       dispatch(DELETE_TOKEN());
+  //       setIsAuth('Failed');
+  //       // 리프레쉬 토큰 있으면
+  //     } else {
+  //       // 인증 확인
+  //       if (authenticated && new Date().getTime() < expireTime) {
+  //         setIsAuth('Success');
+  //       } else {
+  //         const response = await requestToken(refreshToken);
 
-          if (response.status) {
-            const token = response.json.access_token;
-            dispatch(SET_TOKEN(token));
-            setIsAuth('Success');
-          } else {
-            dispatch(DELETE_TOKEN());
-            removeCookieToken();
-            setIsAuth('Failed');
-          }
-        }
-      }
-    };
-    checkAuthToken();
-  }, [refreshToken, dispatch, key]);
+  //         if (response.status) {
+  //           const token = response.json.access_token;
+  //           dispatch(SET_TOKEN(token));
+  //           setIsAuth('Success');
+  //         } else {
+  //           dispatch(DELETE_TOKEN());
+  //           removeCookieToken();
+  //           setIsAuth('Failed');
+  //         }
+  //       }
+  //     }
+  //   };
+  //   checkAuthToken();
+  // }, [refreshToken, dispatch, key]);
 
-  return {
-    isAuth,
-  };
+  // return {
+  //   isAuth,
+  // };
 }
 
 // export const requestToken = async (refreshToken: string) => {

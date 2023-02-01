@@ -11,10 +11,13 @@ import { LikePage } from './pages/LikePage';
 import { AlramPage } from './pages/AlramPage';
 import { FaqPage } from './pages/FaqPage';
 import { AskPage } from './pages/AskPage';
+
 import { LoginPage } from './pages/LoginPage';
+import { AuthKakao } from './components/AuthKakao';
 import { JoinFirstPage } from './pages/JoinFirstPage';
 import { JoinSecondPage } from './pages/JoinSecondPage';
 import { JoinThirdPage } from './pages/JoinThirdPage';
+
 import { MyWish } from './components/Mywish';
 import { Joined } from './components/Joined';
 import { Friend } from './components/Friend';
@@ -114,7 +117,9 @@ function App() {
 
         <Route path="/faq" element={<FaqPage />} />
         <Route path="/ask" element={<AskPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />}>
+          <Route path="/" element={<AskPage />} />
+        </Route>
         <Route path="/join1" element={<JoinFirstPage />} />
         <Route path="/join2" element={<JoinSecondPage />} />
         <Route path="/join3" element={<JoinThirdPage />} />

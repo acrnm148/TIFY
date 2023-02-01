@@ -15,6 +15,11 @@ import { useSelector } from 'react-redux';
 import { LogOut } from '../components/LogOut';
 import { SignOut } from '../components/SignOut';
 
+type LoginResponse = {
+  refresh_token: string;
+  access_token: string;
+};
+
 export function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -25,7 +30,7 @@ export function LoginPage() {
   const onValid = () => {
     setPassword('');
     Login(userid, password)
-      .then((response) => {
+      .then((response: LoginResponse) => {
         setRefreshToken(response.refresh_token);
         dispatch(SET_TOKEN(response.access_token));
 

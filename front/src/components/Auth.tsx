@@ -23,6 +23,11 @@ export const tokenSlice = createSlice({
   },
 });
 
+type TokenType = {
+  access_token: string;
+  refresh_token: string;
+};
+
 export async function Login(id: string, password: string) {
   try {
     return await axios
@@ -33,7 +38,7 @@ export async function Login(id: string, password: string) {
       .then((res) => {
         console.log(res);
         console.log(res.data.accessToken);
-        const tokens = {
+        const tokens: TokenType = {
           access_token: res.data.accessToken,
           refresh_token: res.data.refreshToken,
         };
@@ -44,6 +49,7 @@ export async function Login(id: string, password: string) {
   } catch (err) {
     console.log(err);
     console.log('Errrrrrr');
+    return Promise.reject(err);
   }
 
   // if (id === 'russ' && password === 'whynot0') {

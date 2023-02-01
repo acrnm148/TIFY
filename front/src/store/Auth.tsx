@@ -2,6 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export const TOKEN_TIME_OUT = 600 * 1000;
 
+type Notoken = {
+  authenticated: boolean;
+  accessToken: string | null;
+  expireTime: number;
+};
+
 export const tokenSlice = createSlice({
   name: 'authToken',
   initialState: {
