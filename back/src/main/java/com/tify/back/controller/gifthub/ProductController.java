@@ -48,7 +48,7 @@ public class ProductController {
     public Product testProduct(@RequestBody ProductDto dto) {
         return productService.pyProduct(dto);
     }
-//    @PostMapping("/testproduct")
+    //    @PostMapping("/testproduct")
 //    public String testProduct(@RequestBody String message) throws Exception {
 //        System.out.println(message);
 //        return productService.temp(message);

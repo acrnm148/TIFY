@@ -226,8 +226,8 @@ public class UserService {
     public User updateUserInfo(UserUpdateDto dto) {
         User user = userRepository.findByUserid(dto.getUserid());
         if (dto.getTel() == null || dto.getNickname() == null ||
-           dto.getZipcode() == null || dto.getAddr1() == null ||
-            dto.getAddr2()==null) {
+                dto.getZipcode() == null || dto.getAddr1() == null ||
+                dto.getAddr2()==null) {
             System.out.println("입력란이 비었습니다.");
             return null;
         }
@@ -243,7 +243,7 @@ public class UserService {
         } else {
             user.setProfileImg(dto.getProfileImg());
         }
-        
+
         //비밀번호 변경
         System.out.println("현재 암호화된 비밀번호: "+user.getPassword());
         User userById = userRepository.findByUserid(dto.getUserid());
@@ -288,7 +288,7 @@ public class UserService {
         refreshTokenRepository.deleteById(rf.getId());//자식에서 삭제
     }
 
-    
+
     /**
      * accesstoken 복호화해서 유저 아이디 추출
      */
