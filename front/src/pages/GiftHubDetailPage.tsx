@@ -31,18 +31,18 @@ export function GiftHubDetailPage(){
         setHeart(!heart)
         if (heart===true){
             const putCart = async() =>{
+                
                 const API_URL = `https://i8e208.p.ssafy.io/api/cart/`;
                 axios({
                     method: 'post',
                     url: API_URL,
                     headers: {}, 
                     data: {
-                        userId:1,
-                        cartId:1, // ????????
-                        productId:1, //data.id,
-                        quantity:3, // data.quantity
-                        options:{
-                            Color:"white" //data.option
+                        "userId":104,
+                        "productId":data.id, //data.id,
+                        "quantity":1, // data.quantity
+                        "options":{
+                            "":""
                         }
                     }
                 }).then((con) => {
