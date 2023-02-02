@@ -8,21 +8,6 @@ import { createSlice } from '@reduxjs/toolkit';
 //   refreshToken: string;
 // }
 
-export const tokenSlice = createSlice({
-  name: 'authToken',
-  initialState: {
-    accessToken: null,
-  },
-  reducers: {
-    SET_TOKEN: (state, action) => {
-      state.accessToken = action.payload;
-    },
-    DELETE_TOKEN: (state) => {
-      state.accessToken = null;
-    },
-  },
-});
-
 type TokenType = {
   access_token: string;
   refresh_token: string;
@@ -48,6 +33,7 @@ export async function Login(id: string, password: string) {
             user_id: res.data.userid,
           };
           console.log(tokens);
+          console.log('토큰 오브젝트 보냅니다. 페이지야 받아라');
           return tokens;
         }
       });

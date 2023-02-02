@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store/RootState';
+import { RootState } from '../../store/RootState';
 
 export function SignOut() {
   let accessToken = useSelector((state: RootState) => {

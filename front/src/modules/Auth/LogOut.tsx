@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 
 import axios from 'axios';
 
-import { getCookieToken, removeCookieToken } from '../storage/Cookie';
-import { DELETE_TOKEN } from '../store/Auth';
+import { getCookieToken, removeCookieToken } from './Cookie';
+import { DELETE_TOKEN } from '../../store/Auth';
 // import { logoutUser } from '../api/Users';
 
 export function LogOut() {

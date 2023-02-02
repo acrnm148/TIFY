@@ -7,14 +7,16 @@ import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
-import { Login } from '../components/Auth';
+import { Login } from '../modules/Auth/LogIn';
 import React, { useState } from 'react';
-import { setRefreshToken } from '../storage/Cookie';
-import { SET_TOKEN } from '../store/Auth';
-import { useSelector } from 'react-redux';
+import { setRefreshToken } from '../modules/Auth/Cookie';
+import { SET_TOKEN, SET_USERID } from '../store/Auth';
 import { Outlet } from 'react-router-dom';
-import { LogOut } from '../components/LogOut';
-import { SignOut } from '../components/SignOut';
+import { LogOut } from '../modules/Auth/LogOut';
+import { SignOut } from '../modules/Auth/SignOut';
+
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/Auth';
 
 type LoginResponse = {
   refresh_token: string;
@@ -29,6 +31,15 @@ export function LoginPage() {
   const [userid, setUserid] = useState('octover1025@naver.com');
   const [password, setPassword] = useState('123');
 
+  const userId = useSelector((state: RootState) => state.authToken.userId);
+  console.log(userId);
+  console.log('요것이 userId');
+  const accessToken = useSelector(
+    (state: RootState) => state.authToken.accessToken,
+  );
+  console.log(accessToken);
+  console.log('요것이 accessToken');
+
   const onValid = () => {
     setPassword('');
     Login(userid, password)
@@ -36,10 +47,13 @@ export function LoginPage() {
         if (response === '로그인 실패!') {
           alert('미등록 회원이거나 잘못된 아이디/비밀번호를 입력하셨습니다.');
         } else {
+          console.log('리프레쉬토큰 가자');
           setRefreshToken(response.refresh_token);
           dispatch(SET_TOKEN(response.access_token));
+          dispatch(SET_USERID(response.user_id));
 
           console.log('로그인 성공!!');
+
           return navigate('/');
         }
       })

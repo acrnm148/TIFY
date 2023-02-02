@@ -9,8 +9,8 @@ export function JoinThirdPage() {
   const username = state.username;
 
   const navigate = useNavigate();
-  function GoMakeWish() {
-    navigate('/makewish');
+  function GoGifthub() {
+    navigate('/gifthub');
   }
 
   return (
@@ -43,9 +43,9 @@ export function JoinThirdPage() {
             <button
               type="submit"
               className="loginButton font-bold"
-              onClick={GoMakeWish}
+              onClick={GoGifthub}
             >
-              위시 만들기
+              GiftHub 보기
             </button>
           </div>
         </div>

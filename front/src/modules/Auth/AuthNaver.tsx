@@ -2,8 +2,10 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { setRefreshToken } from '../storage/Cookie';
-import { SET_TOKEN } from '../store/Auth';
+import { setRefreshToken } from './Cookie';
+import { SET_TOKEN, SET_USERID } from '../../store/Auth';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/Auth';
 
 export function AuthNaver() {
   const navigate = useNavigate();
@@ -29,7 +31,15 @@ export function AuthNaver() {
         console.log(res.data.refreshToken);
         setRefreshToken(res.data.accessToken);
         dispatch(SET_TOKEN(res.data.refreshToken));
+        dispatch(SET_USERID(res.data.userId));
+
         console.log('로그인 성공!!');
+        const userId = useSelector(
+          (state: RootState) => state.authToken.userId,
+        );
+        console.log(userId);
+        console.log('유저 아이디 출력');
+
         return navigate('/');
       })
       .catch((err) => {

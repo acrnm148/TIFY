@@ -5,6 +5,10 @@ import defaultProfile from '../assets/iconDefaultProfile.svg';
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Login } from '../modules/Auth/LogIn';
+import { setRefreshToken } from '../modules/Auth/Cookie';
+import { SET_TOKEN, SET_USERID } from '../store/Auth';
+import { useDispatch } from 'react-redux';
 
 export function JoinSecondPage() {
   // const [userid, setUserid] = useState('');
@@ -33,6 +37,8 @@ export function JoinSecondPage() {
   // }, []);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   function GoJoin3() {
     navigate('/join3', {
       state: {
@@ -87,9 +93,27 @@ export function JoinSecondPage() {
           config,
         )
         .then((res) => {
-          console.log(res);
-          GoJoin3();
+          console.log(res, '회원가입 성공!');
+          Login(userid, password)
+            .then((response) => {
+              if (response === '로그인 실패!') {
+                alert(
+                  '미등록 회원이거나 잘못된 아이디/비밀번호를 입력하셨습니다.',
+                );
+              } else {
+                console.log('리프레쉬토큰 가자');
+                setRefreshToken(response.refresh_token);
+                dispatch(SET_TOKEN(response.access_token));
+                dispatch(SET_USERID(response.user_id));
+
+                console.log('로그인 성공!!');
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         });
+      GoJoin3();
       setIsLoading(false);
     } catch (err) {
       setIsLoading(false);
