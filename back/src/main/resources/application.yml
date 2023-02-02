@@ -68,4 +68,8 @@ file:
 imp_key: 8753437
 imp_secret: fec4af82c2d97e8fa4ebdb2c6a8ffb5d021b5794
 
+#firebase
+app:
+  firebase-configuration-file: firebaseconfig/sp-fcm-key.json
+
 
