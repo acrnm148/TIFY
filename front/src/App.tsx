@@ -14,9 +14,11 @@ import { AskPage } from './pages/AskPage';
 
 import { LoginPage } from './pages/LoginPage';
 import { AuthKakao } from './components/AuthKakao';
+import { AuthNaver } from './components/AuthNaver';
 import { JoinFirstPage } from './pages/JoinFirstPage';
 import { JoinSecondPage } from './pages/JoinSecondPage';
 import { JoinThirdPage } from './pages/JoinThirdPage';
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 
 import { MyWish } from './components/Mywish';
 import { Joined } from './components/Joined';
@@ -118,11 +120,13 @@ function App() {
         <Route path="/faq" element={<FaqPage />} />
         <Route path="/ask" element={<AskPage />} />
         <Route path="/login" element={<LoginPage />}>
-          <Route path="/" element={<AskPage />} />
+          <Route path="oauth2/code/kakao" element={<AuthKakao />} />
+          <Route path="Oauth2/code/naver" element={<AuthNaver />} />
         </Route>
         <Route path="/join1" element={<JoinFirstPage />} />
         <Route path="/join2" element={<JoinSecondPage />} />
         <Route path="/join3" element={<JoinThirdPage />} />
+        <Route path="/reset" element={<ForgotPasswordPage />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
       <Footer />

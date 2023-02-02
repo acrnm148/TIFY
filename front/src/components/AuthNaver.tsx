@@ -5,20 +5,20 @@ import { useEffect } from 'react';
 import { setRefreshToken } from '../storage/Cookie';
 import { SET_TOKEN } from '../store/Auth';
 
-export function AuthKakao() {
+export function AuthNaver() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // console.log('location >>>', window.location.search);
+  console.log('location >>>', window.location.search);
   const params = new URLSearchParams(location.search);
   let code: any = params.get('code');
-  // console.log("params.get('code') >>> ", code);
+  console.log("params.get('code') >>> ", code);
 
-  async function KakaoLogin(code: string) {
-    console.log('try kakaologin');
+  async function NaverLogin(code: string) {
+    console.log('try naver login');
     axios({
       // 프록시에 카카오 도메인을 설정했으므로 결제 준비 url만 주자
-      url: 'https://i8e208.p.ssafy.io/api/account/auth/login/kakao',
+      url: 'https://i8e208.p.ssafy.io/api/account/auth/login/naver',
       // 결제 준비 API는 POST 메소드라고 한다.
       method: 'GET',
       params: { code },
@@ -36,11 +36,11 @@ export function AuthKakao() {
         console.log(err);
       });
   }
-  // KakaoLogin(code);
+  // NaverLogin(code);
 
   useEffect(() => {
     console.log('유즈 이팩트!');
-    KakaoLogin(code);
+    NaverLogin(code);
   }, []);
-  return <div>hello kakao</div>;
+  return <div>hello naver</div>;
 }

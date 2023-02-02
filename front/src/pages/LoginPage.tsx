@@ -12,6 +12,7 @@ import React, { useState } from 'react';
 import { setRefreshToken } from '../storage/Cookie';
 import { SET_TOKEN } from '../store/Auth';
 import { useSelector } from 'react-redux';
+import { Outlet } from 'react-router-dom';
 import { LogOut } from '../components/LogOut';
 import { SignOut } from '../components/SignOut';
 
@@ -63,6 +64,7 @@ export function LoginPage() {
 
   return (
     <div className="grayBackground">
+      <Outlet></Outlet>
       <div className="login-inside-box">
         <p className="title">LOGIN to TIFY</p>
         <div className="loginBox">
