@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/Auth';
 import { NavLink, useParams } from "react-router-dom";
 import "../css/giftHubDetail.styles.css"
 import iconGHeart from "../assets/iconGHeart.svg";
@@ -8,6 +9,15 @@ import iconMHeart from "../assets/iconMHeart.svg"
 import { Gift, GiftProps } from "../interface/interface";
 
 export function GiftHubDetailPage(){
+
+    
+    const userId = useSelector((state: RootState) => state.authToken.userId);
+
+    const accessToken = useSelector(
+        (state: RootState) => state.authToken.accessToken,
+      );
+
+
     const [data, setData] = useState(
         {id:'',name:'', imgList : [], description:'', category:'', 
         likeCount: '', options:[],price:'',  quantity:'', repImg:'',}
@@ -28,33 +38,43 @@ export function GiftHubDetailPage(){
         fetchData();
     },[]);
     const checkHeart = () =>{
-        setHeart(!heart)
-        if (heart===true){
-            const putCart = async() =>{
-                
-                const API_URL = `https://i8e208.p.ssafy.io/api/cart/`;
-                axios({
-                    method: 'post',
-                    url: API_URL,
-                    headers: {}, 
-                    data: {
-                        "userId":104,
-                        "productId":data.id, //data.id,
-                        "quantity":1, // data.quantity
-                        "options":{
-                            "":""
+        if (heart){
+            let r = confirm('장바구니에서 삭제하기')
+            setHeart(false)
+        } else{
+            let result = confirm('카트에 담으시겠습니까?')
+            console.log('userId',userId)
+            if (result){
+                setHeart(true)
+                const putCart = async() =>{
+                    
+                    const API_URL = `https://i8e208.p.ssafy.io/api/cart/`;
+                    // axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
+                    axios({
+                        method: 'post',
+                        url: API_URL,
+                        headers: {"Authorization": `Bearer ${accessToken}`,}, 
+                        data: {
+                            "userId":userId,
+                            "productId":data.id, //data.id,
+                            "quantity":1, // data.quantity
+                            "options":{
+                                "":""
+                            }
                         }
-                    }
-                }).then((con) => {
-                    console.log('상품 좋아요 성공', con)
-                    // setData(con.data)
-                }).catch((err) => {
-                    console.log('상품 좋아요 실패', err)
-                })
+                    }).then((con) => {
+                        console.log('상품 좋아요 성공', con)
+                        alert('장바구니에 담기 완료')
+                    }).catch((err) => {
+                        console.log('상품 좋아요 실패', err)
+                    })
+                }
+                putCart();
+
+    
             }
-            putCart();
-            
         }
+
     }
     return(
         <div className="concon">

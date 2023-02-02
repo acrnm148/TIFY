@@ -84,7 +84,7 @@ export function GiftHubPage() {
   [TODO] 검색어 유지.. V
   [TODO] 이미지가 없을 때 기본이미지 표출 V
   [TODO] 기프트허브 선택한 현재 카테고리 표출
-  [TODO] 가격범위 입력값도 받기
+  [TODO] 가격범위 입력값도 받기 V
   [TODO] 카트에 담을 때 유저정보 스토어에서 가져와서 POST요청
   [TODO] 페이징 
   [TODO] 사이트 들어왔을 때 기본 노출 상품들 요청처리 (인기 데이터 요청..)
@@ -135,11 +135,11 @@ export function GiftHubPage() {
                     max={max}
                   />
                   <div className="slider-numbers-range">
-                    <p>{value[0]}원</p>
-                    <input type="text" value={value[0]} onChange={(e)=>SetRange1(e)}/>
+                    {/* <p>{value[0]}원</p> */}
+                    <input className="range-input" type="text" value={value[0]} onChange={(e)=>SetRange1(e)}/>
                     <p>~</p>
-                    <input type="text" value={value[1]} onChange={(e)=>SetRange2(e)}/>
-                    <p>{value[1]}원</p>
+                    <input className="range-input" type="text" value={value[1]} onChange={(e)=>SetRange2(e)}/>
+                    {/* <p>{value[1]}원</p> */}
                   </div>
                 </div>
               </div>
@@ -157,7 +157,7 @@ export function GiftHubPage() {
 
       <div className="gift-sortig">
         <div>
-          <p>인기순</p>
+          {/* <p>인기순</p>
           <p> |</p>
           <p className="sort-btn" onClick={() => ExpensiveList()}>
             높은가격순
@@ -165,7 +165,7 @@ export function GiftHubPage() {
           <p> |</p>
           <p className="sort-btn" onClick={() => CheapestList()}>
             낮은가격순
-          </p>
+          </p> */}
         </div>
       </div>
 

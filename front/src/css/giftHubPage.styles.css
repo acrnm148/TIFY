@@ -30,7 +30,7 @@
     display: flex;
     justify-content: center;
 }
-.filter-bar input{
+.filter-bar > input{
     border: 1px solid #C1C1C1;
     border-radius: 10px;
     height: 14vh;
@@ -42,7 +42,7 @@
 }
 @media (min-width : 1025px)
 {
-    .filter-bar input{
+    .filter-bar > input{
         width: 60%;
     }
     .gift-sortig > div {
@@ -57,7 +57,7 @@
 }
 @media (max-width : 1024px)
 {
-    .filter-bar input{
+    .filter-bar > input{
         width: 70%;
     }
     .gift-sortig > div {
@@ -72,7 +72,7 @@
 }
 @media (max-width : 768px)
 {
-    .filter-bar input{
+    .filter-bar > input{
         width: 90%;
     }
     .gift-sortig > div {
@@ -146,6 +146,7 @@
       justify-content: space-evenly;
       font-size: small;
     color: gray;
+    align-items: center;
   }
   .slider-con-numbers-range{
       width: 80%;
@@ -180,4 +181,12 @@
 
   .sort-btn{
     cursor: pointer;
+  }
+
+  .range-input{
+      height: 52px;
+      max-width: 200px;
+      border: 1px solid rgb(215, 215, 215);
+      border-radius: 8px;
+      padding-left: 10px;
   }

@@ -23,16 +23,25 @@ const CATEGORY_DATA = [
 ]
 const GiftHubCategory = (props:{propFunction: (arg0: number) => void}) =>{
     const [selectCategory, setSelectCategory] = useState<number>()
+    // ts에서 useref사용시 반드시 초기값과 자료형 지정
+    // HTML ELE 접근시 초기값null
+    const selected = useRef<HTMLDivElement>(null)
     const cateChangeHandler =(e:number) =>{
-        let temp = e;
-
-        setSelectCategory(temp)
         props.propFunction(e)
+        console.log(e , 'e') // 
         // 현재 선택한 카테고리의 색 변경
-        
-        console.log('-----selectCategory--------',selectCategory);
+        if(selectCategory === e){
+            setSelectCategory(-1)
+        } else{
+            setSelectCategory(e)
+            // const sc = selected.current
+            // if(sc){
+            //     sc.className = 'selectedCategory';
+            //     sc.style.border = "1px solid red"
+            // }
+        }
     }
-     
+
     const checkCategory = (i: number) =>{
         if (selectCategory === i){
             return true
@@ -40,6 +49,21 @@ const GiftHubCategory = (props:{propFunction: (arg0: number) => void}) =>{
             return false
         }
     }
+    return(
+        <div className="gift-category-icon"  >
+            {CATEGORY_DATA.map((data, i:number) => {
+                return(
+                    <div>
+                        <div  className={`gh-icon ${checkCategory(i) ? 'selectedCategory':''}`} ref={selected}>
+                            <img onClick={() =>cateChangeHandler(i)} src={data.src} alt={data.name} key={data.id}/>
+                        </div>    
+                        <p>{data.ko}</p>
+                    </div>
+                )
+            })}
+        </div>
+    );
+
     return(
         <div className="gift-category-icon"  >
             {CATEGORY_DATA.map((data, i:number) => {
