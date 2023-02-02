@@ -266,12 +266,12 @@ public class UserApiController {
     @Operation(summary = "get refresh token", description = "refresh token 재발급")
     @Parameter(description = "userid를 파라미터로 받습니다.")
     @GetMapping("/refresh/{userId}")
-    public Map<String,String> refreshToken(@PathVariable("userId") String userid, @RequestHeader("refreshToken") String refreshToken) {
+    public Map<String,String> refreshToken(@PathVariable("userid") String userid, @RequestHeader("refreshToken") String refreshToken) {
 
         //String userid = userService.getUserid(refreshToken);
         JwtToken jwtToken = jwtService.validRefreshToken(userid, refreshToken);
 
-        Map<String, String> jsonResponse = jwtService.recreateTokenResponse(jwtToken);
+        Map<String, String> jsonResponse = jwtService.recreateTokenResponse(jwtToken, userid);
         return jsonResponse;
     }
 
