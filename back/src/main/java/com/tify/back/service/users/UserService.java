@@ -15,6 +15,7 @@ import com.tify.back.dto.users.request.JoinRequestDto;
 import com.tify.back.dto.users.request.LoginRequestDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
+import com.tify.back.exception.UserLoginException;
 import com.tify.back.model.gifthub.Cart;
 import com.tify.back.model.users.EmailAuth;
 import com.tify.back.model.users.User;
@@ -112,7 +113,8 @@ public class UserService {
         emailAuth = emailRepository.findByEmail(requestDto.getEmail());
         if (emailAuth.size() == 0) {
             System.out.println("이메일 인증이 필요합니다.");
-            return null;
+            throw new UserLoginException("이메일 인증이 필요합니다.");
+            //return null;
         }
         String authToken = emailAuth.get(0).getAuthToken();
         System.out.println("회원가입 중 authToken 확인: "+authToken);
