@@ -214,7 +214,7 @@ public class UserApiController {
         User saveUser = kakaoService.saveUser(oauthToken.getAccess_token());
         //jwt토큰 저장
         JwtToken jwtTokenDTO = jwtService.getJwtToken(saveUser.getUserid());
-        return jwtService.successLoginResponse(jwtTokenDTO);
+        return jwtService.successLoginResponse(jwtTokenDTO, saveUser.getUserid());
     }
     //test로 직접 인가 코드 받기
     @GetMapping("/login/oauth2/code/kakao")
@@ -231,30 +231,11 @@ public class UserApiController {
         NaverToken oauthToken = naverService.getAccessToken(code);
         User saveUser = naverService.saveUser(oauthToken.getAccess_token());
         JwtToken jwtToken = jwtService.getJwtToken(saveUser.getUserid());
-        return jwtService.successLoginResponse(jwtToken);
+        return jwtService.successLoginResponse(jwtToken, saveUser.getUserid());
     }
     @GetMapping("/login/oauth2/code/naver")
     public String NaverCode(@RequestParam("code") String code) {
         return "네이버 로그인 인증완료, code: "  + code;
-    }
-
-    /**
-     * JWT를 이용한 구글 로그인
-     */
-    @GetMapping("/account/auth/login/google")
-    public Map<String,String> googleLogin(@RequestParam("code") String code) {
-        //access 토큰 받기
-        GoogleToken oauthToken = googleService.getAccessToken(code);
-        //사용자 정보받기 및 회원가입
-        User saveUser = googleService.saveUser(oauthToken.getAccess_token());
-        //jwt토큰 저장
-        JwtToken jwtTokenDTO = jwtService.getJwtToken(saveUser.getUserid());
-        return jwtService.successLoginResponse(jwtTokenDTO);
-    }
-    //test로 직접 인가 코드 받기
-    @GetMapping("/login/oauth2/code/google")
-    public String googleCode(@RequestParam("code") String code) {
-        return "구글 로그인 인증완료, code: "  + code;
     }
 
     /**
