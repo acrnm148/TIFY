@@ -88,13 +88,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        Map<String, String> jsonResponse = jwtService.successLoginResponse(jwtToken);
-        String result = objectMapper.writeValueAsString(jsonResponse);
+        //Map<String, String> jsonResponse = jwtService.successLoginResponse(jwtToken);
+        //String result = objectMapper.writeValueAsString(jsonResponse);
 
         //response 응답
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-        response.getWriter().write(result);
+        //response.getWriter().write(result);
 
         //response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+ jwtToken);
     }

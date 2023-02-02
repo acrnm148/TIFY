@@ -134,10 +134,11 @@ public class JwtService {
      * json response 부분
      */
     //로그인시 응답 json response
-    public Map<String , String> successLoginResponse(JwtToken jwtToken) {
+    public Map<String , String> successLoginResponse(JwtToken jwtToken, String userid) {
         Map<String, String> map = new LinkedHashMap<>();
         map.put("status", "200");
         map.put("message", "accessToken, refreshToken이 생성되었습니다.");
+        map.put("userid", userid);
         map.put("accessToken", jwtToken.getAccessToken());
         map.put("refreshToken", jwtToken.getRefreshToken());
         return map;
