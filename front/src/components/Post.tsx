@@ -9,11 +9,12 @@ const Postcode = (props: { setcompany: (arg0: any) => void; company: any }) => {
 
   const handleComplete = (data: any) => {
     let fullAddress = data.address;
-
+    let zonecode = data.zonecode;
     console.log(fullAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
     props.setcompany({
       ...props.company,
       address: fullAddress,
+      zonecode : zonecode,
     });
   };
 

@@ -1,7 +1,7 @@
 import "../css/makeWishPage.styles.css"
 import "../css/styles.css"
 import addHeart from "../assets/addHeart.svg";
-import React, { Component, useCallback, useRef, useState } from 'react';
+import React, { Component, useCallback, useEffect, useRef, useState } from 'react';
 
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
@@ -35,10 +35,13 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-//[TODO] 카드 선택 옵션중에 한가지만 하고 선택된 카드 표시
-// [TODO] 주소 찾기할때 우편번호 자동으로 입력되도록
-// [TODO] 찜하기목록 불러오기
+//[TODO] 카드 선택 옵션중에 한가지만 하고 선택된 카드 표시 V
+// [TODO] 주소 찾기할때 우편번호 자동으로 입력되도록 V
+// [TODO] 찜하기목록 불러오기 V
 // [TODO] 카테고리 선택 mui..
+// [TODO] 완료 페이지로 위시 정보 넘기기 
+// [TODO] 위시 총 금액
+
 export function MakeWishPage() {
   // declare {Post}: Component;
   const wishOption = ['생일', '결혼', '입학', '졸업','출산', '독립', '비혼', '건강']
@@ -71,7 +74,7 @@ export function MakeWishPage() {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   // address
-  const [enroll_company, setEnroll_company] = useState({ address : '',},)
+  const [enroll_company, setEnroll_company] = useState({ address : '', zonecode: ''},)
   const [popup, setPopup] = useState(false);
   const handleInput = (e:any) => {
     setEnroll_company({
@@ -80,72 +83,68 @@ export function MakeWishPage() {
     })
   }
   // gift cart
-  const [userId , setUserId] = useState(1);
-  const [cartList, setCartList] = useState([
-    // temp data
-    {
-      id : 1,
-      name : "삼성전자 갤럭시S22 5G 256GB [자급제]",
-      price: 879910,
-      repImg:"https://shopping-phinf.pstatic.net/main_3092747/30927477618.20220811174246.jpg?type=f640",
-      giftId: 1,
-      options:[],
-      // imgList : [{id:31, idx:0, url : 'https://shopping-phinf.pstatic.net/main_3092747/30927477618.20220811174246.jpg?type=f640'}]
-      imgList : [{url : ''}]
-    }
-  ])
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
-    setOpen(true);
+  const [userId , setUserId] = useState(104);
+  const [cartList, setCartList] = useState<Gift[]>([])
+
+  // 위시생성페이지 mount시 유저의 id를 담아서 cart정보 요청
+  useEffect(()=>{
     const putCart = async() =>{
-      const API_URL = `https://i8e208.p.ssafy.io:8081/api/cart/list/${userId}`;
+      const API_URL = `http://i8e208.p.ssafy.io:8081/api/cart/forwish/${userId}`;
         axios({
             method: 'get',
             url: API_URL,
             headers: {}, 
         }).then((con) => {
-            console.log('상품 리스트불러오기 성공', con)
-            setCartList(con.data)
+          const lst = con.data
+          const conlst:Gift[] = []
+          
+          lst.map((d:any) => {
+            conlst.push(d.product)
+          })
+          console.log('카트 리스트불러오기 성공', conlst)
+          setCartList(conlst)
         }).catch((err) => {
-            console.log('상품 리스트불러오기 실패', err)
+            console.log('카트 리스트불러오기 실패', err)
         })
     }
     putCart();
+  },[]);
+  
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => {
+    setOpen(true);
   }
   const handleClose = () => setOpen(false);
   const [wishCart, setWishCart] = useState<Gift[]>()
   const pushItem = (i:number) =>{
-    setWishCart([cartList[i]])
-    console.log(wishCart)
+      if (wishCart){
+        setWishCart([...wishCart,cartList[i]])
+      } else {
+        setWishCart([cartList[i]])
+      }
+      console.log(wishCart)
   }
-  const CartList = (props:{w:string}) => {
+  const CartList = () => {
     return(
       <>
           {
             cartList.length > 0
             ?
-            <div className="gift-list-container">
-                <div className="gift-list">
+            <div>
+                <div className="like-list">
                 {cartList.map((gift, i:number) => (
-                  <div onClick={()=>pushItem(i)} className="gift-item-card-container">
-                      <div className="gift-item-card">
-                          <div className="gift-image">
+                  <div onClick={()=>pushItem(i)} className="like-item-card-container">
+                      <div className="like-item-card">
+                          <div className="like-gift-image">
                               {gift.repImg  
                                   ? <img src={gift.repImg} alt="" />
                                   : <img src="https://user-images.githubusercontent.com/87971876/215664788-d0359920-497d-4b2a-86db-6381254637d6.jpg" alt="이미지가 없습니다" />}
                           </div>
-                          <div>
-                            {
-                              props.w==='wishCard'
-                              ? <p></p>
-                              :
-                              <div>
-                                  <p>{gift.name}</p>
-                                  <p>{gift.price}원</p>
-                              </div>
-
-                            }
+                          <div className="gift-text">
+                              <p>{gift.name}</p>
+                              <p>{gift.price}원</p>
                           </div>
+
                       </div>
               </div>
                 ))}
@@ -216,18 +215,22 @@ export function MakeWishPage() {
       inputRef.current?.click();
     }, []);
 
+    function CardClicked(e:any){
+      console.log(e.target.id)
+      setSelectCard(e.target.id)
+    }
   const CardList = (): JSX.Element[] => {
     const filteredTitles = cardList.map(
-      (c) => {
-        return <div className={`wish-card-item`} onClick={CardClicked} id={c}/>
+      (c, i:number) => {
+        return <div className={`wish-card-item ${selcetCard === String(c)? 'selectedCard':''}`} onClick={CardClicked} id={String(c)}/>
       }
     );
     return filteredTitles;
   };
+  const delWishGift = (i:number) => {
+    setWishCart(wishCart?.filter((w, idx:number) => idx !== i));
 
-  function CardClicked(e){
-    // console.log(e.target.id)
-    setSelectCard(e.target.id)
+    console.log(i)
   }
   return (
       <>
@@ -286,7 +289,7 @@ export function MakeWishPage() {
                     <img src={addHeart} alt="직접추가하기"/>
                   </div>
                   {imgBase64 &&
-                    <div className="wish-card-item" onClick={CardClicked} id="0">
+                    <div className={`wish-card-item ${selcetCard === '0'? 'selectedCard':''}`} onClick={CardClicked} id="0">
                       <img src={imgBase64} alt="등록한사진"  id="0" />
                     </div>
                   }
@@ -299,11 +302,9 @@ export function MakeWishPage() {
           <div >
             <label htmlFor="">선물</label>
             <div className="wish-card-container">
-              <div >
-                <div className="add-gift-icon-con" onClick={handleOpen}>
-                  <img className="add-gift-icon" src={addHeart} alt="" />
-                </div>
-                <Modal
+              <div className="modal-con" >
+                <Modal 
+                  className="modal-modal"
                   aria-labelledby="transition-modal-title"
                   aria-describedby="transition-modal-description"
                   open={open}
@@ -316,19 +317,31 @@ export function MakeWishPage() {
                 >
                   <Fade in={open}>
                     <Box sx={style}>
-                      <CartList w='cart'/>
+                      <CartList/>
                     </Box>
                   </Fade>
                 </Modal>
               </div>
               <div className="wish-card">
-                <div className="wish-card-gift"><CartList w='wishCard'/></div>
+              <div className="add-gift-icon-con" onClick={handleOpen}>
+                  <img className="add-gift-icon" src={addHeart} alt="" />
+                </div>
+                  {
+                    wishCart?.map((e, i:number) => {
+                      return (
+                        <div className="wish-card-gift" onClick={()=>delWishGift(i)}>
+                          <img src={e.repImg}></img>
+                        </div>
+                      )
+                    })
+                  }
                 
               </div>
             </div>
           </div>
           <div className="address-form-container">
             <label htmlFor="태그">주소</label>
+              <input className="address-form postcode" type="text" value={enroll_company.zonecode} placeholder="우편번호" disabled />
             <div className="address-form">
               <input type="text" placeholder="주소"required={true} name="address" onChange={handleInput} value={enroll_company.address} disabled/>
               <Postcode company={enroll_company} setcompany={setEnroll_company}/>

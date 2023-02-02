@@ -53,10 +53,9 @@
     height: 160px;
     display: flex;
     align-items: center;
-    /* justify-content: space-between; */
     overflow-x: auto;
-        overflow-y: hidden;
-        white-space: nowrap;
+    overflow-y: hidden;
+    white-space: nowrap;
 }
 .wish-card-item{
     width: 215px;
@@ -79,8 +78,6 @@
 .wish-card-gift{
     width: 138px;
     height: 128px;
-    /* background-color: #C1C1C1; */
-    border: solid 1px #C1C1C1;
     border-radius: 8px;
     margin-left: 10px;
 }
@@ -286,4 +283,54 @@
     line-height: 16px;
     color: #FFC0CE;
     margin-top: 10px;
+}
+
+.selectedCard{
+    border: 1px solid #E52E56;
+}
+
+.postcode{
+    width: 8%;
+}
+
+.modal-modal{
+        /* min-height: 100vh; */
+        max-height: 10000vh;
+        /* display: flex; */
+        overflow-x: hidden;
+        overflow-y: auto;
+        white-space: wrap;
+        flex-direction: row;
+        margin-top: 50px;
+        margin-bottom: 50px;
+}
+.modal-con{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* 카드목록 */
+.like-list{
+    display: flex;
+    flex-wrap: wrap;
+}
+.like-item-card-container{
+    width: 100%;
+    cursor: pointer;
+}
+.gift-text{
+    font-size: small;
+    color: gray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.like-item-card{
+    display: flex;
+}
+.like-gift-image{
+    width: 100%;
 }
