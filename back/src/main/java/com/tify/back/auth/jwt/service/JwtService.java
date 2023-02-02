@@ -160,10 +160,11 @@ public class JwtService {
     }
 
     //refresh 토큰 재발급 response
-    public Map<String, String> recreateTokenResponse(JwtToken jwtToken) {
+    public Map<String, String> recreateTokenResponse(JwtToken jwtToken, String userid) {
         Map<String ,String > map = new LinkedHashMap<>();
         map.put("status", "200");
         map.put("message", "refresh, access 토큰이 재발급되었습니다.");
+        map.put("userid", userid);
         map.put("accessToken", jwtToken.getAccessToken());
         map.put("refreshToken", jwtToken.getRefreshToken());
         return map;
