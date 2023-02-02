@@ -17,5 +17,6 @@ public class PayRequestDto {
     private String celebContent;
     private String celebImgUrl;
     private Long giftId;
+    private Long userId;
 
 }

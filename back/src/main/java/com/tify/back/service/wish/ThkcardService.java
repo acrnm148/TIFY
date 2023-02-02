@@ -18,8 +18,8 @@ public class ThkcardService {
 		return thkcardRepository.save(thkcard);
 	}
 
-	public Thkcard findByPayId(Long pay_id) {
-		Pay pay = payRepository.findById(pay_id).orElse(null);
+	public Thkcard findByPayId(Long user_id) {
+		Pay pay = payRepository.findById(user_id).orElse(null);
 		return thkcardRepository.findByPay(pay);
 	}
 }

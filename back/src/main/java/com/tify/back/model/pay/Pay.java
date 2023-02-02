@@ -36,5 +36,6 @@ public class Pay {
     @JoinColumn(name="id") //변수명에 맞춰야함
     private Gift gift;
 
+    private Long user_id;
     private LocalDateTime createTime;
 }

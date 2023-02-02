@@ -35,7 +35,7 @@ public class Thkcard {
 	private String imageUrl;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "pay_id")
+	@JoinColumn(name = "user_id")
 	private Pay pay;
 
 }
