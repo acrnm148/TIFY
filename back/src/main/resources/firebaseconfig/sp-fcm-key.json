@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "teak-environs-367508",
+  "private_key_id": "416332900498e19930182b48c61b40b8b80f82e5",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDcgpq9KqxFiaXo\n+uoLYMXlnNbS2kTu2vFROeURz74CfVgA4vlpiWOXoofbh5IyEV/J7IsNvVad2h+L\nyEnzWar1tHt0cedozugqh74bC7suIDTZN03DZKQlwzSBwcBmSHoRUs9XkWlo5ICw\ncY6Me+tszql7EYQwsk/qmJlkNuqh1BN8JPxXD7yB6ItugeLDeAP4j75CSp5jOSAD\nVXkr6C7xwrNcGu5Aw5vqC9YdDYrCFSb5z5Pg/Spz+rFmZVpbxhlkJb/hyDIDj5bK\nbKQ07jCRFIOxWPM70y71EZ6rK5ZYtSHt3qO5ifPuKg7kdfr8jraVU63NLYxiPNGE\nRdd70CaPAgMBAAECggEAY02XtM/GU+x4oFJ62tPiWxSF89+iwnQrz5oEbECDP6jF\n3GRa0Km0BYIGr5i+gDitzAfv2SimnKCxqyfwEZyUbmEwZZC0F1FyYVDPDmv6h/uu\nARI0PWWRvIXLnBGufQFvo2SJBlTwRPH+eDczbFWUAGSTE16girOKZMoC7gwDHwvF\n2jYUJGrkacHU3vXLpr2hZR6qTiTD9XO7RcasP+Q0xB2w72aseWm1926v1jiOqAMu\nOOkNy38mBdfIOe4UYTImJX1iuwME9iv4WkgeQU8OsGpR2qGiCyQKl+Js/bGh3px3\nEWeZU4ZfyTiPBGKl/vOMYKPgNb3idA2lNOlnzbkQjQKBgQD5TzPNf9YXvFlf7WmG\nC0NehkZ/1qQrZdE2jmiqNu17vML2WBX28fN4jPm55c7NM7mZHTTZVn9hXt3qs4tm\nH+JyjArPYViT0eS/F41gUij5PvTVH9//qDluZskUTOZi7rLNMiqr+M83Oaos93WN\nAEOX6KRxY5hFY7L5C/vGNQmLwwKBgQDibYvw/IpX+Ined83Kdm/cywQn9fpnZkb3\nVcb1j10isOy7sS6JiaWr2hwCXjs09RbrSvujGni06UIkpRVF10H08HULA8D51mQ3\n+3O5gpuUt+H2zkOoK8+nmfIEuhi0/0XN8MBwYYxFrOKXLZhyYMbnUMJ3sIOPGg0w\nd5KfpEPpRQKBgFMvLR61N88lpkCOq7XxDiJ89Qr0qERerabhb2TT/PtbaUXe8D08\nT7t6dlyjpBPt3VCMYTTfWpM3nx4PmESUAO+tcHHvjimMUCG+jwqDf25ipjhycUAR\ndlAy9YbTfc+my3wR8BD/bMyFbhWg39UTMHqAQlYfIBCPCol0iSaCTdQXAoGAYA0q\ndSMcKK9FBPt7b+yIDXiNncoJ3D0V06wuh1K2ppW5BvHllPCwN9OBWDvTD+b8PvoC\n/zCmjc/5gAQLnyHuV9J9RBvmi9U3lEv1zncqOo86qvDa4IcdQrLaaMjs3DMB0JfV\nepbW42Owh4MPDU4iclPe+tkFJfpeJ/ZBW7laGaUCgYAxupR/YY23HAuYStc9E0xv\nvOKWB1SINmwDs3pQ5XVaHLioCwC2fKMmyTFPdJjrVsYf+YKSqjmFXmbkkv5jKmXe\n0nXZN6M7+9//IxURcsepZtCWan0b/VKAbs5+I4ekNsv5V3zvKaGbGRbHUJAIQIlJ\nnJv2F99eC6ICJVI4MEQDCg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-pnvrp@teak-environs-367508.iam.gserviceaccount.com",
+  "client_id": "107891543394619342340",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-pnvrp%40teak-environs-367508.iam.gserviceaccount.com"
+}
