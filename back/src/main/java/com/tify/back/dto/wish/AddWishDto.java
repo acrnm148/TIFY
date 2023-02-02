@@ -24,7 +24,7 @@ public class AddWishDto {
     private String finishYN;
     private Date startDate;
     private Date endDate;
-    private Integer wishCard;
+    private String wishCard;
     private String addr1;
     private String addr2;
     private String zipCode;

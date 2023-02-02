@@ -44,7 +44,7 @@ public class JwtService {
             JwtToken jwtToken = jwtProviderService.createJwtToken(user.getId(), user.getUserid());
 
             //refreshToken 엔티티 생성
-            RefreshToken refreshToken = new RefreshToken(jwtToken.getRefreshToken());
+            RefreshToken refreshToken = new RefreshToken(jwtToken.getRefreshToken(), user.getUserid());
 
             //DB에 저장(refresh 토큰 저장)
             user.createRefreshToken(refreshToken);
@@ -57,12 +57,12 @@ public class JwtService {
             //유효하면 accesstoken 받아옴, 만료되면 null
             String accessToken = jwtProviderService.validRefreshToken(userRefreshToken);
 
-            //refresh 토큰 기간이 유효
+            //refresh 토큰 기간이 유효 => access만 재발급
             if(accessToken !=null) {
                 return new JwtToken(accessToken, userRefreshToken.getRefreshToken());
             }
             else { //refresh 토큰 기간만료
-                //새로운 access, refresh 토큰 생성
+                //무조건 새로운 access, refresh 토큰 생성
                 JwtToken newJwtToken = jwtProviderService.createJwtToken(user.getId(), user.getUserid());
 
                 user.SetRefreshToken(newJwtToken.getRefreshToken());
@@ -134,10 +134,11 @@ public class JwtService {
      * json response 부분
      */
     //로그인시 응답 json response
-    public Map<String , String> successLoginResponse(JwtToken jwtToken) {
+    public Map<String , String> successLoginResponse(JwtToken jwtToken, String userid) {
         Map<String, String> map = new LinkedHashMap<>();
         map.put("status", "200");
         map.put("message", "accessToken, refreshToken이 생성되었습니다.");
+        map.put("userid", userid);
         map.put("accessToken", jwtToken.getAccessToken());
         map.put("refreshToken", jwtToken.getRefreshToken());
         return map;
@@ -160,10 +161,11 @@ public class JwtService {
     }
 
     //refresh 토큰 재발급 response
-    public Map<String, String> recreateTokenResponse(JwtToken jwtToken) {
+    public Map<String, String> recreateTokenResponse(JwtToken jwtToken, String userid) {
         Map<String ,String > map = new LinkedHashMap<>();
         map.put("status", "200");
         map.put("message", "refresh, access 토큰이 재발급되었습니다.");
+        map.put("userid", userid);
         map.put("accessToken", jwtToken.getAccessToken());
         map.put("refreshToken", jwtToken.getRefreshToken());
         return map;

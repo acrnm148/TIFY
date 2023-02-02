@@ -1,6 +1,7 @@
 package com.tify.back.model.pay;
 
 import com.tify.back.model.gifthub.Gift;
+import com.tify.back.model.gifthub.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,5 +37,12 @@ public class Pay {
     @JoinColumn(name="id") //변수명에 맞춰야함
     private Gift gift;
 
+    private Long user_id;
     private LocalDateTime createTime;
+
+    @OneToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    public void updateOrder(Order order) {this.order = order;}
 }

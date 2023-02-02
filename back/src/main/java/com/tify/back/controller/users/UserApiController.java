@@ -2,16 +2,21 @@ package com.tify.back.controller.users;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.tify.back.auth.jwt.JwtProperties;
 import com.tify.back.auth.jwt.JwtToken;
 import com.tify.back.auth.jwt.service.JwtProviderService;
 import com.tify.back.auth.jwt.service.JwtService;
+import com.tify.back.dto.users.MailDto;
 import com.tify.back.dto.users.UserProfileDto;
 import com.tify.back.dto.users.UserUpdateDto;
 import com.tify.back.dto.users.request.EmailAuthRequestDto;
+import com.tify.back.dto.users.request.FindPwRequestDto;
 import com.tify.back.dto.users.request.JoinRequestDto;
 import com.tify.back.dto.users.request.LoginRequestDto;
+import com.tify.back.dto.users.response.DataResponseDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
+import com.tify.back.exception.UserLoginException;
 import com.tify.back.model.users.EmailAuth;
 import com.tify.back.repository.users.EmailAuthRepository;
 import com.tify.back.service.users.EmailService;
@@ -35,9 +40,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Tag(name = "user", description = "유저 API")
 @RestController
@@ -72,7 +75,8 @@ public class UserApiController {
     public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto) {
         LoginResponseDto responseDto = userService.login(requestDto);
         if (responseDto == null) {
-            return ResponseEntity.ok().body("로그인에 실패했습니다.");
+            DataResponseDto response = new DataResponseDto(1, "로그인에 실패했습니다.");
+            return ResponseEntity.ok().body(response);//"로그인에 실패했습니다.");
         }
         return ResponseEntity.ok().body(responseDto);
     }
@@ -134,7 +138,6 @@ public class UserApiController {
         return ResponseEntity.ok().body(email); //인증된 이메일 리턴
     }
 
-
     /**
      * 회원 조회
      */
@@ -170,8 +173,6 @@ public class UserApiController {
         }
     }
 
-
-
     /**
      * 회원 정보 수정
      */
@@ -186,11 +187,9 @@ public class UserApiController {
             }
             return ResponseEntity.ok().body(updatedUser);
         } catch(Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수정에 실패했습니다..");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수정에 실패했습니다.");
         }
     }
-
-
 
     /**
      * 로그아웃
@@ -215,7 +214,7 @@ public class UserApiController {
         User saveUser = kakaoService.saveUser(oauthToken.getAccess_token());
         //jwt토큰 저장
         JwtToken jwtTokenDTO = jwtService.getJwtToken(saveUser.getUserid());
-        return jwtService.successLoginResponse(jwtTokenDTO);
+        return jwtService.successLoginResponse(jwtTokenDTO, saveUser.getUserid());
     }
     //test로 직접 인가 코드 받기
     @GetMapping("/login/oauth2/code/kakao")
@@ -232,7 +231,7 @@ public class UserApiController {
         NaverToken oauthToken = naverService.getAccessToken(code);
         User saveUser = naverService.saveUser(oauthToken.getAccess_token());
         JwtToken jwtToken = jwtService.getJwtToken(saveUser.getUserid());
-        return jwtService.successLoginResponse(jwtToken);
+        return jwtService.successLoginResponse(jwtToken, saveUser.getUserid());
     }
     @GetMapping("/login/oauth2/code/naver")
     public String NaverCode(@RequestParam("code") String code) {
@@ -240,39 +239,19 @@ public class UserApiController {
     }
 
     /**
-     * JWT를 이용한 구글 로그인
-     */
-    @GetMapping("/account/auth/login/google")
-    public Map<String,String> googleLogin(@RequestParam("code") String code) {
-        //access 토큰 받기
-        GoogleToken oauthToken = googleService.getAccessToken(code);
-        //사용자 정보받기 및 회원가입
-        User saveUser = googleService.saveUser(oauthToken.getAccess_token());
-        //jwt토큰 저장
-        JwtToken jwtTokenDTO = jwtService.getJwtToken(saveUser.getUserid());
-        return jwtService.successLoginResponse(jwtTokenDTO);
-    }
-    //test로 직접 인가 코드 받기
-    @GetMapping("/login/oauth2/code/google")
-    public String googleCode(@RequestParam("code") String code) {
-        return "구글 로그인 인증완료, code: "  + code;
-    }
-
-    /**
-     * refresh token 재발급
+     * access, refresh token 재발급
+     * access 만료 + refresh 유효 => access 재발급
+     * refresh 만료 => access, refresh 재발급
      */
     @Operation(summary = "get refresh token", description = "refresh token 재발급")
     @Parameter(description = "userid를 파라미터로 받습니다.")
-    @GetMapping("/refresh/{userId}")
-    public Map<String,String> refreshToken(@PathVariable("userId") String userid, @RequestHeader("refreshToken") String refreshToken,
-                                           HttpServletResponse response) throws JsonProcessingException {
+    @GetMapping("/refresh/{userid}")
+    public Map<String,String> refreshToken(@PathVariable("userid") String userid, @RequestHeader("refreshToken") String refreshToken) {
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("utf-8");
-
+        //String userid = userService.getUserid(refreshToken);
         JwtToken jwtToken = jwtService.validRefreshToken(userid, refreshToken);
-        Map<String, String> jsonResponse = jwtService.recreateTokenResponse(jwtToken);
 
+        Map<String, String> jsonResponse = jwtService.recreateTokenResponse(jwtToken, userid);
         return jsonResponse;
     }
 
@@ -287,6 +266,34 @@ public class UserApiController {
             return ResponseEntity.status(HttpStatus.MULTI_STATUS).body("Y");
         }
         return ResponseEntity.ok().body("N");
+    }
+
+    /**
+     * 유저 권한 확인 (USER, ADMIN)
+     */
+    @GetMapping("/roleCheck")
+    public ResponseEntity<?> checkRole(@RequestParam("userid") String userid) {
+        User user = userRepository.findByUserid(userid);
+        if (user != null) {
+            List<String> list = user.getRoleList();
+            return ResponseEntity.status(HttpStatus.MULTI_STATUS).body(list.get(0));
+        }
+        return ResponseEntity.ok().body("해당 유저가 없습니다.");
+    }
+
+    /**
+     * 비밀번호 찾기
+     */
+    @PostMapping("/account/findPw")
+    public String findPassword(@RequestParam("email") String email) {
+        User user = userRepository.findByUserid(email);
+        if (user == null) {
+            throw new UserLoginException("이메일이 존재하지 않습니다.");
+        }
+        emailService.createMailAndChangePassword(email, user.getUsername());
+        //emailService.sendPasswordMail(mailDto);
+
+        return "/login";
     }
 
 }

@@ -42,7 +42,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
 
-        String jwtHeader = request.getHeader(JwtProperties.HEADER_STRING);
+        String jwtHeader = request.getHeader(JwtProperties.ACCESS_HEADER_STRING);
         if(jwtHeader ==null) {
             /**
              * JWT 토큰이 없는 사용자 필터링
@@ -55,7 +55,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         }
 
         System.out.println("jwtHeader:" + jwtHeader);
-        String token = request.getHeader(JwtProperties.HEADER_STRING);
+        String token = request.getHeader(JwtProperties.ACCESS_HEADER_STRING);
         String userId = jwtService.validAccessToken(token);
 
         //로그아웃된 토큰인지 검사
