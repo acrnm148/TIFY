@@ -335,6 +335,11 @@ public class UserService {
         return false;
     }
 
+    /**
+     * 유저 비밀번호 변경
+     */
+    //public void updatePassword
+
     // test용 계정 생성
     @Transactional
     public User save(User user) {

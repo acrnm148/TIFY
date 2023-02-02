@@ -6,14 +6,17 @@ import com.tify.back.auth.jwt.JwtProperties;
 import com.tify.back.auth.jwt.JwtToken;
 import com.tify.back.auth.jwt.service.JwtProviderService;
 import com.tify.back.auth.jwt.service.JwtService;
+import com.tify.back.dto.users.MailDto;
 import com.tify.back.dto.users.UserProfileDto;
 import com.tify.back.dto.users.UserUpdateDto;
 import com.tify.back.dto.users.request.EmailAuthRequestDto;
+import com.tify.back.dto.users.request.FindPwRequestDto;
 import com.tify.back.dto.users.request.JoinRequestDto;
 import com.tify.back.dto.users.request.LoginRequestDto;
 import com.tify.back.dto.users.response.DataResponseDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
+import com.tify.back.exception.UserLoginException;
 import com.tify.back.model.users.EmailAuth;
 import com.tify.back.repository.users.EmailAuthRepository;
 import com.tify.back.service.users.EmailService;
@@ -37,9 +40,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Tag(name = "user", description = "유저 API")
 @RestController
@@ -186,11 +187,9 @@ public class UserApiController {
             }
             return ResponseEntity.ok().body(updatedUser);
         } catch(Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수정에 실패했습니다..");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수정에 실패했습니다.");
         }
     }
-
-
 
     /**
      * 로그아웃
@@ -265,7 +264,7 @@ public class UserApiController {
      */
     @Operation(summary = "get refresh token", description = "refresh token 재발급")
     @Parameter(description = "userid를 파라미터로 받습니다.")
-    @GetMapping("/refresh/{userId}")
+    @GetMapping("/refresh/{userid}")
     public Map<String,String> refreshToken(@PathVariable("userid") String userid, @RequestHeader("refreshToken") String refreshToken) {
 
         //String userid = userService.getUserid(refreshToken);
@@ -286,6 +285,34 @@ public class UserApiController {
             return ResponseEntity.status(HttpStatus.MULTI_STATUS).body("Y");
         }
         return ResponseEntity.ok().body("N");
+    }
+
+    /**
+     * 유저 권한 확인 (USER, ADMIN)
+     */
+    @GetMapping("/roleCheck")
+    public ResponseEntity<?> checkRole(@RequestParam("userid") String userid) {
+        User user = userRepository.findByUserid(userid);
+        if (user != null) {
+            List<String> list = user.getRoleList();
+            return ResponseEntity.status(HttpStatus.MULTI_STATUS).body(list.get(0));
+        }
+        return ResponseEntity.ok().body("해당 유저가 없습니다.");
+    }
+
+    /**
+     * 비밀번호 찾기
+     */
+    @PostMapping("/account/findPw")
+    public String findPassword(@RequestParam("email") String email) {
+        User user = userRepository.findByUserid(email);
+        if (user == null) {
+            throw new UserLoginException("이메일이 존재하지 않습니다.");
+        }
+        emailService.createMailAndChangePassword(email, user.getUsername());
+        //emailService.sendPasswordMail(mailDto);
+
+        return "/login";
     }
 
 }

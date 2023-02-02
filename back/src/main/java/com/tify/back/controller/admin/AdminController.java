@@ -1,15 +1,18 @@
 package com.tify.back.controller.admin;
 
 import com.tify.back.dto.admin.EditWishDto;
+import com.tify.back.dto.admin.OrderStateDto;
 import com.tify.back.dto.admin.UserListMap;
 import com.tify.back.dto.admin.createUserDto;
 import com.tify.back.model.gifthub.Cart;
+import com.tify.back.model.gifthub.Order;
 import com.tify.back.model.gifthub.Product;
 import com.tify.back.model.users.User;
 import com.tify.back.model.wish.Wish;
 import com.tify.back.repository.users.UserRepository;
 import com.tify.back.repository.wish.WishRepository;
 import com.tify.back.service.gifthub.CartService;
+import com.tify.back.service.gifthub.OrderService;
 import com.tify.back.service.users.UserService;
 import com.tify.back.service.wish.WishService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +36,7 @@ public class AdminController {
     private final WishRepository wishRepository;
     private final WishService wishService;
     private final CartService cartService;
+    private final OrderService orderService;
 //    @GetMapping("/userlist")
 //    public List<User> getUserList() {}
 
@@ -137,4 +142,14 @@ public class AdminController {
     // 상품들은 product api 활용. 별도로 안만들 것
     // qna, faq도 자체 api 활용
     //
+
+    /**
+     * 운송장번호, 주문상태 수정
+     */
+    @PostMapping("/orderState")
+    private ResponseEntity<?> updateDeliverState(@RequestBody OrderStateDto dto) {
+        Order order = orderService.updateDeliverState(dto);
+        System.out.println("수정 완료:"+order);
+        return ResponseEntity.ok().body(order);
+    }
 }

@@ -1,6 +1,7 @@
 package com.tify.back.service.gifthub;
 
 
+import com.tify.back.dto.admin.OrderStateDto;
 import com.tify.back.exception.OrderAlreadyExistException;
 import com.tify.back.model.gifthub.Gift;
 import com.tify.back.model.gifthub.Order;
@@ -73,6 +74,17 @@ public class OrderService {
         orderRepository.save(order);
         gift.setOrder(order);
         giftService.saveGift(gift);
+
+        return order;
+    }
+
+    /**
+     * 운송장번호, 주문상태 수정 - 관리자
+     */
+    public Order updateDeliverState(OrderStateDto dto) {
+        Order order = orderRepository.getReferenceById(dto.getOrderId());
+        order.setDeliveryNumber(dto.getDeliveryNumber());
+        order.setState(dto.getState());
         return order;
     }
 }
