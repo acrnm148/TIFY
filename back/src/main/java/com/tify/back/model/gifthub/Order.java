@@ -3,6 +3,7 @@ package com.tify.back.model.gifthub;
 
 import com.tify.back.common.BaseEntity;
 import com.tify.back.model.users.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -33,4 +34,14 @@ public class Order extends BaseEntity {
     private String deliveryNumber;
 
     private int state; // 주문 상태 코드화
+
+    @Builder
+    public Order(User user, Gift gift, String tel, int gatheredPrice, int orderPrice, int state) {
+        this.user = user;
+        this.gift = gift;
+        this.tel = tel;
+        this.gatheredPrice = gatheredPrice;
+        this.orderPrice = orderPrice;
+        this.state = state;
+    }
 }
