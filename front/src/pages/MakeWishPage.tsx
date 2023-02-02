@@ -89,7 +89,7 @@ export function MakeWishPage() {
   // 위시생성페이지 mount시 유저의 id를 담아서 cart정보 요청
   useEffect(()=>{
     const putCart = async() =>{
-      const API_URL = `http://i8e208.p.ssafy.io:8081/api/cart/forwish/${userId}`;
+      const API_URL = `https://i8e208.p.ssafy.io:8081/api/cart/forwish/${userId}`;
         axios({
             method: 'get',
             url: API_URL,
