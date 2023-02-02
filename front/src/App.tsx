@@ -5,16 +5,21 @@ import { GiftHubPage } from './pages/GiftHubPage';
 import { MakeWishPage } from './pages/MakeWishPage';
 import { CheckWishPage } from './pages/CheckWishPage';
 import { ThanksPage } from './pages/ThanksPage';
-import { FriendsPage } from './pages/FriendsPage';
+import FriendsPage from './pages/FriendsPage';
 import { MyPage } from './pages/mypage/MyPage';
 import { LikePage } from './pages/LikePage';
 import { AlramPage } from './pages/AlramPage';
 import { FaqPage } from './pages/FaqPage';
 import { AskPage } from './pages/AskPage';
+
 import { LoginPage } from './pages/LoginPage';
+import { AuthKakao } from './components/AuthKakao';
+import { AuthNaver } from './components/AuthNaver';
 import { JoinFirstPage } from './pages/JoinFirstPage';
 import { JoinSecondPage } from './pages/JoinSecondPage';
 import { JoinThirdPage } from './pages/JoinThirdPage';
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
+
 import { MyWish } from './components/Mywish';
 import { Joined } from './components/Joined';
 import { Friend } from './components/Friend';
@@ -24,16 +29,60 @@ import { OrderList } from './components/OrderList';
 import { CongratsPage } from './pages/CongratsPage';
 import { CongratsPayPage } from './pages/CongratsPayPage';
 import { CongratsCardPage } from './pages/CongratsCardPage';
-import GiftItemDetailPage from './pages/GiftItemDetailPage';
+import PayingPort from './components/PayingPort';
 
 import { Footer } from './fixture/Footer';
 import { MainPage } from './pages/MainPage';
+import { NotFound } from './pages/NotFound';
 import PayingService from './components/PayingService';
 import PayResult from './components/PayResult';
+import WishSuccess from './components/WishSuccess';
 
 import './css/styles.css';
 import { GiftHubDetailPage } from './pages/GiftHubDetailPage';
+
+import { useReducer } from 'react';
+import { Login } from './components/Auth';
+
+const initialState = {
+  authenticated: false,
+  token: null,
+};
+
+function reducer(state: any, action: any) {
+  switch (action.type) {
+    case 'SET_TOKEN':
+      return { ...state, token: action.token, authenticated: action.result };
+    default:
+      return state;
+  }
+}
+
 function App() {
+  // const [state, dispatch] = useReducer(reducer, initialState);
+  // const { authenticated } = state;
+  // console.log(state, '-------------------------');
+
+  // function handleLogin(id: string, password: string) {
+  //   let token = Login(id, password);
+
+  //   if (token) {
+  //     console.log('로그인 성공!');
+  //     dispatch({
+  //       type: 'SET_TOKEN',
+  //       token: token,
+  //       result: true,
+  //     });
+  //   } else {
+  //     console.log('로그인 실패');
+  //     dispatch({
+  //       type: 'SET_TOKEN',
+  //       token: null,
+  //       result: false,
+  //     });
+  //   }
+  // }
+
   return (
     <BrowserRouter>
       <Header />
@@ -55,8 +104,9 @@ function App() {
           <Route path="kakaopay" element={<PayingService />} />
         </Route>
         <Route path="/congrats/kakaopay/result" element={<PayResult />} />
-        <Route path='/gifthub/:giftId' element={<GiftItemDetailPage />} />
-
+        <Route path='/congrats/import' element={<PayingPort />} />
+        <Route path='/makewish/success' element={<WishSuccess />} />
+        
         <Route path="/mypage" element={<MyPage />}>
           <Route path="mywish" element={<MyWish />} />
           <Route path="joined" element={<Joined />} />
@@ -71,10 +121,15 @@ function App() {
 
         <Route path="/faq" element={<FaqPage />} />
         <Route path="/ask" element={<AskPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />}>
+          <Route path="oauth2/code/kakao" element={<AuthKakao />} />
+          <Route path="Oauth2/code/naver" element={<AuthNaver />} />
+        </Route>
         <Route path="/join1" element={<JoinFirstPage />} />
-        <Route path="/account/confirmEmail" element={<JoinSecondPage />} />
+        <Route path="/join2" element={<JoinSecondPage />} />
         <Route path="/join3" element={<JoinThirdPage />} />
+        <Route path="/reset" element={<ForgotPasswordPage />} />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
       <Footer />
     </BrowserRouter>

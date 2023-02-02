@@ -16,7 +16,10 @@ export function GiftItem({ gift } : GiftProps, key:number){
             <Link to={`/gifthub/${gift.id}`}>
                 <div className="gift-item-card">
                     <div className="gift-image">
-                        <img src={gift.repImg} alt="" />
+                        {gift.repImg  
+                            ? <img src={gift.repImg} alt="" />
+                            : <img src="https://user-images.githubusercontent.com/87971876/215664788-d0359920-497d-4b2a-86db-6381254637d6.jpg" alt="이미지가 없습니다" />}
+                        
                     </div>
                     <div>
                         <div>
