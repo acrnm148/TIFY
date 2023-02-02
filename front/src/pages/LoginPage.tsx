@@ -1,7 +1,7 @@
 import '../css/login.styles.css';
 import iconGoogle from '../assets/iconGoogle.svg';
 import iconKakaoLogo from '../assets/iconKakaoLogo.svg';
-import iconNaverLogo from '../assets/iconnaverLogo.png';
+import iconNaverLogo from '../assets/iconNaverLogo.png';
 
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
