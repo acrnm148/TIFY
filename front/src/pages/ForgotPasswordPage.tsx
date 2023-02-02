@@ -5,7 +5,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export function JoinFirstPage() {
+export function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [doRequest, setDoRequest] = useState(false);
 
@@ -50,7 +50,7 @@ export function JoinFirstPage() {
   return (
     <div className="grayBackground">
       <div className="insideBox">
-        <p className="title">JOIN TIFY</p>
+        <p className="title">Password Reset</p>
         <div className="loginBox">
           <div className="processTab">
             <div className="processBox">
