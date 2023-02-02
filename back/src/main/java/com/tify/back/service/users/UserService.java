@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.tify.back.auth.jwt.JwtProperties;
+import com.tify.back.auth.jwt.JwtToken;
 import com.tify.back.auth.jwt.refreshToken.RefreshToken;
 import com.tify.back.auth.jwt.refreshToken.RefreshTokenRepository;
 import com.tify.back.auth.jwt.service.JwtProviderService;
@@ -32,6 +33,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.security.auth.login.LoginException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -154,12 +156,7 @@ public class UserService {
     public String confirmEmail(EmailAuthRequestDto requestDto) {
         System.out.println("요청 이메일:"+requestDto.getEmail());
         EmailAuth emailAuth = emailCustomRepository.findValidAuthByEmail(requestDto.getEmail(), requestDto.getAuthToken(), LocalDateTime.now()).get();
-        //User user = userRepository.findByEmail(requestDto.getEmail());
         emailAuth.useToken(); //이메일 인증 상태 true 로 바꿔줌
-
-        //System.out.println("이메일 인증 상태 변경:"+emailAuth.getExpired()+" / "+user.getEmailAuth());
-        //user.emailVerifiedSuccess(); //이메일 인증 성공
-        //return user;
         return emailAuth.getAuthToken();
     }
 
@@ -172,6 +169,7 @@ public class UserService {
         if (user != null) {
             //비밀번호 안맞을 때
             if (!bCryptPasswordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+                //throw new UserLoginException();
                 System.out.println("비밀번호가 일치하지 않습니다.");
                 return null;
             }
@@ -180,11 +178,13 @@ public class UserService {
                 System.out.println("이메일 인증이 필요합니다.");
                 return null;
             }
-            String newRefreshToken = jwtProviderService.createRefreshToken(user.getId(), user.getUserid());
-            RefreshToken refreshToken = new RefreshToken(newRefreshToken);
-
+            JwtToken newJwtToken = jwtProviderService.createJwtToken(user.getId(), user.getUserid());
+            RefreshToken refreshToken = RefreshToken.builder()
+                    .refreshToken(newJwtToken.getRefreshToken())
+                    .userid(user.getUserid())
+                    .build();
             user.updateRefreshToken(refreshToken);
-            return new LoginResponseDto(user.getId(), user.getUserid(), jwtProviderService.createAccessToken(user.getId(),user.getUserid()), newRefreshToken);
+            return new LoginResponseDto(user.getId(), user.getUserid(), newJwtToken.getAccessToken(), newJwtToken.getRefreshToken());
         }
         System.out.println("유저가 존재하지 않습니다.");
         return null;
@@ -279,6 +279,7 @@ public class UserService {
      */
     @Transactional
     public void deleteUser(String userid) {
+        //refreshTokenRepository.deleteBy()
         emailRepository.deleteByEmail(userid);
         userRepository.deleteByUserid(userid);
     }
@@ -304,12 +305,21 @@ public class UserService {
 
 
     /**
-     * accesstoken 복호화해서 유저 아이디 추출
+     * accesstoken 복호화해서 userid 추출
      */
     @Transactional
     public String getUserid(String token) {
         DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token);
         String userid = decodedJWT.getClaim("userid").asString();
+        return userid;
+    }
+
+    /**
+     * refreshToken 복호화해서 userid 추출
+     */
+    public String getUseridByRefresh(String refreshToken) {
+        DecodedJWT verify = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(refreshToken);
+        String userid = verify.getClaim("userid").asString();
         return userid;
     }
 

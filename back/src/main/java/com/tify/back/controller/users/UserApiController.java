@@ -2,6 +2,7 @@ package com.tify.back.controller.users;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.tify.back.auth.jwt.JwtProperties;
 import com.tify.back.auth.jwt.JwtToken;
 import com.tify.back.auth.jwt.service.JwtProviderService;
 import com.tify.back.auth.jwt.service.JwtService;
@@ -10,6 +11,7 @@ import com.tify.back.dto.users.UserUpdateDto;
 import com.tify.back.dto.users.request.EmailAuthRequestDto;
 import com.tify.back.dto.users.request.JoinRequestDto;
 import com.tify.back.dto.users.request.LoginRequestDto;
+import com.tify.back.dto.users.response.DataResponseDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
 import com.tify.back.model.users.EmailAuth;
@@ -72,7 +74,8 @@ public class UserApiController {
     public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto) {
         LoginResponseDto responseDto = userService.login(requestDto);
         if (responseDto == null) {
-            return ResponseEntity.ok().body("로그인에 실패했습니다.");
+            DataResponseDto response = new DataResponseDto(1, "로그인에 실패했습니다.");
+            return ResponseEntity.ok().body(response);//"로그인에 실패했습니다.");
         }
         return ResponseEntity.ok().body(responseDto);
     }
@@ -134,7 +137,6 @@ public class UserApiController {
         return ResponseEntity.ok().body(email); //인증된 이메일 리턴
     }
 
-
     /**
      * 회원 조회
      */
@@ -169,8 +171,6 @@ public class UserApiController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("헤더에 토큰이 없습니다.");
         }
     }
-
-
 
     /**
      * 회원 정보 수정
@@ -259,20 +259,19 @@ public class UserApiController {
     }
 
     /**
-     * refresh token 재발급
+     * access, refresh token 재발급
+     * access 만료 + refresh 유효 => access 재발급
+     * refresh 만료 => access, refresh 재발급
      */
     @Operation(summary = "get refresh token", description = "refresh token 재발급")
     @Parameter(description = "userid를 파라미터로 받습니다.")
-    @GetMapping("/refresh/{userId}")
-    public Map<String,String> refreshToken(@PathVariable("userId") String userid, @RequestHeader("refreshToken") String refreshToken,
-                                           HttpServletResponse response) throws JsonProcessingException {
+    @GetMapping("/refresh")
+    public Map<String,String> refreshToken(@RequestHeader(JwtProperties.REFRESH_HEADER_STRING) String refreshToken) {
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("utf-8");
-
+        String userid = userService.getUserid(refreshToken);
         JwtToken jwtToken = jwtService.validRefreshToken(userid, refreshToken);
-        Map<String, String> jsonResponse = jwtService.recreateTokenResponse(jwtToken);
 
+        Map<String, String> jsonResponse = jwtService.recreateTokenResponse(jwtToken);
         return jsonResponse;
     }
 
