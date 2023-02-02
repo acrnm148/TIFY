@@ -60,7 +60,7 @@
     border-radius: 8px;
 }
 .wish-card-cover{
-    background-image: url('https://user-images.githubusercontent.com/87971876/215254369-d144dcd7-00ae-4f1c-b740-c219c6e30821.png');
+    /* background-image: url('https://user-images.githubusercontent.com/87971876/215254369-d144dcd7-00ae-4f1c-b740-c219c6e30821.png'); */
     overflow: cover;
 }
 .wish-card-content{
@@ -133,4 +133,16 @@
     margin: 5px;
     margin-bottom: 10px;
     border-radius: 5px;
+}
+.wish-card wish-card-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.wish-card wish-card-content h1{
+
+}
+.wish-card wish-card-content p{
+
 }
