@@ -75,8 +75,7 @@ public class UserApiController {
     public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto) {
         LoginResponseDto responseDto = userService.login(requestDto);
         if (responseDto == null) {
-            DataResponseDto response = new DataResponseDto(1, "로그인에 실패했습니다.");
-            return ResponseEntity.ok().body(response);//"로그인에 실패했습니다.");
+            return ResponseEntity.ok().body("로그인에 실패했습니다.");//"로그인에 실패했습니다.");
         }
         return ResponseEntity.ok().body(responseDto);
     }
@@ -247,6 +246,7 @@ public class UserApiController {
     @Parameter(description = "userid를 파라미터로 받습니다.")
     @GetMapping("/refresh/{userid}")
     public Map<String,String> refreshToken(@PathVariable("userid") String userid, @RequestHeader("refreshToken") String refreshToken) {
+        System.out.println(userid+" / "+refreshToken);
 
         //String userid = userService.getUserid(refreshToken);
         JwtToken jwtToken = jwtService.validRefreshToken(userid, refreshToken);
@@ -290,10 +290,10 @@ public class UserApiController {
         if (user == null) {
             throw new UserLoginException("이메일이 존재하지 않습니다.");
         }
-        emailService.createMailAndChangePassword(email, user.getUsername());
-        //emailService.sendPasswordMail(mailDto);
+        userService.sendMailAndChangePassword(email, user.getUsername());
+        System.out.println("임시 비밀번호로 변경 완료");
 
-        return "/login";
+        return "redirect:/login";
     }
 
 }

@@ -106,9 +106,6 @@ public class UserService {
                         .build());
 
         //이메일 인증
-        //System.out.println("emailAuth 저장된 내용: "+emailAuth.getAuthToken()+" ");
-        //emailService.send(emailAuth.getEmail(), emailAuth.getAuthToken());
-        //String authToken = sendEmailAuth(requestDto.getEmail());
         List<EmailAuth> emailAuth = new ArrayList<>();
         emailAuth = emailRepository.findByEmail(requestDto.getEmail());
         if (emailAuth.size() == 0) {
@@ -171,7 +168,7 @@ public class UserService {
         if (user != null) {
             //비밀번호 안맞을 때
             if (!bCryptPasswordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-                //throw new UserLoginException();
+                System.out.println("저장된pw:"+user.getPassword()+" / 날아온pw:"+requestDto.getPassword());
                 System.out.println("비밀번호가 일치하지 않습니다.");
                 return null;
             }
@@ -336,9 +333,24 @@ public class UserService {
     }
 
     /**
+     * 메일 내용을 생성하고 임시 비밀번호로 회원 비밀번호를 변경
+     */
+    public void sendMailAndChangePassword(String email, String name) {
+        String newPw = emailService.sendPwMail(email, name);
+        updatePassword(newPw,email);
+    }
+
+
+    /**
      * 유저 비밀번호 변경
      */
-    //public void updatePassword
+    public void updatePassword(String tempPw, String userEmail){
+        User user = userRepository.findByUserid(userEmail);
+        String encodedPw = bCryptPasswordEncoder.encode(tempPw);
+        user.updatePassword(encodedPw);
+        User user2 = userRepository.save(user);
+        System.out.println("비밀번호 변경 완료 "+tempPw);
+    }
 
     // test용 계정 생성
     @Transactional

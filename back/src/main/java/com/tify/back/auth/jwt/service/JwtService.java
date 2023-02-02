@@ -6,6 +6,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.tify.back.auth.jwt.JwtProperties;
 import com.tify.back.auth.jwt.JwtToken;
 import com.tify.back.auth.jwt.refreshToken.RefreshToken;
+import com.tify.back.auth.jwt.refreshToken.RefreshTokenRepository;
 import com.tify.back.model.users.User;
 import com.tify.back.repository.users.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class JwtService {
 
     private final JwtProviderService jwtProviderService;
     private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     /**
      * access, refresh 토큰 생성
@@ -99,6 +101,7 @@ public class JwtService {
 
         //전달받은 refresh 토큰과 DB의 refresh 토큰이 일치하는지 확인
         RefreshToken findRefreshToken = sameCheckRefreshToken(user, refreshToken);
+        System.out.println("일치하는 refreshToken:"+findRefreshToken);
 
         //refresh 토큰이 만료되지 않았으면 access 토큰이 null 이 아니다.
         String accessToken = jwtProviderService.validRefreshToken(findRefreshToken);
