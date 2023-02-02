@@ -46,7 +46,6 @@ public class PayService {
 
         return pay;
     }
-
     /**
      * 기프트 펀딩 완료
      */
@@ -60,4 +59,6 @@ public class PayService {
         }
         else return false;
     }
+
+
 }

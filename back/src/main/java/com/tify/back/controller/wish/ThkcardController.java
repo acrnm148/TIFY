@@ -31,8 +31,8 @@ public class ThkcardController {
 		return thkcardService.saveThkcard(thkcard);
 	}
 
-	@GetMapping("/{pay_id}")
-	public Thkcard findThkcardByPay(@PathVariable Long pay_id) {
-		return thkcardService.findByPayId(pay_id);
+	@GetMapping("/{user_id}")
+	public Thkcard findThkcardByPay(@PathVariable Long user_id) {
+		return thkcardService.findByPayId(user_id);
 	}
 }
