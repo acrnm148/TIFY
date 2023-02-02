@@ -19,6 +19,7 @@ import { SignOut } from '../components/SignOut';
 type LoginResponse = {
   refresh_token: string;
   access_token: string;
+  user_id: string;
 };
 
 export function LoginPage() {
@@ -31,12 +32,16 @@ export function LoginPage() {
   const onValid = () => {
     setPassword('');
     Login(userid, password)
-      .then((response: LoginResponse) => {
-        setRefreshToken(response.refresh_token);
-        dispatch(SET_TOKEN(response.access_token));
+      .then((response) => {
+        if (response === '로그인 실패!') {
+          alert('미등록 회원이거나 잘못된 아이디/비밀번호를 입력하셨습니다.');
+        } else {
+          setRefreshToken(response.refresh_token);
+          dispatch(SET_TOKEN(response.access_token));
 
-        console.log('로그인 성공!!');
-        return navigate('/');
+          console.log('로그인 성공!!');
+          return navigate('/');
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -84,6 +89,7 @@ export function LoginPage() {
               <input
                 type="text"
                 className="inputBox"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </form>

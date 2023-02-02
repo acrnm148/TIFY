@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export const TOKEN_TIME_OUT = 600 * 1000;
+// 1밀리초 기준으로 하는 getTime()함수에 1시간을 더한 값으로 져장
+export const TOKEN_TIME_OUT = 60 * 60 * 1000;
 
 type Notoken = {
   authenticated: boolean;

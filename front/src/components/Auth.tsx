@@ -26,6 +26,7 @@ export const tokenSlice = createSlice({
 type TokenType = {
   access_token: string;
   refresh_token: string;
+  user_id: string;
 };
 
 export async function Login(id: string, password: string) {
@@ -37,14 +38,18 @@ export async function Login(id: string, password: string) {
       })
       .then((res) => {
         console.log(res);
-        console.log(res.data.accessToken);
-        const tokens: TokenType = {
-          access_token: res.data.accessToken,
-          refresh_token: res.data.refreshToken,
-        };
-        console.log(tokens);
-        return tokens;
-        // console.log(res.accessToken);
+        if (res.data === '로그인에 실패했습니다.') {
+          return '로그인 실패!';
+        } else {
+          console.log(res.data.accessToken);
+          const tokens: TokenType = {
+            access_token: res.data.accessToken,
+            refresh_token: res.data.refreshToken,
+            user_id: res.data.userid,
+          };
+          console.log(tokens);
+          return tokens;
+        }
       });
   } catch (err) {
     console.log(err);
