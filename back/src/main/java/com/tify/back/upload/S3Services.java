@@ -41,9 +41,9 @@ public class S3Services {
         String[] splitString = fileName.split("\\.");
         String ext = splitString[splitString.length -1];
         String changedFileName = uuid.toString() +"."+ext;
-        //S3 저장코드
-        s3client.putObject(new PutObjectRequest(bucketName, changedFileName, inputStream, new ObjectMetadata()));
-        // S3 에서 URL 주소 가지고옴
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType("image/" + ext);
+        s3client.putObject(new PutObjectRequest(bucketName, changedFileName, inputStream, objectMetadata));
         return s3client.getUrl(bucketName, changedFileName).toString();
     }
 }
