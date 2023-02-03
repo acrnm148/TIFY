@@ -76,3 +76,10 @@ imp_secret: fec4af82c2d97e8fa4ebdb2c6a8ffb5d021b5794
 #firebase
 app:
   firebase-configuration-file: firebaseconfig/sp-fcm-key.json
+
+# naver kgh key
+naver-cloud-sms:
+  accessKey: Ins3y4evD9z8sY45fTXN
+  secretKey: 5Xz1XV8TnS5EmRnQo6PAKJISbDt2xHAvrX2JJhzb
+  serviceId: ncp:sms:kr:299557230184:tify
+  senderPhone: 01049221157
