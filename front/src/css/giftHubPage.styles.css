@@ -190,3 +190,15 @@
       border-radius: 8px;
       padding-left: 10px;
   }
+  .gift-list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .gift-list-con-container{
+    display: flex;
+    justify-content: center;
+  }
+  .gift-list-container{
+    width: 65%;
+  }

@@ -1,13 +1,14 @@
-import GiftHubCategory from '../components/GiftHubCategory';
 import SearchBar from '../components/SearchBar';
-import { GiftHubList } from '../components/GiftHubList';
+import GiftHubCategory from '../components/GiftHubCategory';
 import '../css/giftHubPage.styles.css';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import iconFilter from '../assets/iconFilter.svg';
 import axios from 'axios';
 
 // mui Slider 사용
 import Slider from '@mui/material/Slider';
+import { NavLink } from 'react-router-dom';
+import { GiftItem } from '../components/GiftItem';
 
 export function GiftHubPage() {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -25,8 +26,24 @@ export function GiftHubPage() {
     console.log(value);
   };
 
+  // scroll
+  const [pageNum, setPageNum] = useState(0);
+
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastGiftElement = useCallback(  // (*)
+    (node: HTMLDivElement) => {
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          setPageNum((prev) => prev + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    []
+  );
+
   let max_result = 100; //디폴트
-  let page = 0;
   // 기본값은 상품목록에서 보여주는 Recommend 리스트는 검색어가 없을 때 store에 저장한 리스트 표출
   // (검색어 | 카테고리 선택 | 상품리스트에 변경)이 있을 때 실행되는 함수
   useEffect(() => {
@@ -40,30 +57,29 @@ export function GiftHubPage() {
             name: searchQuery,
             category: category,
             max_result: max_result,
-            page: page,
+            page: pageNum,
           },
         })
         .then((e) => {
-          // console.log('데이터를 받아옴')
           console.log(e.data);
-          // console.log(e)
           let copy: Array<any> = [...e.data.content]; // let copy = [...giftList,{name:'new', price:9999, gitId:4}];
-          setGiftList(copy);
-          // console.log('giftList', giftList);
+          setGiftList([...giftList,...e.data.content]);
         })
         .catch((err) => {
           console.log('error', err);
         });
     };
     fetchData();
-  }, [searchQuery, priceRange, category]);
+  }, [searchQuery, priceRange, category, pageNum]);
 
   const ParentComponent = () => {
     const getQuery = (q: string) => {
       setSearchQuery(q);
+      // setPageNum(1);
     };
     const getCategory = (c: number) => {
       setCategory(c);
+      // setPageNum(1);
       if (c === 0) {
         setCategory(null);
       }
@@ -76,20 +92,6 @@ export function GiftHubPage() {
     );
   };
   {
-    /* 
-  [TODO] 전체카테고리 옵션 생성하기 V
-  [TODO] 카테고리 선택 시 giftList 요청 V
-  [TODO] 가격범위 필터 선택시 giftList 요청 V
-  [TODO] 검색 결과가 없을 때 '검색 결과가 없습니다' 표출 V
-  [TODO] 검색어 유지.. V
-  [TODO] 이미지가 없을 때 기본이미지 표출 V
-  [TODO] 기프트허브 선택한 현재 카테고리 표출
-  [TODO] 가격범위 입력값도 받기 V
-  [TODO] 카트에 담을 때 유저정보 스토어에서 가져와서 POST요청
-  [TODO] 페이징 
-  [TODO] 사이트 들어왔을 때 기본 노출 상품들 요청처리 (인기 데이터 요청..)
-  [TODO] -인기순- 높은가격순 낮은가격순 선택 시  ( 데이터 요청..)
-*/
   }
   const NoResult = () => {
     return (
@@ -99,15 +101,6 @@ export function GiftHubPage() {
       </div>
     );
   };
-  function CheapestList(): void {
-    let cheapest = giftList.sort((a, b) => a.price - b.price);
-    setGiftList(cheapest);
-    console.log(cheapest);
-  }
-  function ExpensiveList() {
-    let expensive = giftList.sort((a, b) => b.price - a.price);
-    setGiftList(expensive);
-  }
   const SetRange1 = (e:any) =>{
     setValue([e.target.value, value[1]])
   }
@@ -171,11 +164,50 @@ export function GiftHubPage() {
 
       <div>
         {giftList.length > 0 ? (
-          <GiftHubList giftList={giftList} />
+          <div className="gift-list-con-container">
+          <div className="gift-list-container">
+               <div className="gift-list">
+               {giftList.map((gift, i:number) => {
+                if(giftList.length === i + 1){
+                  return (
+                    <div ref={lastGiftElement}>
+                      <NavLink to={`/gifthub/${gift.giftId}`} >
+                        <GiftItem key={i} gift={gift} />
+                    </NavLink>
+                    </div>
+                  )
+                } else {
+                  return(
+                    <NavLink to={`/gifthub/${gift.giftId}`} >
+                       <GiftItem key={i} gift={gift} />
+                   </NavLink>
+                     )
+                }})}
+               </div>
+           </div> 
+           <div>
+               
+           </div>
+       </div>
         ) : (
           <NoResult />
-        )}
-      </div>
-    </div>
-  );
-}
+                  )}
+                </div>
+              </div>
+            );
+          }
+
+    /* 
+  [TODO] 전체카테고리 옵션 생성하기 V
+  [TODO] 카테고리 선택 시 giftList 요청 V
+  [TODO] 가격범위 필터 선택시 giftList 요청 V
+  [TODO] 검색 결과가 없을 때 '검색 결과가 없습니다' 표출 V
+  [TODO] 검색어 유지.. V
+  [TODO] 이미지가 없을 때 기본이미지 표출 V
+  [TODO] 기프트허브 선택한 현재 카테고리 표출
+  [TODO] 가격범위 입력값도 받기 V
+  [TODO] 카트에 담을 때 유저정보 스토어에서 가져와서 POST요청
+  [TODO] 페이징 
+  [TODO] 사이트 들어왔을 때 기본 노출 상품들 요청처리 (인기 데이터 요청..)
+  [TODO] -인기순- 높은가격순 낮은가격순 선택 시  ( 데이터 요청..)
+*/
