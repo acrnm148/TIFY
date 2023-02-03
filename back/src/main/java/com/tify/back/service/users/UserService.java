@@ -8,7 +8,6 @@ import com.tify.back.auth.jwt.JwtToken;
 import com.tify.back.auth.jwt.refreshToken.RefreshToken;
 import com.tify.back.auth.jwt.refreshToken.RefreshTokenRepository;
 import com.tify.back.auth.jwt.service.JwtProviderService;
-import com.tify.back.dto.users.SearchedUserDto;
 import com.tify.back.dto.users.UserProfileDto;
 import com.tify.back.dto.users.UserUpdateDto;
 import com.tify.back.dto.users.request.EmailAuthRequestDto;
@@ -17,7 +16,6 @@ import com.tify.back.dto.users.request.LoginRequestDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
 import com.tify.back.exception.UserLoginException;
-import com.tify.back.model.friend.FriendStatus;
 import com.tify.back.model.gifthub.Cart;
 import com.tify.back.model.users.EmailAuth;
 import com.tify.back.model.users.User;
@@ -25,7 +23,6 @@ import com.tify.back.repository.users.EmailAuthCustomRepository;
 import com.tify.back.repository.users.EmailAuthRepository;
 import com.tify.back.repository.users.UserRepository;
 
-import com.tify.back.service.friend.FriendService;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +58,6 @@ public class UserService {
 
     private final StringRedisTemplate redisTemplate;
     private final CartService cartService;
-    private final FriendService friendService;
 
     /**
      * DTO로 들어온 값으로 회원가입
@@ -364,27 +360,8 @@ public class UserService {
     }
 
 
-    public List<SearchedUserDto> searchUserByNickname(String nickname, Long myId) {
-        List<User> users = userRepository.findByNicknameLike(nickname);
-        List<SearchedUserDto> searchedUsers = new ArrayList<>();
-        if (searchedUsers != null) {
-            for (User user : users) {
-                //SearchedUserDto searchedUser = new SearchedUserDto();
-                //Long id = userRepository.findByEmail(myId)
-                FriendStatus friendStatus = friendService.getFriendshipStatus(myId, user.getId());
-                SearchedUserDto searchedUser = SearchedUserDto.builder()
-                    .id(user.getId())
-                    .profileImg(user.getProfileImg())
-                    .nickname(user.getNickname())
-                    .email(user.getEmail())
-                    .state(friendStatus)
-                    .build();
-
-                searchedUsers.add(searchedUser);
-            }
-        }
-
-        return searchedUsers;
+    public List<User> searchUserByNickname(String nickname) {
+        return userRepository.findByNicknameLike(nickname);
     }
 
 
