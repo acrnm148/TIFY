@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Login } from '../modules/Auth/LogIn';
 import { setRefreshToken } from '../modules/Auth/Cookie';
-import { SET_TOKEN, SET_USERID } from '../store/Auth';
+import { SET_TOKEN, SET_USERID, SET_USEREMAIL } from '../store/Auth';
 import { useDispatch } from 'react-redux';
 
 export function JoinSecondPage() {
@@ -105,6 +105,7 @@ export function JoinSecondPage() {
                 setRefreshToken(response.refresh_token);
                 dispatch(SET_TOKEN(response.access_token));
                 dispatch(SET_USERID(response.user_id));
+                dispatch(SET_USEREMAIL(response.user_email));
 
                 console.log('로그인 성공!!');
               }

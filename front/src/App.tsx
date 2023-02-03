@@ -102,14 +102,29 @@ function App() {
             <Route path="phone" element={<PhoneBook />} />
             <Route path="order" element={<OrderList />} />
           </Route>
+          <Route path="/checkwish" element={<CheckWishPage />} />
+          <Route path="/thanks/:wishId/:conId" element={<ThanksPage />} />
+          <Route path="/friends" element={<FriendsPage />} />
+          <Route path="/makewish/success" element={<WishSuccess />} />
+          <Route path="/like" element={<LikePage />} />
+          <Route path="/alram" element={<AlramPage />} />
+          <Route path="/ask" element={<AskPage />} />
         </Route>
+
+        <Route element={<PublicRoute />}>
+          <Route path="/join1" element={<JoinFirstPage />} />
+          <Route path="/join2" element={<JoinSecondPage />} />
+          <Route path="/reset" element={<ForgotPasswordPage />} />
+        </Route>
+        <Route path="/login" element={<LoginPage />}>
+          <Route path="oauth2/code/kakao" element={<AuthKakao />} />
+          <Route path="Oauth2/code/naver" element={<AuthNaver />} />
+        </Route>
+        <Route path="/join3" element={<JoinThirdPage />} />
 
         <Route path="" element={<MainPage />} />
         <Route path="/gifthub" element={<GiftHubPage />} />
         <Route path="/gifthub/:giftId" element={<GiftHubDetailPage />} />
-        <Route path="/checkwish" element={<CheckWishPage />} />
-        <Route path="/thanks/:wishId/:conId" element={<ThanksPage />} />
-        <Route path="/friends" element={<FriendsPage />} />
         <Route path="/congrats/:wishId" element={<CongratsPage />} />
         <Route
           path="/congrats/:wishId/giftcard"
@@ -121,24 +136,9 @@ function App() {
         </Route>
         <Route path="/congrats/kakaopay/result" element={<PayResult />} />
         <Route path="/congrats/import" element={<PayingPort />} />
-        <Route path="/makewish/success" element={<WishSuccess />} />
-
-        <Route path="/like" element={<LikePage />} />
-        <Route path="/alram" element={<AlramPage />} />
 
         <Route path="/faq" element={<FaqPage />} />
-        <Route path="/ask" element={<AskPage />} />
 
-        <Route path="/login" element={<LoginPage />}>
-          <Route path="oauth2/code/kakao" element={<AuthKakao />} />
-          <Route path="Oauth2/code/naver" element={<AuthNaver />} />
-        </Route>
-        <Route element={<PublicRoute />}>
-          <Route path="/join1" element={<JoinFirstPage />} />
-          <Route path="/join2" element={<JoinSecondPage />} />
-          <Route path="/reset" element={<ForgotPasswordPage />} />
-        </Route>
-        <Route path="/join3" element={<JoinThirdPage />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
       <Footer />

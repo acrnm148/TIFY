@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 import { Login } from '../modules/Auth/LogIn';
 import React, { useState } from 'react';
 import { setRefreshToken } from '../modules/Auth/Cookie';
-import { SET_TOKEN, SET_USERID } from '../store/Auth';
+import { SET_TOKEN, SET_USERID, SET_USEREMAIL } from '../store/Auth';
 import { Outlet } from 'react-router-dom';
 import { LogOut } from '../modules/Auth/LogOut';
 import { SignOut } from '../modules/Auth/SignOut';
@@ -28,7 +28,7 @@ export function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [userid, setUserid] = useState('octover1025@naver.com');
+  const [userEmail, setUserEmail] = useState('octover1025@naver.com');
   const [password, setPassword] = useState('123');
 
   const userId = useSelector((state: RootState) => state.authToken.userId);
@@ -42,15 +42,17 @@ export function LoginPage() {
 
   const onValid = () => {
     setPassword('');
-    Login(userid, password)
+    Login(userEmail, password)
       .then((response) => {
         if (response === '로그인 실패!') {
           alert('미등록 회원이거나 잘못된 아이디/비밀번호를 입력하셨습니다.');
         } else {
+          console.log(response);
           console.log('리프레쉬토큰 가자');
           setRefreshToken(response.refresh_token);
           dispatch(SET_TOKEN(response.access_token));
           dispatch(SET_USERID(response.user_id));
+          dispatch(SET_USEREMAIL(response.user_email));
 
           console.log('로그인 성공!!');
 
@@ -62,9 +64,13 @@ export function LoginPage() {
       });
   };
 
+  const GoReset = () => {
+    return navigate('/reset');
+  };
+
   // const onValid = async () => {
   //   setPassword('');
-  //   await Login(userid, password)
+  //   await Login(userEmail, password)
   //     .then(() => {
   //       // console.log(res);
   //       // setRefreshToken(res.refresh_token);
@@ -78,7 +84,7 @@ export function LoginPage() {
   // };
 
   // function SubmitLogin() {
-  //   Login(userid, password);
+  //   Login(userEmail, password);
   // }
 
   return (
@@ -95,7 +101,7 @@ export function LoginPage() {
                 className="inputBox"
                 id="emailForm"
                 placeholder="name@example.com"
-                onChange={(e) => setUserid(e.target.value)}
+                onChange={(e) => setUserEmail(e.target.value)}
               />
             </form>
             <p>비밀번호</p>
@@ -118,7 +124,9 @@ export function LoginPage() {
             >
               Login
             </button>
-            <button className="findPassword font-bold">Forgot password?</button>
+            <button className="findPassword font-bold" onClick={GoReset}>
+              Forgot password?
+            </button>
           </div>
         </div>
       </div>

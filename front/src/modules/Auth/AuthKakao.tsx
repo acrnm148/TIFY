@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { setRefreshToken } from './Cookie';
-import { SET_TOKEN, SET_USERID } from '../../store/Auth';
+import { SET_TOKEN, SET_USERID, SET_USEREMAIL } from '../../store/Auth';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Auth';
 
@@ -31,7 +31,8 @@ export function AuthKakao() {
         console.log(res.data.refreshToken);
         setRefreshToken(res.data.accessToken);
         dispatch(SET_TOKEN(res.data.refreshToken));
-        dispatch(SET_USERID(res.data.userId));
+        dispatch(SET_USERID(res.data.userSeq));
+        dispatch(SET_USEREMAIL(res.data.email));
 
         console.log('로그인 성공!!');
         const userId = useSelector(

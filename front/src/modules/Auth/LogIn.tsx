@@ -11,7 +11,8 @@ import { createSlice } from '@reduxjs/toolkit';
 type TokenType = {
   access_token: string;
   refresh_token: string;
-  user_id: string;
+  user_email: string;
+  user_id: number;
 };
 
 export async function Login(id: string, password: string) {
@@ -30,7 +31,8 @@ export async function Login(id: string, password: string) {
           const tokens: TokenType = {
             access_token: res.data.accessToken,
             refresh_token: res.data.refreshToken,
-            user_id: res.data.userid,
+            user_email: res.data.email,
+            user_id: res.data.userSeq,
           };
           console.log(tokens);
           console.log('토큰 오브젝트 보냅니다. 페이지야 받아라');
