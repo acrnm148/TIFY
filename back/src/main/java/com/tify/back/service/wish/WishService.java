@@ -62,6 +62,15 @@ public class WishService {
 
     }
 
+    public Wish wishUserId(Long userId){
+        if(wishRepository.findById(userId).isPresent()){
+            return wishRepository.findById(userId).get();
+        }else{
+            return null;
+        }
+
+    }
+
     public String deleteWishById(Long id){
         Wish wish = wishRepository.findById(id).orElse(null);
         List<Gift> gifts = wish.getGiftItems();
