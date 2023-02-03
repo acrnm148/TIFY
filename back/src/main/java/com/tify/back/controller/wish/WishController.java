@@ -1,5 +1,6 @@
 package com.tify.back.controller.wish;
 import com.tify.back.dto.wish.AddWishDto;
+import com.tify.back.model.friend.Friend;
 import com.tify.back.model.wish.Wish;
 import com.tify.back.repository.wish.WishRepository;
 import com.tify.back.service.wish.WishService;
@@ -38,9 +39,10 @@ public class WishController {
         return wishService.wishDetailId(wishId);
     }
 
-    @GetMapping("/detail/user")
-    public Wish wisharray(@RequestParam(value = "userId", required = true) Long userId){
-        return wishService.wishUserId(userId);
+    @GetMapping("/wish/{userId}")
+    public List<Wish> getWish(@PathVariable long userId) {
+        List<Wish> wish = wishService.getWish(userId);
+        return wish;
     }
     @GetMapping
     public List<Wish> Wish() {
