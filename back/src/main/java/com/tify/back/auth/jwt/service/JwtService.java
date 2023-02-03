@@ -137,11 +137,13 @@ public class JwtService {
      * json response 부분
      */
     //로그인시 응답 json response
-    public Map<String , String> successLoginResponse(JwtToken jwtToken, String userid) {
-        Map<String, String> map = new LinkedHashMap<>();
+    public Map<String , Object> successLoginResponse(JwtToken jwtToken, User user) {
+        Map<String, Object> map = new LinkedHashMap<>();
         map.put("status", "200");
         map.put("message", "accessToken, refreshToken이 생성되었습니다.");
-        map.put("userid", userid);
+        map.put("userSeq", user.getId());
+        map.put("userid", user.getUserid());
+        map.put("email", user.getEmail());
         map.put("accessToken", jwtToken.getAccessToken());
         map.put("refreshToken", jwtToken.getRefreshToken());
         return map;
@@ -164,14 +166,15 @@ public class JwtService {
     }
 
     //refresh 토큰 재발급 response
-    public Map<String, String> recreateTokenResponse(JwtToken jwtToken, String userid) {
-        Map<String ,String > map = new LinkedHashMap<>();
+    public Map<String, Object> recreateTokenResponse(JwtToken jwtToken, User user) {
+        Map<String ,Object > map = new LinkedHashMap<>();
         map.put("status", "200");
         map.put("message", "refresh, access 토큰이 재발급되었습니다.");
-        map.put("userid", userid);
+        map.put("userSeq", user.getId());
+        map.put("userid", user.getUserid());
+        map.put("email", user.getEmail());
         map.put("accessToken", jwtToken.getAccessToken());
         map.put("refreshToken", jwtToken.getRefreshToken());
         return map;
     }
-
 }

@@ -183,7 +183,7 @@ public class UserService {
                     .userid(user.getUserid())
                     .build();
             user.updateRefreshToken(refreshToken);
-            return new LoginResponseDto(user.getId(), user.getUserid(), newJwtToken.getAccessToken(), newJwtToken.getRefreshToken());
+            return new LoginResponseDto(user.getId(), user.getUserid(), user.getEmail(), newJwtToken.getAccessToken(), newJwtToken.getRefreshToken());
         }
         System.out.println("유저가 존재하지 않습니다.");
         return null;
