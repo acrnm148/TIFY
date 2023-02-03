@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+.main-container {
+  display: inline-block;
+  width: 100vw;
+}
+.main-components {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  max-height: 100vh;
+  padding-bottom: 7vh;
+}
+.catch-prase * {
+  text-align: right;
+}
+.catch-prase > h1 {
+  /* font-family: 'Roboto'; */
+  font-family: 'Nanum Gothic';
+  font-style: normal;
+  text-align: right;
+  font-variant: small-caps;
+}
+
+.catch-prase div {
+  display: flex;
+  justify-content: center;
+  float: right;
+}
+.catch-prase button {
+  color: white;
+  font-weight: 600;
+}
+/* media */
+@media (min-width: 1025px) {
+  .catch-prase {
+    min-width: 52%;
+    max-width: 55%;
+    width: max-content;
+    padding-top: 20vh;
+  }
+  .phone-image {
+    width: 24vw;
+    margin: 5vh;
+    margin-top: 1vh;
+  }
+
+  .catch-prase > h1 {
+    font-weight: 900;
+    font-size: 3em;
+    line-height: 1.25em;
+    white-space: nowrap;
+  }
+}
+@media (max-width: 1024px) {
+  .catch-prase {
+    width: 50%;
+    padding-top: 15vh;
+    margin-left: 24px;
+  }
+  .phone-image {
+    width: 23vw;
+    margin: 2vh;
+  }
+
+  .catch-prase > h1 {
+    font-weight: 800;
+    font-size: 2em;
+    line-height: 40px;
+  }
+  .catch-prase button {
+    font-weight: 500;
+    font-size: 95%;
+  }
+}
+@media (max-width: 768px) {
+  .catch-prase {
+    width: 50%;
+    padding-top: 5vh;
+    margin-left: 24px;
+  }
+  .phone-image {
+    width: 27vw;
+    margin: 2vh;
+  }
+
+  .catch-prase > h1 {
+    font-weight: 800;
+    font-size: 1.6em;
+    line-height: 40px;
+  }
+  .catch-prase button {
+    font-weight: 500;
+    font-size: 80%;
+  }
+}

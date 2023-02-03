@@ -1,0 +1,1477 @@
+{
+	"info": {
+		"_postman_id": "65786e50-2ffa-4128-85a0-93ac761b38cd",
+		"name": "TIFY",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "유저 api",
+			"item": [
+				{
+					"name": "이메일 인증 O",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "email",
+								"value": "ssookkookk@naver.com",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "ssookkookk@naver.com",
+									"type": "default",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "https://i8e208.p.ssafy.io/api/account/sendEmailAuth?email=ssookkookk@naver.com",
+							"protocol": "https",
+							"host": [
+								"i8e208",
+								"p",
+								"ssafy",
+								"io"
+							],
+							"path": [
+								"api",
+								"account",
+								"sendEmailAuth"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "ssookkookk@naver.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "이메일 인증 했는지 체크 O",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://i8e208.p.ssafy.io/api/account/checkEmailState?email=acrnm148@gmail.com",
+							"protocol": "https",
+							"host": [
+								"i8e208",
+								"p",
+								"ssafy",
+								"io"
+							],
+							"path": [
+								"api",
+								"account",
+								"checkEmailState"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "acrnm148@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "중복 닉네임 체크O",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://i8e208.p.ssafy.io/api/dupCheck?nickname=수나캉",
+							"protocol": "https",
+							"host": [
+								"i8e208",
+								"p",
+								"ssafy",
+								"io"
+							],
+							"path": [
+								"api",
+								"dupCheck"
+							],
+							"query": [
+								{
+									"key": "nickname",
+									"value": "수나캉"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "일반 회원가입 O",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "userId",
+								"value": "acrnm148@gmail.com",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "kangsuna0289!",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "addr1",
+								"value": "",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userid\" : \"acrnm148@gmail.com\",\r\n    \"password\" : \"kangsuna0289!\",\r\n    \"addr1\" : \"부산시 해운대구\",\r\n    \"addr2\" : \"104동 402호\",\r\n    \"birthYear\" : \"1999\",\r\n    \"birth\" : \"0923\",\r\n    \"gender\" : \"F\",\r\n    \"tel\" : \"010-6265-0289\",\r\n    \"email\" : \"acrnm148@gmail.com\",\r\n    \"username\" : \"강수나\",\r\n    \"nickname\" : \"수나캉\",\r\n    \"zipcode\" : \"123456\",\r\n    \"authToken\" : \"683b6a94-631c-4d12-8725-86e5b8954324\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://i8e208.p.ssafy.io/api/account/signin",
+							"protocol": "https",
+							"host": [
+								"i8e208",
+								"p",
+								"ssafy",
+								"io"
+							],
+							"path": [
+								"api",
+								"account",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "일반 로그인 O",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userid\" : \"ssookkookk@naver.com\",\r\n    \"password\" : \"kangsuna0289!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://i8e208.p.ssafy.io/api/account/login",
+							"protocol": "https",
+							"host": [
+								"i8e208",
+								"p",
+								"ssafy",
+								"io"
+							],
+							"path": [
+								"api",
+								"account",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "kakao 코드 발급  O",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessTokenUrl",
+									"value": "https://kauth.kakao.com/oauth/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "https://kauth.kakao.com/oauth/authorize",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:8080/login/oauth2/code/kakao",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "af5un2n5wi857RPKyB7wBFPKhjBBebd4",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "097d883a03c0da953d919d990701da5f",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "Kakao API",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://kauth.kakao.com/oauth/authorize?client_id=097d883a03c0da953d919d990701da5f&redirect_uri=https://i8e208.p.ssafy.io/api/login/oauth2/code/kakao&response_type=code",
+							"protocol": "https",
+							"host": [
+								"kauth",
+								"kakao",
+								"com"
+							],
+							"path": [
+								"oauth",
+								"authorize"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "097d883a03c0da953d919d990701da5f"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://i8e208.p.ssafy.io/api/login/oauth2/code/kakao"
+								},
+								{
+									"key": "response_type",
+									"value": "code"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "kakao 로그인  O",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "scope",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "https://kauth.kakao.com/oauth/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "https://kauth.kakao.com/oauth/authorize",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "af5un2n5wi857RPKyB7wBFPKhjBBebd4",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "097d883a03c0da953d919d990701da5f",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:8080/login/oauth2/code/kakao",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "Kakao API",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://i8e208.p.ssafy.io/api/account/auth/login/kakao?code=cwbADI8wj92MOmnALh25PPL_SgubI47UiT2lU2l4KmiYGskJfBsm8FmpRzI7LMtKhCY_HQoqJQ8AAAGF7nEKvw",
+							"protocol": "https",
+							"host": [
+								"i8e208",
+								"p",
+								"ssafy",
+								"io"
+							],
+							"path": [
+								"api",
+								"account",
+								"auth",
+								"login",
+								"kakao"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "cwbADI8wj92MOmnALh25PPL_SgubI47UiT2lU2l4KmiYGskJfBsm8FmpRzI7LMtKhCY_HQoqJQ8AAAGF7nEKvw"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Naver 코드 발급  O",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://nid.naver.com/oauth2.0/authorize?client_id=n4ayopJ7b7D_4KefcRcb&redirect_uri=https://i8e208.p.ssafy.io/api/login/oauth2/code/naver&response_type=code",
+							"protocol": "https",
+							"host": [
+								"nid",
+								"naver",
+								"com"
+							],
+							"path": [
+								"oauth2.0",
+								"authorize"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "n4ayopJ7b7D_4KefcRcb"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://i8e208.p.ssafy.io/api/login/oauth2/code/naver"
+								},
+								{
+									"key": "response_type",
+									"value": "code"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Naver 로그인  O",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://i8e208.p.ssafy.io/api/account/auth/login/naver?code=cYKps2D46ZZcWaJ4dL",
+							"protocol": "https",
+							"host": [
+								"i8e208",
+								"p",
+								"ssafy",
+								"io"
+							],
+							"path": [
+								"api",
+								"account",
+								"auth",
+								"login",
+								"naver"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "cYKps2D46ZZcWaJ4dL"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "회원 정보 조회 O",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://i8e208.p.ssafy.io/api/account/userInfo",
+							"protocol": "https",
+							"host": [
+								"i8e208",
+								"p",
+								"ssafy",
+								"io"
+							],
+							"path": [
+								"api",
+								"account",
+								"userInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "회원 정보 수정 O",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "tokenType",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNTQzNTA5NTU0IiwiaWQiOjEsImV4cCI6MTY3NDQ2MTg5MSwidXNlcmlkIjoiMjU0MzUwOTU1NCJ9.MXkgpGudHcHDWRrTRW5xfr-hMtALjx6vQWjQRtkOMJr6gf-GkMqiLuDKV70QtU7sFsSfcQgE_6GrbBT7I9XvYw",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "geYJwlh7FY",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "n4ayopJ7b7D_4KefcRcb",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "https://nid.naver.com/oauth2.0/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "https://nid.naver.com/oauth2.0/authorize",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:8080/login/oauth2/code/naver",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "Naver API",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userid\" : \"ssookkookk@naver.com\",\r\n    \"nickname\" : \"수나수나캉\",\r\n    \"tel\" : \"010-6265-0000\",\r\n    \"addr1\" : \"부산 강서구\",\r\n    \"addr2\" : \"송삼\",\r\n    \"zipcode\" : \"123456\",\r\n    \"profileImg\" : \"/no_img.png\",\r\n    \"nowPassword\" : \"$2a$10$9AAKd0uGnm0LHvSIGSP6Te7LkDGOqKXKnaAiVEFoUU6sK2BgYpRr6\",\r\n    \"newPassword\" : \"kangsuna0289!!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://i8e208.p.ssafy.io/api/account/update",
+							"protocol": "https",
+							"host": [
+								"i8e208",
+								"p",
+								"ssafy",
+								"io"
+							],
+							"path": [
+								"api",
+								"account",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "회원 탈퇴 O",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://i8e208.p.ssafy.io/api/account/signout",
+							"protocol": "https",
+							"host": [
+								"i8e208",
+								"p",
+								"ssafy",
+								"io"
+							],
+							"path": [
+								"api",
+								"account",
+								"signout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "로그아웃 O",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://i8e208.p.ssafy.io/api/account/logout",
+							"protocol": "https",
+							"host": [
+								"i8e208",
+								"p",
+								"ssafy",
+								"io"
+							],
+							"path": [
+								"api",
+								"account",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\" : \"5000\",\r\n    \"payType\" : \"1\",\r\n    \"celebFrom\" : \"강수나\",\r\n    \"celebTel\" : \"010-6265-0289\",\r\n    \"celebContent\" : \"gggg\",\r\n    \"celebImgUrl\" : \"test\",\r\n    \"giftId\" : 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:10080/api/celebrate",
+							"host": [
+								"localhost"
+							],
+							"port": "10080",
+							"path": [
+								"api",
+								"celebrate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "유저 api Copy",
+			"item": [
+				{
+					"name": "이메일 인증 O",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "email",
+								"value": "ssookkookk@naver.com",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "ssookkookk@naver.com",
+									"type": "default",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/account/sendEmailAuth?email=ssookkookk@naver.com",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"sendEmailAuth"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "ssookkookk@naver.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "일반 회원가입 O",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "userId",
+								"value": "acrnm148@gmail.com",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "kangsuna0289!",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "addr1",
+								"value": "",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userid\" : \"ssookkookk@naver.com\",\r\n    \"password\" : \"kangsuna0289!\",\r\n    \"addr1\" : \"부산시 해운대구\",\r\n    \"addr2\" : \"104동 402호\",\r\n    \"birthYear\" : \"1999\",\r\n    \"birth\" : \"0923\",\r\n    \"gender\" : \"F\",\r\n    \"tel\" : \"010-6265-0289\",\r\n    \"email\" : \"ssookkookk@naver.com\",\r\n    \"username\" : \"강수나\",\r\n    \"nickname\" : \"수나캉\",\r\n    \"zipcode\" : \"123456\",\r\n    \"authToken\" : \"61f20a26-5f0e-432a-9149-99478e4146b9\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/account/signin",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "일반 로그인 O",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userid\" : \"ssookkookk@naver.com\",\r\n    \"password\" : \"kangsuna0289!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/account/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "kakao 코드 발급  O",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessTokenUrl",
+									"value": "https://kauth.kakao.com/oauth/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "https://kauth.kakao.com/oauth/authorize",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:8080/login/oauth2/code/kakao",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "af5un2n5wi857RPKyB7wBFPKhjBBebd4",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "097d883a03c0da953d919d990701da5f",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "Kakao API",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://kauth.kakao.com/oauth/authorize?client_id=097d883a03c0da953d919d990701da5f&redirect_uri=http://localhost:8080/login/oauth2/code/kakao&response_type=code",
+							"protocol": "https",
+							"host": [
+								"kauth",
+								"kakao",
+								"com"
+							],
+							"path": [
+								"oauth",
+								"authorize"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "097d883a03c0da953d919d990701da5f"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:8080/login/oauth2/code/kakao"
+								},
+								{
+									"key": "response_type",
+									"value": "code"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "kakao 로그인  O",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "scope",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "https://kauth.kakao.com/oauth/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "https://kauth.kakao.com/oauth/authorize",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "af5un2n5wi857RPKyB7wBFPKhjBBebd4",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "097d883a03c0da953d919d990701da5f",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:8080/login/oauth2/code/kakao",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "Kakao API",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/account/auth/login/kakao?code=puiWop6ESY_F1tRrVYqncnvDHiCO5P_dmbZ35luLvdi5BFkeHOLSpQl3Y-Opv47gs4ONSgo9dVwAAAGF4Ysfnw",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"auth",
+								"login",
+								"kakao"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "puiWop6ESY_F1tRrVYqncnvDHiCO5P_dmbZ35luLvdi5BFkeHOLSpQl3Y-Opv47gs4ONSgo9dVwAAAGF4Ysfnw"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Naver 코드 발급  O",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://nid.naver.com/oauth2.0/authorize?client_id=n4ayopJ7b7D_4KefcRcb&redirect_uri=http://localhost:8080/login/oauth2/code/naver&response_type=code",
+							"protocol": "https",
+							"host": [
+								"nid",
+								"naver",
+								"com"
+							],
+							"path": [
+								"oauth2.0",
+								"authorize"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "n4ayopJ7b7D_4KefcRcb"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:8080/login/oauth2/code/naver"
+								},
+								{
+									"key": "response_type",
+									"value": "code"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Naver 로그인  O",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/account/auth/login/naver?code=H8BZAWjxo98GRC5NML",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"auth",
+								"login",
+								"naver"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "H8BZAWjxo98GRC5NML"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Google 코드 발급  O",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "tokenName",
+									"value": "Google API",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:8080/login/oauth2/code/google",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "https://www.googleapis.com/auth/cloud-platform",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "https://accounts.google.com/o/oauth2/token",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "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",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "417043208647-4staa1cqmcp9bph79l9tv7jusva0tmia.apps.googleusercontent.com",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "https://accounts.google.com/o/oauth2/auth",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "acrnm148@gmail.com",
+								"type": "default"
+							},
+							{
+								"key": "password",
+								"value": "kangsuna0289!",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://accounts.google.com/o/oauth2/v2/auth?response_type=code&scope=openid%20email&client_id=417043208647-4staa1cqmcp9bph79l9tv7jusva0tmia.apps.googleusercontent.com&redirect_uri=http://localhost:8080/login/oauth2/code/google\n",
+							"protocol": "https",
+							"host": [
+								"accounts",
+								"google",
+								"com"
+							],
+							"path": [
+								"o",
+								"oauth2",
+								"v2",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "response_type",
+									"value": "code"
+								},
+								{
+									"key": "scope",
+									"value": "openid%20email"
+								},
+								{
+									"key": "client_id",
+									"value": "417043208647-4staa1cqmcp9bph79l9tv7jusva0tmia.apps.googleusercontent.com"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:8080/login/oauth2/code/google\n"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Google 로그인",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/account/auth/login/google?code=4/0AWgavdcmOd0ZiaIaD1b-NoebOV6txTTa4DK09VTpkVMeIR9hvlQTa9KCyLxpo1HE4mEX_g",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"auth",
+								"login",
+								"google"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "4/0AWgavdcmOd0ZiaIaD1b-NoebOV6txTTa4DK09VTpkVMeIR9hvlQTa9KCyLxpo1HE4mEX_g"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "회원 정보 조회 O",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_tutorial_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/account/userInfo",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"userInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "회원 정보 수정",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "tokenType",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNTQzNTA5NTU0IiwiaWQiOjEsImV4cCI6MTY3NDQ2MTg5MSwidXNlcmlkIjoiMjU0MzUwOTU1NCJ9.MXkgpGudHcHDWRrTRW5xfr-hMtALjx6vQWjQRtkOMJr6gf-GkMqiLuDKV70QtU7sFsSfcQgE_6GrbBT7I9XvYw",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "geYJwlh7FY",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "n4ayopJ7b7D_4KefcRcb",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "https://nid.naver.com/oauth2.0/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "https://nid.naver.com/oauth2.0/authorize",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:8080/login/oauth2/code/naver",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "Naver API",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/account/userInfo",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"userInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "회원 탈퇴",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "tokenType",
+									"value": "Bearer",
+									"type": "string"
+								},
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNTQzNTA5NTU0IiwiaWQiOjEsImV4cCI6MTY3NDQ0MTE5OCwidXNlcmlkIjoiMjU0MzUwOTU1NCJ9.oiSfFT2vRCPrbCmR29ctp_UqgE6GKCLH9cq28_OD7QQcSgKTBp9UfF70Sk0cSB1_UsJIh2pd83Q3_8V8mQNvOg",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "geYJwlh7FY",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "n4ayopJ7b7D_4KefcRcb",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "https://nid.naver.com/oauth2.0/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "https://nid.naver.com/oauth2.0/authorize",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:8080/login/oauth2/code/naver",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "Naver API",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://kapi.kakao.com/v2/api/talk/memo/default/send",
+							"protocol": "https",
+							"host": [
+								"kapi",
+								"kakao",
+								"com"
+							],
+							"path": [
+								"v2",
+								"api",
+								"talk",
+								"memo",
+								"default",
+								"send"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "로그아웃",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Google 코드 발급  O",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "tokenName",
+									"value": "Google API",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:8080/login/oauth2/code/google",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "https://www.googleapis.com/auth/cloud-platform",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "https://accounts.google.com/o/oauth2/token",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "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",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "417043208647-4staa1cqmcp9bph79l9tv7jusva0tmia.apps.googleusercontent.com",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "https://accounts.google.com/o/oauth2/auth",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "acrnm148@gmail.com",
+								"type": "default"
+							},
+							{
+								"key": "password",
+								"value": "kangsuna0289!",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://accounts.google.com/o/oauth2/v2/auth?response_type=code&scope=openid%20email&client_id=417043208647-4staa1cqmcp9bph79l9tv7jusva0tmia.apps.googleusercontent.com&redirect_uri=http://localhost:8080/login/oauth2/code/google\n",
+							"protocol": "https",
+							"host": [
+								"accounts",
+								"google",
+								"com"
+							],
+							"path": [
+								"o",
+								"oauth2",
+								"v2",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "response_type",
+									"value": "code"
+								},
+								{
+									"key": "scope",
+									"value": "openid%20email"
+								},
+								{
+									"key": "client_id",
+									"value": "417043208647-4staa1cqmcp9bph79l9tv7jusva0tmia.apps.googleusercontent.com"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:8080/login/oauth2/code/google\n"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Google 로그인",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/account/auth/login/google?code=4/0AWgavdcmOd0ZiaIaD1b-NoebOV6txTTa4DK09VTpkVMeIR9hvlQTa9KCyLxpo1HE4mEX_g",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"auth",
+								"login",
+								"google"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "4/0AWgavdcmOd0ZiaIaD1b-NoebOV6txTTa4DK09VTpkVMeIR9hvlQTa9KCyLxpo1HE4mEX_g"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

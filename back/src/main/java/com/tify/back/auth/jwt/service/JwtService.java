@@ -6,6 +6,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.tify.back.auth.jwt.JwtProperties;
 import com.tify.back.auth.jwt.JwtToken;
 import com.tify.back.auth.jwt.refreshToken.RefreshToken;
+import com.tify.back.auth.jwt.refreshToken.RefreshTokenRepository;
 import com.tify.back.model.users.User;
 import com.tify.back.repository.users.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class JwtService {
 
     private final JwtProviderService jwtProviderService;
     private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     /**
      * access, refresh 토큰 생성
@@ -99,6 +101,7 @@ public class JwtService {
 
         //전달받은 refresh 토큰과 DB의 refresh 토큰이 일치하는지 확인
         RefreshToken findRefreshToken = sameCheckRefreshToken(user, refreshToken);
+        System.out.println("일치하는 refreshToken:"+findRefreshToken);
 
         //refresh 토큰이 만료되지 않았으면 access 토큰이 null 이 아니다.
         String accessToken = jwtProviderService.validRefreshToken(findRefreshToken);
@@ -134,11 +137,13 @@ public class JwtService {
      * json response 부분
      */
     //로그인시 응답 json response
-    public Map<String , String> successLoginResponse(JwtToken jwtToken, String userid) {
-        Map<String, String> map = new LinkedHashMap<>();
+    public Map<String , Object> successLoginResponse(JwtToken jwtToken, User user) {
+        Map<String, Object> map = new LinkedHashMap<>();
         map.put("status", "200");
         map.put("message", "accessToken, refreshToken이 생성되었습니다.");
-        map.put("userid", userid);
+        map.put("userSeq", user.getId());
+        map.put("userid", user.getUserid());
+        map.put("email", user.getEmail());
         map.put("accessToken", jwtToken.getAccessToken());
         map.put("refreshToken", jwtToken.getRefreshToken());
         return map;
@@ -161,14 +166,15 @@ public class JwtService {
     }
 
     //refresh 토큰 재발급 response
-    public Map<String, String> recreateTokenResponse(JwtToken jwtToken, String userid) {
-        Map<String ,String > map = new LinkedHashMap<>();
+    public Map<String, Object> recreateTokenResponse(JwtToken jwtToken, User user) {
+        Map<String ,Object > map = new LinkedHashMap<>();
         map.put("status", "200");
         map.put("message", "refresh, access 토큰이 재발급되었습니다.");
-        map.put("userid", userid);
+        map.put("userSeq", user.getId());
+        map.put("userid", user.getUserid());
+        map.put("email", user.getEmail());
         map.put("accessToken", jwtToken.getAccessToken());
         map.put("refreshToken", jwtToken.getRefreshToken());
         return map;
     }
-
 }

@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+.back-botton{
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.4em;
+    line-height: 22px;
+    color: #A1A3A2;
+}
+.thanks-page-con-container{
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.thanks-page-container{
+    width: 90%;
+    border: 1px solid gray;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.con-thanks-container{
+    width: 100%;
+    border: 1px solid rgb(72, 96, 182);
+    min-height: 890px;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.con-card-detail{
+    display: flex;
+    align-items: center;
+}
+.con-card{
+    background-image: url('../assets/conCard.svg');
+    height: 38em;
+    width: 422px;
+    padding: 10px;
+    background-size: cover;
+    /* https://user-images.githubusercontent.com/87971876/214236782-7e8171df-a2cc-46ce-9ffc-6ecc2061de33.svg */
+}
+.con-photo{
+    width: inherit - 20px;
+    min-height: 15em;
+    border: 1px solid blue;
+}
+.con-text{
+    width: inherit - 20px;
+    min-height: 17em;
+    border: 1px solid aqua;
+    margin-top: 1em;
+
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 200%;
+    color: #636564;
+}
+.userName{
+    width: inherit - 20px;
+    text-align: end;
+}
+
+.tofrom{
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 14px;
+    color: #828483;
+    
+}
+
+.thanks-card-container{
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    width: 422px;
+    
+}
+.thanks-card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 422px;
+}
+
+.thanks-input{
+    width: inherit;
+    min-height: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    margin-top: 10px;
+}
+.thanks-input label{
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 14px;
+    /* identical to box height */
+
+
+    /* text/600 */
+
+    color: #4F5150;
+    padding: 5px;
+}
+.thanks-input input{
+    height: 52px;
+    border: solid 1px #C1C1C1;
+    border-radius: 8px;
+    margin-top: 7px;
+}
+.thanks-input textarea{
+    border: solid 1px #C1C1C1;
+    border-radius: 8px;
+    margin-top: 7px;
+}
+
+.thanks-photo-btn{
+    width: inherit-20px;
+    height: 150px;
+    border: solid 1px #BBDAF7;
+    border-radius: 8px;
+    margin-top: 7px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.thanks-photo-btn h1{
+    font-size: 88px;
+    color: #BBDAF7;
+}
+
+.thanks-form-btn{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 10px;
+
+    background: #BBDAF7;
+    border-radius: 10px;
+    height: 52px;
+    margin-top: 20px;
+}
+
+.form-title{
+    color: #96AEC6;
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22.652px;
+    line-height: 23px;
+    margin-bottom: 25px;
+}
+
+.img-input{
+    display: none;
+}

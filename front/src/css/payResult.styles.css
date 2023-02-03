@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+.pay-result-container{
+    width: 100vw;
+    height: 50vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.pay-result{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.pay-result-container h1{
+
+}
+.pay-result-container p{
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-size: 14px;
+    line-height: 14px;
+    color: #E52E56;
+    line-height: 22px;
+}
+.fin{
+    font-weight: 800;
+}
+.pay-result-container a{
+    background: radial-gradient(71.83% 71.82% at 49.82% 57.27%, #FE3360 0%, #FE3360 36.98%, rgba(254, 51, 96, 0.791562) 55.73%, rgba(254, 51, 96, 0.574062) 67.71%, rgba(254, 51, 96, 0.339394) 80.21%, rgba(254, 51, 96, 0.28) 87.5%, rgba(255, 255, 255, 0.42) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+    border-radius: 10px;
+    width: 281px;
+    height: 52px;
+
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 22.652px;
+    line-height: 22px;
+
+    color: #FFFFFF;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 10px;
+}

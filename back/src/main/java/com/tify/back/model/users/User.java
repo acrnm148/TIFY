@@ -104,6 +104,9 @@ public class User {
     public void updateRefreshToken(RefreshToken refreshToken) {
         this.jwtRefreshToken = refreshToken;
     }
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 
     /**
      * 사용자가 다양한 권한을 가지고 있을수 있음
