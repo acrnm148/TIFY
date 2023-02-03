@@ -72,15 +72,6 @@ public class UserService {
         if (validateDuplicated(requestDto.getUserid())) {
             return null;
         }
-        /*
-        //이메일 인증 false로 초기화
-        EmailAuth emailAuth = emailRepository.save(
-                EmailAuth.builder()
-                        .email(requestDto.getEmail())
-                        .authToken(UUID.randomUUID().toString())
-                        .expired(false)
-                        .build());
-        */
 
         Boolean emailState = false;
         if (emailRepository.findByEmail(requestDto.getEmail()).size() != 0) {
@@ -271,11 +262,9 @@ public class UserService {
             System.out.println("현재 비밀번호가 일치하지 않습니다.");
             return null;
         }
-
         userRepository.save(user);
         return user;
     }
-
 
     /**
      * 회원 탈퇴

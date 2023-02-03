@@ -59,7 +59,6 @@ public class UserApiController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final KakaoService kakaoService;
     private final NaverService naverService;
-    private final GoogleService googleService;
     private final JwtProviderService jwtProviderService;
 
     private final RedisTemplate<String, String> redisTemplate;

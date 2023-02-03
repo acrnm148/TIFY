@@ -37,21 +37,13 @@ public class EmailService {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
-
-            //title
-            helper.setSubject("[TIFY] 회원가입 이메일 인증");
-
-            //content html
             String htmlStr = "<h2> 회원가입 이메일 인증</h2>"
                     + "아래 버튼을 클릭해서 회원가입을 진행해주세요.<br>"
                     + "<a href='http://localhost:8081/api/account/confirmEmail?email="+email+"&authToken="+authToken+"' > 인증하기 </a>";
 
-            //content setting
+            helper.setSubject("[TIFY] 회원가입 이메일 인증"); //title
             helper.setText(htmlStr, true);
-
-            //to
             helper.setTo(new InternetAddress(email, email, "utf-8"));
-
             javaMailSender.send(message);
 
         } catch (MessagingException e) {
@@ -70,20 +62,13 @@ public class EmailService {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
 
-            //title
             helper.setSubject("[TIFY] 고객님의 임시 비밀번호입니다. ");
-
-            //content html
             String htmlStr = "<h2> 임시 비밀번호 발급 안내 </h2>"
                     + "안녕하세요,"+name+"님!<br> TIFY 임시 비밀번호 안내 관련 이메일입니다.<br> 고객님의 임시 비밀번호는 [<strong>"
                     + tempPw + "</strong>] 입니다. 로그인 후 비밀번호를 변경해주세요.";
 
-            //content setting
             helper.setText(htmlStr, true);
-
-            //to
             helper.setTo(new InternetAddress(email, email, "utf-8"));
-
             javaMailSender.send(message);
 
         } catch (MessagingException e) {
@@ -100,9 +85,7 @@ public class EmailService {
     public String getTempPassword(){
         char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
                 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-
         String str = "";
-
         // 문자 배열 길이의 값을 랜덤으로 10개를 뽑아 구문을 작성함
         int idx = 0;
         for (int i = 0; i < 10; i++) {
