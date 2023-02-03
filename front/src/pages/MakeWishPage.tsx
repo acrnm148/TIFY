@@ -41,12 +41,7 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-//[TODO] 카드 선택 옵션중에 한가지만 하고 선택된 카드 표시 V
-// [TODO] 주소 찾기할때 우편번호 자동으로 입력되도록 V
-// [TODO] 찜하기목록 불러오기 V
 // [TODO] 카테고리 선택 mui..
-// [TODO] 완료 페이지로 위시 정보 넘기기 
-// [TODO] 위시 총 금액
 
 export function MakeWishPage() {
   // const [userId , setUserId] = useState(104);
