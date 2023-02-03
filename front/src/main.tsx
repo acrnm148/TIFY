@@ -8,7 +8,6 @@ import { Provider } from 'react-redux';
 // import { configureStore } from '@reduxjs/toolkit';
 import store from './store/store';
 import { CookiesProvider } from 'react-cookie';
-
 // let store = configureStore({
 //   reducer: {
 //     // user : userSlice.reducer

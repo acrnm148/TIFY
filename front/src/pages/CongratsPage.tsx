@@ -21,7 +21,7 @@ export function CongratsPage() {
     const [wishGiftList, setWishGiftList] = useState([
         {
             id : 1,
-            img : 'https://user-images.githubusercontent.com/87971876/215254369-d144dcd7-00ae-4f1c-b740-c219c6e30821.png',
+            img : 'https://user-images.githubusercontent.com/87971876/216546104-5294c903-7f29-4483-b58a-855cc2fe4715.png',
             name : '임시선물1',
             achieved81 : 81 *0.2,
             achieved : 20,

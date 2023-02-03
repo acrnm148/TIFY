@@ -47,6 +47,8 @@ import { GiftHubDetailPage } from './pages/GiftHubDetailPage';
 import { useReducer } from 'react';
 import { Login } from './modules/Auth/LogIn';
 
+import ScrollTop from '../src/interface/scroll';
+
 // const initialState = {
 //   authenticated: false,
 //   token: null,
@@ -90,6 +92,7 @@ function App() {
   // 비로그인만 가능한 건 PublicRoute안에 넣기
   return (
     <BrowserRouter>
+      <ScrollTop />
       <Header />
       <Routes>
         <Route element={<PrivateRoute />}>

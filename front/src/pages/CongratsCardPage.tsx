@@ -33,7 +33,10 @@ export function CongratsCardPage(){
 
     //이용약관동의 선택여부
     const [isChecked, setIsChecked] = useState(false)
-    // file upload
+
+// file upload----------------------------------------------------------------
+    const [imgUrl, setImgUrl] = useState<string>('')
+    // div 박스 클릭하면 이미지 input이 클릭되도록 useRef사용
     const inputRef = useRef<HTMLInputElement | null>(null);
     const API_HOST = ''
     const onUploadImageButtonClick = useCallback(() => {
@@ -42,32 +45,32 @@ export function CongratsCardPage(){
         } 
         inputRef.current.click();
     }, []);
-
+    // 이미지 업로드 버튼 클릭시 발생하는 이벤트
     const onUploadImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) {
         return;
     }
 
-  const formData = new FormData();
-  formData.append('image', e.target.files[0]);
+    // 파일을 formData로 만들어주기
+    const formData = new FormData();
+    formData.append('file', e.target.files[0]);
 
-  axios({
-    baseURL: API_HOST,
-    url: '/images/:username/thumbnail',
-    method: 'POST',
-    data: formData,
-    headers: {
-        'Content-Type': 'multipart/form-data',
-    },
-    })
-    .then(response => {
-        console.log(response.data);
-    })
-    .catch(error => {
-        console.error(error);
-    });
+    // 3. imgFile 을 보내서 S3에 저장된 url받기 
+    const getImgUrl = async() =>{
+        const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
+        await axios.post(API_URL, formData, {
+          headers: {'Content-Type' : 'multipart/form-data'},
+        }).then((con) => {
+          console.log('이미지주소불러오기 성공', con.data)
+          setImgUrl(con.data)
+        }).catch((err) => {
+            console.log('이미지주소불러오기 실패', err)
+        })
+      }
+      getImgUrl();
     }, []);
 // end file upload----------------------------------------------------------------
+
     const amountSelected =(i:any) =>{
         console.log(payAmount[i])
         setAmount(payAmountNum[i])
@@ -85,25 +88,6 @@ export function CongratsCardPage(){
         else{
             return false
         }
-    }
-    const Payment = () =>{
-        return(
-            <div className="payment-selection">
-                <p className="selection-label">결제수단 선택</p>
-                <div className="payment-selection-buttons">
-                    <div 
-                        className={`payment-btn kakao ${checkPay('kakao')? 'selected-payment':''}`} 
-                        onClick={()=> setPayment('kakao')}>
-                            카카오페이
-                    </div>
-                    <div 
-                        className={`payment-btn card-pay ${checkPay('card')? 'selected-payment':''}`}
-                        onClick={()=> setPayment('card')}>
-                            카드 결제
-                    </div>
-                </div>
-            </div>
-        )
     }
 
     const GiftLoadingIcon = () =>{
@@ -155,64 +139,12 @@ export function CongratsCardPage(){
     const onChangeContents = (e:any) => {
         setCardContents(e.target.value);
     }
-    // const MakeCardComponent = () =>{
-    //     return(
-    //         <div className='thanks-card-container'>
-    //     <div className='thanks-card'>
-    //       <div className='thanks-input'>
-    //         <label htmlFor="제목">보내는 사람</label>
-    //         <input className='input-small'type="text" name='제목' value={cardFrom} onChange={onChangeFrom} placeholder="받는 사람이 알 수 있도록 이름을 입력해주세요!"/>
-    //       </div>
-    //       <div className='thanks-input'>
-    //         <label htmlFor="연락처">연락처</label>
-    //         <input className='input-small'type="text" name='연락처' value={cardPhone} onChange={onChangePhone} placeholder="000-0000-0000"/>
-    //       </div>
-    //       <div  className='thanks-input'>
-    //         <label htmlFor="내용">축하메세지</label>
-    //         <textarea name="내용" placeholder='카드 내용을 입력하세요' value={cardContents} onChange={onChangeContents}></textarea>
-    //       </div>
-    //       <div className='thanks-input'>
-    //         <label htmlFor="">사진</label>
-    //         {/* <input className='img-input' type="file" accept="image/*" ref={inputRef} onChange={onUploadImage} name="thumbnail"/>
-    //         <div className={`thanks-photo-btn`} onClick={onUploadImageButtonClick}>
-    //           <h1>+</h1>
-    //         </div> */}
-    //       </div>
-    //     </div>
-        
-    //   </div>
-    //     )
-    // }
+
     function setCheckbox(){
         setIsChecked(!isChecked)
         console.log('이용약관..', isChecked);
     }
-        // const GiftInfo = () => {
-    //     return(
-    //         <div className="gift-info">
-    //             <img src={state.selectGift.img} alt="" />
-    //             <div className="name_and_price">
-    //                 <h1>{state.selectGift.name}</h1>
-    //                 <p>{state.selectGift.price}</p>
-    //             </div>
-    //             <div className="underline"></div>
-    //             <div className="pay-amount-selection">
-    //                 <p className="selection-label">축하 금액 선택</p>
-    //                 <div className="pay-amount-selection-btns">
-    //                     {
-    //                         payAmount.map((amt, i:number) => (
-    //                             <button onClick={()=>{amountSelected(i)}}>{amt}</button>
-    //                         ))
-    //                     }
-    //                 </div>
-    //             </div>
-    //             <div className="pay-amount-selected">
-    //                 <label htmlFor=""></label>
-    //                 <input className="" type="text" placeholder='축하금액' value={amount} onChange={getAmount}/>
-    //             </div>
-    //         </div>
-    //     )
-    // }
+
     return (
         <>
             <TapNameKor
@@ -223,8 +155,11 @@ export function CongratsCardPage(){
             <div className="congrats-card-page-containger">
                 <div className="congrats-card-page-containger-border">
                     <div className="congrats-card-page-left">
+                    <GiftLoadingIcon />
                     <div className="gift-info">
-                            <img src={state.selectGift.img} alt="" />
+                        <div className="gift-img-box-con">
+                            <img className="gift-img-box" src={state.selectGift.img} alt="" />
+                        </div>
                             <div className="name_and_price">
                                 <h1>{state.selectGift.name}</h1>
                                 <p>{state.selectGift.price}</p>
@@ -245,20 +180,14 @@ export function CongratsCardPage(){
                                 <input className="" type="text" placeholder='축하금액' value={amount} onChange={getAmount}/>
                             </div>
                         </div>
-                        <Payment />
                     </div>
                     <div className="middle-line-vertical"></div>
                     <div className="congrats-card-page-right">
-                        <GiftLoadingIcon />
                         <div className='thanks-card-container'>
                             <div className='thanks-card'>
                             <div className='thanks-input'>
                                 <label htmlFor="제목">보내는 사람</label>
                                 <input className='input-small'type="text" name='제목' value={cardFrom} onChange={onChangeFrom} placeholder="받는 사람이 알 수 있도록 이름을 입력해주세요!"/>
-                            </div>
-                            <div className='thanks-input'>
-                                <label htmlFor="연락처">연락처</label>
-                                <input className='input-small'type="text" name='연락처' value={cardPhone} onChange={onChangePhone} placeholder="000-0000-0000"/>
                             </div>
                             <div  className='thanks-input'>
                                 <label htmlFor="내용">축하메세지</label>
@@ -267,9 +196,13 @@ export function CongratsCardPage(){
                             <div className='thanks-input'>
                                 <label htmlFor="">사진</label>
                                 <input className='img-input' type="file" accept="image/*" ref={inputRef} onChange={onUploadImage} name="thumbnail"/>
-                                <div className={`thanks-photo-btn`} onClick={onUploadImageButtonClick}>
-                                <h1>+</h1>
+                                <div className={`thanks-photo-btn`} onClick={onUploadImageButtonClick} style={{"backgroundImage":`url(${imgUrl})`,"backgroundSize":"contain", "backgroundRepeat":"no-repeat", "backgroundPosition":"center"}}>
+                                {!imgUrl && <h1>+</h1>}
                                 </div>
+                            </div>
+                            <div className='thanks-input'>
+                                <label htmlFor="연락처">연락처</label>
+                                <input className='input-small'type="text" name='연락처' value={cardPhone} onChange={onChangePhone} placeholder="000-0000-0000"/>
                             </div>
                             </div>
                             

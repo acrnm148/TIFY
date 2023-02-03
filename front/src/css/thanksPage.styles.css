@@ -100,6 +100,9 @@
     justify-content: left;
     margin-top: 10px;
 }
+.thanks-input textarea{
+    min-height: 200px;
+}
 .thanks-input label{
     font-family: 'NanumGothic';
     font-style: normal;
@@ -128,7 +131,7 @@
 
 .thanks-photo-btn{
     width: inherit-20px;
-    height: 150px;
+    height: 200px;
     border: solid 1px #BBDAF7;
     border-radius: 8px;
     margin-top: 7px;
@@ -169,4 +172,5 @@
 
 .img-input{
     display: none;
+    min-height: 200px;
 }
