@@ -12,7 +12,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,8 +26,8 @@ public class GiftController {
     private final ProductService productService;
 
     @GetMapping("/detail/{id}")
-    public Gift getGift(@PathVariable Long id) {
-        return giftService.getGiftById(id);
+    public Map<String,Object> getGift(@PathVariable Long id) {
+        return giftService.getGiftInfoById(id);
     }
 
 //    @PostMapping
@@ -41,6 +43,8 @@ public class GiftController {
     @PutMapping("/detail/{id}")
     public Gift updateGift(@PathVariable Long id, @RequestBody Gift gift) {
         Gift existingGift = giftService.getGiftById(id);
+        existingGift.setGiftUrl(gift.getGiftUrl());
+        existingGift.setGiftImgUrl(gift.getGiftImgUrl());
         existingGift.setUserOption(gift.getUserOption());
         existingGift.setIdx(gift.getIdx());
         existingGift.setFinishYN(gift.getFinishYN());
