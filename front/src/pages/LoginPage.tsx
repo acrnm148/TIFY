@@ -18,6 +18,9 @@ import { SignOut } from '../modules/Auth/SignOut';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
 
+import axios from 'axios';
+import FirebaseAuth from '../components/FirebaseAuth';
+
 type LoginResponse = {
   refresh_token: string;
   access_token: string;
@@ -56,6 +59,18 @@ export function LoginPage() {
 
           console.log('로그인 성공!!');
 
+          //로그인 성공시 백으로 firebase customized token 요청
+          //받아오면 알아서 쿠키에 refresh_token 으로 저장됨.
+          axios.post('http://localhost:8081/fcm',{
+            email: userid,
+          }).then((res) => {
+            console.log(res.data);
+            console.log("성공!");
+            FirebaseAuth(res.data);
+          })
+          .catch((err) => {console.log});
+
+          
           return navigate('/');
         }
       })

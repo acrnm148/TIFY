@@ -15,6 +15,9 @@ import axios from 'axios';
 import { removeCookieToken } from '../modules/Auth/Cookie';
 import { DELETE_TOKEN } from '../store/Auth';
 
+import AlarmDropdown from '../components/AlarmDropdown';
+
+
 export function Header() {
   const [showWishDetail, setShowWishDetail] = useState<boolean>(false);
   const [hideWishDetail, setHideWishDetail] = useState<boolean>(true);
@@ -98,7 +101,8 @@ export function Header() {
           <img src={heart} className="logo logo-right" alt="Tify logo" />
         </NavLink>
         <NavLink to="/alram">
-          <img src={alertIcon} className="logo logo-right" alt="Tify logo" />
+          {/* <img src={alertIcon} className="logo logo-right" alt="Tify logo" /> */}
+          <AlarmDropdown/>
         </NavLink>
         <button onClick={handleLogOut}>
           <img src={logout} className="logo logo-right" alt="Tify logo" />
