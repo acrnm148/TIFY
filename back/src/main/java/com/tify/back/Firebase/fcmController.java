@@ -6,10 +6,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,10 +27,11 @@ public class fcmController {
         return customToken;
     }
 
-    @GetMapping("/addData")
-    public Map<String, Object> addData() {
+    @PostMapping("/addData")
+    public Map<String, Object> addData(String collection) {
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://tify-noti-default-rtdb.firebaseio.com/");
-        DatabaseReference reference = database.getReference("test/tify/rkdrlgks321-naver-com");
+        System.out.println(collection);
+        DatabaseReference reference = database.getReference("test/tify/"+collection);
         Map<String, Object> updates = new HashMap<>();
         updates.put("data", "Hello, World!");
         updates.put("time", System.currentTimeMillis());
@@ -54,5 +52,21 @@ public class fcmController {
             }
         });
         return updates;
+    }
+
+    @DeleteMapping("/deleteData/{key}")
+    public void deleteData(@PathVariable String key) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://tify-noti-default-rtdb.firebaseio.com/");
+        DatabaseReference reference = database.getReference("test/tify/rkdrlgks321-naver-com").child(key);
+        reference.removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError error, DatabaseReference ref) {
+                if (error == null) {
+                    System.out.println("Data deleted successfully");
+                } else {
+                    System.out.println("Data delete failed: " + error.getMessage());
+                }
+            }
+        });
     }
 }
