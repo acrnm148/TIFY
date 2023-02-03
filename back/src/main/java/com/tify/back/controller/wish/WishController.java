@@ -37,6 +37,11 @@ public class WishController {
     public Wish wishList(@RequestParam(value = "wishId", required = true) Long wishId){
         return wishService.wishDetailId(wishId);
     }
+
+    @GetMapping("/detail/user")
+    public Wish wisharray(@RequestParam(value = "userId", required = true) Long userId){
+        return wishService.wishUserId(userId);
+    }
     @GetMapping
     public List<Wish> Wish() {
         return wishRepository.findAll();
