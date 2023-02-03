@@ -22,9 +22,9 @@ public class Gift {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "gift_id")
     private Long id;
-    @OneToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+
+    @Column(name = "product_id")
+    private Long productId;
     @JsonIgnore // json 할때 무시하고 json 생성, image에서 product는 mapping용이면 충분
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="wish_id") //OrderItem은 하나의 Order만 가진다. => order_id 매핑

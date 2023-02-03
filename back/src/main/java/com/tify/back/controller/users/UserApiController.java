@@ -34,12 +34,15 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 
 @Tag(name = "user", description = "유저 API")
@@ -56,7 +59,6 @@ public class UserApiController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final KakaoService kakaoService;
     private final NaverService naverService;
-    private final GoogleService googleService;
     private final JwtProviderService jwtProviderService;
 
     private final RedisTemplate<String, String> redisTemplate;
@@ -99,14 +101,18 @@ public class UserApiController {
      */
     @Operation(summary = "comfirm email", description = "이메일 인증 완료")
     @GetMapping("/account/confirmEmail")
-    public ResponseEntity<?> confirmEmail(@ModelAttribute EmailAuthRequestDto requestDto) { //json으로 전달이 안됨
+    public ResponseEntity<?> confirmEmail(@ModelAttribute EmailAuthRequestDto requestDto, HttpServletResponse response) throws URISyntaxException { //json으로 전달이 안됨
         System.out.println("전송된 링크 진입");
-        //User user = userService.confirmEmail(requestDto);
         String authToken = userService.confirmEmail(requestDto);
-        //System.out.println("이메일 인증 성공, 이메일 토큰: "+authToken);
-        //return ResponseEntity.ok().body("이메일 인증 성공, 이메일 토큰: "+authToken);
-        return ResponseEntity.ok().body(authToken);
+
+        URI redirectUri = new URI("https://i8e208.p.ssafy.io/join2");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(redirectUri);
+        httpHeaders.add("email", requestDto.getEmail());
+        //httpHeaders.set("email", requestDto.getEmail());
+        return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
     }
+
     /**
      * 이메일 인증 했는지 체크
      */
@@ -286,15 +292,14 @@ public class UserApiController {
      * 비밀번호 찾기
      */
     @PostMapping("/account/findPw")
-    public String findPassword(@RequestParam("email") String email) {
+    public ResponseEntity<?> findPassword(@RequestParam("email") String email) throws URISyntaxException {
         User user = userRepository.findByUserid(email);
         if (user == null) {
             throw new UserLoginException("이메일이 존재하지 않습니다.");
         }
-        userService.sendMailAndChangePassword(email, user.getUsername());
+        userService.sendMailAndChangePassword(user);
         System.out.println("임시 비밀번호로 변경 완료");
-
-        return "redirect:/login";
+        return ResponseEntity.ok().body("임시 비밀번호로 변경 완료");
     }
 
 }

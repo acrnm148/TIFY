@@ -85,6 +85,7 @@ dependencies {
     implementation group: 'com.google.firebase', name: 'firebase-admin', version: '8.1.0'
 
     implementation 'com.amazonaws:aws-java-sdk-s3:1.11.795'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 }
 
 tasks.named('test') {
