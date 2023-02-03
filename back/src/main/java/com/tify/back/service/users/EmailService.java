@@ -39,7 +39,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
             String htmlStr = "<h2> 회원가입 이메일 인증</h2>"
                     + "아래 버튼을 클릭해서 회원가입을 진행해주세요.<br>"
-                    + "<a href='http://localhost:8081/api/account/confirmEmail?email="+email+"&authToken="+authToken+"' > 인증하기 </a>";
+                    + "<a href='https://i8e208.p.ssafy.io/api/account/confirmEmail?email="+email+"&authToken="+authToken+"' > 인증하기 </a>";
 
             helper.setSubject("[TIFY] 회원가입 이메일 인증"); //title
             helper.setText(htmlStr, true);
