@@ -2,6 +2,8 @@ package com.tify.back.service.wish;
 
 import com.tify.back.dto.gifthub.GiftDto;
 import com.tify.back.dto.wish.AddWishDto;
+import com.tify.back.model.friend.Friend;
+import com.tify.back.model.friend.FriendStatus;
 import com.tify.back.model.gifthub.Gift;
 import com.tify.back.model.wish.Wish;
 import com.tify.back.repository.gifthub.ProductRepository;
@@ -53,6 +55,10 @@ public class WishService {
             return false;
         }
     }
+    public List<Wish> getWish(long userId) {
+        return wishRepository.findByUserId(userId);
+    }
+
     public Wish wishDetailId(Long wishId){
         if(wishRepository.findById(wishId).isPresent()){
             return wishRepository.findById(wishId).get();
@@ -62,14 +68,6 @@ public class WishService {
 
     }
 
-    public Wish wishUserId(Long userId){
-        if(wishRepository.findById(userId).isPresent()){
-            return wishRepository.findById(userId).get();
-        }else{
-            return null;
-        }
-
-    }
 
     public String deleteWishById(Long id){
         Wish wish = wishRepository.findById(id).orElse(null);
