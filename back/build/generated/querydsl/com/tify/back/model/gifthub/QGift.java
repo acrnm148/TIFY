@@ -22,9 +22,17 @@ public class QGift extends EntityPathBase<Gift> {
 
     public static final QGift gift = new QGift("gift");
 
+    public final DateTimePath<java.time.LocalDateTime> finishDate = createDateTime("finishDate", java.time.LocalDateTime.class);
+
     public final StringPath finishYN = createString("finishYN");
 
     public final NumberPath<Integer> gathered = createNumber("gathered", Integer.class);
+
+    public final StringPath giftImgUrl = createString("giftImgUrl");
+
+    public final ListPath<GiftOption, QGiftOption> giftOption = this.<GiftOption, QGiftOption>createList("giftOption", GiftOption.class, QGiftOption.class, PathInits.DIRECT2);
+
+    public final StringPath giftUrl = createString("giftUrl");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -34,7 +42,7 @@ public class QGift extends EntityPathBase<Gift> {
 
     public final QOrder order;
 
-    public final QProduct product;
+    public final NumberPath<Long> productId = createNumber("productId", Long.class);
 
     public final NumberPath<Integer> purePrice = createNumber("purePrice", Integer.class);
 
@@ -67,7 +75,6 @@ public class QGift extends EntityPathBase<Gift> {
     public QGift(Class<? extends Gift> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.order = inits.isInitialized("order") ? new QOrder(forProperty("order"), inits.get("order")) : null;
-        this.product = inits.isInitialized("product") ? new QProduct(forProperty("product")) : null;
         this.wish = inits.isInitialized("wish") ? new com.tify.back.model.wish.QWish(forProperty("wish"), inits.get("wish")) : null;
     }
 
