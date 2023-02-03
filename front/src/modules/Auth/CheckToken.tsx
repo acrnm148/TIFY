@@ -8,8 +8,17 @@ import {
   RootState,
   SET_TOKEN,
   SET_USERID,
+  SET_USEREMAIL,
 } from '../../store/Auth';
 import axios from 'axios';
+import { setRefreshToken } from './Cookie';
+
+type TokenType = {
+  access_token: string;
+  refresh_token: string;
+  user_email: string;
+  user_id: number;
+};
 
 export function CheckTokenByKey(key: string) {
   const [isAuth, setIsAuth] = useState('Loaded');
@@ -24,6 +33,11 @@ export function CheckTokenByKey(key: string) {
     expireTime,
     'authenticated, expireTime 이렇습니다!!!',
   );
+
+  // const { userId } = useSelector((state: RootState) => state.authToken.userId);
+  // console.log(userId, 'userId는 이렇습니다!!');
+
+  // console.log(refreshToken, 'refreshToken은 이렇습니다!!!');
 
   useEffect(() => {
     const checkAuthToken = async () => {
@@ -46,9 +60,10 @@ export function CheckTokenByKey(key: string) {
           const response = await requestToken(refreshToken);
 
           if (response) {
-            // const token = response.json.access_token;
-            // dispatch(SET_USERID(token));
-            // dispatch(SET_TOKEN(token));
+            setRefreshToken(response.refresh_token);
+            dispatch(SET_TOKEN(response.access_token));
+            dispatch(SET_USERID(response.user_id));
+            dispatch(SET_USEREMAIL(response.user_email));
             console.log('리프레쉬 성공');
             setIsAuth('Success');
           } else {
@@ -124,16 +139,17 @@ export function CheckTokenByKey(key: string) {
 //   };
 // }
 
-async function requestToken(refreshToken: string) {
-  const { userId } = useSelector((state: RootState) => state.authToken.userId);
-  const dispatch = useDispatch();
+async function requestToken(
+  refreshToken: string,
+): Promise<TokenType | false | undefined> {
+  console.log('useState 시도해보기!!!');
 
   console.log('리프레쉬 요청 보내보기');
 
   try {
     axios
       .post(
-        `https://i8e208.p.ssafy.io/api/refresh/${userId}`,
+        `https://i8e208.p.ssafy.io/api/refresh/`,
         {},
         // 헤더에 리프레쉬 토큰 얹어서 보내야 함.
         { headers: { refreshToken } },
@@ -141,6 +157,17 @@ async function requestToken(refreshToken: string) {
       .then((res) => {
         console.log('리프레쉬 요청한 거 받음');
         console.log(res);
+
+        const tokens: TokenType = {
+          access_token: res.data.accessToken,
+          refresh_token: res.data.refreshToken,
+          user_email: res.data.email,
+          user_id: res.data.userSeq,
+        };
+        console.log(tokens);
+        console.log('토큰 오브젝트 보냅니다. 페이지야 받아라');
+        return tokens;
+
         // console.log(res);
         // console.log(res.data.accessToken);
         // const tokens = {
@@ -154,7 +181,7 @@ async function requestToken(refreshToken: string) {
         // 재발급 성공
         // 리프레쉬 토큰 재설정하기
 
-        return true;
+        // return true;
       });
   } catch (err) {
     console.log(err);
