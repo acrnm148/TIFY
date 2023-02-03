@@ -1,4 +1,5 @@
 import "../css/makeWishPage.styles.css"
+import "../css/giftHubList.styles.css"
 import "../css/styles.css"
 import addHeart from "../assets/addHeart.svg";
 import React, { Component, useCallback, useEffect, useRef, useState } from 'react';
@@ -44,8 +45,8 @@ const style = {
 // [TODO] 카테고리 선택 mui..
 
 export function MakeWishPage() {
-  // const [userId , setUserId] = useState(104);
-  const [userId, setUserId] = useState(useSelector((state: RootState) => state.authToken.userId))
+  const [userId , setUserId] = useState(104);
+  // const [userId, setUserId] = useState(useSelector((state: RootState) => state.authToken.userId))
 
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
@@ -56,9 +57,6 @@ export function MakeWishPage() {
                     'https://user-images.githubusercontent.com/87971876/216435045-ef976fc6-09db-4de6-9f89-c412196b609a.jpg',
                     'https://user-images.githubusercontent.com/87971876/216435046-1ef30270-a505-4f79-8f5e-d41eedaeb3ba.jpg',
                     ]
-                    // 5:'', 
-                    // 6:'',
-                    // 7:''} // [TODO] 카드 디자인하고 주소 보관
   const [category, setCategory] = useState()
   const [title, setTitle] = useState<string>()
   const [content, setContent] = useState<string>()
@@ -83,6 +81,7 @@ export function MakeWishPage() {
   const endDate = dateFomat(range[0].endDate)
 
   const [imgBase64, setImgBase64] = useState(""); // 파일 base64
+  const [imgUrlS3, setImgUrlS3] = useState<string>(""); 
   const [imgFile, setImgFile] = useState(null);	//파일	
   // photo
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -141,7 +140,6 @@ export function MakeWishPage() {
       }
       setTotalPrice(totalPrice+cartList[i].price)
       setTotalProduct([...totalProduct,{"productId" : cartList[i].id}])
-      // console.log(wishCart)
       console.log(totalPrice, totalProduct)
   }
   const CartList = () => {
@@ -195,7 +193,7 @@ export function MakeWishPage() {
             "category":category,
             "startDate" : startDate, 
             "endDate":endDate,
-            // "wishCard": selectedWishCard, //string
+            "wishCard": imgUrlS3, //string
             "addr1": enroll_company.address,
             "addr2":addr2,
           },
@@ -216,9 +214,10 @@ export function MakeWishPage() {
   }
   
   // 사진 등록
+  const formData = new FormData();
   const handleChangeFile = (event:any) => {
     let reader = new FileReader();
-
+    
     reader.onloadend = () => {
       // 2. 읽기가 완료되면 아래코드가 실행됩니다.
       const base64 = reader.result;
@@ -228,9 +227,21 @@ export function MakeWishPage() {
     }
     if (event.target.files[0]) {
       reader.readAsDataURL(event.target.files[0]); // 1. 파일을 읽어 버퍼에 저장합니다.
-      setImgFile(event.target.files[0]); // 파일 상태 업데이트
-      console.log(imgFile, 'imgFile') // 
+      formData.append('file', event.target.files[0]); // 파일 상태 업데이트
     }
+    // 3. imgFile 을 보내서 S3에 저장된 url받기 
+    const getImgUrl = async() =>{
+      const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
+      await axios.post(API_URL, formData, {
+        headers: {'Content-Type' : 'multipart/form-data'},
+      }).then((con) => {
+        console.log('이미지주소불러오기 성공', con.data)
+        setImgUrlS3(con.data)
+      }).catch((err) => {
+          console.log('이미지주소불러오기 실패', err)
+      })
+    }
+    getImgUrl();
   }
   const onUploadImageButtonClick = useCallback(() => {
       inputRef.current?.click();
@@ -365,7 +376,7 @@ export function MakeWishPage() {
                   </div>
                   {imgBase64 &&
                     <div className={`wish-card-item ${selectCard === '-1'? 'selectedCard':''}`} onClick={CardClicked} id="-1">
-                      <img src={imgBase64} alt="등록한사진"  id="-1" />
+                      <img src={imgUrlS3} alt="등록한사진"  id="-1" />
                     </div>
                   }
                   {CardList () }
