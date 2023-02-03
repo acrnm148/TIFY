@@ -75,8 +75,7 @@ public class UserApiController {
     public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto) {
         LoginResponseDto responseDto = userService.login(requestDto);
         if (responseDto == null) {
-            DataResponseDto response = new DataResponseDto(1, "로그인에 실패했습니다.");
-            return ResponseEntity.ok().body(response);//"로그인에 실패했습니다.");
+            return ResponseEntity.ok().body("로그인에 실패했습니다.");//"로그인에 실패했습니다.");
         }
         return ResponseEntity.ok().body(responseDto);
     }
@@ -207,14 +206,14 @@ public class UserApiController {
      */
     /**front-end로 부터 받은 인가 코드 받기 및 사용자 정보 받기,회원가입 */
     @GetMapping("/account/auth/login/kakao")
-    public Map<String,String> KakaoLogin(@RequestParam("code") String code) {
+    public Map<String,Object> KakaoLogin(@RequestParam("code") String code) {
         //access 토큰 받기
         KakaoToken oauthToken = kakaoService.getAccessToken(code);
         //사용자 정보받기 및 회원가입
         User saveUser = kakaoService.saveUser(oauthToken.getAccess_token());
         //jwt토큰 저장
         JwtToken jwtTokenDTO = jwtService.getJwtToken(saveUser.getUserid());
-        return jwtService.successLoginResponse(jwtTokenDTO, saveUser.getUserid());
+        return jwtService.successLoginResponse(jwtTokenDTO, saveUser);
     }
     //test로 직접 인가 코드 받기
     @GetMapping("/login/oauth2/code/kakao")
@@ -227,11 +226,11 @@ public class UserApiController {
      * JWT를 이용한 네이버 로그인
      */
     @GetMapping("/account/auth/login/naver")
-    public Map<String, String> NaverLogin(@RequestParam("code") String code) {
+    public Map<String, Object> NaverLogin(@RequestParam("code") String code) {
         NaverToken oauthToken = naverService.getAccessToken(code);
         User saveUser = naverService.saveUser(oauthToken.getAccess_token());
         JwtToken jwtToken = jwtService.getJwtToken(saveUser.getUserid());
-        return jwtService.successLoginResponse(jwtToken, saveUser.getUserid());
+        return jwtService.successLoginResponse(jwtToken, saveUser);
     }
     @GetMapping("/login/oauth2/code/naver")
     public String NaverCode(@RequestParam("code") String code) {
@@ -245,13 +244,15 @@ public class UserApiController {
      */
     @Operation(summary = "get refresh token", description = "refresh token 재발급")
     @Parameter(description = "userid를 파라미터로 받습니다.")
-    @GetMapping("/refresh/{userid}")
-    public Map<String,String> refreshToken(@PathVariable("userid") String userid, @RequestHeader("refreshToken") String refreshToken) {
+    @GetMapping("/refresh/{userSeq}")
+    public Map<String,Object> refreshToken(@PathVariable("userSeq") Long userSeq, @RequestHeader("refreshToken") String refreshToken) {
+        System.out.println(userSeq+" / "+refreshToken);
 
-        //String userid = userService.getUserid(refreshToken);
+        User user = userRepository.findById(userSeq).get();
+        String userid = user.getUserid();
         JwtToken jwtToken = jwtService.validRefreshToken(userid, refreshToken);
 
-        Map<String, String> jsonResponse = jwtService.recreateTokenResponse(jwtToken, userid);
+        Map<String, Object> jsonResponse = jwtService.recreateTokenResponse(jwtToken, user);
         return jsonResponse;
     }
 
@@ -290,10 +291,10 @@ public class UserApiController {
         if (user == null) {
             throw new UserLoginException("이메일이 존재하지 않습니다.");
         }
-        emailService.createMailAndChangePassword(email, user.getUsername());
-        //emailService.sendPasswordMail(mailDto);
+        userService.sendMailAndChangePassword(email, user.getUsername());
+        System.out.println("임시 비밀번호로 변경 완료");
 
-        return "/login";
+        return "redirect:/login";
     }
 
 }
