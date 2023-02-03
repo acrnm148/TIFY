@@ -47,7 +47,7 @@ import java.util.UUID;
  */
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class UserService {
 
     private final EmailService emailService;
@@ -339,20 +339,27 @@ public class UserService {
     /**
      * 메일 내용을 생성하고 임시 비밀번호로 회원 비밀번호를 변경
      */
-    public void sendMailAndChangePassword(String email, String name) {
-        String newPw = emailService.sendPwMail(email, name);
-        updatePassword(newPw,email);
+    public void sendMailAndChangePassword(User user) {
+        String newPw = emailService.sendPwMail(user.getEmail(), user.getUsername());
+        updatePassword(user, newPw);
     }
 
 
     /**
      * 유저 비밀번호 변경
      */
-    public void updatePassword(String tempPw, String userEmail){
-        User user = userRepository.findByUserid(userEmail);
+    @Transactional
+    public void updatePassword(User user, String tempPw){
+        // test
+        System.out.println("수정 전 비밀번호:"+user.getPassword());
         String encodedPw = bCryptPasswordEncoder.encode(tempPw);
-        user.updatePassword(encodedPw);
-        User user2 = userRepository.save(user);
+        System.out.println("수정 후 비밀번호:"+encodedPw);
+
+        user.setPassword(encodedPw);
+        userRepository.save(user);
+        System.out.println("수정된 유저:"+user);
+        System.out.println("수정된 비밀번호:"+user.getPassword());
+
         System.out.println("비밀번호 변경 완료 "+tempPw);
     }
 
