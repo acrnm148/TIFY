@@ -20,3 +20,13 @@ export interface GiftList {
 export interface GiftProps {
   giftList: Gift[];
 }
+export interface Paying{
+  amount : number, // api요청시에는 string.!!!
+  payType : string,
+  celebFrom : string,
+  celebTel : string,
+  celebContent : string,
+  celebImgUrl : string,
+  giftId : number,
+  userId : number,
+}

@@ -38,6 +38,12 @@
 }
 
 .wish-card{
+    width: 523px;
+    height: 312px;
+    border: 1px solid #FE3360;
+    border-radius: 8px;
+}
+.m-wish-card{
     display: flex;
     justify-content: left;
     align-items: center;
@@ -333,4 +339,30 @@
 }
 .like-gift-image{
     width: 100%;
+}
+
+.finish-wish-con{
+    display: flex;
+    justify-content: space-evenly;
+}
+.finish-congrats{
+    border: 1px solid lavender;
+    width: 30%;
+    border-radius: 20px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+.fin-wcd{
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    /* padding: 10px; */
+    flex-direction: column;
+    word-break: normal;
+    flex-wrap: nowrap;
+}
+.gift-img{
+    background-size: cover;
 }

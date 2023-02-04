@@ -24,3 +24,18 @@
     font-variant: small-caps;
     color: #A1A3A2;
 }
+
+.gh-icon{
+    background-color: hsl(0, 0%, 89%);
+    width: 52px;
+    height: 52px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    margin:3px;
+}
+.selectedCategory{
+    border-radius: 100%;
+    background-color:rgb(255, 55, 95);
+}

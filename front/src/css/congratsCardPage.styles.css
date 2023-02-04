@@ -26,6 +26,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding-top: 10%;
+    width: 40%;
 }
 .selected>div{
     border: 2px solid #BBDAF7;
@@ -33,7 +35,12 @@
 .gift-img{
     cursor: pointer;
 }
-
+.gift-img-box{
+    margin-top: 20px;
+    width: 100%;
+    /* min-width: 450px;
+    min-height: 250px; */
+}
 .congrats-form-btn{
     display: flex;
     flex-direction: column;
@@ -54,7 +61,7 @@
     line-height: 22px;
 }
 .congrats-input{
-    width: 423px;
+    width: 100%;
     min-height: 30px;
     display: flex;
     flex-direction: column;
@@ -90,21 +97,31 @@
     font-weight: 400;
     font-size: 14px;
     line-height: 14px;
-
-    /* text/300 */
-
+    margin-top: 20px;
     color: #A1A3A2;
 }
 
+.gift-loading{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+.gift-loading>img{
+    min-width: 20px;
+    margin-bottom: 40px;
+}
 .gift-info{
     display: flex;
     flex-direction: column;
+    width: 100%;
 
 }
 
 .gift-info img{
-    width: 426px;
-    height: 226px;
+    width: 70%;
+    height: auto;
 }
 
 .name_and_price{
@@ -131,9 +148,12 @@
 .policy{
     display: flex;
     justify-content: left;
-    width: 423px;
+    width: 100%;
     margin-top: 30px;
     margin-bottom: 5px;
+}
+.pay-amount-selection{
+    margin-top: 10px;
 }
 .pay-amount-selection-btns{
     display: flex;
@@ -142,10 +162,11 @@
 }
 
 .pay-amount-selection-btns button{
-    width: 90px;
+    /* width: 90px; */
     height: 42px;
     background: #D9D9D9;
     border-radius: 10px;
+    width: 22%;
 }
 
 .selection-label{
@@ -159,7 +180,7 @@
 }
 
 .pay-amount-selected{
-    width: 420px;
+    width: 100%;
     height: 52px;
 
     text-align: center;
@@ -211,4 +232,38 @@
 .selected-payment{
     border: solid 1px #FE3360;
     zoom: 110%;
+}
+
+.gift-img-box-con{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 로딩바 */
+.donut {
+    position: absolute;
+    /* width: calc(100% - 16px);
+    height: calc(100% - 16px); */
+    width: 170px;
+    height: 170px;
+    margin: 0 auto;
+    border-radius: 50%;
+    position: relative;
+    text-align: center;
+  }
+
+  .donut-container {
+    width: 200px;
+    height: 200px;
+  }
+
+.donut > svg{
+    position: relative;
+    left: 50%;
+    top: 50%;
+    width: 102;
+    height: 102%;
+    transform: translate(-50%, -50%);
 }
