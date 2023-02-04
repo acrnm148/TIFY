@@ -12,10 +12,12 @@ import com.tify.back.repository.wish.WishRepository;
 
 import com.tify.back.service.gifthub.GiftService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -31,6 +33,7 @@ public class WishService {
     public Wish pureSave(Wish wish) {
         return wishRepository.save(wish);
     }
+
     public Wish findWishById(Long id) {
         return wishRepository.findById(id).orElse(null);
     }
@@ -40,10 +43,10 @@ public class WishService {
         Wish wish = dto.toEntity(userRepository);
         wishRepository.save(wish);
         List<Gift> gifts = wish.getGiftItems();
-        for(GiftDto giftDto: dto.getGiftItems()){
+        for (GiftDto giftDto : dto.getGiftItems()) {
             Gift gift = giftDto.toEntity(productRepository);
             gift.setWish(wish);
-            gift = giftService.createGift(gift,wish.getId());
+            gift = giftService.createGift(gift, wish.getId());
             gifts.add(gift);
         }
         wish.setJoinCount(0);
@@ -55,21 +58,22 @@ public class WishService {
             return false;
         }
     }
+
     public List<Wish> getWish(long userId) {
         return wishRepository.findByUserId(userId);
     }
 
-    public Wish wishDetailId(Long wishId){
-        if(wishRepository.findById(wishId).isPresent()){
+    public Wish wishDetailId(Long wishId) {
+        if (wishRepository.findById(wishId).isPresent()) {
             return wishRepository.findById(wishId).get();
-        }else{
+        } else {
             return null;
         }
 
     }
 
 
-    public String deleteWishById(Long id){
+    public String deleteWishById(Long id) {
         Wish wish = wishRepository.findById(id).orElse(null);
         List<Gift> gifts = wish.getGiftItems();
         for (Gift gift : gifts) {
@@ -80,5 +84,15 @@ public class WishService {
 
     }
 
+    @Scheduled(cron = "0 0 0 * * *") // run every day at midnight
+    public void updateWishFinishYN() {
+        List<Wish> wishes = wishRepository.findAll();
+        for (Wish wish : wishes) {
+            if (wish.getEndDate().before(new Date()) && !wish.getFinishYN().equals("Y")) {
+                wish.setFinishYN("Y");
+                wishRepository.save(wish);
+            }
+        }
+    }
 }
 
