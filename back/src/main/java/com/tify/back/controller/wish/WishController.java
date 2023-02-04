@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,6 +38,17 @@ public class WishController {
     @GetMapping("/detail")
     public Wish wishList(@RequestParam(value = "wishId", required = true) Long wishId){
         return wishService.wishDetailId(wishId);
+    }
+
+    @PutMapping("/cardopen/{wishId}")
+    public String cardOpen(@PathVariable Long wishId) {
+        Wish wish = wishRepository.findById(wishId).orElse(null);
+        if (wish == null) {
+            return "wish not found";
+        }
+        wish.setFinishYN("y");
+        wishRepository.save(wish);
+        return "card open";
     }
 
     @GetMapping("/wish/{userId}")
