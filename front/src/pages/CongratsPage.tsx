@@ -5,7 +5,7 @@ import "../css/congratsPage.styles.css"
 export function CongratsPage() {
     
     let {wishId} = useParams();
-// [TODO] wishId로 위시 디테일 정보 요청
+// [TODO] wishId로 위시 디테일 정보 요청 => 여기서 유저id, 유저name도 받아오기
 // [ TODO] 유저 이름은 어디서 가져와?!?! store에서!??!?
     const username = '김싸피'
     const [selectGift, setSelectGift] = useState({})

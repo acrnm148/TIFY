@@ -81,7 +81,7 @@
     flex-direction: column;
     align-items: left;
     justify-content: center;
-    width: 422px;
+    width: 100%;
     
 }
 .thanks-card{
@@ -89,7 +89,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 422px;
+    width: 100%;
 }
 
 .thanks-input{
