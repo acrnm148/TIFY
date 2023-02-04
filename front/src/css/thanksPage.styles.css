@@ -81,7 +81,7 @@
     flex-direction: column;
     align-items: left;
     justify-content: center;
-    width: 422px;
+    width: 100%;
     
 }
 .thanks-card{
@@ -89,7 +89,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 422px;
+    width: 100%;
 }
 
 .thanks-input{
@@ -99,6 +99,9 @@
     flex-direction: column;
     justify-content: left;
     margin-top: 10px;
+}
+.thanks-input textarea{
+    min-height: 200px;
 }
 .thanks-input label{
     font-family: 'NanumGothic';
@@ -128,7 +131,7 @@
 
 .thanks-photo-btn{
     width: inherit-20px;
-    height: 150px;
+    height: 200px;
     border: solid 1px #BBDAF7;
     border-radius: 8px;
     margin-top: 7px;
@@ -169,4 +172,5 @@
 
 .img-input{
     display: none;
+    min-height: 200px;
 }

@@ -1,5 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
+import PrivateRoute from './modules/routes/PrivateRoutes';
+import PublicRoute from './modules/routes/PublicRoutes';
+
 import { Header } from './fixture/Header';
 import { GiftHubPage } from './pages/GiftHubPage';
 import { MakeWishPage } from './pages/MakeWishPage';
@@ -13,8 +16,8 @@ import { FaqPage } from './pages/FaqPage';
 import { AskPage } from './pages/AskPage';
 
 import { LoginPage } from './pages/LoginPage';
-import { AuthKakao } from './components/AuthKakao';
-import { AuthNaver } from './components/AuthNaver';
+import { AuthKakao } from './modules/Auth/AuthKakao';
+import { AuthNaver } from './modules/Auth/AuthNaver';
 import { JoinFirstPage } from './pages/JoinFirstPage';
 import { JoinSecondPage } from './pages/JoinSecondPage';
 import { JoinThirdPage } from './pages/JoinThirdPage';
@@ -42,21 +45,23 @@ import './css/styles.css';
 import { GiftHubDetailPage } from './pages/GiftHubDetailPage';
 
 import { useReducer } from 'react';
-import { Login } from './components/Auth';
+import { Login } from './modules/Auth/LogIn';
 
-const initialState = {
-  authenticated: false,
-  token: null,
-};
+import ScrollTop from '../src/interface/scroll';
 
-function reducer(state: any, action: any) {
-  switch (action.type) {
-    case 'SET_TOKEN':
-      return { ...state, token: action.token, authenticated: action.result };
-    default:
-      return state;
-  }
-}
+// const initialState = {
+//   authenticated: false,
+//   token: null,
+// };
+
+// function reducer(state: any, action: any) {
+//   switch (action.type) {
+//     case 'SET_TOKEN':
+//       return { ...state, token: action.token, authenticated: action.result };
+//     default:
+//       return state;
+//   }
+// }
 
 function App() {
   // const [state, dispatch] = useReducer(reducer, initialState);
@@ -83,17 +88,46 @@ function App() {
   //   }
   // }
 
+  // 로그인 해야 하는 건 PrivateRoute안에 넣기
+  // 비로그인만 가능한 건 PublicRoute안에 넣기
   return (
     <BrowserRouter>
+      <ScrollTop />
       <Header />
       <Routes>
+        <Route element={<PrivateRoute />}>
+          <Route path="/makewish" element={<MakeWishPage />} />
+          <Route path="/mypage" element={<MyPage />}>
+            <Route path="mywish" element={<MyWish />} />
+            <Route path="joined" element={<Joined />} />
+            <Route path="friend" element={<Friend />} />
+            <Route path="info" element={<MyInfo />} />
+            <Route path="phone" element={<PhoneBook />} />
+            <Route path="order" element={<OrderList />} />
+          </Route>
+          <Route path="/checkwish" element={<CheckWishPage />} />
+          <Route path="/thanks/:wishId/:conId" element={<ThanksPage />} />
+          <Route path="/friends" element={<FriendsPage />} />
+          <Route path="/makewish/success" element={<WishSuccess />} />
+          <Route path="/like" element={<LikePage />} />
+          <Route path="/alram" element={<AlramPage />} />
+          <Route path="/ask" element={<AskPage />} />
+        </Route>
+
+        <Route element={<PublicRoute />}>
+          <Route path="/join1" element={<JoinFirstPage />} />
+          <Route path="/join2" element={<JoinSecondPage />} />
+          <Route path="/reset" element={<ForgotPasswordPage />} />
+        </Route>
+        <Route path="/login" element={<LoginPage />}>
+          <Route path="oauth2/code/kakao" element={<AuthKakao />} />
+          <Route path="Oauth2/code/naver" element={<AuthNaver />} />
+        </Route>
+        <Route path="/join3" element={<JoinThirdPage />} />
+
         <Route path="" element={<MainPage />} />
         <Route path="/gifthub" element={<GiftHubPage />} />
         <Route path="/gifthub/:giftId" element={<GiftHubDetailPage />} />
-        <Route path="/makewish" element={<MakeWishPage />} />
-        <Route path="/checkwish" element={<CheckWishPage />} />
-        <Route path="/thanks/:wishId/:conId" element={<ThanksPage />} />
-        <Route path="/friends" element={<FriendsPage />} />
         <Route path="/congrats/:wishId" element={<CongratsPage />} />
         <Route
           path="/congrats/:wishId/giftcard"
@@ -104,31 +138,10 @@ function App() {
           <Route path="kakaopay" element={<PayingService />} />
         </Route>
         <Route path="/congrats/kakaopay/result" element={<PayResult />} />
-        <Route path='/congrats/import' element={<PayingPort />} />
-        <Route path='/makewish/success' element={<WishSuccess />} />
-        
-        <Route path="/mypage" element={<MyPage />}>
-          <Route path="mywish" element={<MyWish />} />
-          <Route path="joined" element={<Joined />} />
-          <Route path="friend" element={<Friend />} />
-          <Route path="info" element={<MyInfo />} />
-          <Route path="phone" element={<PhoneBook />} />
-          <Route path="order" element={<OrderList />} />
-        </Route>
-
-        <Route path="/like" element={<LikePage />} />
-        <Route path="/alram" element={<AlramPage />} />
+        <Route path="/congrats/import" element={<PayingPort />} />
 
         <Route path="/faq" element={<FaqPage />} />
-        <Route path="/ask" element={<AskPage />} />
-        <Route path="/login" element={<LoginPage />}>
-          <Route path="oauth2/code/kakao" element={<AuthKakao />} />
-          <Route path="Oauth2/code/naver" element={<AuthNaver />} />
-        </Route>
-        <Route path="/join1" element={<JoinFirstPage />} />
-        <Route path="/join2" element={<JoinSecondPage />} />
-        <Route path="/join3" element={<JoinThirdPage />} />
-        <Route path="/reset" element={<ForgotPasswordPage />} />
+
         <Route path="/*" element={<NotFound />} />
       </Routes>
       <Footer />

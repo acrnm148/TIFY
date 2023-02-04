@@ -1,16 +1,48 @@
 import { NavLink } from 'react-router-dom';
 import logo from '../assets/tifyLogo.svg';
 import heart from '../assets/iconLikeCart.svg';
-import alert from '../assets/iconAlert.svg';
+import alertIcon from '../assets/iconAlert.svg';
 import profile from '../assets/iconProfile.svg';
 import logout from '../assets/iconLogout.svg';
 import '../css/header.styles.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { RootState } from '../store/Auth';
+import { useNavigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCookieToken } from '../modules/Auth/Cookie';
+
+import axios from 'axios';
+
+import { removeCookieToken } from '../modules/Auth/Cookie';
+import { DELETE_TOKEN } from '../store/Auth';
+
+import AlarmDropdown from '../components/AlarmDropdown';
 
 export function Header() {
   const [showWishDetail, setShowWishDetail] = useState<boolean>(false);
   const [hideWishDetail, setHideWishDetail] = useState<boolean>(true);
-  const [checkUser, setCheckUser] = useState<boolean>(true);
+  const [checkUser, setCheckUser] = useState<boolean>();
+
+  // const checkUser = useSelector(
+  //   (state: RootState) => state.authToken.authenticated,
+  // );
+  // const accessToken = useSelector(
+  //   (state: RootState) => state.authToken.accessToken,
+  // );
+  // console.log(checkUser);
+  // console.log('요것이 checkUser');
+  // console.log(accessToken);
+  // console.log('요것이 accessToken');
+
+  const refreshToken = getCookieToken();
+
+  useEffect(() => {
+    if (refreshToken != undefined) {
+      setCheckUser(true);
+    } else {
+      setCheckUser(false);
+    }
+  }, [refreshToken]);
 
   const NavLeft = () => {
     return (
@@ -62,11 +94,19 @@ export function Header() {
   // 로그아웃 버튼 클릭 시 유저 정보 지우기
   // 유저 로그아웃 상태일 경우 <로그인|회원가입> 컴포넌트
   // 로그인 상태일 경우 <마이페이지|카드|알람|로그아웃>컴포넌트
-  const logOut = () => {
-    setCheckUser(false);
-    return <></>;
-  };
+
   const LoggedInNav = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleLogOut = () => {
+      alert('로그아웃 되셨습니다.');
+      console.log('로그아웃됨!');
+      dispatch(DELETE_TOKEN());
+      // Cookie에 저장된 Refresh Token 정보를 삭제
+      removeCookieToken();
+      return navigate('/');
+    };
     return (
       <>
         <NavLink to="/mypage/mywish">
@@ -76,9 +116,10 @@ export function Header() {
           <img src={heart} className="logo logo-right" alt="Tify logo" />
         </NavLink>
         <NavLink to="/alram">
-          <img src={alert} className="logo logo-right" alt="Tify logo" />
+          {/* <img src={alertIcon} className="logo logo-right" alt="Tify logo" /> */}
+          <AlarmDropdown />
         </NavLink>
-        <button onClick={logOut}>
+        <button onClick={handleLogOut}>
           <img src={logout} className="logo logo-right" alt="Tify logo" />
         </button>
       </>

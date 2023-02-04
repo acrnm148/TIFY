@@ -21,12 +21,18 @@ import {
   NavLink,
   Outlet,
 } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/Auth';
 import '../../css/myPage.styles.css';
 
 export function MyPage() {
   const locate = useLocation();
   const tmp = locate.pathname.split('/');
   const tapId = tmp[2];
+
+  const userId = useSelector((state: RootState) => state.authToken.userId);
+  console.log(userId);
+  console.log('요것이 userId');
 
   return (
     <div className="mypage-div">

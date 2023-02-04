@@ -5,7 +5,7 @@ import "../css/congratsPage.styles.css"
 export function CongratsPage() {
     
     let {wishId} = useParams();
-// [TODO] wishId로 위시 디테일 정보 요청
+// [TODO] wishId로 위시 디테일 정보 요청 => 여기서 유저id, 유저name도 받아오기
 // [ TODO] 유저 이름은 어디서 가져와?!?! store에서!??!?
     const username = '김싸피'
     const [selectGift, setSelectGift] = useState({})
@@ -21,7 +21,7 @@ export function CongratsPage() {
     const [wishGiftList, setWishGiftList] = useState([
         {
             id : 1,
-            img : 'https://user-images.githubusercontent.com/87971876/215254369-d144dcd7-00ae-4f1c-b740-c219c6e30821.png',
+            img : 'https://user-images.githubusercontent.com/87971876/216546104-5294c903-7f29-4483-b58a-855cc2fe4715.png',
             name : '임시선물1',
             achieved81 : 81 *0.2,
             achieved : 20,
