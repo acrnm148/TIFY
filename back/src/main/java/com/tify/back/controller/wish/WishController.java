@@ -46,7 +46,7 @@ public class WishController {
         if (wish == null) {
             return "wish not found";
         }
-        wish.setFinishYN("y");
+        wish.setCardopen("open");
         wishRepository.save(wish);
         return "card open";
     }
