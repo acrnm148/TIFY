@@ -2,6 +2,7 @@ package com.tify.back.model.pay;
 
 import com.tify.back.model.gifthub.Gift;
 import com.tify.back.model.gifthub.Order;
+import com.tify.back.model.wish.Thkcard;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -43,6 +46,9 @@ public class Pay {
     @OneToOne
     @JoinColumn(name = "order_id")
     private Order order;
+
+    @OneToMany(mappedBy= "pay")
+    private List<Thkcard> thkcardList = new ArrayList<>();
 
     public void updateOrder(Order order) {this.order = order;}
 }

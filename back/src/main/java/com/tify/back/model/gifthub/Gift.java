@@ -1,6 +1,7 @@
 package com.tify.back.model.gifthub;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tify.back.model.pay.Pay;
 import com.tify.back.model.wish.Wish;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +56,8 @@ public class Gift {
     private LocalDateTime finishDate;
     private String giftImgUrl;
     private String giftUrl;
-
+    @OneToMany(mappedBy= "gift")
+    private List<Pay> payList = new ArrayList<>();
     @OneToMany(mappedBy= "gift")
     private List<GiftOption> giftOption = new ArrayList<>();
 }

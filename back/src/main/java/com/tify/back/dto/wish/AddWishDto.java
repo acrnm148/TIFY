@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 public class AddWishDto {
+    private Long wishId;
     private Long userId;
     private List<GiftDto> giftItems;
     private Integer totalPrice;
