@@ -26,9 +26,9 @@ export function Header() {
   // const checkUser = useSelector(
   //   (state: RootState) => state.authToken.authenticated,
   // );
-  // const accessToken = useSelector(
-  //   (state: RootState) => state.authToken.accessToken,
-  // );
+  const accessToken = useSelector(
+    (state: RootState) => state.authToken.accessToken,
+  );
   // console.log(checkUser);
   // console.log('요것이 checkUser');
   // console.log(accessToken);
@@ -105,6 +105,21 @@ export function Header() {
       dispatch(DELETE_TOKEN());
       // Cookie에 저장된 Refresh Token 정보를 삭제
       removeCookieToken();
+      // 로그아웃 요청
+      axios({
+        url: 'https://i8e208.p.ssafy.io/api/account/logout',
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-type': 'application/json',
+        },
+      })
+        .then((con) => {
+          console.log('로그아웃 성공', con);
+        })
+        .catch((err) => {
+          console.log('로그아웃 실패', err);
+        });
       return navigate('/');
     };
     return (

@@ -33,17 +33,39 @@ export function CheckTokenByKey(key: string) {
     expireTime,
     'authenticated, expireTime 이렇습니다!!!',
   );
+  const accessToken = useSelector(
+    (state: RootState) => state.authToken.accessToken,
+  );
 
   // const { userId } = useSelector((state: RootState) => state.authToken.userId);
   // console.log(userId, 'userId는 이렇습니다!!');
 
   // console.log(refreshToken, 'refreshToken은 이렇습니다!!!');
 
+  function LogOutAPI(accessToken: string) {
+    axios({
+      url: 'https://i8e208.p.ssafy.io/api/account/logout',
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-type': 'application/json',
+      },
+    })
+      .then((con) => {
+        console.log('로그아웃 성공', con);
+      })
+      .catch((err) => {
+        console.log('로그아웃 실패', err);
+      });
+  }
+
   const checkAuthToken = async () => {
     // 리프레쉬 토큰이 없다면
     if (refreshToken === undefined) {
       // access 토큰 없애고, 인증 여부를 Failed로 한다.
       dispatch(DELETE_TOKEN());
+      // LogOutAPI(accessToken);
+
       setIsAuth('Failed');
       console.log('리프레쉬토큰 없는 녀석');
       // return navigate('/');
@@ -70,6 +92,7 @@ export function CheckTokenByKey(key: string) {
         } else {
           dispatch(DELETE_TOKEN());
           removeCookieToken();
+          // 로그아웃 요청
           setIsAuth('Failed');
           console.log('리프레쉬 실패');
           alert('로그아웃 되셨습니다.');
