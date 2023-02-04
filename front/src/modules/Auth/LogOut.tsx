@@ -11,7 +11,7 @@ import { DELETE_TOKEN } from '../../store/Auth';
 
 export function LogOut() {
   // store에 저장된 Access Token 정보를 받아 온다
-  console.log('로그아웃!!!');
+  // console.log('로그아웃!!!');
 
   // let accessToken = useSelector((state) => {
   //   return state.authToken.accessToken;

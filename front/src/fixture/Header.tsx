@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { RootState } from '../store/Auth';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
+import { getCookieToken } from '../modules/Auth/Cookie';
 
 import axios from 'axios';
 
@@ -17,17 +18,31 @@ import { DELETE_TOKEN } from '../store/Auth';
 
 import AlarmDropdown from '../components/AlarmDropdown';
 
-
 export function Header() {
   const [showWishDetail, setShowWishDetail] = useState<boolean>(false);
   const [hideWishDetail, setHideWishDetail] = useState<boolean>(true);
-  // const [checkUser, setCheckUser] = useState<boolean>(true);
+  const [checkUser, setCheckUser] = useState<boolean>();
 
-  const checkUser = useSelector(
-    (state: RootState) => state.authToken.authenticated,
-  );
-  console.log(checkUser);
-  console.log('요것이 checkUser');
+  // const checkUser = useSelector(
+  //   (state: RootState) => state.authToken.authenticated,
+  // );
+  // const accessToken = useSelector(
+  //   (state: RootState) => state.authToken.accessToken,
+  // );
+  // console.log(checkUser);
+  // console.log('요것이 checkUser');
+  // console.log(accessToken);
+  // console.log('요것이 accessToken');
+
+  const refreshToken = getCookieToken();
+
+  useEffect(() => {
+    if (refreshToken != undefined) {
+      setCheckUser(true);
+    } else {
+      setCheckUser(false);
+    }
+  }, [refreshToken]);
 
   const NavLeft = () => {
     return (
@@ -102,7 +117,7 @@ export function Header() {
         </NavLink>
         <NavLink to="/alram">
           {/* <img src={alertIcon} className="logo logo-right" alt="Tify logo" /> */}
-          <AlarmDropdown/>
+          <AlarmDropdown />
         </NavLink>
         <button onClick={handleLogOut}>
           <img src={logout} className="logo logo-right" alt="Tify logo" />

@@ -61,16 +61,19 @@ export function LoginPage() {
 
           //로그인 성공시 백으로 firebase customized token 요청
           //받아오면 알아서 쿠키에 refresh_token 으로 저장됨.
-          axios.post('http://localhost:8081/fcm',{
-            email: userid,
-          }).then((res) => {
-            console.log(res.data);
-            console.log("성공!");
-            FirebaseAuth(res.data);
-          })
-          .catch((err) => {console.log});
+          axios
+            .post('http://localhost:8081/fcm', {
+              email: userEmail,
+            })
+            .then((res) => {
+              console.log(res.data);
+              console.log('성공!');
+              FirebaseAuth(res.data);
+            })
+            .catch((err) => {
+              console.log;
+            });
 
-          
           return navigate('/');
         }
       })

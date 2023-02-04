@@ -14,6 +14,8 @@ export function ForgotPasswordPage() {
     event.preventDefault();
     const navigate = useNavigate();
 
+    // axios.get(`http://i8e208.p.ssafy.io/api/account/checkEmailState`);
+
     try {
       // 해당 이메일이 존재하는지 먼저 체크해보기
       await axios

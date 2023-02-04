@@ -7,7 +7,7 @@ export function SignOut() {
     return state.authToken.accessToken;
   });
 
-  console.log('회원탈퇴 하지마!!!');
+  // console.log('회원탈퇴 하지마!!!');
 
   // token이 필요한 API 요청 시 header Authorization에 token 담아서 보내기
 
