@@ -1,4 +1,5 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import "../css/congratsPage.styles.css"
 
@@ -7,8 +8,13 @@ export function CongratsPage() {
     let {wishId} = useParams();
 // [TODO] wishId로 위시 디테일 정보 요청 => 여기서 유저id, 유저name도 받아오기
 // [ TODO] 유저 이름은 어디서 가져와?!?! store에서!??!?
-    const username = '김싸피'
+    const [userName , setUserName] = useState('티피')
+    const [category, setCategory] = useState('')
     const [selectGift, setSelectGift] = useState({})
+    const [title, setTitle] = useState('')
+    const [content, setContent] = useState('')
+    const [card, setCard] = useState('')
+
     const [clickedGift, setClickedGift] = useState<number>()
     const [wishDetail, setWishDetail] = useState(
         {
@@ -37,20 +43,52 @@ export function CongratsPage() {
         },
     ])
 
+    useEffect(()=>{
+        const API_URL='http://i8e208.p.ssafy.io:8081/api/wish/detail/'
+        axios.get(API_URL,{
+            params: {
+                wishId : wishId
+            }
+        })
+        .then((res)=>{
+            console.log('위시 상세 정보', res.data)
+            setUserName(res.data.user.username)
+            setCategory(res.data.category)
+            setTitle(res.data.title)
+            setContent(res.data.content)
+            setCard(res.data.cardImageCode)
+            
+            setWishGiftList(res.data.giftItems.map((item: { giftImgUrl: any; productNum: number; gathered: number; purePrice: number; }, i:number) => {
+                return(
+                {
+                    id : i,
+                    img : item.giftImgUrl,
+                    productNum : item.productNum,
+                    name : '추가해야함', // 추가해야함
+                    achieved : (item.gathered % (item.purePrice+(item.purePrice * 0.05)))*100,
+                    price : item.purePrice+(item.purePrice * 0.05)
+                }
+                )
+            }))
+        }).catch((err) =>{
+            console.log('위시 상세정보 어디감', err)
+        })
+    }, [])
+
+
 
     const WishCardCover = () =>{
         return(
             <div className="wish-card wish-card-cover">
-            {/* // [TODO] 받은 카드이미지 주소로 표출 */}
-                카드다
+                <img src={card} alt="" />
             </div>
         )
     }
     const WishCardContent = () =>{
         return(
             <div className="wish-card wish-card-content">
-                <h1>{wishDetail.title}</h1>
-                <p>{wishDetail.content}</p>
+                <h1>{title}</h1>
+                <p>{content}</p>
             </div>
         )
     }
@@ -91,7 +129,12 @@ export function CongratsPage() {
         <div className="congrats-page-container">
             <div className="wish-components">
                 <div className="wish-components-title">
-                    <h1>{username}님의 {wishDetail.category}를 축하해주세요!</h1>
+                    {
+                        category?
+                        <h1>{userName}님의 {category}를 축하해주세요!</h1>
+                        :
+                        <h1>{userName}님을 축하해주세요!</h1>
+                    }
                 </div>
                 <div className="wish-card-box">
                     <WishCardCover />

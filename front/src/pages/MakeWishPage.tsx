@@ -30,6 +30,7 @@ import "../css/congratsPage.styles.css"
 // user
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
+import { NavLink } from "react-router-dom";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -45,8 +46,8 @@ const style = {
 // [TODO] 카테고리 선택 mui..
 
 export function MakeWishPage() {
-  const [userId , setUserId] = useState(104);
-  // const [userId, setUserId] = useState(useSelector((state: RootState) => state.authToken.userId))
+  // const [userId , setUserId] = useState(104);
+  const [userId, setUserId] = useState(useSelector((state: RootState) => state.authToken.userId))
 
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
@@ -176,7 +177,6 @@ export function MakeWishPage() {
   const [finished, setFinished] = useState(false)
   const MakeWish = () =>{
     const selectedWishCard = Number(selectCard)>=0? imgBase64:cardList[Number(selectCard)]
-    console.log('선택한 카드', selectedWishCard, Number(selectCard), imgBase64)
     const makeWish = async() =>{
       const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';
         axios({
@@ -187,13 +187,14 @@ export function MakeWishPage() {
             "giftItems": [
               ...totalProduct
             ],
+            "finishYN": "N",
             "totalPrice": totalPrice,
             "wishTitle": title,
             "wishContent" :content,
             "category":category,
             "startDate" : startDate, 
             "endDate":endDate,
-            "wishCard": imgUrlS3, //string
+            "wishCard": imgUrlS3,
             "addr1": enroll_company.address,
             "addr2":addr2,
           },
@@ -303,7 +304,9 @@ export function MakeWishPage() {
           </div>
           <div className="finish-wish-comment">
             <h1>위시 생성이 완료되었습니다!</h1>
-            <p></p>
+            <NavLink to={'/checkwish'}>
+                    <p>위시목록으로 고고고</p>
+            </NavLink>
           </div>
         </div>
     )

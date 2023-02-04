@@ -43,3 +43,14 @@ export interface Wish {
   addr1: string;
   addr2:string;
 }
+
+export interface CheckWish{
+  wishId : string;
+  userName : string;
+  title : string;
+  category : string;
+  restDay : string;
+  percent : number;
+  fromList : string[];
+  fromId : number;
+}
