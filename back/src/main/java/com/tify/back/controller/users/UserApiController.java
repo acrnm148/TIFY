@@ -4,6 +4,8 @@ package com.tify.back.controller.users;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tify.back.auth.jwt.JwtProperties;
 import com.tify.back.auth.jwt.JwtToken;
+import com.tify.back.auth.jwt.refreshToken.RefreshToken;
+import com.tify.back.auth.jwt.refreshToken.RefreshTokenRepository;
 import com.tify.back.auth.jwt.service.JwtProviderService;
 import com.tify.back.auth.jwt.service.JwtService;
 import com.tify.back.dto.users.MailDto;
@@ -51,6 +53,7 @@ import java.util.*;
 @RequestMapping("/api")
 public class UserApiController {
 
+    private final RefreshTokenRepository refreshTokenRepository;
     private final EmailAuthRepository emailAuthRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
@@ -249,17 +252,23 @@ public class UserApiController {
      * refresh 만료 => access, refresh 재발급
      */
     @Operation(summary = "get refresh token", description = "refresh token 재발급")
-    @Parameter(description = "userid를 파라미터로 받습니다.")
-    @GetMapping("/refresh/{userSeq}")
-    public Map<String,Object> refreshToken(@PathVariable("userSeq") Long userSeq, @RequestHeader("refreshToken") String refreshToken) {
-        System.out.println(userSeq+" / "+refreshToken);
+    @GetMapping("/refresh")
+    public Map<String,Object> refreshToken(@RequestHeader("refreshToken") String refreshToken) {
 
-        User user = userRepository.findById(userSeq).get();
-        String userid = user.getUserid();
-        JwtToken jwtToken = jwtService.validRefreshToken(userid, refreshToken);
+        //Long userSeq = userService.getUseridByRefresh(refreshToken);
+        Optional<RefreshToken> token = refreshTokenRepository.findByRefreshToken(refreshToken);
+        if (token.get() != null) {
+            Long userSeq = userRepository.findByUserid(token.get().getUserid()).getId();
+            System.out.println(userSeq+" / "+refreshToken);
 
-        Map<String, Object> jsonResponse = jwtService.recreateTokenResponse(jwtToken, user);
-        return jsonResponse;
+            User user = userRepository.findById(userSeq).get();
+            String userid = user.getUserid();
+            JwtToken jwtToken = jwtService.validRefreshToken(userid, refreshToken);
+
+            Map<String, Object> jsonResponse = jwtService.recreateTokenResponse(jwtToken, user);
+            return jsonResponse;
+        }
+        return null;
     }
 
     /**

@@ -195,6 +195,7 @@ public class UserService {
             //복호화된 JWT
             DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(accessToken);
             String userid = decodedJWT.getClaim("userid").asString();
+            System.out.println("userid:"+userid);
             User user = userRepository.findByUserid(userid);
 
             System.out.println("현재 암호화된 비밀번호: "+user.getPassword());
@@ -282,7 +283,15 @@ public class UserService {
     @Transactional
     public void logout(String accessToken) {
         UserProfileDto user = getUser(accessToken);
+        if (user == null) {
+            System.out.println("해당 엑세스토큰을 가진 유저가 없습니다.");
+            throw new UserLoginException("잘못된 접근");
+        }
         String refreshToken = user.getRefreshToken();
+        if (refreshToken == null) {
+            System.out.println("이미 로그아웃한 사용자입니다.");
+            throw new UserLoginException("이미 로그아웃한 사용자입니다.");
+        }
 
         //1. accessToken redisTemplate 블랙리스트 추가
         ValueOperations<String, String> logoutValueOperations = redisTemplate.opsForValue();
