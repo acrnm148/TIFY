@@ -311,4 +311,16 @@ public class UserApiController {
         return ResponseEntity.ok().body("임시 비밀번호로 변경 완료");
     }
 
+    /**
+     * 이메일 중복 확인
+     */
+    @GetMapping("/dupEmailCheck")
+    public ResponseEntity<?> checkDuplicatedEmail(@RequestParam("userid") String userid) {
+        User user = userRepository.findByUserid(userid);
+        if (user != null) {
+            return ResponseEntity.ok().body("유저가 존재합니다.");
+        }
+        return ResponseEntity.ok().body("가입이 가능합니다.");
+    }
+
 }
