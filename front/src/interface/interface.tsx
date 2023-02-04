@@ -29,6 +29,4 @@ export interface Paying{
   celebImgUrl : string,
   giftId : number,
   userId : number,
-  // 결제 시 표출정보
-  giftName : string,
 }
