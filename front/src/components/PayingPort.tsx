@@ -2,6 +2,11 @@ import axios from "axios";
 import { useState } from "react";
 import { Paying } from "../interface/interface";
 
+// 기존 윈도우에 없는 객체에 접근할 때 발생하는 에러
+// 임의로 IMP 값이 있다고 정의해주는 부분
+declare const window: typeof globalThis & {
+  IMP: any;
+};
 
 let paying = {
             amount : -1,

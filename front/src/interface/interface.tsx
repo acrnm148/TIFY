@@ -30,3 +30,16 @@ export interface Paying{
   giftId : number,
   userId : number,
 }
+
+export interface Wish {
+  giftItems: Gift[];
+  totalPrice: number;
+  wishTitle: string;
+  wishConten :string;
+  category:number;
+  startDate : string;
+  endDate:string;
+  wishCard: string; //string
+  addr1: string;
+  addr2:string;
+}

@@ -1,4 +1,4 @@
-import {ClassAttributes, HTMLAttributes, JSXElementConstructor, ReactElement, ReactFragment, ReactPortal, useState} from "react";
+import {ClassAttributes, HTMLAttributes, JSXElementConstructor, ReactElement, ReactFragment, ReactPortal, useEffect, useState} from "react";
 import { NavLink } from "react-router-dom";
 import "../css/styles.css"
 import "../css/checkWishPage.styles.css"
@@ -8,7 +8,7 @@ import { List } from "reselect/es/types";
 // slider
 import ReactSlider from "react-slider";
 import 'rc-slider/assets/index.css';
-
+import axios from "axios";
 
 // [TODO] wish정보 props로 받아서 표출 
 const wishTitle = '졸업해버렸습니다'
@@ -54,6 +54,10 @@ export function CheckWishPage() {
     },
   ])
   
+  // useEffect(()=>{
+  //   axios.get(API_URL, userId)
+  // })
+
   const CongratCard = (props: { from: string, to:string }) =>{
     return(
       <div className="congrat-card-cover">

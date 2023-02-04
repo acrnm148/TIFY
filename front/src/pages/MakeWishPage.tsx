@@ -199,7 +199,7 @@ export function MakeWishPage() {
           },
           headers:{"Authorization": `Bearer ${accessToken}`,"Content-type" : "application/json"}
         }).then((con) => {
-          console.log('위시생성 성공', con)
+          console.log('위시생성 성공', con, userId)
           setFinished(true)
           console.log('wishCart', wishCart)
         }).catch((err) => {
