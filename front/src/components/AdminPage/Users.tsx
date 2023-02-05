@@ -149,7 +149,7 @@ const Users = () => {
         console.log(userid);
         try {
             const response = await axios.delete(`${baseUrl}/user/${userid}`);
-            await getData(page);
+            await getData(page-1);
             console.log(`deleted user ${userid}`)
             return response;
         } catch (error) {
@@ -211,7 +211,7 @@ const Users = () => {
                     <button className="btn" style={{backgroundColor:"blue", color:"white"}}>수정</button>
                     </NavLink>
                     <button className="btn" style={{backgroundColor:"gray", color:"black"}}
-                        onClick={() => handleDelete(user.id)}>삭제ss</button>
+                        onClick={() => handleDelete(user.id)}>삭제</button>
                   </td>
                     {/* <button onClick={() => handleEdit({ userPk: user.id })}>Edit {user.id}</button> */}
                     {/* <button onClick={() => handleDelete(user.idx)}>Delete</button> */}
