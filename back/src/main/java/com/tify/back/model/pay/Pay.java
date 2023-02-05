@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class Pay {
     @Column(length = 3000)
     private String pay_type;
 
+    @JsonIgnore
     @ManyToOne(fetch=LAZY)
     @JoinColumn(name="id") //변수명에 맞춰야함
     private Gift gift;
