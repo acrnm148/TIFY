@@ -82,7 +82,7 @@ public class UserService {
         User user = userRepository.save(
                 User.builder()
                         .userid(requestDto.getUserid())
-                        .profileImg("/no_img.png")
+                        .profileImg(requestDto.getProfile_img())
                         .tel(requestDto.getTel())
                         .username(requestDto.getUsername())
                         .nickname(requestDto.getNickname())
