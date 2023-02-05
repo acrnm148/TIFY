@@ -1,5 +1,6 @@
 package com.tify.back.model.pay;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tify.back.model.gifthub.Gift;
 import com.tify.back.model.gifthub.Order;
 import com.tify.back.model.wish.Thkcard;
