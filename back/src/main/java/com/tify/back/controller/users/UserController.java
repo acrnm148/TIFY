@@ -1,38 +1,31 @@
 package com.tify.back.controller.users;
-import com.tify.back.dto.users.UserDTO;
-import com.tify.back.dto.admin.createUserDto;
-import com.tify.back.model.users.User;
+import com.tify.back.repository.users.UserRepository;
 import com.tify.back.service.users.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import com.tify.back.dto.users.SearchedUserDto;
-import com.tify.back.service.users.UserService;
-import java.util.List;
-
-import org.springframework.web.bind.annotation.*;
-
-import static java.lang.Long.parseLong;
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
 
-	private final UserService userService;
-
-	public UserController(UserService userService) {
-		this.userService = userService;
-	}
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private UserService userService;
 
 	@GetMapping("/searchuser/{nickname}")
 	public List<SearchedUserDto> searchUserByNickname(@PathVariable String nickname, @RequestHeader("Authorization") String token) {
 		String newToken = token.substring(7);
-		String myId = userService.getUserid(newToken);
-		List<SearchedUserDto> users = userService.searchUserByNickname(nickname,parseLong(myId));
+		String email = userService.getUserid(newToken);
+		System.out.println(userRepository.ownFindByEmail(email));
+		Long myId = userRepository.ownFindByEmail(email).getId();
 
+		List<SearchedUserDto> users = userService.searchUserByNickname(nickname,myId);
 		return users;
 	}
 
