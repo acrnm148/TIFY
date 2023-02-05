@@ -134,7 +134,7 @@ const Wishes = () => {
                     <button className="btn" style={{backgroundColor:"blue", color:"white"}}>수정</button>
                     {/* </NavLink> */}
                     <button className="btn" style={{backgroundColor:"gray", color:"black"}}
-                        onClick={() => handleDelete(wish?.id)}>삭제ss</button>
+                        onClick={() => handleDelete(wish?.id)}>삭제</button>
                   </td>
                     {/* <button onClick={() => handleEdit({ userPk: user.id })}>Edit {user.id}</button> */}
                     {/* <button onClick={() => handleDelete(user.idx)}>Delete</button> */}
