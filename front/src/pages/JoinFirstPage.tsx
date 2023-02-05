@@ -47,28 +47,33 @@ export function JoinFirstPage() {
   const navigate = useNavigate();
   function GoNext(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    axios
-      .get(
-        `https://i8e208.p.ssafy.io/api/account/checkEmailState?email=${email}`,
-      )
-      .then((r) => {
-        console.log(r);
-        if (r.data == 'Y') {
-          alert('이메일 인증이 확인되었습니다. 추가 정보를 입력해주세요.');
-          navigate('/join2', {
-            state: {
-              emailData: email,
-            },
-          });
-        } else if (r.data == 'N') {
-          alert(
-            '아직 이메일 인증이 확인되지 않습니다. 인증 완료 후 시도해주세요',
-          );
-        }
-      })
-      .catch((err) => {
-        console.log(err, 'errrr');
-      });
+    // axios
+    //   .get(
+    //     `https://i8e208.p.ssafy.io/api/account/checkEmailState?email=${email}`,
+    //   )
+    //   .then((r) => {
+    //     console.log(r);
+    //     if (r.data == 'Y') {
+    //       alert('이메일 인증이 확인되었습니다. 추가 정보를 입력해주세요.');
+    //       navigate('/join2', {
+    //         state: {
+    //           emailData: email,
+    //         },
+    //       });
+    //     } else if (r.data == 'N') {
+    //       alert(
+    //         '아직 이메일 인증이 확인되지 않습니다. 인증 완료 후 시도해주세요',
+    //       );
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err, 'errrr');
+    //   });
+    navigate('/join2', {
+      state: {
+        emailData: email,
+      },
+    });
   }
 
   return (

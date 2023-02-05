@@ -3,7 +3,7 @@ import '../css/join.styles.css';
 import coloredCheckIcon from '../assets/iconColoredCheck.svg';
 import checkIcon from '../assets/iconCheck.svg';
 import defaultProfile from '../assets/iconDefaultProfile.svg';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Login } from '../modules/Auth/LogIn';
@@ -24,22 +24,22 @@ export function JoinSecondPage() {
   // const [username, setUsername] = useState('강수나');
   // const [nickname, setNickname] = useState('수나캉');
 
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [addr1, setAddr1] = useState('');
-  const [addr2, setAddr2] = useState('');
-  const [birthYear, setBirthyear] = useState('');
-  const [birthMonth, setBirthMonth] = useState('');
-  const [birthDay, setBirthDay] = useState('');
-  const [birth, setBirth] = useState('');
-  const [tel1, setTel1] = useState('');
-  const [tel2, setTel2] = useState('');
-  const [tel3, setTel3] = useState('');
-  const [username, setUsername] = useState('');
-  const [nickname, setNickname] = useState('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [addr1, setAddr1] = useState<string>('');
+  const [addr2, setAddr2] = useState<string>('');
+  const [birthYear, setBirthyear] = useState<string>('');
+  const [birthMonth, setBirthMonth] = useState<string>('');
+  const [birthDay, setBirthDay] = useState<string>('');
+  const [birth, setBirth] = useState<string>('');
+  const [tel1, setTel1] = useState<string>('');
+  const [tel2, setTel2] = useState<string>('');
+  const [tel3, setTel3] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [nickname, setNickname] = useState<string>('');
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   const location = useLocation();
   const state = location.state as { emailData: string };
@@ -48,11 +48,21 @@ export function JoinSecondPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [nickDubCheck, setNickDubCheck] = useState(false);
+  const [nickDubCheck, setNickDubCheck] = useState<boolean>(false);
 
   const birthMD = birthMonth + birthDay;
   const tel = tel1 + tel2 + tel3;
-  console.log(tel);
+  // console.log(tel);
+
+  const [imgUrlS3, setImgUrlS3] = useState<string>(
+    'https://tifyimage.s3.ap-northeast-2.amazonaws.com/5e1dc3dc-12c3-4363-8e91-8676c44f122b.png',
+  );
+  // photo
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const onUploadImageButtonClick = useCallback(() => {
+    inputRef.current?.click();
+  }, []);
 
   function GoJoin3() {
     navigate('/join3', {
@@ -120,20 +130,46 @@ export function JoinSecondPage() {
       return false;
     }
 
-    if (!reg.test(birthMD)) {
-      alert('생년월일은 숫자만 입력할 수 있습니다.');
-      return false;
+    console.log(birthYear, birthMonth, birthDay);
+    console.log(typeof birthYear, typeof birthMonth, typeof birthDay);
+    // console.log(
+    //   !reg.test(birthYear),
+    //   !reg.test(birthMonth),
+    //   !reg.test(birthDay),
+    // );
+    if (reg.test(birthYear)) {
+      alert('1.');
     }
+    if (reg.test(birthMonth)) {
+      alert('2.');
+    }
+    if (reg.test(birthDay)) {
+      alert('3.');
+    }
+    // if (Number.isNaN(birthMD) || Number.isNaN(birthYear)) {
+    //   alert('생년월일은 숫자만 입력할 수 있습니다.');
+    //   return false;
+    // }
 
     if (tel1 == '' || tel2 == '' || tel3 == '') {
       alert('전화번호를 입력해주세요.');
       return false;
     }
 
-    if (!reg.test(tel)) {
+    if (!reg.test(tel1) || !reg.test(tel2) || !reg.test(tel3)) {
       alert('전화번호는 숫자만 입력할 수 있습니다.');
       return false;
     }
+    // console.log(!Number.isNaN(tel1));
+    // console.log(!Number.isNaN(tel2));
+    // console.log(!Number.isNaN(tel3));
+    // console.log(
+    //   !Number.isNaN(tel1) && !Number.isNaN(tel2) && !Number.isNaN(tel3),
+    // );
+    // if (Number.isNaN(tel1) || Number.isNaN(tel2) || isNaN(tel3)) {
+    //   alert('전화번호는 숫자만 입력할 수 있습니다.');
+    //   return false;
+    // }
 
     if (password !== confirmPassword) {
       alert('비밀번호가 다릅니다.');
@@ -160,13 +196,14 @@ export function JoinSecondPage() {
           addr1,
           addr2,
           birthYear,
-          birth: { birthMD },
-          tel,
+          birth: birthMonth,
+          tel: tel1,
           email: userid,
           username,
           nickname,
+          profile_img: imgUrlS3,
         });
-        await axios
+        return await axios
           .post(
             'https://i8e208.p.ssafy.io/api/account/signin',
             {
@@ -175,22 +212,24 @@ export function JoinSecondPage() {
               addr1,
               addr2,
               birthYear,
-              birth,
-              tel,
+              birth: birthMonth,
+              tel: tel1,
               email: userid,
               username,
               nickname,
+              profile_img: imgUrlS3,
             },
             config,
           )
           .then((res) => {
-            console.log(res, '회원가입 성공!');
+            console.log(res, '회원가입  성공!');
             Login(userid, password)
               .then((response) => {
                 if (response === '로그인 실패!') {
                   alert(
                     '미등록 회원이거나 잘못된 아이디/비밀번호를 입력하셨습니다.',
                   );
+                  console.log('222222222222222');
                 } else {
                   console.log('리프레쉬토큰 가자');
                   setRefreshToken(response.refresh_token);
@@ -199,26 +238,24 @@ export function JoinSecondPage() {
                   dispatch(SET_USEREMAIL(response.user_email));
 
                   console.log('로그인 성공!!');
+                  GoJoin3();
                 }
               })
               .catch((err) => {
+                console.log('333333333333333333');
                 console.log(err);
               });
           });
-        GoJoin3();
-        setIsLoading(false);
       } catch (err) {
-        setIsLoading(false);
-        setError('Error confirming email. Please try again later.');
         console.log(err);
         console.log('Errrrrrr');
       }
     }
   };
 
-  if (isLoading) {
-    return <p>Confirming email...</p>;
-  }
+  // if (isLoading) {
+  //   return <p>Confirming email...</p>;
+  // }
 
   function CheckNickname(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
@@ -248,19 +285,15 @@ export function JoinSecondPage() {
       .then((e) => {
         console.log('닉네임 확인 완료');
         console.log(e);
+        alert('You can do it! 👍');
         setNickDubCheck(true);
       })
       .catch((err) => {
+        alert(`You can't do it! 😅`);
         console.log('error', err);
       });
     console.log('abc');
   }
-
-  const [imgBase64, setImgBase64] = useState(''); // 파일 base64
-  const [imgUrlS3, setImgUrlS3] = useState<string>('');
-  const [imgFile, setImgFile] = useState(null); //파일
-  // photo
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const formData = new FormData();
   const handleChangeFile = (event: any) => {
@@ -310,16 +343,24 @@ export function JoinSecondPage() {
               <img src={checkIcon} className="checkIcon" />
             </div>
           </div>
-          <div className="img-div" style={{ border: 'none' }}>
+          <div
+            className="img-div"
+            style={{ border: 'none', backgroundImage: `url("${imgUrlS3}")` }}
+            onClick={onUploadImageButtonClick}
+          >
             <input
               type="file"
               name="imgFile"
               accept="image/*"
+              ref={inputRef}
               id="imgFile"
               onChange={handleChangeFile}
               style={{ display: 'none' }}
             />
-            <img src={defaultProfile} className="mx-auto" />
+            <img
+              src="https://tifyimage.s3.ap-northeast-2.amazonaws.com/54a2e5c2-1c5c-4a77-9aa0-80d7dfd8da4a.png"
+              className="profile-img"
+            />
           </div>
           <div className="emailBox">
             <p className="m-1">이메일</p>

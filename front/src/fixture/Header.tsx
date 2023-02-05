@@ -45,11 +45,14 @@ export function Header() {
   const refreshToken = getCookieToken();
 
   function checkRole() {
+    const accessToken = useSelector(
+      (state: RootState) => state.authToken.accessToken,
+    );
     axios({
       url: 'https://i8e208.p.ssafy.io/api/roleCheck',
       method: 'GET',
-params: 
-    })
+      params: { userid: '' },
+    });
   }
 
   useEffect(() => {
