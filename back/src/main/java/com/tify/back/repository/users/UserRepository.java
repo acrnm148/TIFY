@@ -3,6 +3,7 @@ package com.tify.back.repository.users;
 import com.tify.back.dto.admin.UserListMap;
 import com.tify.back.model.users.User;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    public Optional<User> findById(Long id);
     public User findByUserid(String username); //public 빼면 오류난다
     public int deleteByUserid(String userid);
     public User findByPassword(String nowPassword);
