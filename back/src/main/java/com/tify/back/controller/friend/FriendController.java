@@ -4,8 +4,15 @@ import com.tify.back.dto.friend.FriendAcceptanceDTO;
 import com.tify.back.dto.friend.FriendDTO;
 import com.tify.back.model.friend.Friend;
 import com.tify.back.model.friend.FriendStatus;
+import com.tify.back.model.wish.Wish;
 import com.tify.back.service.friend.FriendService;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.tify.back.service.wish.WishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +21,22 @@ import org.springframework.web.bind.annotation.*;
 public class FriendController {
 
     @Autowired
+    private WishService wishService;
+    @Autowired
     private FriendService friendService;
+    @GetMapping("/wishfriend/{userId}")
+    public List<Map<Long,Object>> wishes(@PathVariable long userId) {
+        List<Friend> friends = friendService.getFriends(userId);
+        List<Map<Long,Object>> data = new ArrayList<>();
+        for(Friend friend: friends){
+            Map<Long,Object> map = new HashMap<>();
+            List<Wish> wishes = wishService.getWish(friend.getFriendId());
+            map.put(friend.getId(), wishes);
+            data.add(map);
+        }
+        return data;
 
+    }
     @GetMapping("/friends/{userId}")
     public List<Friend> getFriends(@PathVariable long userId) {
         List<Friend> friends = friendService.getFriends(userId);
