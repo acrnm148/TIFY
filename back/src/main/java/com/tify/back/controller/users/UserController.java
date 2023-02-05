@@ -29,7 +29,8 @@ public class UserController {
 
 	@GetMapping("/searchuser/{nickname}")
 	public List<SearchedUserDto> searchUserByNickname(@PathVariable String nickname, @RequestHeader("Authorization") String token) {
-		String myId = userService.getUserid(token);
+		String newToken = token.substring(7);
+		String myId = userService.getUserid(newToken);
 		List<SearchedUserDto> users = userService.searchUserByNickname(nickname,parseLong(myId));
 
 		return users;
