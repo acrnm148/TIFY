@@ -59,7 +59,7 @@ public class CartService {
         Product product = productService.getProductById(map.getLong("productId"));
 //        CartItem cartItem = cartItemService.createCartItem(product, cart, map.getInt("quantity"), map.getString("options"));
         CartItem check = cartItemRepository.findByProductAndOptionsAndCart(product, map.getString("options"),cart);
-        System.out.println(check.getId());
+        // System.out.println(check.getId());
         if (check != null) { throw new AlreadyExistException("이미 존재하는 상품입니다.."); }
         else {
             CartItem cartItem = cartItemService.createCartItem(product, cart, 1, map.getString("options"));
