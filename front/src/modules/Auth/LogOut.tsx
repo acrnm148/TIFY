@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { RootState } from '../../store/Auth';
 
 import axios from 'axios';
 
@@ -11,11 +12,27 @@ import { DELETE_TOKEN } from '../../store/Auth';
 
 export function LogOut() {
   // store에 저장된 Access Token 정보를 받아 온다
-  console.log('로그아웃!!!');
+  // console.log('로그아웃!!!');
 
-  // let accessToken = useSelector((state) => {
-  //   return state.authToken.accessToken;
-  // });
+  const accessToken = useSelector(
+    (state: RootState) => state.authToken.accessToken,
+  );
+  function LogOutAPI(accessToken: string) {
+    axios({
+      url: 'https://i8e208.p.ssafy.io/api/account/logout',
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-type': 'application/json',
+      },
+    })
+      .then((con) => {
+        console.log('로그아웃 성공', con);
+      })
+      .catch((err) => {
+        console.log('로그아웃 실패', err);
+      });
+  }
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,6 +45,8 @@ export function LogOut() {
     dispatch(DELETE_TOKEN());
     // Cookie에 저장된 Refresh Token 정보를 삭제
     removeCookieToken();
+    LogOutAPI(accessToken);
+
     return navigate('/');
   }
 

@@ -120,14 +120,16 @@ function App() {
           <Route path="/ask" element={<AskPage />} />
         </Route>
 
+        {/* 테스트용 */}
+        <Route path="/join2" element={<JoinSecondPage />} />
         <Route element={<PublicRoute />}>
           <Route path="/join1" element={<JoinFirstPage />} />
-          <Route path="/join2" element={<JoinSecondPage />} />
+          {/* <Route path="/join2" element={<JoinSecondPage />} /> */}
           <Route path="/reset" element={<ForgotPasswordPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />}>
           <Route path="oauth2/code/kakao" element={<AuthKakao />} />
-          <Route path="Oauth2/code/naver" element={<AuthNaver />} />
+          <Route path="oauth2/code/naver" element={<AuthNaver />} />
         </Route>
         <Route path="/join3" element={<JoinThirdPage />} />
 

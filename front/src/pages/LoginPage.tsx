@@ -21,27 +21,21 @@ import { RootState } from '../store/Auth';
 import axios from 'axios';
 import FirebaseAuth from '../components/FirebaseAuth';
 
-type LoginResponse = {
-  refresh_token: string;
-  access_token: string;
-  user_id: string;
-};
-
 export function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [userEmail, setUserEmail] = useState('octover1025@naver.com');
-  const [password, setPassword] = useState('123');
+  const [userEmail, setUserEmail] = useState<any>();
+  const [password, setPassword] = useState<any>();
 
-  const userId = useSelector((state: RootState) => state.authToken.userId);
-  console.log(userId);
-  console.log('요것이 userId');
+  // const userId = useSelector((state: RootState) => state.authToken.userId);
+  // console.log(userId);
+  // console.log('요것이 userId');
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
-  console.log(accessToken);
-  console.log('요것이 accessToken');
+  // console.log(accessToken);
+  // console.log('요것이 accessToken');
 
   const onValid = () => {
     setPassword('');
@@ -61,16 +55,19 @@ export function LoginPage() {
 
           //로그인 성공시 백으로 firebase customized token 요청
           //받아오면 알아서 쿠키에 refresh_token 으로 저장됨.
-          axios.post('http://localhost:8081/fcm',{
-            email: userId,
-          }).then((res) => {
-            console.log(res.data);
-            console.log("성공!");
-            FirebaseAuth(res.data);
-          })
-          .catch((err) => {console.log});
+          axios
+            .post('http://localhost:8081/fcm', {
+              email: userEmail,
+            })
+            .then((res) => {
+              console.log(res.data);
+              console.log('성공!');
+              FirebaseAuth(res.data);
+            })
+            .catch((err) => {
+              console.log;
+            });
 
-          
           return navigate('/');
         }
       })
@@ -82,25 +79,6 @@ export function LoginPage() {
   const GoReset = () => {
     return navigate('/reset');
   };
-
-  // const onValid = async () => {
-  //   setPassword('');
-  //   await Login(userEmail, password)
-  //     .then(() => {
-  //       // console.log(res);
-  //       // setRefreshToken(res.refresh_token);
-  //       // dispatch(SET_TOKEN(res.access_token));
-  //       console.log('로그인 성공!!');
-  //       return navigate('/');
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
-  // function SubmitLogin() {
-  //   Login(userEmail, password);
-  // }
 
   return (
     <div className="grayBackground">
@@ -117,36 +95,37 @@ export function LoginPage() {
                 id="emailForm"
                 placeholder="name@example.com"
                 onChange={(e) => setUserEmail(e.target.value)}
+                required
               />
-            </form>
-            <p>비밀번호</p>
-            <form>
+              <p>비밀번호</p>
               <input
-                type="text"
+                type="password"
                 className="inputBox"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
+              <button
+                type="submit"
+                className="loginButton font-roboto font-bold"
+                onClick={onValid}
+              >
+                Login
+              </button>
             </form>
-            <label>
+            <form></form>
+            {/* <label>
               <input type="checkbox" name="color" value="blue" /> 로그인 정보
               저장
-            </label>
-            <button
-              type="submit"
-              className="loginButton font-roboto font-bold"
-              onClick={onValid}
-            >
-              Login
-            </button>
+            </label> */}
             <button className="findPassword font-bold" onClick={GoReset}>
               Forgot password?
             </button>
           </div>
         </div>
       </div>
-      <LogOut />
-      <SignOut />
+      {/* <LogOut /> */}
+      {/* <SignOut /> */}
       <div>
         <div className="cross-line-box">
           <div className="cross-line"></div>

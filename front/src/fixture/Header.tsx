@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { RootState } from '../store/Auth';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
+import { getCookieToken } from '../modules/Auth/Cookie';
 
 import axios from 'axios';
 
@@ -21,13 +22,33 @@ import { useLocation } from 'react-router-dom';
 export function Header() {
   const [showWishDetail, setShowWishDetail] = useState<boolean>(false);
   const [hideWishDetail, setHideWishDetail] = useState<boolean>(true);
+  const [checkUser, setCheckUser] = useState<boolean>();
+
+  // const checkUser = useSelector(
+  //   (state: RootState) => state.authToken.authenticated,
+  // );
+  const accessToken = useSelector(
+    (state: RootState) => state.authToken.accessToken,
+  );
   // const [checkUser, setCheckUser] = useState<boolean>(true);
   const location = useLocation();
-  const checkUser = useSelector(
-    (state: RootState) => state.authToken.authenticated,
-  );
-  console.log(checkUser);
-  console.log('요것이 checkUser');
+  // const checkUser = useSelector(
+  //   (state: RootState) => state.authToken.authenticated,
+  // );
+  // console.log(checkUser);
+  // console.log('요것이 checkUser');
+  // console.log(accessToken);
+  // console.log('요것이 accessToken');
+
+  const refreshToken = getCookieToken();
+
+  useEffect(() => {
+    if (refreshToken != undefined) {
+      setCheckUser(true);
+    } else {
+      setCheckUser(false);
+    }
+  }, [refreshToken]);
 
   const NavLeft = () => {
     return (
@@ -93,6 +114,21 @@ export function Header() {
       dispatch(DELETE_TOKEN());
       // Cookie에 저장된 Refresh Token 정보를 삭제
       removeCookieToken();
+      // 로그아웃 요청
+      axios({
+        url: 'https://i8e208.p.ssafy.io/api/account/logout',
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-type': 'application/json',
+        },
+      })
+        .then((con) => {
+          console.log('로그아웃 성공', con);
+        })
+        .catch((err) => {
+          console.log('로그아웃 실패', err);
+        });
       return navigate('/');
     };
     return (
@@ -104,8 +140,8 @@ export function Header() {
           <img src={heart} className="logo logo-right" alt="Tify logo" />
         </NavLink>
         {/* <NavLink to="/alram"> */}
-          {/* <img src={alertIcon} className="logo logo-right" alt="Tify logo" /> */}
-          <AlarmDropdown/>
+        {/* <img src={alertIcon} className="logo logo-right" alt="Tify logo" /> */}
+        <AlarmDropdown />
         {/* </NavLink> */}
         <button onClick={handleLogOut}>
           <img src={logout} className="logo logo-right" alt="Tify logo" />
@@ -167,13 +203,17 @@ export function Header() {
           </NavLink>
         </div>
       </>
-    )
-  }
+    );
+  };
 
   return (
     <nav className="navbar-container">
       <div className="nav-left">
-        {location.pathname.startsWith('/admin') ? <AmdinNavLeft /> : <NavLeft />}
+        {location.pathname.startsWith('/admin') ? (
+          <AmdinNavLeft />
+        ) : (
+          <NavLeft />
+        )}
       </div>
 
       <div className="header-right">
