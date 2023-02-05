@@ -28,10 +28,10 @@ export function JoinSecondPage() {
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [addr1, setAddr1] = useState<string>('');
   const [addr2, setAddr2] = useState<string>('');
-  const [birthYear, setBirthyear] = useState<string>('');
+  const [birthYear, setBirthyear] = useState<string>();
   const [birthMonth, setBirthMonth] = useState<string>('');
   const [birthDay, setBirthDay] = useState<string>('');
-  const [birth, setBirth] = useState<string>('');
+  const [birth, setBirth] = useState<string>();
   const [tel1, setTel1] = useState<string>('');
   const [tel2, setTel2] = useState<string>('');
   const [tel3, setTel3] = useState<string>('');
@@ -99,25 +99,20 @@ export function JoinSecondPage() {
       return false;
     }
 
+    if (password !== confirmPassword) {
+      alert('비밀번호가 다릅니다.');
+      return false;
+    }
+
     var reg = /^[0-9]+/g; //숫자만 입력하는 정규식
 
-    if (birthYear == '') {
+    if (birthYear == undefined) {
       alert('태어난 연도를 입력해주세요.');
       return false;
     }
 
-    if (birthYear.length < 4) {
-      alert('몇 월인지 2자리로 입력해주세요.');
-      return false;
-    }
-
-    if (birthMonth.length < 2) {
-      alert('몇 일인지 2자리로 입력해주세요.');
-      return false;
-    }
-
-    if (birthMonth.length < 2) {
-      alert('연도를 4자리로 입력해주세요.');
+    if (birthYear.length < 4 || 4 < birthYear.length) {
+      alert('태어난 연도를 4자리로 입력해주세요.');
       return false;
     }
 
@@ -125,8 +120,22 @@ export function JoinSecondPage() {
       alert('태어난 월을 입력해주세요.');
       return false;
     }
+    if (birthMonth.length < 2 || 2 < birthMonth.length) {
+      alert('몇 월인지를 2자리로 입력해주세요.');
+      return false;
+    }
     if (birthDay == '') {
       alert('태어난 날짜를 입력해주세요.');
+      return false;
+    }
+
+    if (2 < birthDay.length) {
+      alert('몇 일인지를 2자리로 입력해주세요.');
+      return false;
+    }
+
+    if (birthDay.length < 2) {
+      alert('몇 일인지를 2자리로 입력해주세요.');
       return false;
     }
 
@@ -137,15 +146,15 @@ export function JoinSecondPage() {
     //   !reg.test(birthMonth),
     //   !reg.test(birthDay),
     // );
-    if (reg.test(birthYear)) {
-      alert('1.');
-    }
-    if (reg.test(birthMonth)) {
-      alert('2.');
-    }
-    if (reg.test(birthDay)) {
-      alert('3.');
-    }
+    // if (reg.test(birthYear)) {
+    //   alert('1.');
+    // }
+    // if (reg.test(birthMonth)) {
+    //   alert('2.');
+    // }
+    // if (reg.test(birthDay)) {
+    //   alert('3.');
+    // }
     // if (Number.isNaN(birthMD) || Number.isNaN(birthYear)) {
     //   alert('생년월일은 숫자만 입력할 수 있습니다.');
     //   return false;
@@ -156,10 +165,23 @@ export function JoinSecondPage() {
       return false;
     }
 
-    if (!reg.test(tel1) || !reg.test(tel2) || !reg.test(tel3)) {
-      alert('전화번호는 숫자만 입력할 수 있습니다.');
+    if (3 < tel1.length) {
+      alert('전화번호 첫 자리가 너무 길어요.');
       return false;
     }
+    if (4 < tel2.length) {
+      alert('전화번호 두 번째 자리가 너무 길어요.');
+      return false;
+    }
+    if (4 < tel3.length) {
+      alert('전화번호 세 번째 자리가 너무 길어요.');
+      return false;
+    }
+
+    // if (!reg.test(tel1) || !reg.test(tel2) || !reg.test(tel3)) {
+    //   alert('전화번호는 숫자만 입력할 수 있습니다.');
+    //   return false;
+    // }
     // console.log(!Number.isNaN(tel1));
     // console.log(!Number.isNaN(tel2));
     // console.log(!Number.isNaN(tel3));
@@ -171,10 +193,6 @@ export function JoinSecondPage() {
     //   return false;
     // }
 
-    if (password !== confirmPassword) {
-      alert('비밀번호가 다릅니다.');
-      return false;
-    }
     return true;
   }
 
@@ -426,7 +444,7 @@ export function JoinSecondPage() {
             <form className="emailForm">
               <div className="mini-input-container">
                 <input
-                  type="text"
+                  type="number"
                   className="mini-input-box"
                   placeholder="2000"
                   maxLength={4}
@@ -434,15 +452,16 @@ export function JoinSecondPage() {
                 />
                 <span>년</span>
                 <input
-                  type="text"
+                  type="number"
                   className="mini-input-box"
                   placeholder="10"
-                  maxLength={2}
+                  min="1"
+                  max="12"
                   onChange={(e) => setBirthMonth(e.target.value)}
                 />
                 <span>월</span>
                 <input
-                  type="text"
+                  type="number"
                   className="mini-input-box"
                   placeholder="10"
                   maxLength={2}
@@ -455,7 +474,7 @@ export function JoinSecondPage() {
             <form className="emailForm">
               <div className="mini-input-container">
                 <input
-                  type="text"
+                  type="number"
                   className="mini-input-box"
                   placeholder="010"
                   maxLength={3}
@@ -463,7 +482,7 @@ export function JoinSecondPage() {
                 />
                 <span>-</span>
                 <input
-                  type="text"
+                  type="number"
                   className="mini-input-box"
                   placeholder="8888"
                   maxLength={4}
@@ -471,7 +490,7 @@ export function JoinSecondPage() {
                 />
                 <span>-</span>
                 <input
-                  type="text"
+                  type="number"
                   className="mini-input-box"
                   placeholder="8888"
                   maxLength={4}
