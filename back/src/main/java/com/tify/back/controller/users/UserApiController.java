@@ -127,9 +127,6 @@ public class UserApiController {
     public ResponseEntity<?> checkEmailState(String email) {
         System.out.println("이메일 인증 했는지 체크");
         User user = userRepository.findByUserid(email);
-        if (user == null) {
-            return ResponseEntity.ok().body("N");
-        }
         List<EmailAuth> emailAuths = emailAuthRepository.findAllByEmail(email);
         if (emailAuths.size() == 0 || emailAuths.get(emailAuths.size()-1).getExpired() ==false) {
             return ResponseEntity.ok().body("N");

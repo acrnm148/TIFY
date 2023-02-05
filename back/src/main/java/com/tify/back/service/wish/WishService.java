@@ -41,11 +41,14 @@ public class WishService {
     // gift datas come in shape of JsonArray
     public boolean saveWish(AddWishDto dto) {
         Wish wish = dto.toEntity(userRepository);
+        wish.setNowPrice(0);
         wishRepository.save(wish);
         List<Gift> gifts = wish.getGiftItems();
         for (GiftDto giftDto : dto.getGiftItems()) {
             Gift gift = giftDto.toEntity(productRepository);
             gift.setWish(wish);
+            gift.setSuccessYN("N");
+            gift.setFinishYN("N");
             gift = giftService.createGift(gift, wish.getId());
             gifts.add(gift);
         }
