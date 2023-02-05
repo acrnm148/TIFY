@@ -1,8 +1,13 @@
 .gift-item-card-container{
     margin: 2px;
 }
+
+.gift-item-card{
+    padding-left: 10px;
+    padding-right: 10px;
+}
 .gift-image {
-    background-color: rgb(217, 217, 217);
+    height: 21.3vw;
 }
 
 @media (min-width : 1025px)

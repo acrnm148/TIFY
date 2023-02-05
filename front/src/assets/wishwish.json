@@ -1,0 +1,126 @@
+[
+    {
+      "id": 0,
+      "giftItems": [
+        {
+          "id": 0,
+          "productId": 0,
+          "quantity": 0,
+          "userOption": "string",
+          "type": "string",
+          "finishYN": "string",
+          "maxAmount": 0,
+          "purePrice": 0,
+          "gathered": 0,
+          "successYN": "string",
+          "idx": 0,
+          "finishDate": "2023-02-05T08:21:57.212Z",
+          "giftImgUrl": "string",
+          "giftUrl": "string",
+          "payList": [
+            {
+              "pay_id": 0,
+              "amount": "string",
+              "celeb_img_url": "string",
+              "celeb_from": "string",
+              "celeb_tel": "string",
+              "celeb_content": "string",
+              "pay_type": "string",
+              "gift": "string",
+              "user_id": 0,
+              "createTime": "2023-02-05T08:21:57.212Z",
+              "order": {
+                "createdDate": "2023-02-05T08:21:57.212Z",
+                "modifiedDate": "2023-02-05T08:21:57.212Z",
+                "id": 0,
+                "user": {
+                  "id": 0,
+                  "userid": "string",
+                  "password": "string",
+                  "roles": "string",
+                  "provider": "string",
+                  "nickname": "string",
+                  "profileImg": "string",
+                  "username": "string",
+                  "birth": "string",
+                  "email": "string",
+                  "tel": "string",
+                  "addr1": "string",
+                  "addr2": "string",
+                  "zipcode": "string",
+                  "birthYear": "string",
+                  "gender": "string",
+                  "emailAuth": true,
+                  "createTime": "2023-02-05T08:21:57.212Z",
+                  "roleList": [
+                    "string"
+                  ]
+                },
+                "gift": "string",
+                "tel": "string",
+                "gatheredPrice": 0,
+                "orderPrice": 0,
+                "deliveryNumber": "string",
+                "state": 0
+              },
+              "thkcardList": [
+                {
+                  "id": 0,
+                  "title": "string",
+                  "phoneNumber": "string",
+                  "content": "string",
+                  "imageUrl": "string",
+                  "pay": "string"
+                }
+              ]
+            }
+          ],
+          "giftOption": [
+            {
+              "giftOptId": 0,
+              "gift": "string",
+              "giftOpt": "string"
+            }
+          ]
+        }
+      ],
+      "user": {
+        "id": 0,
+        "userid": "string",
+        "password": "string",
+        "roles": "string",
+        "provider": "string",
+        "nickname": "string",
+        "profileImg": "string",
+        "username": "string",
+        "birth": "string",
+        "email": "string",
+        "tel": "string",
+        "addr1": "string",
+        "addr2": "string",
+        "zipcode": "string",
+        "birthYear": "string",
+        "gender": "string",
+        "emailAuth": true,
+        "createTime": "2023-02-05T08:21:57.212Z",
+        "roleList": [
+          "string"
+        ]
+      },
+      "totPrice": 0,
+      "nowPrice": 0,
+      "title": "string",
+      "content": "string",
+      "joinCount": 0,
+      "finishYN": "string",
+      "createDate": "2023-02-05T08:21:57.212Z",
+      "startDate": "2023-02-05T08:21:57.212Z",
+      "endDate": "2023-02-05T08:21:57.212Z",
+      "cardImageCode": "string",
+      "addr1": "string",
+      "addr2": "string",
+      "zipCode": "string",
+      "cardopen": "string",
+      "category": "string"
+    }
+  ]

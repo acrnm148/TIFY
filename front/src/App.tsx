@@ -146,8 +146,6 @@ function App() {
           <Route path="kakaopay" element={<PayingService />} />
         </Route>
         <Route path="/congrats/kakaopay/result" element={<PayResult />} />
-        {/* <Route path="/congrats/import" element={<PayingPort />} /> */}
-
         <Route path="/faq" element={<FaqPage />} />
 
         <Route path="/*" element={<NotFound />} />

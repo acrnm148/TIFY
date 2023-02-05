@@ -29,7 +29,7 @@ export function GiftHubDetailPage(){
         const fetchData = async() =>{
             const API_URL = `https://i8e208.p.ssafy.io/api/gifthub/product/${giftId}`;
             axios.get(API_URL).then((con) => {
-                console.log(con)
+                console.log(con.data)
                 setData(con.data)
             }).catch((err) => {
                 console.log('상품 디테일 데이터를 받아오지못함', err)
@@ -49,7 +49,6 @@ export function GiftHubDetailPage(){
                 const putCart = async() =>{
                     
                     const API_URL = `https://i8e208.p.ssafy.io/api/cart/`;
-                    // axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
                     axios({
                         method: 'post',
                         url: API_URL,
@@ -59,7 +58,7 @@ export function GiftHubDetailPage(){
                             "productId":data.id, //data.id,
                             "quantity":1, // data.quantity
                             "options":{
-                                "color":"green"
+                                "":""
                             }
                         }
                     }).then((con) => {
@@ -89,15 +88,12 @@ export function GiftHubDetailPage(){
                         </div>
                         <div className="product-price-option">
                             <p className="product-price">₩ {data.price} </p>
-                            <div>{data.options ? data.options[0]:''}</div>
+                            <div>{data.options ? data.options:''}</div>
                         </div>
-                        {/* [TODO] 기프트정보 같이 보내기 */}
                         <div className="make-wish" onClick={()=>{checkHeart()}}>
                             장바구니에 담기
                         </div>
-                        {/* <NavLink to={'/makewish'} className="make-wish" >
-                            위시 만들기
-                        </NavLink> */}
+
                     </div>
                 </div>
                 <div className="product-image">
