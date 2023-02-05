@@ -2,6 +2,9 @@ import axios from "axios";
 import { useState } from "react";
 import { Paying } from "../interface/interface";
 
+declare const window: typeof globalThis & {
+  IMP: any;
+};
 
 let paying = {
             amount : -1,
