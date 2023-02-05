@@ -32,6 +32,7 @@ import { OrderList } from './components/OrderList';
 import { CongratsPage } from './pages/CongratsPage';
 import { CongratsPayPage } from './pages/CongratsPayPage';
 import { CongratsCardPage } from './pages/CongratsCardPage';
+import { Delivery } from './components/Delivery';
 import PayingPort from './components/PayingPort';
 
 import { Footer } from './fixture/Footer';
@@ -103,7 +104,9 @@ function App() {
             <Route path="friend" element={<Friend />} />
             <Route path="info" element={<MyInfo />} />
             <Route path="phone" element={<PhoneBook />} />
-            <Route path="order" element={<OrderList />} />
+            <Route path="order" element={<OrderList />}>
+              <Route path="delivery" element={<Delivery />} />
+            </Route>
           </Route>
           <Route path="/checkwish" element={<CheckWishPage />} />
           <Route path="/thanks/:wishId/:conId" element={<ThanksPage />} />
