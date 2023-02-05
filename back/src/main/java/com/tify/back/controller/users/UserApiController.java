@@ -20,6 +20,7 @@ import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
 import com.tify.back.exception.UserLoginException;
 import com.tify.back.model.users.EmailAuth;
+import com.tify.back.model.users.UserProperties;
 import com.tify.back.repository.users.EmailAuthRepository;
 import com.tify.back.service.users.EmailService;
 import com.tify.back.service.users.UserService;
@@ -92,8 +93,10 @@ public class UserApiController {
     @PostMapping("/account/signin")
     public ResponseEntity<?> join(@RequestBody JoinRequestDto joinRequestDto){ //authToken, email 받아옴
         JoinResponseDto responseDto = userService.register(joinRequestDto);
-        if (responseDto == null) {
+        if (responseDto.getResult().equals(UserProperties.EXISTED_USER)) {
             return ResponseEntity.status(HttpStatus.MULTI_STATUS).body("존재하는 유저입니다.");
+        } else if (responseDto.getResult().equals(UserProperties.NO_CHECKED_EMAIL)) {
+            return ResponseEntity.status(HttpStatus.MULTI_STATUS).body("이메일 인증이 필요합니다.");
         }
         //login(new LoginRequestDto(responseDto.getUserid(), responseDto.getPassword()));
         return ResponseEntity.ok().body(responseDto);
@@ -123,9 +126,9 @@ public class UserApiController {
     @GetMapping("/account/checkEmailState")
     public ResponseEntity<?> checkEmailState(String email) {
         System.out.println("이메일 인증 했는지 체크");
-        List<EmailAuth> emailAuths = new ArrayList<>();
-        emailAuths = emailAuthRepository.findByEmail(email);
-        if (emailAuths.size() == 0) {
+        User user = userRepository.findByUserid(email);
+        List<EmailAuth> emailAuths = emailAuthRepository.findAllByEmail(email);
+        if (emailAuths.size() == 0 || emailAuths.get(emailAuths.size()-1).getExpired() ==false) {
             return ResponseEntity.ok().body("N");
         }
         return ResponseEntity.ok().body("Y");
@@ -140,7 +143,7 @@ public class UserApiController {
     public ResponseEntity<?> sendEmailAuth(@RequestParam("email") String email) {
         System.out.println("이메일 인증 - 이미 가입된 메일 체크 :"+userService.validateDuplicated(email));
         if (userService.validateDuplicated(email)) {
-            return ResponseEntity.ok().body("이미 인증이 완료된 이메일입니다.");
+            return ResponseEntity.ok().body("해당 이메일의 유저가 존재합니다.");
         }
         userService.sendEmailAuth(email);
         return ResponseEntity.ok().body(email); //인증된 이메일 리턴
@@ -152,22 +155,22 @@ public class UserApiController {
     @Operation(summary = "user info", description = "유저 프로필 정보를 가져옴")
     @GetMapping("/account/userInfo")
     public ResponseEntity<?> getUserProfile(@RequestHeader(value = "Authorization") String token) {
+        UserProfileDto userProfileDto = null;
         try {
             System.out.println("유저 조회 token 체크 : "+token);
-            UserProfileDto userProfileDto = userService.getUser(token.substring(7));
-            //return ResponseEntity.ok().body(new UserProfileDto(user));
-            return ResponseEntity.ok().body(userProfileDto);
+             userProfileDto = userService.getUser(token.substring(7));
+             System.out.println("userprofile:"+userProfileDto);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("유저 정보가 없습니다. 다시 로그인해주세요.");
         }
+        return ResponseEntity.ok().body(userProfileDto);
     }
 
     /**
      * 회원 탈퇴
      */
     @DeleteMapping("/account/signout")
-    public ResponseEntity<?> signout(@RequestHeader("Authorization") String token) { //@RequestHeader(value = "Authorization") String token) {
-        try {
+    public ResponseEntity<?> signout(@RequestHeader("Authorization") String token) {
             token = token.substring(7);
             if (jwtService.validAccessToken(token) == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰이 만료되었습니다.");
@@ -175,10 +178,7 @@ public class UserApiController {
             String userid = userService.getUserid(token);
             userService.deleteUser(userid);
             System.out.println("탈퇴되었습니다.");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        } catch(Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("헤더에 토큰이 없습니다.");
-        }
+            return ResponseEntity.ok().body("탈퇴되었습니다.");
     }
 
     /**
@@ -304,7 +304,7 @@ public class UserApiController {
     public ResponseEntity<?> findPassword(@RequestParam("email") String email) throws URISyntaxException {
         User user = userRepository.findByUserid(email);
         if (user == null) {
-            throw new UserLoginException("이메일이 존재하지 않습니다.");
+            return ResponseEntity.badRequest().body("이메일이 존재하지 않습니다.");
         }
         userService.sendMailAndChangePassword(user);
         System.out.println("임시 비밀번호로 변경 완료");

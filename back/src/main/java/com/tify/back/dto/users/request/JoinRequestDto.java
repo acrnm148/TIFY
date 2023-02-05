@@ -25,4 +25,5 @@ public class JoinRequestDto {
     private String gender;
     private String provider;
     private String profile_img;
+    private Boolean emailAuthYN;
 }
