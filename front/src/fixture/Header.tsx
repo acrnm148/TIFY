@@ -17,6 +17,7 @@ import { removeCookieToken } from '../modules/Auth/Cookie';
 import { DELETE_TOKEN } from '../store/Auth';
 
 import AlarmDropdown from '../components/AlarmDropdown';
+import { useLocation } from 'react-router-dom';
 
 export function Header() {
   const [showWishDetail, setShowWishDetail] = useState<boolean>(false);
@@ -29,6 +30,11 @@ export function Header() {
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
+  // const [checkUser, setCheckUser] = useState<boolean>(true);
+  const location = useLocation();
+  // const checkUser = useSelector(
+  //   (state: RootState) => state.authToken.authenticated,
+  // );
   // console.log(checkUser);
   // console.log('요것이 checkUser');
   // console.log(accessToken);
@@ -87,6 +93,9 @@ export function Header() {
               </NavLink>
             </div>
           </div>
+          <NavLink to="/admin" className="nav-cate-item">
+            관리자페이지
+          </NavLink>
         </div>
       </>
     );
@@ -130,10 +139,10 @@ export function Header() {
         <NavLink to="/like">
           <img src={heart} className="logo logo-right" alt="Tify logo" />
         </NavLink>
-        <NavLink to="/alram">
-          {/* <img src={alertIcon} className="logo logo-right" alt="Tify logo" /> */}
-          <AlarmDropdown />
-        </NavLink>
+        {/* <NavLink to="/alram"> */}
+        {/* <img src={alertIcon} className="logo logo-right" alt="Tify logo" /> */}
+        <AlarmDropdown />
+        {/* </NavLink> */}
         <button onClick={handleLogOut}>
           <img src={logout} className="logo logo-right" alt="Tify logo" />
         </button>
@@ -156,10 +165,55 @@ export function Header() {
     );
   };
 
+  const AmdinNavLeft = () => {
+    return (
+      <>
+        <NavLink to="">
+          <img src={logo} className="logo logo-left" alt="Tify logo" />
+        </NavLink>
+        <div
+          className="nav-cate"
+          onMouseOver={() => {
+            setShowWishDetail(true);
+            setHideWishDetail(false);
+          }}
+          onMouseLeave={() => {
+            setHideWishDetail(true);
+            setShowWishDetail(false);
+          }}
+        >
+          {/* <NavLink to="/qna" className="nav-cate-item">문의하기</NavLink> */}
+          <NavLink to="/admin/users" className="nav-cate-item">
+            회원관리
+          </NavLink>
+          <NavLink to="/admin/wishes" className="nav-cate-item">
+            위시관리
+          </NavLink>
+          <NavLink to="/admin/products" className="nav-cate-item">
+            상품관리
+          </NavLink>
+          <NavLink to="/admin/qna" className="nav-cate-item">
+            문의관리
+          </NavLink>
+          <NavLink to="/admin/faq" className="nav-cate-item">
+            FAQ관리
+          </NavLink>
+          <NavLink to="/admin/refund" className="nav-cate-item">
+            환불관리
+          </NavLink>
+        </div>
+      </>
+    );
+  };
+
   return (
     <nav className="navbar-container">
       <div className="nav-left">
-        <NavLeft />
+        {location.pathname.startsWith('/admin') ? (
+          <AmdinNavLeft />
+        ) : (
+          <NavLeft />
+        )}
       </div>
 
       <div className="header-right">

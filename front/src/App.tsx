@@ -11,7 +11,7 @@ import { ThanksPage } from './pages/ThanksPage';
 import FriendsPage from './pages/FriendsPage';
 import { MyPage } from './pages/mypage/MyPage';
 import { LikePage } from './pages/LikePage';
-import { AlramPage } from './pages/AlramPage';
+import { AlarmPage } from './pages/AlarmPage';
 import { FaqPage } from './pages/FaqPage';
 import { AskPage } from './pages/AskPage';
 
@@ -32,7 +32,6 @@ import { OrderList } from './components/OrderList';
 import { CongratsPage } from './pages/CongratsPage';
 import { CongratsPayPage } from './pages/CongratsPayPage';
 import { CongratsCardPage } from './pages/CongratsCardPage';
-import PayingPort from './components/PayingPort';
 
 import { Footer } from './fixture/Footer';
 import { MainPage } from './pages/MainPage';
@@ -40,6 +39,7 @@ import { NotFound } from './pages/NotFound';
 import PayingService from './components/PayingService';
 import PayResult from './components/PayResult';
 import WishSuccess from './components/WishSuccess';
+import Admin from './pages/AdminPage/AdminPage';
 
 import './css/styles.css';
 import { GiftHubDetailPage } from './pages/GiftHubDetailPage';
@@ -48,6 +48,12 @@ import { useReducer } from 'react';
 import { Login } from './modules/Auth/LogIn';
 
 import ScrollTop from '../src/interface/scroll';
+
+import { AdminPage } from './pages/AdminPage';
+import Users from "./components/AdminPage/Users"
+import Wishes from "./components/AdminPage/Wishes"
+import UserInfoEdit from './components/AdminPage/UserInfoEdit';
+import Products from './components/AdminPage/Products'
 
 // const initialState = {
 //   authenticated: false,
@@ -110,7 +116,7 @@ function App() {
           <Route path="/friends" element={<FriendsPage />} />
           <Route path="/makewish/success" element={<WishSuccess />} />
           <Route path="/like" element={<LikePage />} />
-          <Route path="/alram" element={<AlramPage />} />
+          {/* <Route path="/alarm" element={<AlarmPage />} /> */}
           <Route path="/ask" element={<AskPage />} />
         </Route>
 
@@ -140,11 +146,17 @@ function App() {
           <Route path="kakaopay" element={<PayingService />} />
         </Route>
         <Route path="/congrats/kakaopay/result" element={<PayResult />} />
-        <Route path="/congrats/import" element={<PayingPort />} />
+        {/* <Route path="/congrats/import" element={<PayingPort />} /> */}
 
         <Route path="/faq" element={<FaqPage />} />
 
         <Route path="/*" element={<NotFound />} />
+        <Route path="/admin" element={<Admin/>}/>
+        <Route path="/admin/users" element={<Users/>}/>
+        <Route path="/admin/users/:userPk" element={<UserInfoEdit />} />
+
+        <Route path="/admin/wishes" element={<Wishes/>}/>
+        <Route path="/admin/products" element={<Products/>}/>
       </Routes>
       <Footer />
     </BrowserRouter>

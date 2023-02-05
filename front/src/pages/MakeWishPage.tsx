@@ -36,6 +36,7 @@ import '../css/congratsPage.styles.css';
 // user
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
+import { NavLink } from 'react-router-dom';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -51,8 +52,10 @@ const style = {
 // [TODO] 카테고리 선택 mui..
 
 export function MakeWishPage() {
-  const [userId, setUserId] = useState(104);
-  // const [userId, setUserId] = useState(useSelector((state: RootState) => state.authToken.userId))
+  // const [userId , setUserId] = useState(104);
+  const [userId, setUserId] = useState(
+    useSelector((state: RootState) => state.authToken.userId),
+  );
 
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
@@ -214,7 +217,6 @@ export function MakeWishPage() {
   const MakeWish = () => {
     const selectedWishCard =
       Number(selectCard) >= 0 ? imgBase64 : cardList[Number(selectCard)];
-    console.log('선택한 카드', selectedWishCard, Number(selectCard), imgBase64);
     const makeWish = async () => {
       const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';
       axios({
@@ -223,13 +225,14 @@ export function MakeWishPage() {
         data: {
           userId: userId,
           giftItems: [...totalProduct],
+          finishYN: 'N',
           totalPrice: totalPrice,
           wishTitle: title,
           wishContent: content,
           category: category,
           startDate: startDate,
           endDate: endDate,
-          wishCard: imgUrlS3, //string
+          wishCard: imgUrlS3,
           addr1: enroll_company.address,
           addr2: addr2,
         },
@@ -239,9 +242,12 @@ export function MakeWishPage() {
         },
       })
         .then((con) => {
-          console.log('위시생성 성공', con);
+          console.log('위시생성 성공', con, userId);
           setFinished(true);
           console.log('wishCart', wishCart);
+        })
+        .catch((err) => {
+          console.log('위시생성 실패', err);
         })
         .catch((err) => {
           console.log('위시생성 실패', err);
@@ -333,24 +339,17 @@ export function MakeWishPage() {
                 <h1>{title}</h1>
                 <p>{content}</p>
               </div>
+              <div className="wish-congrats-btns">
+                <div className="button color">선택한 선물로 축하하기 →</div>
+                <div className="button gray">축하금으로 보내기 →</div>
+              </div>
             </div>
-            <div className="wish-gift-list">
-              {wishCart?.map((wishGift, i: number) => (
-                <div className="wish-gift" id={String(i)}>
-                  <div
-                    className="gift-img"
-                    style={{ backgroundImage: `url(${wishGift.repImg})` }}
-                  >
-                    <div className="gift-bar-gray" />
-                  </div>
-                  <p>{wishGift.name}</p>
-                </div>
-              ))}
-            </div>
-            <div className="wish-congrats-btns">
-              <div className="button color">선택한 선물로 축하하기 →</div>
-              <div className="button gray">축하금으로 보내기 →</div>
-            </div>
+          </div>
+          <div className="finish-wish-comment">
+            <h1>위시 생성이 완료되었습니다!</h1>
+            <NavLink to={'/checkwish'}>
+              <p>위시목록으로 고고고</p>
+            </NavLink>
           </div>
         </div>
         <div className="finish-wish-comment">
