@@ -61,6 +61,34 @@ public class WishController {
         return wishRepository.findAll();
     }
 
+    @PutMapping("/edit")
+    public String editWish(@RequestBody AddWishDto dto) {
+        // Validate if the wish exists
+        Optional<Wish> wishOptional = wishRepository.findById(dto.getWishId());
+        if (!wishOptional.isPresent()) {
+            return "Wish not found!";
+        }
+        Wish wish = wishOptional.get();
+
+        // Update the wish with the new values
+        wish.setTotPrice(dto.getTotalPrice());
+        wish.setNowPrice(dto.getNowPrice());
+        wish.setTitle(dto.getWishTitle());
+        wish.setContent(dto.getWishContent());
+        wish.setCategory(dto.getCategory());
+        wish.setFinishYN(dto.getFinishYN());
+        wish.setStartDate(dto.getStartDate());
+        wish.setEndDate(dto.getEndDate());
+        wish.setCardImageCode(dto.getWishCard());
+        wish.setAddr1(dto.getAddr1());
+        wish.setAddr2(dto.getAddr2());
+        wish.setZipCode(dto.getZipCode());
+
+        // Save the changes to the database
+        wishRepository.save(wish);
+        return "Wish updated!";
+    }
+
     @PostMapping// test용 빈 wish 만드는 컨트롤러
     public Wish makeWish(String message) {
         Wish wish = new Wish();
