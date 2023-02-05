@@ -40,7 +40,17 @@ export function Header() {
   // console.log(accessToken);
   // console.log('요것이 accessToken');
 
+  const [checkAdmin, setCheckAdmin] = useState<boolean>(false);
+
   const refreshToken = getCookieToken();
+
+  function checkRole() {
+    axios({
+      url: 'https://i8e208.p.ssafy.io/api/roleCheck',
+      method: 'GET',
+params: 
+    })
+  }
 
   useEffect(() => {
     if (refreshToken != undefined) {
@@ -93,9 +103,11 @@ export function Header() {
               </NavLink>
             </div>
           </div>
-          <NavLink to="/admin" className="nav-cate-item">
-            관리자페이지
-          </NavLink>
+          <div>
+            <NavLink to="/admin" className="nav-cate-item">
+              관리자페이지
+            </NavLink>
+          </div>
         </div>
       </>
     );
