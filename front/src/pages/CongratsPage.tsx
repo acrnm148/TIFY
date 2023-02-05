@@ -16,14 +16,6 @@ export function CongratsPage() {
     const [card, setCard] = useState('')
 
     const [clickedGift, setClickedGift] = useState<number>()
-    const [wishDetail, setWishDetail] = useState(
-        {
-            category : 'temp',
-            title : 'temp title',
-            content: 'temp content',
-            card : '',
-        }
-    )
     const [wishGiftList, setWishGiftList] = useState([
         {
             id : 1,
@@ -32,14 +24,6 @@ export function CongratsPage() {
             achieved81 : 81 *0.2,
             achieved : 20,
             price: '400,000',
-        },
-        {
-            id : 2,
-            img : 'https://user-images.githubusercontent.com/87971876/215254369-d144dcd7-00ae-4f1c-b740-c219c6e30821.png',
-            name : '임시선물2',
-            achieved81 : 81 *0.8,
-            achieved : 80,
-            price: '100,000,000',
         },
     ])
 
@@ -59,14 +43,18 @@ export function CongratsPage() {
             setCard(res.data.cardImageCode)
             
             setWishGiftList(res.data.giftItems.map((item: { giftImgUrl: any; productNum: number; gathered: number; purePrice: number; }, i:number) => {
+                const pricevat = Number(item.purePrice) + (Number(item.purePrice)*0.05)
+                const achieved = (Number(item.gathered) / pricevat)*100
+                // console.log((Number(item.gathered) / pricevat)*100)
                 return(
                 {
                     id : i,
                     img : item.giftImgUrl,
                     productNum : item.productNum,
-                    name : '추가해야함', // 추가해야함
-                    achieved : (item.gathered % (item.purePrice+(item.purePrice * 0.05)))*100,
-                    price : item.purePrice+(item.purePrice * 0.05)
+                    name : '', // 추가해야함
+                    achieved : Math.round(achieved),
+                    achieved81 : Math.round(achieved*0.81),
+                    price : Math.round(pricevat),
                 }
                 )
             }))
@@ -79,15 +67,13 @@ export function CongratsPage() {
 
     const WishCardCover = () =>{
         return(
-            <div className="wish-card wish-card-cover">
-                <img src={card} alt="" />
-            </div>
+            <div className="wish-card wish-card-cover" style={{"backgroundImage" :`url(${card})`, "marginBottom":"10px"}} />
         )
     }
     const WishCardContent = () =>{
         return(
             <div className="wish-card wish-card-content">
-                <h1>{title}</h1>
+                <h1 className="wish-title">{title}</h1>
                 <p>{content}</p>
             </div>
         )
@@ -128,7 +114,7 @@ export function CongratsPage() {
     return(
         <div className="congrats-page-container">
             <div className="wish-components">
-                <div className="wish-components-title">
+                <div className="wish-components-title" style={{"padding":"0 10px"}}>
                     {
                         category?
                         <h1>{userName}님의 {category}를 축하해주세요!</h1>

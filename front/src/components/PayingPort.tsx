@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useState } from "react";
 import { Paying } from "../interface/interface";
 
 // 기존 윈도우에 없는 객체에 접근할 때 에러 발생
@@ -23,7 +22,7 @@ export function onClickPayment(congratsInfo:Paying, giftName:string) {
     /* 1. 가맹점 식별하기 */
     const {IMP} = window;
     IMP.init('imp34060260');
-
+    if(!giftName){giftName = '티피로 축하하기'}
     /* 2. 결제 데이터 정의하기 */
     const data = {
       pg: 'html5_inicis.INIpayTest',                           // PG사
@@ -66,8 +65,8 @@ export function onClickPayment(congratsInfo:Paying, giftName:string) {
         const API_URL = "https://i8e208.p.ssafy.io/api/celebrate/"
         axios.post(API_URL, data
           ).then((res) =>{
-            console.log('축하 결제 성공!!!')
-            
+            console.log('축하 결제 성공!!!', res)
+            window.location.href = 'https://i8e208.p.ssafy.io'
           }).catch((err) => {
             console.log('축하 결제 실패', err)
           })

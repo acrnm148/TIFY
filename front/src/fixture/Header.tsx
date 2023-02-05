@@ -58,14 +58,6 @@ export function Header() {
         </NavLink>
         <div
           className="nav-cate"
-          onMouseOver={() => {
-            setShowWishDetail(true);
-            setHideWishDetail(false);
-          }}
-          onMouseLeave={() => {
-            setHideWishDetail(true);
-            setShowWishDetail(false);
-          }}
         >
           {/* <NavLink to="/qna" className="nav-cate-item">문의하기</NavLink> */}
           <NavLink to="/gifthub" className="nav-cate-item">
@@ -74,25 +66,12 @@ export function Header() {
           <NavLink to="/friends" className="nav-cate-item">
             친구찾기
           </NavLink>
-          <NavLink to="/thanks" className="nav-cate-item">
-            감사하기
+          <NavLink to="/makewish" className="nav-cate-item">
+            위시만들기
           </NavLink>
-          <div className="nav-cate-item wish">
-            위시
-            <div
-              className={`wish-detail 
-              ${showWishDetail ? 'open' : ''} 
-              ${hideWishDetail ? 'hide' : ''}
-              `}
-            >
-              <NavLink to="/makewish" className="">
-                만들기
-              </NavLink>
-              <NavLink to="/checkwish" className="">
-                확인
-              </NavLink>
-            </div>
-          </div>
+          <NavLink to="/checkwish" className="nav-cate-item">
+            마이위시
+          </NavLink>
           <NavLink to="/admin" className="nav-cate-item">
             관리자페이지
           </NavLink>
