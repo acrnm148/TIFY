@@ -21,12 +21,37 @@ export interface GiftProps {
   giftList: Gift[];
 }
 export interface Paying{
-  amount : number, // api요청시에는 string.!!!
-  payType : string,
-  celebFrom : string,
-  celebTel : string,
-  celebContent : string,
-  celebImgUrl : string,
-  giftId : number,
-  userId : number,
+  amount : number; // api요청시에는 string.!!!
+  payType : string;
+  celebFrom : string;
+  celebTel : string;
+  celebContent : string;
+  celebImgUrl : string;
+  giftId : number;
+  userId : number;
+}
+
+export interface Wish {
+  giftItems: Gift[];
+  totalPrice: number;
+  wishTitle: string;
+  wishConten :string;
+  category:number;
+  startDate : string;
+  endDate:string;
+  wishCard: string; //string
+  addr1: string;
+  addr2:string;
+}
+
+export interface CheckWish{
+  wishId : string;
+  userName : string;
+  title : string;
+  category : string;
+  restDay : string;
+  percent : number;
+  fromList : string[];
+  fromId : number;
+  cardOpen : string;
 }

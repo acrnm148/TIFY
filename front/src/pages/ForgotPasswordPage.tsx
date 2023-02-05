@@ -9,27 +9,30 @@ export function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
 
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const navigate = useNavigate();
 
-    try {
-      // 해당 이메일이 존재하는지 먼저 체크해보기
-      await axios
-        .get(
-          `https://i8e208.p.ssafy.io/api/account/sendEmailAuth?email=${email}`,
-        )
-        .then((r) => {
-          console.log('요청 보냄!');
-          console.log(r);
-          alert(
-            '요청하신 주소로 인증 요청 메일을 보냈습니다. 확인 후 완료 버튼을 눌러주세요.',
-          );
-        });
-    } catch (err) {
-      setError('Error sending email. Please try again later.');
-    }
+    // axios.get(`http://i8e208.p.ssafy.io/api/account/checkEmailState`);
+
+    // 해당 이메일이 존재하는지 먼저 체크해보기
+    axios({
+      // 프록시에 카카오 도메인을 설정했으므로 결제 준비 url만 주자
+      url: 'https://i8e208.p.ssafy.io/api/account/findPw',
+      // 결제 준비 API는 POST 메소드라고 한다.
+      method: 'POST',
+      params: { email },
+    })
+      .then((r) => {
+        console.log('요청 보냄!', r);
+        alert('요청하신 주소로 인증 요청 메일을 보냈습니다.');
+        return navigate('/login');
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('존재하지 않는 이메일입니다.');
+      });
   };
 
   return (

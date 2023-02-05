@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { RootState } from '../store/Auth';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
+import { getCookieToken } from '../modules/Auth/Cookie';
 
 import axios from 'axios';
 
@@ -16,18 +17,38 @@ import { removeCookieToken } from '../modules/Auth/Cookie';
 import { DELETE_TOKEN } from '../store/Auth';
 
 import AlarmDropdown from '../components/AlarmDropdown';
-
+import { useLocation } from 'react-router-dom';
 
 export function Header() {
   const [showWishDetail, setShowWishDetail] = useState<boolean>(false);
   const [hideWishDetail, setHideWishDetail] = useState<boolean>(true);
-  // const [checkUser, setCheckUser] = useState<boolean>(true);
+  const [checkUser, setCheckUser] = useState<boolean>();
 
-  const checkUser = useSelector(
-    (state: RootState) => state.authToken.authenticated,
+  // const checkUser = useSelector(
+  //   (state: RootState) => state.authToken.authenticated,
+  // );
+  const accessToken = useSelector(
+    (state: RootState) => state.authToken.accessToken,
   );
-  console.log(checkUser);
-  console.log('요것이 checkUser');
+  // const [checkUser, setCheckUser] = useState<boolean>(true);
+  const location = useLocation();
+  // const checkUser = useSelector(
+  //   (state: RootState) => state.authToken.authenticated,
+  // );
+  // console.log(checkUser);
+  // console.log('요것이 checkUser');
+  // console.log(accessToken);
+  // console.log('요것이 accessToken');
+
+  const refreshToken = getCookieToken();
+
+  useEffect(() => {
+    if (refreshToken != undefined) {
+      setCheckUser(true);
+    } else {
+      setCheckUser(false);
+    }
+  }, [refreshToken]);
 
   const NavLeft = () => {
     return (
@@ -37,14 +58,6 @@ export function Header() {
         </NavLink>
         <div
           className="nav-cate"
-          onMouseOver={() => {
-            setShowWishDetail(true);
-            setHideWishDetail(false);
-          }}
-          onMouseLeave={() => {
-            setHideWishDetail(true);
-            setShowWishDetail(false);
-          }}
         >
           {/* <NavLink to="/qna" className="nav-cate-item">문의하기</NavLink> */}
           <NavLink to="/gifthub" className="nav-cate-item">
@@ -53,25 +66,15 @@ export function Header() {
           <NavLink to="/friends" className="nav-cate-item">
             친구찾기
           </NavLink>
-          <NavLink to="/thanks" className="nav-cate-item">
-            감사하기
+          <NavLink to="/makewish" className="nav-cate-item">
+            위시만들기
           </NavLink>
-          <div className="nav-cate-item wish">
-            위시
-            <div
-              className={`wish-detail 
-              ${showWishDetail ? 'open' : ''} 
-              ${hideWishDetail ? 'hide' : ''}
-              `}
-            >
-              <NavLink to="/makewish" className="">
-                만들기
-              </NavLink>
-              <NavLink to="/checkwish" className="">
-                확인
-              </NavLink>
-            </div>
-          </div>
+          <NavLink to="/checkwish" className="nav-cate-item">
+            마이위시
+          </NavLink>
+          <NavLink to="/admin" className="nav-cate-item">
+            관리자페이지
+          </NavLink>
         </div>
       </>
     );
@@ -90,6 +93,21 @@ export function Header() {
       dispatch(DELETE_TOKEN());
       // Cookie에 저장된 Refresh Token 정보를 삭제
       removeCookieToken();
+      // 로그아웃 요청
+      axios({
+        url: 'https://i8e208.p.ssafy.io/api/account/logout',
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-type': 'application/json',
+        },
+      })
+        .then((con) => {
+          console.log('로그아웃 성공', con);
+        })
+        .catch((err) => {
+          console.log('로그아웃 실패', err);
+        });
       return navigate('/');
     };
     return (
@@ -100,10 +118,10 @@ export function Header() {
         <NavLink to="/like">
           <img src={heart} className="logo logo-right" alt="Tify logo" />
         </NavLink>
-        <NavLink to="/alram">
-          {/* <img src={alertIcon} className="logo logo-right" alt="Tify logo" /> */}
-          <AlarmDropdown/>
-        </NavLink>
+        {/* <NavLink to="/alram"> */}
+        {/* <img src={alertIcon} className="logo logo-right" alt="Tify logo" /> */}
+        <AlarmDropdown />
+        {/* </NavLink> */}
         <button onClick={handleLogOut}>
           <img src={logout} className="logo logo-right" alt="Tify logo" />
         </button>
@@ -126,10 +144,55 @@ export function Header() {
     );
   };
 
+  const AmdinNavLeft = () => {
+    return (
+      <>
+        <NavLink to="">
+          <img src={logo} className="logo logo-left" alt="Tify logo" />
+        </NavLink>
+        <div
+          className="nav-cate"
+          onMouseOver={() => {
+            setShowWishDetail(true);
+            setHideWishDetail(false);
+          }}
+          onMouseLeave={() => {
+            setHideWishDetail(true);
+            setShowWishDetail(false);
+          }}
+        >
+          {/* <NavLink to="/qna" className="nav-cate-item">문의하기</NavLink> */}
+          <NavLink to="/admin/users" className="nav-cate-item">
+            회원관리
+          </NavLink>
+          <NavLink to="/admin/wishes" className="nav-cate-item">
+            위시관리
+          </NavLink>
+          <NavLink to="/admin/products" className="nav-cate-item">
+            상품관리
+          </NavLink>
+          <NavLink to="/admin/qna" className="nav-cate-item">
+            문의관리
+          </NavLink>
+          <NavLink to="/admin/faq" className="nav-cate-item">
+            FAQ관리
+          </NavLink>
+          <NavLink to="/admin/refund" className="nav-cate-item">
+            환불관리
+          </NavLink>
+        </div>
+      </>
+    );
+  };
+
   return (
     <nav className="navbar-container">
       <div className="nav-left">
-        <NavLeft />
+        {location.pathname.startsWith('/admin') ? (
+          <AmdinNavLeft />
+        ) : (
+          <NavLeft />
+        )}
       </div>
 
       <div className="header-right">

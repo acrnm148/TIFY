@@ -9,42 +9,66 @@ export function JoinFirstPage() {
   const [email, setEmail] = useState('');
   const [doRequest, setDoRequest] = useState(false);
 
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(doRequest);
-    setDoRequest(true);
 
     try {
-      setIsLoading(true);
       await axios
-        .get(
-          `https://i8e208.p.ssafy.io/api/account/sendEmailAuth?email=${email}`,
-        )
+        .get(`https://i8e208.p.ssafy.io/api/dupEmailCheck?userid=${email}`)
         .then((r) => {
-          console.log('요청 보냄!');
-          console.log(doRequest);
-          console.log(r);
-          alert(
-            '요청하신 주소로 인증 요청 메일을 보냈습니다. 확인 후 완료 버튼을 눌러주세요.',
-          );
+          console.log(r.data);
+          if (r.data == '유저가 존재합니다.') {
+            alert('이미 존재하는 이메일입니다.');
+          } else {
+            axios
+              .get(
+                `https://i8e208.p.ssafy.io/api/account/sendEmailAuth?email=${email}`,
+              )
+              .then((r) => {
+                setDoRequest(true);
+                console.log('요청 보냄!');
+                console.log(doRequest);
+                console.log(r);
+                alert(
+                  '요청하신 주소로 인증 요청 메일을 보냈습니다. 확인 후 완료 버튼을 눌러주세요.',
+                );
+              })
+              .catch((err) => {
+                console.log(err, '에러!!');
+              });
+          }
+        })
+        .catch((err) => {
+          console.log(err, 'errrr');
         });
-      setIsLoading(false);
-    } catch (err) {
-      setIsLoading(false);
-      setError('Error sending email. Please try again later.');
-    }
+    } catch (err) {}
   };
 
   const navigate = useNavigate();
-  function GoNext() {
-    navigate('/join2', {
-      state: {
-        emailData: email,
-      },
-    });
+  function GoNext(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    axios
+      .get(
+        `https://i8e208.p.ssafy.io/api/account/checkEmailState?email=${email}`,
+      )
+      .then((r) => {
+        console.log(r);
+        if (r.data == 'Y') {
+          alert('이메일 인증이 확인되었습니다. 추가 정보를 입력해주세요.');
+          navigate('/join2', {
+            state: {
+              emailData: email,
+            },
+          });
+        } else if (r.data == 'N') {
+          alert(
+            '아직 이메일 인증이 확인되지 않습니다. 인증 완료 후 시도해주세요',
+          );
+        }
+      })
+      .catch((err) => {
+        console.log(err, 'errrr');
+      });
   }
 
   return (
@@ -82,9 +106,12 @@ export function JoinFirstPage() {
                   id="emailForm"
                   placeholder="name@example.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setDoRequest(false);
+                  }}
                   required
-                  disabled
+                  // disabled
                 />
                 <button type="submit" className="loginButton font-bold">
                   이메일 인증 완료
@@ -98,7 +125,9 @@ export function JoinFirstPage() {
                   id="emailForm"
                   placeholder="name@example.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                   required
                 />
                 <button type="submit" className="loginButton font-bold">

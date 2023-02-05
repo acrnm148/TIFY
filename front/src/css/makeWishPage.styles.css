@@ -40,7 +40,6 @@
 .wish-card{
     width: 523px;
     height: 312px;
-    border: 1px solid #FE3360;
     border-radius: 8px;
 }
 .m-wish-card{
@@ -365,4 +364,11 @@
 }
 .gift-img{
     background-size: cover;
+}
+
+.wish-gift{
+    word-break: break-all;
+    width: 94px;
+    font-size: x-small;
+    color: white;
 }
