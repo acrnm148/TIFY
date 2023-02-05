@@ -21,6 +21,7 @@ import com.tify.back.model.friend.FriendStatus;
 import com.tify.back.model.gifthub.Cart;
 import com.tify.back.model.users.EmailAuth;
 import com.tify.back.model.users.User;
+import com.tify.back.model.users.UserProperties;
 import com.tify.back.repository.users.EmailAuthCustomRepository;
 import com.tify.back.repository.users.EmailAuthRepository;
 import com.tify.back.repository.users.UserRepository;
@@ -33,6 +34,7 @@ import com.tify.back.service.gifthub.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,13 +72,23 @@ public class UserService {
     public JoinResponseDto register(JoinRequestDto requestDto) {
         //중복 유저 체크 - 중복되면 true
         if (validateDuplicated(requestDto.getUserid())) {
-            return null;
+            System.out.println("유저가 존재합니다.");
+            JoinResponseDto responseDto = new JoinResponseDto();
+            responseDto.setResult(UserProperties.EXISTED_USER);
+            return responseDto;
         }
 
-        Boolean emailState = false;
-        if (emailRepository.findByEmail(requestDto.getEmail()).size() != 0) {
-            emailState = true;
+        //이메일 인증 여부 확인
+        //Boolean emailState = false;
+        List<EmailAuth> emailAuths = emailRepository.findAllByEmail(requestDto.getEmail());
+
+        if (emailAuths.size() == 0 || emailAuths.get(emailAuths.size()-1).getExpired() ==false) {
+            System.out.println("이메일 인증이 필요합니다.");
+            JoinResponseDto responseDto = new JoinResponseDto();
+            responseDto.setResult(UserProperties.NO_CHECKED_EMAIL);
+            return responseDto;
         }
+        //emailState = true;
 
         //회원가입
         User user = userRepository.save(
@@ -96,19 +108,11 @@ public class UserService {
                         .email(requestDto.getEmail())
                         .password(bCryptPasswordEncoder.encode(requestDto.getPassword()))
                         .provider(requestDto.getProvider())
-                        .emailAuth(emailState)
+                        .emailAuth(true)
                         .createTime(LocalDateTime.now())
                         .build());
 
-        //이메일 인증
-        List<EmailAuth> emailAuth = new ArrayList<>();
-        emailAuth = emailRepository.findByEmail(requestDto.getEmail());
-        if (emailAuth.size() == 0) {
-            System.out.println("이메일 인증이 필요합니다.");
-            throw new UserLoginException("이메일 인증이 필요합니다.");
-            //return null;
-        }
-        String authToken = emailAuth.get(0).getAuthToken();
+        String authToken = emailAuths.get(emailAuths.size()-1).getAuthToken();
         System.out.println("회원가입 중 authToken 확인: "+authToken);
 
         // 유저 고유 cart 생성.
@@ -119,6 +123,7 @@ public class UserService {
         return JoinResponseDto.builder()
                 .userid(user.getUserid())
                 .email(user.getEmail())
+                .result(UserProperties.SUCCESS)
                 //.authToken(emailAuth.getAuthToken())
                 .authToken(authToken)
                 .build();
@@ -167,11 +172,6 @@ public class UserService {
                 System.out.println("비밀번호가 일치하지 않습니다.");
                 return null;
             }
-            //이메일 인증 안했을 때
-            if (!user.getEmailAuth()) {
-                System.out.println("이메일 인증이 필요합니다.");
-                return null;
-            }
             JwtToken newJwtToken = jwtProviderService.createJwtToken(user.getId(), user.getUserid());
             RefreshToken refreshToken = RefreshToken.builder()
                     .refreshToken(newJwtToken.getRefreshToken())
@@ -191,7 +191,7 @@ public class UserService {
     @Transactional
     public UserProfileDto getUser(String accessToken) {
         System.out.println("getUser 함수 진입");
-        try {
+        //try {
             //복호화된 JWT
             DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(accessToken);
             String userid = decodedJWT.getClaim("userid").asString();
@@ -201,6 +201,7 @@ public class UserService {
             System.out.println("현재 암호화된 비밀번호: "+user.getPassword());
 
             UserProfileDto userProfileDto = UserProfileDto.builder()
+                    .id(user.getId())
                     .userid(user.getUserid())
                     .profileImg(user.getProfileImg())
                     .tel(user.getTel())
@@ -222,9 +223,9 @@ public class UserService {
 
             System.out.println("유저 프로필 : "+userProfileDto);
             return userProfileDto;
-        }catch (Exception e) {
-            return null;
-        }
+//        }catch (Exception e) {
+//            return null;
+//        }
     }
 
     /**
@@ -272,9 +273,14 @@ public class UserService {
      */
     @Transactional
     public void deleteUser(String userid) {
-        //refreshTokenRepository.deleteBy()
-        emailRepository.deleteByEmail(userid);
-        userRepository.deleteByUserid(userid);
+        User user = userRepository.findByUserid(userid);
+        refreshTokenRepository.deleteById(user.getJwtRefreshToken().getId());
+        //user.setJwtRefreshToken(null);
+        user.setRoles("DELETED_USER");
+        user.setUserid("!"+user.getUserid());
+        user.setEmail("!"+user.getEmail());
+        //emailRepository.deleteByEmail(userid);
+        //userRepository.deleteByUserid(userid);
     }
 
     /**

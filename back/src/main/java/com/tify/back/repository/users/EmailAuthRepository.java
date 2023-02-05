@@ -10,6 +10,7 @@ import java.util.List;
 @Primary
 //@Repository
 public interface EmailAuthRepository extends JpaRepository<EmailAuth, Long>, EmailAuthCustomRepository {
-    public List<EmailAuth> findByEmail(String email); //인증을 여러번 할 수 있으므로 list
+    public EmailAuth findByEmail(String email);
+    public List<EmailAuth> findAllByEmail(String email); //인증을 여러번 할 수 있으므로 list
     public int deleteByEmail(String userid);
 }

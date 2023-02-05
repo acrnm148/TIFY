@@ -24,4 +24,5 @@ public class JoinRequestDto {
     private String birthYear;
     private String gender;
     private String provider;
+    private Boolean emailAuthYN;
 }
