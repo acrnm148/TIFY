@@ -366,3 +366,10 @@
 .gift-img{
     background-size: cover;
 }
+
+.wish-gift{
+    word-break: break-all;
+    width: 94px;
+    font-size: x-small;
+    color: white;
+}

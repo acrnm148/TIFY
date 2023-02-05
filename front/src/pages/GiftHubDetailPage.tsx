@@ -39,11 +39,11 @@ export function GiftHubDetailPage(){
     },[]);
     const checkHeart = () =>{
         if (heart){
-            let r = confirm('장바구니에서 삭제하기')
-            setHeart(false)
+            let r = confirm('이미 장바구니에 존재하는 상품입니다.'+ '\n장바구니에서 삭제할까요?')
+            if (r){ setHeart(false) }
         } else{
-            let result = confirm('카트에 담으시겠습니까?')
-            console.log('userId',userId)
+            let result = confirm('카트에 담으시겠습니까? ')
+            console.log('accessToken',accessToken)
             if (result){
                 setHeart(true)
                 const putCart = async() =>{
@@ -59,7 +59,7 @@ export function GiftHubDetailPage(){
                             "productId":data.id, //data.id,
                             "quantity":1, // data.quantity
                             "options":{
-                                "":""
+                                "color":"green"
                             }
                         }
                     }).then((con) => {
@@ -85,18 +85,19 @@ export function GiftHubDetailPage(){
                     <div className="product-info-right">
                         <div className="product-name-like">
                             <p>{data.name}</p>
-                            <div className="product-like" onClick={()=>{checkHeart()}}>
-                                <img src={heart?iconMHeart:iconGHeart} alt="" />
-                            </div>
+                            
                         </div>
                         <div className="product-price-option">
                             <p className="product-price">₩ {data.price} </p>
-                            <div>{data.options ? data.options:''}</div>
+                            <div>{data.options ? data.options[0]:''}</div>
                         </div>
                         {/* [TODO] 기프트정보 같이 보내기 */}
-                        <NavLink to={'/makewish'} className="make-wish" >
+                        <div className="make-wish" onClick={()=>{checkHeart()}}>
+                            장바구니에 담기
+                        </div>
+                        {/* <NavLink to={'/makewish'} className="make-wish" >
                             위시 만들기
-                        </NavLink>
+                        </NavLink> */}
                     </div>
                 </div>
                 <div className="product-image">

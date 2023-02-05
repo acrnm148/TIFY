@@ -140,7 +140,7 @@ export function MakeWishPage() {
         setWishCart([cartList[i]])
       }
       setTotalPrice(totalPrice+cartList[i].price)
-      setTotalProduct([...totalProduct,{"productId" : cartList[i].id}])
+      setTotalProduct([...totalProduct,{"productId" : cartList[i].id, "maxAmount": cartList[i].price+(cartList[i].price*0.05) , 'purePrice':cartList[i].price, 'userOption':cartList[i].options[0], 'giftImgUrl':cartList[i].repImg }])
       console.log(totalPrice, totalProduct)
   }
   const CartList = () => {
