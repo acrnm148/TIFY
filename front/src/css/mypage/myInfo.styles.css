@@ -14,6 +14,15 @@
   margin-bottom: 50px;
 }
 
-.emailBox > .info {
-  background-color: #fe3360;
+#disabled-input-box {
+  background-color: #e0e0e0;
+}
+
+.checkedNickname2 {
+  background-color: #e0e0e0;
+}
+
+.divied-info-tap {
+  margin-top: 30px;
+  margin-bottom: 30px;
 }

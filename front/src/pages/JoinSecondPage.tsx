@@ -50,10 +50,6 @@ export function JoinSecondPage() {
 
   const [nickDubCheck, setNickDubCheck] = useState<boolean>(false);
 
-  const birthMD = birthMonth + birthDay;
-  const tel = tel1 + tel2 + tel3;
-  // console.log(tel);
-
   const [imgUrlS3, setImgUrlS3] = useState<string>(
     'https://tifyimage.s3.ap-northeast-2.amazonaws.com/5e1dc3dc-12c3-4363-8e91-8676c44f122b.png',
   );
@@ -198,6 +194,9 @@ export function JoinSecondPage() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const birthMD = birthMonth + birthDay;
+    const tel = tel1 + '-' + tel2 + '-' + tel3;
+    // console.log(tel);
 
     if (CheckValid()) {
       try {
@@ -214,8 +213,8 @@ export function JoinSecondPage() {
           addr1,
           addr2,
           birthYear,
-          birth: birthMonth,
-          tel: tel1,
+          birth: birthMD,
+          tel,
           email: userid,
           username,
           nickname,
@@ -230,8 +229,8 @@ export function JoinSecondPage() {
               addr1,
               addr2,
               birthYear,
-              birth: birthMonth,
-              tel: tel1,
+              birth: birthMD,
+              tel,
               email: userid,
               username,
               nickname,
@@ -407,9 +406,7 @@ export function JoinSecondPage() {
                 <input
                   type="text"
                   maxLength={10}
-                  className={` 
-                ${nickDubCheck ? 'checkedNickname' : ''}
-                `}
+                  // className={`${nickDubCheck ? 'checkedNickname' : ''}`}
                   placeholder="2~10자리 한글/영어"
                   onChange={(e) => {
                     setNickname(e.target.value);

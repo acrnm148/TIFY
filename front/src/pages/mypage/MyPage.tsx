@@ -21,7 +21,7 @@ import {
   NavLink,
   Outlet,
 } from 'react-router-dom';
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Auth';
 import axios from 'axios';
@@ -59,23 +59,26 @@ function Sidebar(props: { tapId: string }) {
   // console.log(accessToken);
   const [name, Setname] = useState('');
   const [nickName, SetNickName] = useState('');
-  axios({
-    url: 'https://i8e208.p.ssafy.io/api/account/userInfo',
-    method: 'GET',
-    headers: {
-      // 카카오 developers에 등록한 admin키를 헤더에 줘야 한다.
-      Authorization: `Bearer ${accessToken}`,
-    },
-  })
-    .then((res) => {
-      console.log(res, 'res입니다.');
-      Setname(res.data.username);
-      SetNickName(res.data.nickname);
-      setImgUrlS3(res.data.profileImg);
+
+  useEffect(() => {
+    axios({
+      url: 'https://i8e208.p.ssafy.io/api/account/userInfo',
+      method: 'GET',
+      headers: {
+        // 카카오 developers에 등록한 admin키를 헤더에 줘야 한다.
+        Authorization: `Bearer ${accessToken}`,
+      },
     })
-    .catch((err) => {
-      console.log(err, 'err입니다.');
-    });
+      .then((res) => {
+        console.log(res, 'res입니다.');
+        Setname(res.data.username);
+        SetNickName(res.data.nickname);
+        setImgUrlS3(res.data.profileImg);
+      })
+      .catch((err) => {
+        console.log(err, 'err입니다.');
+      });
+  }, []);
 
   const formData = new FormData();
   const handleChangeFile = (event: any) => {
