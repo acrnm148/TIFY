@@ -152,11 +152,23 @@ public class UserService {
      * 이메일 인증 성공
      */
     @Transactional
-    public String confirmEmail(EmailAuthRequestDto requestDto) {
-        System.out.println("요청 이메일:"+requestDto.getEmail());
-        EmailAuth emailAuth = emailCustomRepository.findValidAuthByEmail(requestDto.getEmail(), requestDto.getAuthToken(), LocalDateTime.now()).get();
+    public String confirmEmail(String email) {
+        System.out.println("요청 이메일:"+email);
+        List<EmailAuth> list = emailRepository.findAllByEmail(email);
+        String authToken = list.get(list.size()-1).getAuthToken();
+        EmailAuth emailAuth = emailCustomRepository.findValidAuthByEmail(email, authToken, LocalDateTime.now()).get();
         emailAuth.useToken(); //이메일 인증 상태 true 로 바꿔줌
-        return emailAuth.getAuthToken();
+
+        String successAuthHtml1 = "<div style=\"font-family: 'Nanum Gothic', 'sans-serif' !important; width: 540px; height: 600px; margin: 50px auto; padding: 10px 0; box-sizing: border-box;\">"
+                +	"<h1 style=\"margin: 0; padding: 0 5px; font-size: 28px; font-weight: 400;\">"
+                +		"인증되었습니다.</h1>"
+                +	        "<p style=\"font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;\">"
+                +                    "인증 요청한 페이지로 돌아가서 회원가입을 진행해주세요. </p>"
+                +"</div>";
+        String successAuthHtml2 = "<div style=\"font-family: 'Nanum Gothic', 'sans-serif' !important; width: 540px; height: 600px; margin: 50px auto; padding: 10px 0; box-sizing: border-box;\">"
+                +	"<img src=\"https://tifyimage.s3.ap-northeast-2.amazonaws.com/7d0fd987-24b9-41f3-9fce-5abd5a067d4d.png\"/>"
+                +"</div>";
+        return successAuthHtml2;
     }
 
     /**
