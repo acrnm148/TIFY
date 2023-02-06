@@ -25,7 +25,7 @@
 .con-thanks-container{
     width: 100%;
     /* border: 1px solid rgb(72, 96, 182); */
-    min-height: 890px;
+    min-height: 800px;
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
@@ -35,6 +35,7 @@
     display: flex;
     align-items: center;
     width: 50%;
+    min-width: 519px;
 }
 .con-card{
     background-image: url('../assets/conCard.svg');
@@ -90,6 +91,7 @@
     
 }.thanks-card-con-container{
     width: 50%;
+    min-width: 300px;
 }
 .thanks-card{
     display: flex;
@@ -177,10 +179,14 @@
     font-size: 22.652px;
     line-height: 23px;
     /* margin-bottom: 25px; */
-    padding: 5%;
+    padding: 2%;
 }
 
 .img-input{
     display: none;
     min-height: 200px;
+}
+.arrow{
+    height: inherit;
+    width: 50px;
 }

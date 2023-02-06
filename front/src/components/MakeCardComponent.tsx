@@ -10,12 +10,11 @@ type UploadImage = {
   type: string;
 };
 const MakeCardComponent = (
-  cardData: Dictionary<string>,
-  setCardData: Dictionary<string>,
+  setTitle,
+  setMessageFunc,
+  setPhoneFunc,
+  setImgFunc,
   phone: string,
-  disable: boolean,
-  card: string,
-  cardEng: string,
 ) => {
   // 사진 업로드하는 html 버튼에 직접 접근해서 값을 가져오는 inputRef
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -31,40 +30,7 @@ const MakeCardComponent = (
     if (!e.target.files) {
       return;
     }
-    const fileList = e.target.files[0];
-
-    let img = new Image();
-    img.src = e.target.value;
-    let width = img.width;
-    let height = img.height;
-    alert(width + height);
-
-    // 이미지 resize 옵션 설정 (최대 width을 100px로 지정)
-    const options = {
-      maxSizeMB: 500,
-      maxWidthOrHeight: 1000,
-    };
-    try {
-      const compressedFile = await imageCompression(fileList, options);
-      // resize된 이미지의 url을 받아 fileUrl에 저장
-      const promise = imageCompression.getDataUrlFromFile(compressedFile);
-      promise.then((result) => {
-        fileUrl = result;
-        console.log(fileList);
-        console.log(fileUrl);
-      });
-    } catch (err) {
-      console.log(err);
-    }
-
-    if (fileList && fileList) {
-      const url = URL.createObjectURL(fileList);
-      setCardImage({
-        file: fileList,
-        thumbnail: url,
-        type: fileList.type.slice(0, 5),
-      });
-    }
+    
   };
   const showImage = useMemo(() => {
     if (!cardImage && cardImage == null) {
@@ -89,14 +55,14 @@ const MakeCardComponent = (
     );
   }, [cardImage]);
 
-  function setTitle(e: any) {
-    setCardData = { title: e.target.value };
+  function setTitleFunc(e: any) {
+    setTitle(e.target.value) ;
   }
-  function setPhone(e: any) {
-    setCardData = { phone: e.target.value };
+  function setPhoneFunc(e: any) {
+    setPhone(e.target.value) ;
   }
-  function setMessage(e: any) {
-    setCardData = { contents: e.target.value };
+  function setMessageFunc(e: any) {
+    setContents(e.target.value) ;
   }
 
   return (
@@ -110,7 +76,7 @@ const MakeCardComponent = (
             className="input-small"
             type="text"
             name="제목"
-            onKeyUp={setTitle}
+            onKeyUp={setTitleFunc}
           />
         </div>
         <div className="thanks-input">
@@ -119,17 +85,16 @@ const MakeCardComponent = (
             className="input-small"
             type="text"
             name="연락처"
-            onKeyUp={setPhone}
+            onKeyUp={setPhoneFunc}
             placeholder={phone}
-            disabled={disable}
           />
         </div>
         <div className="thanks-input">
-          <label htmlFor="내용">{card}메세지</label>
+          <label htmlFor="내용">감사메세지</label>
           <textarea
             name="내용"
             id=""
-            onKeyUp={setMessage}
+            onKeyUp={setMessageFunc}
             placeholder="카드 내용을 입력하세요"
           ></textarea>
         </div>

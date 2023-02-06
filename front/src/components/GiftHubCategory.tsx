@@ -55,21 +55,6 @@ const GiftHubCategory = (props:{propFunction: (arg0: number) => void}) =>{
             })}
         </div>
     );
-
-    return(
-        <div className="gift-category-icon"  >
-            {CATEGORY_DATA.map((data, i:number) => {
-                return(
-                    <div >
-                        <div  className={`gh-icon ${checkCategory(i) ? 'selectedCategory':''}`} >
-                            <img onClick={()=>cateChangeHandler} src={data.src} alt={data.name} key={data.id}/>
-                        </div>
-                        <p>{data.ko}</p>
-                    </div>
-                )
-            })}
-        </div>
-    );
 }
 
 export default GiftHubCategory
