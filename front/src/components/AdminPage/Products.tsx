@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactEventHandler, useCallback } from "react";
+import React, { useState, useEffect, ReactEventHandler, useCallback, ReactHTMLElement } from "react";
 import alert from '../../assets/iconAlert.svg';
 import bell from '../../assets/bell.png';
 import anony from '../../assets/anony.png';
@@ -26,13 +26,13 @@ interface product {
 }
 
 interface pImg {
-  idx?:string;
+  idx?:number;
   url?:string;
-  id?:string;
+  id?:number;
 }
 
 interface productDetail {
-  id?:string;
+  id?:number;
   name?:string;
   repImg?:string;
   imgList?:pImg[];
@@ -56,9 +56,8 @@ const Products = () => {
     const [totalPages, setTotalPages] = useState(0);
     const maxResults = 10;
     const baseUrl = "https://i8e208.p.ssafy.io/api/gifthub";
-
-    // for 상품정보 edit
-    const [productInfo, setProductInfo] = useState<productDetail|null> (null);
+    const [productInfo, setProductInfo] = useState<productDetail|null> (null);// for 상품정보 edit
+    
     // const handleSearch = async (event) => {
     //   if (event.key === 'Enter' || event.type === 'click') {
     //     const response = await axios.get('localhost:8081/api/users/search', {
@@ -139,7 +138,7 @@ const Products = () => {
       setOpen(false)
     };
 
-    const handleImgShow = (e) => {
+    const handleImgShow = (e:any) => {
       e.preventDefault();
       setOpen(!open)
     };
@@ -170,7 +169,7 @@ const Products = () => {
       formData.append('file', files[idx]); // 파일 상태 업데이트
     }
     // imgFile 을 보내서 S3에 저장된 url받기
-    const getImgUrl = async (idx) => {
+    const getImgUrl = async (idx:number) => {
       const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
       return await axios
         .post(API_URL, formData, {
@@ -180,7 +179,8 @@ const Products = () => {
           console.log('이미지주소불러오기 성공', con.data);
           setImgUrlS3(con.data);
           let temp:pImg = {
-            idx, url:con.data
+            url:con.data,
+            idx:idx
           };
           // setNewImgs(newImgs?.concat(temp));
           return con.data
@@ -195,7 +195,7 @@ const Products = () => {
     const submitEdit = async (id: number) => {
       console.log(id);
       console.log("-----------------");
-      const response = await axios.get(`${baseUrl}/product/${id}`);
+      const response = await axios.get(`https://i8e208.p.ssafy.io/api/gifthub/product/${id}`);
       setProductInfo(response.data);
       console.log(response.data);
       return response.data;
@@ -338,7 +338,7 @@ const Products = () => {
                     ))}
                 </div>
               </div>
-              <button className="btn" block="true" style={{backgroundColor:"black", color:"white", marginTop:"10px"}}
+              <button className="btn" style={{backgroundColor:"black", color:"white", marginTop:"10px"}}
                 onClick={handleImgShow}
                 aria-controls="example-collapse-text"
                 aria-expanded={open}>
@@ -349,10 +349,10 @@ const Products = () => {
                   {
                     productInfo?.imgList?.map((val,idx) => {
                       return (
-                          <>
-                          <h2 style={{fontWeight:"bold"}}>{val.idx+1} 번 이미지</h2>
-                          <img key={val.url} src={val.url} alt={val.url}/>
-                          </>
+                          <div style={{visibility: "visible"}}>
+                          <h2 style={{fontWeight:"bold"}}>{val?.idx} 번 이미지</h2>
+                          <img key={val.url} src={val.url} alt={val.url} />
+                          </div>
                       )
                     })
                   }
@@ -384,7 +384,7 @@ const Products = () => {
               </Form.Group>
 
               <h1>dsadss</h1>
-              <button className="btn" block="true" style={{backgroundColor:"blue", color:"white"}}>수정</button>
+              <button className="btn" style={{backgroundColor:"blue", color:"white"}}>수정</button>
               {/* <Button variant="primary" type="submit" >
                 수정하기
               </Button> */}

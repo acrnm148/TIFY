@@ -78,27 +78,18 @@ export function GiftHubPage() {
   }, [searchQuery, priceRange, category, pageNum]);
 
 
-  const ParentComponent = () => {
-    const getQuery = (q: string) => {
-      setSearchQuery(q);
-      setPageNum(0);
-    };
-    const getCategory = (c: number) => {
-      setCategory(c);
-      setPageNum(0);
-      if (c === 0) {
-        setCategory(null);
-      }
-    };
-    return (
-      <>
-        <GiftHubCategory propFunction={getCategory} />
-        <SearchBar propFunction={getQuery} initailQuery={searchQuery} />
-      </>
-    );
+  const getQuery = (q: string) => {
+    setSearchQuery(q);
+    setPageNum(0);
   };
-  {
-  }
+  const getCategory = (c: number) => {
+    setCategory(c);
+    setPageNum(0);
+    if (c === 0) {
+      setCategory(null);
+    }
+  };
+
   const NoResult = () => {
     return (
       <div className="no-result">
@@ -123,7 +114,8 @@ export function GiftHubPage() {
   }
   return (
     <div>
-      <ParentComponent />
+      <GiftHubCategory propFunction={getCategory} />
+      <SearchBar propFunction={getQuery} initailQuery={searchQuery} />
       <div className="filter-bar-container">
         <div className="filter-bar">
           <div className="slider-container">

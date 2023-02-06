@@ -11,11 +11,11 @@ import { Search } from 'react-bootstrap-icons';
 import { NavLink } from 'react-router-dom';
 
 interface wish {
-    id: Number;
+    id: number;
     user : any;
     title : string;
-    totPrice : Number;
-    nowPrice : Number;
+    totPrice : number;
+    nowPrice : number;
     finishYN: string;
     endDate: string;
     category: string;
@@ -64,7 +64,7 @@ const Wishes = () => {
         );
       };
 
-    const handleDelete = async ({ id }: { id: number }) => {
+    const handleDelete = async (id: number) => {
         console.log(id);
         try {
             const response = await axios.delete(`${baseUrl}/wish/${id}`);
@@ -123,12 +123,12 @@ const Wishes = () => {
                   <td>
                     {wish?.user?.email}
                   </td>
-                  <td>{wish?.title}</td>
-                  <td>{wish?.totPrice}</td>
-                  <td>{wish?.nowPrice}</td>
-                  <td>{wish?.finishYN}</td>
-                  <td>{wish?.endDate}</td>
-                  <td>{wish?.category}</td>
+                  <td>{wish?.title.toString()}</td>
+                  <td>{wish?.totPrice.toString()}</td>
+                  <td>{wish?.nowPrice.toString()}</td>
+                  <td>{wish?.finishYN.toString()}</td>
+                  <td>{wish?.endDate.toString()}</td>
+                  <td>{wish?.category.toString()}</td>
                   <td colSpan={2}>
                     {/* <NavLink to={`/admin/users/${user.id}`} > */}
                     <button className="btn" style={{backgroundColor:"blue", color:"white"}}>수정</button>
