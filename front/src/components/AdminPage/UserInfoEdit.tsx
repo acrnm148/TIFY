@@ -25,7 +25,7 @@ interface UserDetailInfo {
   roleList?: string[];
 }
 
-const UserInfoEdit: React.FC<{ userInfo: UserDetailInfo|null }> = ({ userInfo }) => {
+const UserInfoEdit = (userInfo : UserDetailInfo) => {
   const location = useLocation();
   const baseUrl = "https://i8e208.p.ssafy.io/api/admin";
 
@@ -104,10 +104,10 @@ const UserInfoEdit: React.FC<{ userInfo: UserDetailInfo|null }> = ({ userInfo })
   
   if (userData.id === undefined ) {getDetail()}
 
-  const MakeSubmitForm = ({ userData }) => {
+  const MakeSubmitForm = ( {userData} : any ) => {
     let fields = ["id","userid","password","roles","provider","nickname","profileImg","username","birth","email","tel",
     "addr1","addr2","zipcode","birthYear","gender","emailAuth","createTime","roleList"];
-    let forms = [];
+    let forms:any = [];
     fields.map((val,idx) => {
         forms.push(
             <div>
