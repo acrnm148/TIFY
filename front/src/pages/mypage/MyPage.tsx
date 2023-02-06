@@ -56,10 +56,27 @@ function Sidebar(props: { tapId: string }) {
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
-  // console.log(accessToken);
+  console.log(accessToken);
   const [name, Setname] = useState('');
   const [nickName, SetNickName] = useState('');
 
+  // axios({
+  //   url: 'https://i8e208.p.ssafy.io/api/account/userInfo',
+  //   method: 'GET',
+  //   headers: {
+  //     // 카카오 developers에 등록한 admin키를 헤더에 줘야 한다.
+  //     Authorization: `Bearer ${accessToken}`,
+  //   },
+  // })
+  //   .then((res) => {
+  //     console.log(res, 'res입니다.');
+  //     Setname(res.data.username);
+  //     SetNickName(res.data.nickname);
+  //     setImgUrlS3(res.data.profileImg);
+  //   })
+  //   .catch((err) => {
+  //     console.log(err, 'err입니다.');
+  //   });
   useEffect(() => {
     axios({
       url: 'https://i8e208.p.ssafy.io/api/account/userInfo',
@@ -78,7 +95,8 @@ function Sidebar(props: { tapId: string }) {
       .catch((err) => {
         console.log(err, 'err입니다.');
       });
-  }, []);
+  }, [accessToken]);
+  // useEffect(() => {}, [imgUrlS3]);
 
   const formData = new FormData();
   const handleChangeFile = (event: any) => {
@@ -89,24 +107,24 @@ function Sidebar(props: { tapId: string }) {
     } else {
       console.log('3mb가 아님');
       if (event.target.files[0]) {
-        formData.append('file', event.target.files[0]); // 파일 상태 업데이트
+        formData.append('image', event.target.files[0]); // 파일 상태 업데이트
 
         // imgFile 을 보내서 S3에 저장된 url받기
-        const getImgUrl = async () => {
-          const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
+        const updateProfImg = async () => {
+          const API_URL = `https://i8e208.p.ssafy.io/api/account/updateProfImg`;
           await axios
             .post(API_URL, formData, {
               headers: { 'Content-Type': 'multipart/form-data' },
             })
             .then((con) => {
-              console.log('이미지주소불러오기 성공', con.data);
+              console.log('프로필 변경 성공', con.data);
               setImgUrlS3(con.data);
             })
             .catch((err) => {
-              console.log('이미지주소불러오기 실패', err);
+              console.log('프로필 변경 실패', err);
             });
         };
-        getImgUrl();
+        updateProfImg();
       }
     }
   };

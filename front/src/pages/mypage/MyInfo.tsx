@@ -3,7 +3,6 @@ import { RootState } from '../../store/Auth';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import '../../css/mypage/MyInfo.styles.css';
-import { fontSize } from '@mui/system';
 import Postcode from '../../components/Post';
 
 export function MyInfo() {
@@ -35,6 +34,7 @@ export function MyInfo() {
     zonecode: '',
   });
   const handleInput = (e: any) => {
+    console.log(e);
     setEnroll_company({
       ...enroll_company,
       [e.target.name]: e.target.value,
@@ -52,11 +52,11 @@ export function MyInfo() {
       },
     })
       .then((res) => {
-        console.log(res, 'res입니다.');
+        // console.log(res, 'res입니다.');
         setAddr1(res.data.addr1);
         setAddr2(res.data.addr2);
         setBirthyear(res.data.birthYear);
-        console.log(res.data.birth);
+        // console.log(res.data.birth);
         const birthMonth = res.data.birth.substr(0, 2);
         const birthDay = res.data.birth.substr(2, 2);
         setBirthMonth(birthMonth);
@@ -67,13 +67,17 @@ export function MyInfo() {
         setTel2(tels[1]);
         setTel3(tels[2]);
         setUsername(res.data.username);
+        setEnroll_company({
+          ...enroll_company,
+          address: res.data.addr1,
+          zonecode: res.data.zipcode,
+        });
+        setAddr2(res.data.addr2);
       })
       .catch((err) => {
         console.log(err, 'err입니다.');
       });
-  });
-
-  console.log(enroll_company);
+  }, []);
 
   const handleInfoSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -98,10 +102,12 @@ export function MyInfo() {
           userId,
         });
         console.log(accessToken);
-        return await axios({
-          url: 'https://i8e208.p.ssafy.io/api/account/update',
-          method: 'POST',
-          params: {
+        const zipcode = enroll_company.zonecode;
+        axios.defaults.headers.common[
+          'Authorization'
+        ] = `Bearer ${accessToken}`;
+        return await axios
+          .post('https://i8e208.p.ssafy.io/api/account/update', {
             userid: userId,
             addr1,
             addr2,
@@ -109,14 +115,10 @@ export function MyInfo() {
             tel,
             username,
             nickname,
-          },
-          headers: {
-            // 카카오 developers에 등록한 admin키를 헤더에 줘야 한다.
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
+          })
           .then((res) => {
             console.log(res, '정보 변경 api 시도 성공!');
+            alert('정보가 변경되었습니다.');
           })
           .catch((err) => {
             console.log(err);
@@ -132,6 +134,35 @@ export function MyInfo() {
     event: React.FormEvent<HTMLFormElement>,
   ) => {
     event.preventDefault();
+    console.log(password1);
+    console.log(password2);
+    console.log(confirmPassword2);
+    if (CheckValidPassword()) {
+      try {
+        axios.defaults.headers.common[
+          'Authorization'
+        ] = `Bearer ${accessToken}`;
+        return await axios
+          .post('https://i8e208.p.ssafy.io/api/account/updatePw', {
+            nowPw: 'password1',
+            newPw: 'password2',
+          })
+          .then((res) => {
+            console.log(res, '비밀번호 변경 api 시도 성공!');
+            if (res.data === '비밀번호가 수정되었습니다.') {
+              alert('정보가 변경되었습니다.');
+            } else if (res.data === '비밀번호가 일치하지 않습니다.') {
+              alert('현재 비밀번호를 틀리셨습니다.');
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (err) {
+        console.log(err);
+        console.log('Errrrrrr');
+      }
+    }
   };
 
   function CheckNickname(event: React.MouseEvent<HTMLButtonElement>) {
@@ -254,6 +285,12 @@ export function MyInfo() {
       );
       return false;
     }
+    if (!pwdCheck.test(password2)) {
+      alert(
+        '비밀번호는 영문자+숫자+특수문자 조합으로 8~12자리 사용해야 합니다.',
+      );
+      return false;
+    }
 
     if (password2 !== confirmPassword2) {
       alert('비밀번호가 다릅니다.');
@@ -280,7 +317,7 @@ export function MyInfo() {
         <input
           type="text"
           className="inputBox"
-          // onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
           maxLength={6}
           value={username}
         />
@@ -409,6 +446,7 @@ export function MyInfo() {
                 type="text"
                 name="상세주소"
                 onChange={(e) => setAddr2(e.target.value)}
+                value={addr2}
               />
             </div>
           </div>
@@ -444,7 +482,7 @@ export function MyInfo() {
               className="inputBox"
               maxLength={12}
               placeholder={'영어, 숫자, 특수문자를 포함한 8~12자리'}
-              onChange={(e) => setPassword1(e.target.value)}
+              onChange={(e) => setPassword2(e.target.value)}
             />
           </form>
           <span className="m-1">새로운 비밀번호 확인</span>
