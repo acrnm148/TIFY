@@ -47,7 +47,7 @@ public class Pay {
     @OneToOne
     @JoinColumn(name = "order_id")
     private Order order;
-    @OneToMany(mappedBy= "pay")
-    private List<Thkcard> thkcardList = new ArrayList<>();
+    @OneToOne(mappedBy= "pay")
+    private Thkcard thkcardList;
     public void updateOrder(Order order) {this.order = order;}
 }
