@@ -21,7 +21,7 @@ public class ProductOptionDetail {
     private int value; //옵션 추가요금
     private int idx; // detail 정렬 순서
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_option_id")
     private ProductOption productOption;
 
