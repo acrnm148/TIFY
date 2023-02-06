@@ -343,6 +343,10 @@ public class UserApiController {
         // 이미지 업로드
         String image = "";
         try {
+            if (file == null) {
+                String fileUrl = "https://tifyimage.s3.ap-northeast-2.amazonaws.com/5e1dc3dc-12c3-4363-8e91-8676c44f122b.png";
+            }
+
             if (file.getSize() > 3 * 1024 * 1024) {
                 throw new FileSizeException("File size should not exceed 3MB");
             }
