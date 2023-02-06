@@ -46,11 +46,11 @@ public class EmailService {
                     +                    "TIFY를 이용해 주셔서 진심으로 감사드립니다.<br />"
                     +                    "아래 <b style=\"color: #FE3360;\">'메일 인증'</b> 버튼을 클릭하여 이메일 인증을 완료해주세요.<br />"
                     +                    "감사합니다. </p>"
-                    +	"<a style=\"color: #FFF; text-decoration: none; text-align: center;\" href=\"http://localhost:8081/api/account/confirmEmail/"+email+"\" target=\"_blank\"><p style=\"display: inline-block; width: 210px; height: 45px; margin: 30px 5px 40px; background: #FE3360; line-height: 45px; vertical-align: middle; font-size: 16px;\">메일 인증</p></a>"
+                    +	"<a style=\"color: #FFF; text-decoration: none; text-align: center;\" href=\"https://i8e208.p.ssafy.io/api/account/confirmEmail/"+email+"\" target=\"_blank\"><p style=\"display: inline-block; width: 210px; height: 45px; margin: 30px 5px 40px; background: #FE3360; line-height: 45px; vertical-align: middle; font-size: 16px;\">메일 인증</p></a>"
                     +	"<div style=\"border-top: 1px solid #DDD; padding: 5px;\">"
                     +		"<p style=\"font-size: 13px; line-height: 21px; color: #555;\">"
                     +                    "만약 버튼이 정상적으로 클릭되지 않는다면, 아래 링크를 복사하여 접속해 주세요.<br />"
-                    +                    "http://localhost:8081/api/account/confirmEmail</p>"
+                    +                    "https://i8e208.p.ssafy.io/localhost:8081/api/account/confirmEmail</p>"
                     +	"</div>"
                     +"</div>";
 //                    "<h2> 회원가입 이메일 인증</h2>"
