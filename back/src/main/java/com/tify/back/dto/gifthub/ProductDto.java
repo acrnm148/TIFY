@@ -22,8 +22,9 @@ public class ProductDto {
     private String category;
     private int categoryId;
     private int likeCount;
-    private List<ImgDto> images;
+    private List<ImgDto> imgList;
     private List<ProductOptionDto> options;
+    private long id;
 
     private List<String> categories = Arrays.asList("뷰티", "전자제품", "키친", "의류", "음식", "출산유아", "홈인테리어", "반려동물용품");
     public Product toEntity() {
@@ -33,14 +34,15 @@ public class ProductDto {
         product.setQuantity(this.quantity);
         String herePrice = this.price.replaceAll(",", "");
         herePrice = herePrice.replace("원","");
-        if (isNumeric(herePrice)) {
+        System.out.println(herePrice);
+        System.out.println("sssssssssssssssssssssss");
+        try {
             product.setPrice(Integer.parseInt(herePrice));
-        } else {
+        } catch (NumberFormatException e) {
             Random random = new Random();
             int randomPrice = random.nextInt(200000 - 15000 + 1) + 15000;
             product.setPrice(randomPrice);
         }
-
         product.setDescription(this.description);
 
         if (this.category != null) {
@@ -52,6 +54,10 @@ public class ProductDto {
             product.setCategory(this.categoryId);
         }
         product.setLikeCount(this.likeCount);
+
+        if (this.id!= 0) {
+            product.setId(this.id);
+        }
         return product;
     }
 }
