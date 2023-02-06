@@ -42,6 +42,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -111,17 +112,22 @@ public class UserApiController {
      * 회원가입 - 이메일 인증
      */
     @Operation(summary = "comfirm email", description = "이메일 인증 완료")
-    @GetMapping("/account/confirmEmail")
-    public ResponseEntity<?> confirmEmail(@ModelAttribute EmailAuthRequestDto requestDto, HttpServletResponse response) throws URISyntaxException { //json으로 전달이 안됨
+    @GetMapping("/account/confirmEmail/{email}")
+    public ResponseEntity<String> confirmEmail(@PathVariable(value = "email") String email, HttpServletResponse response) throws URISyntaxException { //json으로 전달이 안됨
         System.out.println("전송된 링크 진입");
-        String authToken = userService.confirmEmail(requestDto);
+        String successPage = userService.confirmEmail(email);
 
-        URI redirectUri = new URI("https://i8e208.p.ssafy.io/join2");
+        //방식1 리다이렉트
+        /* URI redirectUri = new URI("https://i8e208.p.ssafy.io/join2");
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(redirectUri);
         httpHeaders.add("email", requestDto.getEmail());
-        //httpHeaders.set("email", requestDto.getEmail());
-        return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
+        return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);*/
+
+        //방식2 html 리턴
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.TEXT_HTML);
+        return new ResponseEntity<String>(successPage, httpHeaders, HttpStatus.OK);
     }
 
     /**
@@ -136,10 +142,13 @@ public class UserApiController {
         if (emailAuths.size() == 0 || emailAuths.get(emailAuths.size()-1).getExpired() ==false) {
             return ResponseEntity.ok().body("N");
         }
+
+        /*
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://tify-noti-default-rtdb.firebaseio.com/");
         DatabaseReference reference = database.getReference("test/tify");
         String uid = email.replace("@","-").replace(".","-");
         reference.child(uid).setValueAsync("");
+        */
         return ResponseEntity.ok().body("Y");
 
     }
