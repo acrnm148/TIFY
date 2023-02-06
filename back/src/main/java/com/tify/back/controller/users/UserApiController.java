@@ -341,20 +341,16 @@ public class UserApiController {
         User user = userRepository.findById(userService.getUser(token).getId()).get();
 
         // 이미지 업로드
-        String image = "";
         try {
-            if (file == null) {
+            if (file.getOriginalFilename().equals("")) {
                 String fileUrl = "https://tifyimage.s3.ap-northeast-2.amazonaws.com/5e1dc3dc-12c3-4363-8e91-8676c44f122b.png";
-
                 userService.updateProfImg(user, fileUrl);
                 return ResponseEntity.ok().body("프로필 사진이 수정되었습니다. " +fileUrl);
             }
-
             if (file.getSize() > 3 * 1024 * 1024) {
                 throw new FileSizeException("File size should not exceed 3MB");
             }
             String fileUrl = s3Services.uploadFile(file.getOriginalFilename(), file.getInputStream());
-
             userService.updateProfImg(user, fileUrl);
             return ResponseEntity.ok().body("프로필 사진이 수정되었습니다. " +fileUrl);
         } catch (FileSizeException | IOException e) {
