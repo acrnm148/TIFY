@@ -47,7 +47,11 @@
 .con-photo{
     width: inherit - 20px;
     min-height: 15em;
-    /* border: 1px solid blue; */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: white;
+    border-radius: 10px;
 }
 .con-text{
     width: inherit - 20px;

@@ -75,10 +75,10 @@ export function CheckWishPage() {
             const result = goOpenList.some((go: { wishId:any; }) => go.wishId === wish.id)
             if(wish.finishYN === 'y'){
               let diff = new Date(wish.endDate).getTime() - new Date().getTime();
-              const froms = wish.giftItems.map((gift: { payList: { pay_id: any; celeb_from:string;  }[]; }, i:number)=>{
+              const froms = wish.giftItems.map((gift: { payList: { pay_id: any; celeb_from:string; celeb_content:string; celeb_tel:string; celeb_img_url:string; }[]; }, i:number)=>{
                 if(gift){
-                  let payids = gift.payList.map((p: { pay_id: any; celeb_from:string; }) => {
-                    return {'id' : p.pay_id, 'from': p.celeb_from}
+                  let payids = gift.payList.map((p: { pay_id: any; celeb_from:string; celeb_content:string; celeb_tel:string; celeb_img_url:string;}) => {
+                    return {'id' : p.pay_id, 'from': p.celeb_from, 'content':p.celeb_content, 'tel':p.celeb_tel, 'img':p.celeb_img_url}
                   })
                     return {data : payids}
                   }
@@ -101,6 +101,7 @@ export function CheckWishPage() {
           ))
         }
         // }).then(()=>{
+          // console.log(goOpenList, 'goOpenList')
         //   return new Promise (function myo(){
         //     console.log(conList, 'here is myo')
         //     // 리스트 restDay가 적은 순서로 정렬
@@ -136,10 +137,11 @@ export function CheckWishPage() {
     )
   }
   const CongratsCards = (props:{fromList:any[], wishId:string, userName:string}) =>{
+    console.log(props.fromList, 'props.fromList')
     return(
       <div className="congrat-card-list">
       {props.fromList && props.fromList.map((from: { id: any; from: string; }, i:number) =>(
-        <NavLink to={`/thanks/${props.wishId}/${from.id}`}>
+        <NavLink to={`/thanks/${props.wishId}/${from.id}`} state={props.fromList}>
           <CongratCard key={i} from={from.from} to={props.userName} />
         </NavLink>
       ))}
@@ -150,18 +152,18 @@ export function CheckWishPage() {
     return(
       <>
         {
-          goOpenList.map((lst:CheckWish) =>{
+          goOpenList.map((lst:CheckWish, i:number) =>{
             return(
               <div className="wish-container">
                 <CongratsCards fromList={lst.fromList} wishId={lst.wishId} userName={lst.userName}/>
-                <div className="wish-open wish-on-going-background">
-                  
-                  위시 오픈 애니메이션
                   <NavLink to={`/congrats/${lst.wishId}`}>
                     <h1>{lst.userName}님의 {lst.category}위시</h1>
                     <h1>"{lst.title}"</h1>
                   </NavLink>
-                </div>
+                {/* <div className="wish-open wish-on-going-background">
+                  
+                  위시 오픈 애니메이션
+                </div> */}
               </div>
             )
           })
@@ -178,7 +180,7 @@ export function CheckWishPage() {
     return(
       <>
       {/* <button onClick={CheckConList}>list확인용</button> */}
-        {conList && conList.map((lst:CheckWish)=>{
+        {conList && conList.map((lst:CheckWish, i:number)=>{
           return(
             <div className="wish-container">
               <CongratsCards fromList={lst.fromList} wishId={lst.wishId} userName={lst.userName}/>

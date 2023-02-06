@@ -173,7 +173,13 @@ export function MakeWishPage() {
         setWishCart([cartList[i]])
       }
       setTotalPrice(totalPrice+cartList[i].price)
-      setTotalProduct([...totalProduct,{"productId" : cartList[i].id, "maxAmount": cartList[i].price+Math.round(cartList[i].price*0.05) , 'purePrice':cartList[i].price, 'userOption':cartList[i].options[0], 'giftImgUrl':cartList[i].repImg }])
+      setTotalProduct([...totalProduct,{"productId" : cartList[i].id,
+                                        'purePrice': cartList[i].price, 
+                                        'userOption':cartList[i].options[0], 
+                                        'giftImgUrl':cartList[i].repImg, 
+                                        'giftName' : cartList[i].name,
+                                        "maxAmount": cartList[i].price+Math.round(cartList[i].price*0.05),
+                                        "quantity" : 1 }])
       console.log(totalPrice, totalProduct)
   }
   const CartList = () => {
@@ -216,7 +222,7 @@ export function MakeWishPage() {
   const [finished, setFinished] = useState(false);
   const MakeWish = () => {
     const selectedWishCard =
-      Number(selectCard) >= 0 ? imgBase64 : cardList[Number(selectCard)];
+      Number(selectCard) >= 0 ? cardList[Number(selectCard)] :imgUrlS3;
     const makeWish = async () => {
       const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';
       axios({
@@ -232,7 +238,7 @@ export function MakeWishPage() {
           category: category,
           startDate: startDate,
           endDate: endDate,
-          wishCard: imgUrlS3,
+          wishCard: selectedWishCard,
           addr1: enroll_company.address,
           addr2: addr2,
         },

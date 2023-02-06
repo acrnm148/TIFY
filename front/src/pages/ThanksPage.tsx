@@ -1,4 +1,4 @@
-import { useNavigate,useParams} from 'react-router-dom';
+import { NavLink, useLocation, useNavigate,useParams} from 'react-router-dom';
 import {useCallback, useRef, useState} from 'react';
 import "../css/thanksPage.styles.css"
 
@@ -6,15 +6,35 @@ import circleArrowL from "../assets/iconArrowLeft.svg";
 import circleArrowR from "../assets/iconArrowRight.svg";
 import iconPlus from "../assets/iconPlus.svg";
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/Auth';
 
 export function ThanksPage() {
+  const userId = useSelector((state: RootState) => state.authToken.userId);
+  const accessToken = useSelector(
+    (state: RootState) => state.authToken.accessToken,
+  );
+
+  // state => props로 위시의 축하카드 리스트 전달받음
+  const location = useLocation()
+  const { state } = location
+  
   let navigate = useNavigate();
   let {wishId, conId} = useParams()
+  let conInfo = {
+    content : "", from :"", tel:"", img:""
+  }
   const [imgUrl, setImgUrl] = useState<string>()
   const [cartData, setCardData] = useState<string>()
   const [title, setTitle]  = useState<string>()
   const [message, setMessage ] = useState<string>()
   const [phone, setPhone] = useState<string>()
+
+  // 좌우 축하카드 조회 버튼
+  let left = null
+  let right = null
+
+  let fromList;
 
   // 사진 업로드하는 html 버튼에 직접 접근해서 값을 가져오는 inputRef
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -59,7 +79,35 @@ const onUploadImage = (event: any) => {
 
   // 해당 축하카드에 대해서 감사카드가 존재하는지 확인
   let [replystate, setReplyState] = useState<Boolean>(false)
-
+  
+  useState(()=>{
+    let nowcard;
+    console.log(state, 'state state state state state state state state')
+    // 1. state로 받은 해당 위시의 축하카드 정보조회
+    state.map((s: { id: string | undefined; }, i:number)=>{
+      if(s.id == conId){
+        conInfo = state[i]
+        nowcard = i
+      }
+    })
+    if(nowcard){
+      if(nowcard>0){
+        left = state[nowcard-1].id
+      }
+      if(nowcard<state.length -1){
+        right = state[state.length-1].id
+      }
+    }
+    const API_URL = `https://i8e208.p.ssafy.io/api/thkcards/${userId}`
+    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    // 2. userId로 작성한 감사카드, payid와 같이 조회
+    axios.get(API_URL
+      ).then((res)=>{
+        console.log(`${userId}의 감사카드`, res.data)
+      }).catch((err)=>{
+        console.log('유저의 감사카드를 불러오지 못함', err)
+      })
+  })
   // 카드 하나의 정보 useState로 관리
   const ThanksReply = () => {
     return(
@@ -100,7 +148,7 @@ const onUploadImage = (event: any) => {
             placeholder="카드 내용을 입력하세요"
           ></textarea>
         </div>
-        <div className="thanks-input" style={{"backgroundImage" : `url(${imgUrl})`, "backgroundSize":"contain", "backgroundRepeat":"no-repeat", "backgroundPosition":"center"}}>
+        <div className="thanks-input" style={{"backgroundImage" : `url(${imgUrl})`}}>
           <label htmlFor="">사진</label>
           <input
             className="img-input"
@@ -136,10 +184,10 @@ const onUploadImage = (event: any) => {
       <div>
         받은 축하카드 디테일
         <div className="con-card">
-          <div className='tofrom'>From {} </div>
-          <div className='con-photo'></div>
-          <div className='con-text'>{}</div>
-          <div className='userName tofrom'>To {} </div>
+          <div className='tofrom'>From {conInfo.from} </div>
+          <div className='con-photo' style={{"backgroundImage":`url(${conInfo.img})`}}></div>
+          <div className='con-text'>{conInfo.content}</div>
+          <div className='userName tofrom'>To </div>
         </div>
       </div>
     )
@@ -149,10 +197,12 @@ const onUploadImage = (event: any) => {
         <div className='thanks-page-container'>
           <button className="back-botton" onClick={() =>(navigate(-1))}> 뒤로가기!!</button>
             <div className='con-thanks-container'>
-              <div className='con-card-detail'> 
-                <button><img src={circleArrowL} alt="원형 화살표 좌" /></button>
+              <div className='con-card-detail'>
+                {left !== null && 
+                  <NavLink to={`/thanks/${wishId}/${left}`} state={[...state]}><img src={circleArrowL} alt="원형 화살표 좌" />
+                  </NavLink>}
                 <ConCardDetail />
-                <button><img src={circleArrowR} alt="원형 화살표 우" /></button>
+                {right !== null && <button><img src={circleArrowL} alt="원형 화살표 좌" /></button>}
               </div>
               
               { replystate?

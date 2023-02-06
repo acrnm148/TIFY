@@ -28,7 +28,7 @@ export function CongratsPage() {
     ])
 
     useEffect(()=>{
-        const API_URL='http://i8e208.p.ssafy.io:8081/api/wish/detail/'
+        const API_URL='https://i8e208.p.ssafy.io/api/wish/detail/'
         axios.get(API_URL,{
             params: {
                 wishId : wishId
@@ -42,7 +42,7 @@ export function CongratsPage() {
             setContent(res.data.content)
             setCard(res.data.cardImageCode)
             
-            setWishGiftList(res.data.giftItems.map((item: { giftImgUrl: any; productNum: number; gathered: number; purePrice: number; id:number }, i:number) => {
+            setWishGiftList(res.data.giftItems.map((item: { giftname:string,giftImgUrl: any; productNum: number; gathered: number; purePrice: number; id:number }, i:number) => {
                 const pricevat = Number(item.purePrice) + (Number(item.purePrice)*0.05)
                 const achieved = (Number(item.gathered) / pricevat)*100
                 // console.log((Number(item.gathered) / pricevat)*100)
@@ -51,7 +51,7 @@ export function CongratsPage() {
                     id : i,
                     img : item.giftImgUrl,
                     productNum : item.productNum,
-                    name : '', // 추가해야함
+                    name : item.giftname, // 추가해야함
                     achieved : Math.round(achieved),
                     achieved81 : Math.round(achieved*0.81),
                     price : Math.round(pricevat),
