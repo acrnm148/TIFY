@@ -9,6 +9,8 @@ export function JoinFirstPage() {
   const [email, setEmail] = useState('');
   const [doRequest, setDoRequest] = useState(false);
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -44,7 +46,6 @@ export function JoinFirstPage() {
     } catch (err) {}
   };
 
-  const navigate = useNavigate();
   function GoNext(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     axios
@@ -64,6 +65,11 @@ export function JoinFirstPage() {
           alert(
             '아직 이메일 인증이 확인되지 않습니다. 인증 완료 후 시도해주세요',
           );
+          // navigate('/join2', {
+          //   state: {
+          //     emailData: email,
+          //   },
+          // });
         }
       })
       .catch((err) => {

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import '../../css/mypage/MyInfo.styles.css';
 import { fontSize } from '@mui/system';
+import Postcode from '../../components/Post';
 
 export function MyInfo() {
   const [userId, setUserId] = useState(
@@ -29,6 +30,18 @@ export function MyInfo() {
     (state: RootState) => state.authToken.accessToken,
   );
 
+  const [enroll_company, setEnroll_company] = useState({
+    address: '',
+    zonecode: '',
+  });
+  const handleInput = (e: any) => {
+    setEnroll_company({
+      ...enroll_company,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // 처음 유저값 불러오는 부분
   useEffect(() => {
     axios({
       url: 'https://i8e208.p.ssafy.io/api/account/userInfo',
@@ -60,8 +73,59 @@ export function MyInfo() {
       });
   });
 
+  console.log(enroll_company);
+
   const handleInfoSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const tel = tel1 + '-' + tel2 + '-' + tel3;
+    // console.log(tel);
+
+    if (CheckValid()) {
+      try {
+        const config: object = {
+          'Content-Type': 'application/json',
+          'Accept-Encoding': 'gzip, deflate, br',
+          Connection: 'keep-alive',
+        };
+        console.log(enroll_company.zonecode);
+        console.log({
+          username,
+          nickname,
+          addr1,
+          addr2,
+          tel,
+          userId,
+        });
+        console.log(accessToken);
+        return await axios({
+          url: 'https://i8e208.p.ssafy.io/api/account/update',
+          method: 'POST',
+          params: {
+            userid: userId,
+            addr1,
+            addr2,
+            zipcode: enroll_company.zonecode,
+            tel,
+            username,
+            nickname,
+          },
+          headers: {
+            // 카카오 developers에 등록한 admin키를 헤더에 줘야 한다.
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+          .then((res) => {
+            console.log(res, '정보 변경 api 시도 성공!');
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (err) {
+        console.log(err);
+        console.log('Errrrrrr');
+      }
+    }
   };
 
   const handlePasswordSubmit = async (
@@ -104,6 +168,7 @@ export function MyInfo() {
       .catch((err) => {
         alert(`You can't do it! 😅`);
         console.log('error', err);
+        setNickDubCheck(false);
       });
     console.log('abc');
   }
@@ -222,7 +287,7 @@ export function MyInfo() {
         <p className="m-1">닉네임</p>
         <div
           className={`nickname-box
-              ${nickDubCheck ? 'checkedNickname2' : ''}
+              ${nickDubCheck ? 'checkedNickname' : ''}
               `}
         >
           <form className="">
@@ -231,9 +296,11 @@ export function MyInfo() {
               maxLength={10}
               placeholder="2~10자리 한글/영어"
               value={nickname}
+              className={`${nickDubCheck ? 'checkedNickname' : ''}`}
               onChange={(e) => {
                 setNickname(e.target.value);
-                // setNickDubCheck(false);
+                setNickDubCheck(false);
+                console.log(e.target.value);
               }}
             />
             <button className="formSideButton" onClick={CheckNickname}>
@@ -244,7 +311,7 @@ export function MyInfo() {
 
         <p className="m-1">생년월일</p>
         <form className="emailForm">
-          <div className="mini-input-container">
+          <div className="mini-input-container" id="birth-box">
             <input
               type="number"
               className="mini-input-box"
@@ -252,6 +319,7 @@ export function MyInfo() {
               maxLength={4}
               value={birthYear}
               onChange={(e) => setBirthyear(e.target.value)}
+              disabled
             />
             <span>년</span>
             <input
@@ -262,6 +330,7 @@ export function MyInfo() {
               max="12"
               value={birthMonth}
               onChange={(e) => setBirthMonth(e.target.value)}
+              disabled
             />
             <span>월</span>
             <input
@@ -271,6 +340,7 @@ export function MyInfo() {
               maxLength={2}
               value={birthDay}
               onChange={(e) => setBirthDay(e.target.value)}
+              disabled
             />
             <span>일</span>
           </div>
@@ -304,6 +374,43 @@ export function MyInfo() {
               value={tel3}
               onChange={(e) => setTel3(e.target.value)}
             />
+          </div>
+          <div className="address-form-container">
+            <label htmlFor="태그">주소</label>
+            <input
+              className="address-form postcode"
+              type="text"
+              // 바꿀거
+              value={enroll_company.zonecode}
+              placeholder="우편번호"
+              disabled
+            />
+            <div className="address-form">
+              <input
+                type="text"
+                placeholder="주소"
+                required={true}
+                name="address"
+                onChange={handleInput}
+                // 바꿀거
+                value={enroll_company.address}
+                disabled
+              />
+              <Postcode
+                company={enroll_company}
+                setcompany={setEnroll_company}
+              />
+            </div>
+          </div>
+          <div>
+            <label htmlFor="상세주소">상세주소</label>
+            <div className="input-form">
+              <input
+                type="text"
+                name="상세주소"
+                onChange={(e) => setAddr2(e.target.value)}
+              />
+            </div>
           </div>
         </form>
 

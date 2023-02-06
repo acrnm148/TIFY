@@ -29,3 +29,12 @@ input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.divide-info-tap {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#birth-box {
+  background-color: #e0e0e0;
+}

@@ -82,25 +82,33 @@ function Sidebar(props: { tapId: string }) {
 
   const formData = new FormData();
   const handleChangeFile = (event: any) => {
-    if (event.target.files[0]) {
-      formData.append('file', event.target.files[0]); // 파일 상태 업데이트
+    const sizeLimit = 300 * 10000;
+    // 300만 byte 넘으면 경고문구 출력
+    if (event.target.files[0].size > sizeLimit) {
+      alert('사진 크기가 3MB를 넘을 수 없습니다.');
+    } else {
+      console.log('3mb가 아님');
+      if (event.target.files[0]) {
+        formData.append('file', event.target.files[0]); // 파일 상태 업데이트
+
+        // imgFile 을 보내서 S3에 저장된 url받기
+        const getImgUrl = async () => {
+          const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
+          await axios
+            .post(API_URL, formData, {
+              headers: { 'Content-Type': 'multipart/form-data' },
+            })
+            .then((con) => {
+              console.log('이미지주소불러오기 성공', con.data);
+              setImgUrlS3(con.data);
+            })
+            .catch((err) => {
+              console.log('이미지주소불러오기 실패', err);
+            });
+        };
+        getImgUrl();
+      }
     }
-    // imgFile 을 보내서 S3에 저장된 url받기
-    const getImgUrl = async () => {
-      const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
-      await axios
-        .post(API_URL, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        })
-        .then((con) => {
-          console.log('이미지주소불러오기 성공', con.data);
-          setImgUrlS3(con.data);
-        })
-        .catch((err) => {
-          console.log('이미지주소불러오기 실패', err);
-        });
-    };
-    getImgUrl();
   };
 
   return (
@@ -110,7 +118,10 @@ function Sidebar(props: { tapId: string }) {
           {props.tapId === 'info' ? (
             <div
               className="img-div"
-              style={{ border: 'none', backgroundImage: `url("${imgUrlS3}")` }}
+              style={{
+                border: 'none',
+                backgroundImage: `url("${imgUrlS3}")`,
+              }}
               onClick={onUploadImageButtonClick}
             >
               <input

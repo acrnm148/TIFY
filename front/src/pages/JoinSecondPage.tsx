@@ -239,14 +239,13 @@ export function JoinSecondPage() {
             config,
           )
           .then((res) => {
-            console.log(res, '회원가입  성공!');
+            console.log(res, '회원가입 api 시도 성공!');
             Login(userid, password)
               .then((response) => {
                 if (response === '로그인 실패!') {
                   alert(
                     '미등록 회원이거나 잘못된 아이디/비밀번호를 입력하셨습니다.',
                   );
-                  console.log('222222222222222');
                 } else {
                   console.log('리프레쉬토큰 가자');
                   setRefreshToken(response.refresh_token);
@@ -259,7 +258,6 @@ export function JoinSecondPage() {
                 }
               })
               .catch((err) => {
-                console.log('333333333333333333');
                 console.log(err);
               });
           });
@@ -314,25 +312,36 @@ export function JoinSecondPage() {
 
   const formData = new FormData();
   const handleChangeFile = (event: any) => {
-    if (event.target.files[0]) {
-      formData.append('file', event.target.files[0]); // 파일 상태 업데이트
-    }
+    // if (event.target.files[0]) {
+    //   formData.append('file', event.target.files[0]); // 파일 상태 업데이트
+    // }
     // imgFile 을 보내서 S3에 저장된 url받기
-    const getImgUrl = async () => {
-      const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
-      await axios
-        .post(API_URL, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        })
-        .then((con) => {
-          console.log('이미지주소불러오기 성공', con.data);
-          setImgUrlS3(con.data);
-        })
-        .catch((err) => {
-          console.log('이미지주소불러오기 실패', err);
-        });
-    };
-    getImgUrl();
+    const sizeLimit = 300 * 10000;
+    // 300만 byte 넘으면 경고문구 출력
+    if (event.target.files[0].size > sizeLimit) {
+      alert('사진 크기가 3MB를 넘을 수 없습니다.');
+    } else {
+      console.log('3mb가 아님');
+      if (event.target.files[0]) {
+        formData.append('file', event.target.files[0]); // 파일 상태 업데이트
+
+        const getImgUrl = async () => {
+          const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
+          await axios
+            .post(API_URL, formData, {
+              headers: { 'Content-Type': 'multipart/form-data' },
+            })
+            .then((con) => {
+              console.log('이미지주소불러오기 성공', con.data);
+              setImgUrlS3(con.data);
+            })
+            .catch((err) => {
+              console.log('이미지주소불러오기 실패', err);
+            });
+        };
+        getImgUrl();
+      }
+    }
   };
 
   return (
@@ -412,6 +421,8 @@ export function JoinSecondPage() {
                     setNickname(e.target.value);
                     setNickDubCheck(false);
                   }}
+                  className={`${nickDubCheck ? 'checkedNickname' : ''}
+                  `}
                 />
                 <button className="formSideButton" onClick={CheckNickname}>
                   중복확인
