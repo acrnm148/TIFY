@@ -28,10 +28,13 @@ export function CheckTokenByKey(key: string) {
   const refreshToken = getCookieToken();
   const dispatch = useDispatch();
   // const navigate = useNavigate();
-  console.log(
-    authenticated,
-    expireTime,
-    'authenticated, expireTime 이렇습니다!!!',
+  // console.log(
+  //   authenticated,
+  //   expireTime,
+  //   'authenticated, expireTime 이렇습니다!!!',
+  // );
+  const accessToken = useSelector(
+    (state: RootState) => state.authToken.accessToken,
   );
 
   // const { userId } = useSelector((state: RootState) => state.authToken.userId);
@@ -39,11 +42,30 @@ export function CheckTokenByKey(key: string) {
 
   // console.log(refreshToken, 'refreshToken은 이렇습니다!!!');
 
+  function LogOutAPI(accessToken: string) {
+    axios({
+      url: 'https://i8e208.p.ssafy.io/api/account/logout',
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-type': 'application/json',
+      },
+    })
+      .then((con) => {
+        console.log('로그아웃 성공', con);
+      })
+      .catch((err) => {
+        console.log('로그아웃 실패', err);
+      });
+  }
+
   const checkAuthToken = async () => {
     // 리프레쉬 토큰이 없다면
     if (refreshToken === undefined) {
       // access 토큰 없애고, 인증 여부를 Failed로 한다.
       dispatch(DELETE_TOKEN());
+      // LogOutAPI(accessToken);
+
       setIsAuth('Failed');
       console.log('리프레쉬토큰 없는 녀석');
       // return navigate('/');
@@ -57,19 +79,20 @@ export function CheckTokenByKey(key: string) {
         // access코드 이상하면 리프레쉬 토큰으로 리프레쉬 시도
         console.log('리프레쉬 시도');
         const response = await requestToken(refreshToken);
-        console.log(response);
+        // console.log(response);
 
         if (response) {
           setRefreshToken(response.refresh_token);
           dispatch(SET_TOKEN(response.access_token));
           dispatch(SET_USERID(response.user_id));
           dispatch(SET_USEREMAIL(response.user_email));
-          console.log(response);
+          // console.log(response);
           console.log('리프레쉬 성공');
           setIsAuth('Success');
         } else {
           dispatch(DELETE_TOKEN());
           removeCookieToken();
+          // 로그아웃 요청
           setIsAuth('Failed');
           console.log('리프레쉬 실패');
           alert('로그아웃 되셨습니다.');
@@ -161,7 +184,7 @@ async function requestToken(
       },
     }).then((res) => {
       console.log('리프레쉬 요청한 거 받음');
-      console.log(res);
+      // console.log(res);
 
       const tokens: TokenType = {
         access_token: res.data.accessToken,
@@ -169,12 +192,12 @@ async function requestToken(
         user_email: res.data.email,
         user_id: res.data.userSeq,
       };
-      console.log(tokens);
+      // console.log(tokens);
       console.log('토큰 오브젝트 보냅니다. 페이지야 받아라');
       return tokens;
     });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     console.log('Errrrrrr');
     return false;
   }

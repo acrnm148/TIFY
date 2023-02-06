@@ -17,7 +17,7 @@ export function GiftItem({ gift } : GiftProps, key:number){
                 <div className="gift-item-card">
                     <div className="gift-image">
                         {gift.repImg  
-                            ? <img src={gift.repImg} alt="" />
+                            ? <img src={gift.repImg} alt="상품이미지" />
                             : <img src="https://user-images.githubusercontent.com/87971876/215664788-d0359920-497d-4b2a-86db-6381254637d6.jpg" alt="이미지가 없습니다" />}
                         
                     </div>
