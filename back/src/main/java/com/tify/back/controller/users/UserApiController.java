@@ -345,6 +345,9 @@ public class UserApiController {
         try {
             if (file == null) {
                 String fileUrl = "https://tifyimage.s3.ap-northeast-2.amazonaws.com/5e1dc3dc-12c3-4363-8e91-8676c44f122b.png";
+
+                userService.updateProfImg(user, fileUrl);
+                return ResponseEntity.ok().body("프로필 사진이 수정되었습니다. " +fileUrl);
             }
 
             if (file.getSize() > 3 * 1024 * 1024) {
