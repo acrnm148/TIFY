@@ -60,5 +60,5 @@ public class Gift {
     @OneToMany(mappedBy= "gift")
     private List<Pay> payList = new ArrayList<>();
     @OneToMany(mappedBy= "gift")
-    private List<GiftOption> giftOptionList = new ArrayList<>();
+    private List<GiftOption> giftOption = new ArrayList<>();
 }
