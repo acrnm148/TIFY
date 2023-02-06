@@ -230,7 +230,6 @@ public class UserService {
 
     /**
      * 유저 정보 수정
-     * 프로필이미지 변경, 비밀번호 변경
      */
     @Transactional
     public User updateUserInfo(UserUpdateDto dto) {
@@ -241,28 +240,26 @@ public class UserService {
             System.out.println("입력란이 비었습니다.");
             return null;
         }
+        user.setUsername(dto.getUsername());
         user.setTel(dto.getTel());
         user.setZipcode(dto.getZipcode());
         user.setNickname(dto.getNickname());
         user.setAddr1(dto.getAddr1());
         user.setAddr2(dto.getAddr2());
 
-        //프로필사진 변경
-        if (dto.getProfileImg()==null || dto.getProfileImg().equals("")) {
-            user.setProfileImg("/no_img.png");
-        } else {
-            user.setProfileImg(dto.getProfileImg());
-        }
+        userRepository.save(user);
+        return user;
+    }
 
-        //비밀번호 변경
-        System.out.println("현재 암호화된 비밀번호: "+user.getPassword());
-        User userById = userRepository.findByUserid(dto.getUserid());
-        User userByPw = userRepository.findByPassword(user.getPassword());
-        if (userById.equals(userByPw)) { //id와 pw가 일치하면
-            user.setPassword(bCryptPasswordEncoder.encode(dto.getNewPassword()));
+    /**
+     * 프로필이미지 변경
+     */
+    @Transactional
+    public User updateProfImg(User user, String imgUrl) {
+        if (imgUrl==null || imgUrl.equals("")) {
+            user.setProfileImg("https://tifyimage.s3.ap-northeast-2.amazonaws.com/5e1dc3dc-12c3-4363-8e91-8676c44f122b.png");
         } else {
-            System.out.println("현재 비밀번호가 일치하지 않습니다.");
-            return null;
+            user.setProfileImg(imgUrl);
         }
         userRepository.save(user);
         return user;

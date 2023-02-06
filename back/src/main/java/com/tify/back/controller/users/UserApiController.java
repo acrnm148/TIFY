@@ -1,6 +1,7 @@
 package com.tify.back.controller.users;
 
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -13,10 +14,7 @@ import com.tify.back.auth.jwt.service.JwtService;
 import com.tify.back.dto.users.MailDto;
 import com.tify.back.dto.users.UserProfileDto;
 import com.tify.back.dto.users.UserUpdateDto;
-import com.tify.back.dto.users.request.EmailAuthRequestDto;
-import com.tify.back.dto.users.request.FindPwRequestDto;
-import com.tify.back.dto.users.request.JoinRequestDto;
-import com.tify.back.dto.users.request.LoginRequestDto;
+import com.tify.back.dto.users.request.*;
 import com.tify.back.dto.users.response.DataResponseDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
@@ -34,18 +32,23 @@ import com.tify.back.oauth.service.GoogleService;
 import com.tify.back.oauth.service.KakaoService;
 import com.tify.back.oauth.service.NaverService;
 import com.tify.back.repository.users.UserRepository;
+import com.tify.back.upload.FileSizeException;
+import com.tify.back.upload.S3Services;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -55,7 +58,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class UserApiController {
-
+    private final S3Services s3Services;
     private final RefreshTokenRepository refreshTokenRepository;
     private final EmailAuthRepository emailAuthRepository;
     private final UserRepository userRepository;
@@ -188,24 +191,6 @@ public class UserApiController {
     }
 
     /**
-     * 회원 정보 수정
-     */
-    @PostMapping("/account/update")
-    public ResponseEntity<?> updateUserInfo(@RequestBody UserUpdateDto userUpdateDto) { //@RequestHeader(value = "Authorization") String token) {
-        try {
-            User updatedUser = userService.updateUserInfo(userUpdateDto);
-            if (updatedUser != null) {
-                System.out.println("수정되었습니다.");
-            } else {
-                System.out.println("수정에 실패했습니다.");
-            }
-            return ResponseEntity.ok().body(updatedUser);
-        } catch(Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수정에 실패했습니다.");
-        }
-    }
-
-    /**
      * 로그아웃
      */
     @PostMapping("/account/logout")
@@ -329,4 +314,62 @@ public class UserApiController {
         return ResponseEntity.ok().body("가입이 가능합니다.");
     }
 
+    /**
+     * 회원 정보 수정
+     */
+    @PostMapping("/account/update")
+    public ResponseEntity<?> updateUserInfo(@RequestBody UserUpdateDto userUpdateDto) { //@RequestHeader(value = "Authorization") String token) {
+        try {
+            User updatedUser = userService.updateUserInfo(userUpdateDto);
+            if (updatedUser != null) {
+                System.out.println("수정되었습니다.");
+            } else {
+                System.out.println("수정에 실패했습니다.");
+            }
+            return ResponseEntity.ok().body(updatedUser);
+        } catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수정에 실패했습니다.");
+        }
+    }
+
+    /**
+     * 프로필 사진 수정
+     */
+    @PostMapping("/account/updateProfImg")
+    public ResponseEntity<?> updateProfImg(@RequestHeader("Authorization") String token, @RequestPart(value = "image", required = false) MultipartFile file) { //@RequestHeader(value = "Authorization") String token) {
+        token = token.substring(7);
+        User user = userRepository.findById(userService.getUser(token).getId()).get();
+
+        // 이미지 업로드
+        String image = "";
+        try {
+            if (file.getSize() > 3 * 1024 * 1024) {
+                throw new FileSizeException("File size should not exceed 3MB");
+            }
+            String fileUrl = s3Services.uploadFile(file.getOriginalFilename(), file.getInputStream());
+
+            userService.updateProfImg(user, fileUrl);
+            return ResponseEntity.ok().body("프로필 사진이 수정되었습니다. " +fileUrl);
+        } catch (FileSizeException | IOException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    /**
+     * 비밀번호 변경
+     */
+    @PostMapping("/account/updatePw")
+    public ResponseEntity<?> updatePw(@RequestHeader("Authorization") String token, @RequestBody UdatePwRequestDto dto) { //@RequestHeader(value = "Authorization") String token) {
+        token = token.substring(7);
+        User user = userRepository.findById(userService.getUser(token).getId()).get();
+        //현재 비밀번호 확인
+        if (!bCryptPasswordEncoder.matches(dto.getNowPw(),user.getPassword())) { //맞지않을 때
+            System.out.println("저장된pw:"+user.getPassword()+" / 날아온pw:"+dto.getNewPw());
+            System.out.println("비밀번호가 일치하지 않습니다.");
+            return ResponseEntity.ok().body("비밀번호가 일치하지 않습니다.");
+        }
+        //비밀번호 변경
+        userService.updatePassword(user, dto.getNewPw());
+        return ResponseEntity.ok().body("비밀번호가 수정되었습니다.");
+    }
 }
