@@ -31,7 +31,7 @@ export interface Paying{
   userId : number;
 }
 
-export interface Wish {
+export interface Wish { 
   giftItems: Gift[];
   totalPrice: number;
   wishTitle: string;

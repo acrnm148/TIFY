@@ -177,7 +177,7 @@ export function CheckWishPage() {
   const WishOnGoing = ({ conList } : {conList : CheckWish[]}) => {
     return(
       <>
-      <button onClick={CheckConList}>list확인용</button>
+      {/* <button onClick={CheckConList}>list확인용</button> */}
         {conList && conList.map((lst:CheckWish)=>{
           return(
             <div className="wish-container">

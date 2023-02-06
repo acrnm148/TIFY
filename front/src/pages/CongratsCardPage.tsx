@@ -10,8 +10,13 @@ import axios from "axios";
 import { useCallback, useRef } from "react";
 import * as PayingPort from "../components/PayingPort";
 import { Paying } from "../interface/interface"
+import { useSelector } from "react-redux";
+import { RootState } from "../store/Auth";
 
 export function CongratsCardPage(){
+    const userId = useSelector(
+        (state: RootState) => state.authToken.userId,
+      );
     const params = useParams();
     const wishId = params.wishId
     const payAmount = ['5,000', '10,000', '50,000', '100,000']
@@ -43,6 +48,7 @@ export function CongratsCardPage(){
     }, []);
     // 이미지 업로드 버튼 클릭시 발생하는 이벤트
     const onUploadImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(state, 'state')
         if (!e.target.files) {
         return;
         }
@@ -110,8 +116,8 @@ export function CongratsCardPage(){
             celebTel : cardPhone,
             celebContent : cardContents,
             celebImgUrl : imgUrl,
-            giftId : state.selectGift.id,
-            userId : 1,
+            giftId : state.selectGift.giftId,
+            userId : userId,
         }
         // Paying 자료형 >> 결제창으로 넘어갈때 결제정보 인자로 넘기기
         PayingPort.onClickPayment(congratsInfo, state.selectGift.name)

@@ -42,7 +42,7 @@ export function CongratsPage() {
             setContent(res.data.content)
             setCard(res.data.cardImageCode)
             
-            setWishGiftList(res.data.giftItems.map((item: { giftImgUrl: any; productNum: number; gathered: number; purePrice: number; }, i:number) => {
+            setWishGiftList(res.data.giftItems.map((item: { giftImgUrl: any; productNum: number; gathered: number; purePrice: number; id:number }, i:number) => {
                 const pricevat = Number(item.purePrice) + (Number(item.purePrice)*0.05)
                 const achieved = (Number(item.gathered) / pricevat)*100
                 // console.log((Number(item.gathered) / pricevat)*100)
@@ -55,6 +55,7 @@ export function CongratsPage() {
                     achieved : Math.round(achieved),
                     achieved81 : Math.round(achieved*0.81),
                     price : Math.round(pricevat),
+                    giftId : item.id,
                 }
                 )
             }))
