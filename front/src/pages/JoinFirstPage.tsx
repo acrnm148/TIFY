@@ -54,7 +54,7 @@ export function JoinFirstPage() {
         <div className="loginBox">
           <div className="processTab">
             <div className="processBox">
-              <p className="text-primary processtext">이메일 인증</p>
+              <p className="text-[#E0E0E0] processtext">이메일 인증</p>
               <img src={coloredCheckIcon} className="checkIcon" />
             </div>
             <div>
