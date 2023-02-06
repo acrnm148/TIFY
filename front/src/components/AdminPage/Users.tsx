@@ -124,7 +124,7 @@ const Users = () => {
         );
       };
 
-    const handlePageChange = async (newPage) => {
+    const handlePageChange = async (newPage:number) => {
       setPage(newPage);
       const response = await axios.get('localhost:8081/api/users/', {
         params: {
@@ -145,7 +145,7 @@ const Users = () => {
     //     )
     // };
   
-    const handleDelete = async (userid) => {
+    const handleDelete = async (userid:number) => {
         console.log(userid);
         try {
             const response = await axios.delete(`${baseUrl}/user/${userid}`);
