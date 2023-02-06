@@ -386,6 +386,7 @@ public class UserService {
                 SearchedUserDto searchedUser = SearchedUserDto.builder()
                     .id(user.getId())
                     .profileImg(user.getProfileImg())
+                    .name(user.getUsername())
                     .nickname(user.getNickname())
                     .email(user.getEmail())
                     .state(friendStatus)
