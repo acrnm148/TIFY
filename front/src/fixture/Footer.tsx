@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import logo from "../assets/logoFooter.svg"
 import '../css/footer.styles.css'
-import logo2 from "../assets/logoFooter2.svg"
+// import logo2 from "../assets/logoFooter2.svg"
 
 export function Footer() {
   return (
@@ -53,7 +53,7 @@ export function Footer() {
       </div>
 
       <div>
-        <img src={logo2} alt="footer logo2" />
+        {/* <img src={} alt="footer logo2" /> */}
       </div>
       
     </nav>
