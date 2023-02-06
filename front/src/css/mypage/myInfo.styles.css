@@ -1,0 +1,19 @@
+.info-page {
+  width: 838px;
+  height: 1260px;
+
+  box-shadow: 30px 30px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+}
+
+.emailBox > .infopage-title {
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 32px;
+  color: #fe3360;
+  margin-bottom: 50px;
+}
+
+.emailBox > .info {
+  background-color: #fe3360;
+}

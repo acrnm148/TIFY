@@ -21,7 +21,7 @@ import {
   NavLink,
   Outlet,
 } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Auth';
 import axios from 'axios';
@@ -33,8 +33,8 @@ export function MyPage() {
   const tapId = tmp[2];
 
   const userId = useSelector((state: RootState) => state.authToken.userId);
-  console.log(userId);
-  console.log('요것이 userId');
+  // console.log(userId);
+  // console.log('요것이 userId');
 
   return (
     <div className="mypage-div">
@@ -45,10 +45,18 @@ export function MyPage() {
 }
 
 function Sidebar(props: { tapId: string }) {
+  const [imgUrlS3, setImgUrlS3] = useState<string | null>('');
+  // photo
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const onUploadImageButtonClick = useCallback(() => {
+    inputRef.current?.click();
+  }, []);
+
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
-  console.log(accessToken);
+  // console.log(accessToken);
   const [name, Setname] = useState('');
   const [nickName, SetNickName] = useState('');
   axios({
@@ -63,14 +71,71 @@ function Sidebar(props: { tapId: string }) {
       console.log(res, 'res입니다.');
       Setname(res.data.username);
       SetNickName(res.data.nickname);
+      setImgUrlS3(res.data.profileImg);
     })
     .catch((err) => {
       console.log(err, 'err입니다.');
     });
+
+  const formData = new FormData();
+  const handleChangeFile = (event: any) => {
+    if (event.target.files[0]) {
+      formData.append('file', event.target.files[0]); // 파일 상태 업데이트
+    }
+    // imgFile 을 보내서 S3에 저장된 url받기
+    const getImgUrl = async () => {
+      const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
+      await axios
+        .post(API_URL, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+        .then((con) => {
+          console.log('이미지주소불러오기 성공', con.data);
+          setImgUrlS3(con.data);
+        })
+        .catch((err) => {
+          console.log('이미지주소불러오기 실패', err);
+        });
+    };
+    getImgUrl();
+  };
+
   return (
     <div className="side-div">
       <div className="profile-div">
-        <img src={iconProfileSample} alt="사진추가하기" />
+        <div>
+          {props.tapId === 'info' ? (
+            <div
+              className="img-div"
+              style={{ border: 'none', backgroundImage: `url("${imgUrlS3}")` }}
+              onClick={onUploadImageButtonClick}
+            >
+              <input
+                type="file"
+                name="imgFile"
+                accept="image/*"
+                ref={inputRef}
+                id="imgFile"
+                onChange={handleChangeFile}
+                style={{ display: 'none' }}
+              />
+              <img
+                src="https://tifyimage.s3.ap-northeast-2.amazonaws.com/54a2e5c2-1c5c-4a77-9aa0-80d7dfd8da4a.png"
+                className="profile-img"
+              />
+            </div>
+          ) : (
+            <div
+              className="img-div"
+              style={{
+                border: 'none',
+                backgroundImage: `url("${imgUrlS3}")`,
+                cursor: 'default',
+              }}
+            ></div>
+          )}
+        </div>
+
         <p className="profile-name">{name}</p>
         <p className="profile-nickname">{nickName}</p>
       </div>

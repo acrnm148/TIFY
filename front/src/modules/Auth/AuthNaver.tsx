@@ -11,6 +11,11 @@ export function AuthNaver() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    console.log('유즈 이팩트!');
+    NaverLogin(code);
+  }, []);
+
   console.log('location >>>', window.location.search);
   const params = new URLSearchParams(location.search);
   let code: any = params.get('code');
@@ -35,10 +40,6 @@ export function AuthNaver() {
         dispatch(SET_USEREMAIL(res.data.email));
 
         console.log('로그인 성공!!');
-        const userId = useSelector(
-          (state: RootState) => state.authToken.userId,
-        );
-        console.log(userId);
         console.log('유저 아이디 출력');
 
         return navigate('/');
@@ -49,9 +50,5 @@ export function AuthNaver() {
   }
   // NaverLogin(code);
 
-  useEffect(() => {
-    console.log('유즈 이팩트!');
-    NaverLogin(code);
-  }, []);
   return <div>hello naver</div>;
 }

@@ -26,7 +26,7 @@ import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { MyWish } from './components/Mywish';
 import { Joined } from './components/Joined';
 import { Friend } from './components/Friend';
-import { MyInfo } from './components/MyInfo';
+import { MyInfo } from './pages/mypage/MyInfo';
 import { PhoneBook } from './components/PhoneBook';
 import { OrderList } from './components/OrderList';
 import { CongratsPage } from './pages/CongratsPage';
