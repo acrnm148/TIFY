@@ -10,6 +10,7 @@ public class GiftDto {
     private String giftImgUrl;
     private String giftUrl;
     private Long productId;
+    private String giftName;
     private int quantity;
     private String userOption;
     private String type;
@@ -112,6 +113,14 @@ public class GiftDto {
         return giftUrl;
     }
 
+    public String getGiftName() {
+        return giftName;
+    }
+
+    public void setGiftName(String giftName) {
+        this.giftName = giftName;
+    }
+
     public void setGiftUrl(String giftUrl) {
         this.giftUrl = giftUrl;
     }
@@ -121,6 +130,7 @@ public class GiftDto {
         gift.setGiftUrl(this.giftUrl);
         gift.setProductId(this.productId);
         gift.setGiftImgUrl(this.giftImgUrl);
+        gift.setGiftname(this.giftName);
         gift.setQuantity(this.quantity);
         gift.setUserOption(this.userOption);
         gift.setType(this.type);
