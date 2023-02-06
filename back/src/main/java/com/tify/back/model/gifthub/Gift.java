@@ -43,6 +43,7 @@ public class Gift {
     //state
     @Column(name = "user_option")
     private String userOption;// json 형태
+    private String giftname;
     private String type;
     private String finishYN;
     @Column(name = "max_amount")

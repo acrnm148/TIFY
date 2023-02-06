@@ -10,8 +10,13 @@ import axios from "axios";
 import { useCallback, useRef } from "react";
 import * as PayingPort from "../components/PayingPort";
 import { Paying } from "../interface/interface"
+import { useSelector } from "react-redux";
+import { RootState } from "../store/Auth";
 
 export function CongratsCardPage(){
+    const userId = useSelector(
+        (state: RootState) => state.authToken.userId,
+      );
     const params = useParams();
     const wishId = params.wishId
     const payAmount = ['5,000', '10,000', '50,000', '100,000']
@@ -43,27 +48,34 @@ export function CongratsCardPage(){
     }, []);
     // 이미지 업로드 버튼 클릭시 발생하는 이벤트
     const onUploadImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(state, 'state')
         if (!e.target.files) {
         return;
-    }
+        }
+        const sizeLimit = 300*10000
+        // 300만 byte 넘으면 경고문구 출력
+        if (e.target.files[0].size > sizeLimit){
+        alert('사진 크기가 3MB를 넘을 수 없습니다.')
+        } else{
+            // 파일을 formData로 만들어주기
+            const formData = new FormData();
+            formData.append('file', e.target.files[0]);
+    
+            // 3. imgFile 을 보내서 S3에 저장된 url받기 
+            const getImgUrl = async() =>{
+                const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
+                await axios.post(API_URL, formData, {
+                headers: {'Content-Type' : 'multipart/form-data'},
+                }).then((con) => {
+                console.log('이미지주소불러오기 성공', con.data)
+                setImgUrl(con.data)
+                }).catch((err) => {
+                    console.log('이미지주소불러오기 실패', err)
+                })
+            }
+            getImgUrl();
+        }
 
-    // 파일을 formData로 만들어주기
-    const formData = new FormData();
-    formData.append('file', e.target.files[0]);
-
-    // 3. imgFile 을 보내서 S3에 저장된 url받기 
-    const getImgUrl = async() =>{
-        const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
-        await axios.post(API_URL, formData, {
-          headers: {'Content-Type' : 'multipart/form-data'},
-        }).then((con) => {
-          console.log('이미지주소불러오기 성공', con.data)
-          setImgUrl(con.data)
-        }).catch((err) => {
-            console.log('이미지주소불러오기 실패', err)
-        })
-      }
-      getImgUrl();
     }, []);
 // end file upload----------------------------------------------------------------
 
@@ -104,8 +116,8 @@ export function CongratsCardPage(){
             celebTel : cardPhone,
             celebContent : cardContents,
             celebImgUrl : imgUrl,
-            giftId : state.selectGift.id,
-            userId : 1,
+            giftId : state.selectGift.giftId,
+            userId : userId,
         }
         // Paying 자료형 >> 결제창으로 넘어갈때 결제정보 인자로 넘기기
         PayingPort.onClickPayment(congratsInfo, state.selectGift.name)

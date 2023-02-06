@@ -15,6 +15,7 @@ import com.tify.back.model.gifthub.Img;
 import com.tify.back.model.gifthub.Product;
 import com.tify.back.model.gifthub.ProductOption;
 import com.tify.back.model.gifthub.ProductOptionDetail;
+import com.tify.back.repository.gifthub.ImgRepository;
 import com.tify.back.repository.gifthub.ProductOptionDetailRepository;
 import com.tify.back.repository.gifthub.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,7 @@ public class ProductService {
     private final ProductOptionDetailService productOptionDetailService;
     ObjectMapper objectMapper = new ObjectMapper();
     private final ProductOptionDetailRepository productOptionDetailRepository;
+    private final ImgRepository imgRepository;
 
     public Product saveProduct(Product product) {
         return productRepository.save(product);
@@ -92,7 +94,7 @@ public class ProductService {
         productRepository.save(product);
 
         List<Img> imgList = product.getImgList();
-        for (ImgDto imgDto : dto.getImages()) {
+        for (ImgDto imgDto : dto.getImgList()) {
             Img img = imgDto.toEntity();
             img.setProduct(product);
             imgService.saveImg(img);
@@ -210,7 +212,7 @@ public class ProductService {
         }
 
         // 일단 귀찮아서 새로 생성하는 식으로 해버렸음.
-        JSONArray imagelist = map.getJSONArray("images");
+        JSONArray imagelist = map.getJSONArray("imgList");
         List<Img> images = new ArrayList<>();
         for (int i = 0; i < imagelist.length(); i++) {
             JSONObject image = imagelist.getJSONObject(i);
@@ -227,5 +229,52 @@ public class ProductService {
         existingProduct.setOptions(opts);
         existingProduct.setRepImg(map.getString("repImg"));
         return productRepository.save(existingProduct);
+    }
+
+    @Transactional
+    public Product testUpdateProduct(ProductDto dto) {
+        Product newpr = dto.toEntity();
+        Product exproduct = productRepository.findById(dto.getId()).orElse(null);
+        exproduct.setName(newpr.getName());
+        exproduct.setPrice(newpr.getPrice());
+        exproduct.setQuantity(newpr.getQuantity());
+        exproduct.setDescription(newpr.getDescription());
+        exproduct.setRepImg(newpr.getRepImg());
+        exproduct.setCategory(Integer.parseInt(dto.getCategory()));
+        // 새 이미지 들이 올라왔다면.
+        if (dto.getImgList().size() > 0) {
+            List<Img> imgList = exproduct.getImgList();
+            for (Img img : exproduct.getImgList()) {
+                imgService.deleteImg(img.getId());
+            }
+            imgList.clear();
+            for (ImgDto imgDto : dto.getImgList()) {
+                Img img = imgDto.toEntity();
+                img.setProduct(exproduct);
+                imgService.saveImg(img);
+                imgList.add(img);
+            }
+            exproduct.setImgList(imgList);
+        }
+//        List<ProductOption> options = new ArrayList<>();
+//        for (ProductOptionDto optionDto : dto.getOptions()) {
+//            ProductOption productOption = optionDto.toEntity();
+//            productOption.setProduct(exproduct);
+//            productOptionService.saveProductOption(productOption);
+//            List<ProductOptionDetail> details = new ArrayList<>();
+//
+//            for (ProductOptionDetailDto detailDto : optionDto.getDetails()) {
+//                ProductOptionDetail productOptionDetail = detailDto.toEntity();
+//                productOptionDetail.setProductOption(productOption);
+//                productOptionDetailService.saveProductOptionDetail(productOptionDetail);
+//                details.add(productOptionDetail);
+//            }
+//            productOption.setDetails(details);
+//            productOptionService.saveProductOption(productOption);
+//            options.add(productOption);
+//        }
+//        product.setOptions(options);
+
+        return productRepository.save(exproduct);
     }
 }

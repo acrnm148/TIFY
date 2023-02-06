@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
 
-.go-back{
+.go-back {
     width: 100%;
     margin-top: 20px ;
     align-items: left;
 }
-.concon{
+.concon {
     width: 100vw;
     background-color: #F3F3F3;
     display: flex;
@@ -13,7 +13,7 @@
     align-items: center;
     justify-content: center;
 }
-.gift-item-detail-container{
+.gift-item-detail-container {
     display: flex;
     flex-direction: column;
     align-items: center;

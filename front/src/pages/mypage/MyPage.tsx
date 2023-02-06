@@ -21,8 +21,10 @@ import {
   NavLink,
   Outlet,
 } from 'react-router-dom';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Auth';
+import axios from 'axios';
 import '../../css/myPage.styles.css';
 
 export function MyPage() {
@@ -43,12 +45,34 @@ export function MyPage() {
 }
 
 function Sidebar(props: { tapId: string }) {
+  const accessToken = useSelector(
+    (state: RootState) => state.authToken.accessToken,
+  );
+  console.log(accessToken);
+  const [name, Setname] = useState('');
+  const [nickName, SetNickName] = useState('');
+  axios({
+    url: 'https://i8e208.p.ssafy.io/api/account/userInfo',
+    method: 'GET',
+    headers: {
+      // 카카오 developers에 등록한 admin키를 헤더에 줘야 한다.
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+    .then((res) => {
+      console.log(res, 'res입니다.');
+      Setname(res.data.username);
+      SetNickName(res.data.nickname);
+    })
+    .catch((err) => {
+      console.log(err, 'err입니다.');
+    });
   return (
     <div className="side-div">
       <div className="profile-div">
         <img src={iconProfileSample} alt="사진추가하기" />
-        <p className="profile-name">정인모</p>
-        <p className="profile-nickname">Basketball93</p>
+        <p className="profile-name">{name}</p>
+        <p className="profile-nickname">{nickName}</p>
       </div>
       <div className="side-menu-div ">
         <NavLink
