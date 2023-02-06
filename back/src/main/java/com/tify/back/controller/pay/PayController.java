@@ -35,7 +35,11 @@ public class PayController {
     @PostMapping("/celebrate")
     public ResponseEntity<?> celebrate(@RequestBody PayRequestDto payRequestDto, @RequestHeader(required = false, value = "Authorization") String token) {
         System.out.println("축하하기 메소드 진입, token:"+token);
-        if (token != null) {
+        if (token == null || token.equals("Bearer") || token.equals("Bearer ") || token.equals("Bearer null")|| token.equals("null")) {
+            System.out.println("비로그인 유저, token:"+token);
+        }
+        else{
+            System.out.println("로그인 유저, token:"+token);
             token = token.substring(7);
             String userid = userService.getUserid(token);
             Long id = userRepository.findByUserid(userid).getId();
@@ -44,17 +48,21 @@ public class PayController {
         }
 
         if (payRequestDto.getGiftId() == null) {
+            System.out.println("payRequestDto:"+payRequestDto);
             throw new NoGiftException("상품이 존재하지 않습니다.");
         }
         Optional<Gift> gift = giftRepository.findById(payRequestDto.getGiftId());
-        if (gift.isPresent() == false) {
-            return ResponseEntity.ok().body("상품이 없습니다.");
+        System.out.println("기프트 정보 :"+gift);
+        if (gift == null) {
+            return ResponseEntity.ok().body("gift가 없습니다.");
         }
+        System.out.println("기프트 정보 giftId:"+payRequestDto.getGiftId());
+        System.out.println("payRequestDto:"+payRequestDto);
         System.out.println(gift.get());
+
         if (gift.get().getFinishYN().equals("Y") || gift.get().getSuccessYN().equals("Y")) {
             return ResponseEntity.ok().body("펀딩이 완료된 기프트입니다.");
         }
-
         Pay pay = payService.fund(payRequestDto);
         System.out.println("결제 완료 : "+pay);
 

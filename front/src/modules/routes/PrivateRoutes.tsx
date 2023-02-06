@@ -7,7 +7,7 @@ import LoadingModal from '../../components/LoadingModal';
 export default function PrivateRoute() {
   const location = useLocation();
   const { isAuth } = CheckTokenByKey(location.key);
-  console.log('Location은 지금', location);
+  // console.log('Location은 지금', location);
 
   if (isAuth === 'Failed') {
     alert('로그인 해야 합니다.');

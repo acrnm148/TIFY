@@ -69,4 +69,13 @@ public class fcmController {
             }
         });
     }
+
+    @PostMapping("/newuser")
+    public String newCollection(@RequestBody String email) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://tify-noti-default-rtdb.firebaseio.com/");
+        DatabaseReference reference = database.getReference("test/tify");
+        String uid = email.replace("@","-").replace(".","-");
+        reference.child(uid).setValueAsync("");
+        return "collection for " + uid + " created";
+    }
 }
