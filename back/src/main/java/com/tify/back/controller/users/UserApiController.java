@@ -116,6 +116,12 @@ public class UserApiController {
     public ResponseEntity<String> confirmEmail(@PathVariable(value = "email") String email, HttpServletResponse response) throws URISyntaxException { //json으로 전달이 안됨
         System.out.println("전송된 링크 진입");
         String successPage = userService.confirmEmail(email);
+        if (successPage == null) {
+            URI redirectUri = new URI("https://i8e208.p.ssafy.io/404");
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setLocation(redirectUri);
+            return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
+        }
 
         //방식1 리다이렉트
         /* URI redirectUri = new URI("https://i8e208.p.ssafy.io/join2");

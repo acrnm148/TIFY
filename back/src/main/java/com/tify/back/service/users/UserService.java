@@ -41,6 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.security.auth.login.LoginException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -156,17 +157,15 @@ public class UserService {
         System.out.println("요청 이메일:"+email);
         List<EmailAuth> list = emailRepository.findAllByEmail(email);
         String authToken = list.get(list.size()-1).getAuthToken();
-        EmailAuth emailAuth = emailCustomRepository.findValidAuthByEmail(email, authToken, LocalDateTime.now()).get();
-        emailAuth.useToken(); //이메일 인증 상태 true 로 바꿔줌
-
-        String successAuthHtml1 = "<div style=\"font-family: 'Nanum Gothic', 'sans-serif' !important; width: 540px; height: 600px; margin: 50px auto; padding: 10px 0; box-sizing: border-box;\">"
-                +	"<h1 style=\"margin: 0; padding: 0 5px; font-size: 28px; font-weight: 400;\">"
-                +		"인증되었습니다.</h1>"
-                +	        "<p style=\"font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;\">"
-                +                    "인증 요청한 페이지로 돌아가서 회원가입을 진행해주세요. </p>"
-                +"</div>";
-        String successAuthHtml2 = "<div style=\"font-family: 'Nanum Gothic', 'sans-serif' !important; width: 540px; height: 600px; margin: 50px auto; padding: 10px 0; box-sizing: border-box;\">"
-                +	"<img src=\"https://tifyimage.s3.ap-northeast-2.amazonaws.com/7d0fd987-24b9-41f3-9fce-5abd5a067d4d.png\"/>"
+        Optional<EmailAuth> option = emailCustomRepository.findValidAuthByEmail(email, authToken, LocalDateTime.now());
+        if (option.isPresent()) {
+            EmailAuth emailAuth = option.get();
+            emailAuth.useToken(); //이메일 인증 상태 true 로 바꿔줌
+        } else {
+            return null;
+        }
+        String successAuthHtml2 = "<div style=\"font-family: 'Nanum Gothic', 'sans-serif' !important; width: 500px; height: 700px; margin: 2px auto; box-sizing: border-box;\">"
+                +	"<img src=\"https://tifyimage.s3.ap-northeast-2.amazonaws.com/f8085730-8f18-419d-8c4c-5a9c360739e3.png\" style=\"width:500px; height:700px;\"/>"
                 +"</div>";
         return successAuthHtml2;
     }

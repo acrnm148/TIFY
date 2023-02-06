@@ -37,20 +37,19 @@ public class EmailService {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
-            String htmlStr = "<div style=\"font-family: 'Nanum Gothic', 'sans-serif' !important; width: 540px; height: 600px; margin: 50px auto; padding: 10px 0; box-sizing: border-box;\">"
-                    +	"<h1 style=\"margin: 0; padding: 0 5px; font-size: 28px; font-weight: 400;\">"
-                    +		"<span style=\"font-size: 15px; margin: 0 0 10px 3px;\">TIFY</span><br />"
-                    +		"<span style=\"color: #FE3360;\">메일인증</span> 안내입니다.</h1>"
-                    +	        "<p style=\"font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;\">"
-                    +                    "안녕하세요. <br />"
-                    +                    "TIFY를 이용해 주셔서 진심으로 감사드립니다.<br />"
+            String htmlStr = "<div style=\"margin: 0 auto;text-align: center; font-family: 'Nanum Gothic', 'sans-serif' !important; width: 540px; height: 600px; margin: 50px auto; padding: 10px 0; box-sizing: border-box;\">"
+                    + "<img src='https://tifyimage.s3.ap-northeast-2.amazonaws.com/1c9f3f4b-9f42-4fc2-87e5-45a4cb43e3df.png'/>"
+                    +	"<h1 style=\"margin: 0 auto; padding: 0 5px; font-size: 28px;text-align: center;font-weight:400;\">"
+                    +		"<span style=\"color: #FE3360; text-align: center;\"><strong>메일인증</strong></span> 안내입니다.</h1>"
+                    +	        "<p style=\"margin: 0 auto; font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;text-align: center;\">"
+                    +                    "TIFY를 이용해 주셔서 감사드립니다.<br />"
                     +                    "아래 <b style=\"color: #FE3360;\">'메일 인증'</b> 버튼을 클릭하여 이메일 인증을 완료해주세요.<br />"
                     +                    "감사합니다. </p>"
-                    +	"<a style=\"color: #FFF; text-decoration: none; text-align: center;\" href=\"https://i8e208.p.ssafy.io/api/account/confirmEmail/"+email+"\" target=\"_blank\"><p style=\"display: inline-block; width: 210px; height: 45px; margin: 30px 5px 40px; background: #FE3360; line-height: 45px; vertical-align: middle; font-size: 16px;\">메일 인증</p></a>"
+                    +	"<a style=\"margin: 0 auto; color: #FFF; text-decoration: none; text-align: center;\" href=\"https://i8e208.p.ssafy.io/api/account/confirmEmail/"+email+"\" target=\"_blank\"><p style=\"display: inline-block; width: 210px; height: 45px; margin: 30px 5px 40px; background-image: url('https://tifyimage.s3.ap-northeast-2.amazonaws.com/26e901d0-2994-4355-a19e-9b0dd8d8828e.png'); radius:8px; line-height: 45px; vertical-align: middle; font-size: 16px;\"></p></a>"
                     +	"<div style=\"border-top: 1px solid #DDD; padding: 5px;\">"
                     +		"<p style=\"font-size: 13px; line-height: 21px; color: #555;\">"
-                    +                    "만약 버튼이 정상적으로 클릭되지 않는다면, 아래 링크를 복사하여 접속해 주세요.<br />"
-                    +                    "https://i8e208.p.ssafy.io/localhost:8081/api/account/confirmEmail</p>"
+                    +                    "버튼이 정상적으로 클릭되지 않을 경우 아래 링크를 복사하여 접속해 주세요.<br />"
+                    +                    "https://i8e208.p.ssafy.io/api/account/confirmEmail/"+email+"</p>"
                     +	"</div>"
                     +"</div>";
 //                    "<h2> 회원가입 이메일 인증</h2>"
@@ -79,9 +78,16 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
 
             helper.setSubject("[TIFY] 고객님의 임시 비밀번호입니다. ");
-            String htmlStr = "<h2> 임시 비밀번호 발급 안내 </h2>"
-                    + "안녕하세요,"+name+"님!<br> TIFY 임시 비밀번호 안내 관련 이메일입니다.<br> 고객님의 임시 비밀번호는 [<strong>"
-                    + tempPw + "</strong>] 입니다. 로그인 후 비밀번호를 변경해주세요.";
+            String htmlStr = "<div style=\"margin: 0 auto;text-align: center; font-family: 'Nanum Gothic', 'sans-serif' !important; width: 540px; height: 600px; margin: 50px auto; padding: 10px 0; box-sizing: border-box;\">"
+                    + "<img src='https://tifyimage.s3.ap-northeast-2.amazonaws.com/1c9f3f4b-9f42-4fc2-87e5-45a4cb43e3df.png'/>"
+                    +	"<h1 style=\"margin: 0 auto; padding: 0 5px; font-size: 28px;text-align: center;font-weight:400;\">"
+                    +		"<span style=\"color: #FE3360; text-align: center;\"><strong>임시 비밀번호 발급</strong></span> 안내입니다.</h1>"
+                    +	        "<p style=\"margin: 0 auto; font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;text-align: center;\">"
+                    +                    "TIFY 임시 비밀번호 안내 관련 메일입니다.<br />"
+                    +                    "고객님의 임시 비밀번호는 [<strong>"
+                    +                       tempPw + "</strong>] 입니다. <br />로그인 후 비밀번호를 변경해주세요."
+                    +                     "<br />감사합니다. </p>"
+                    +"</div>";
 
             helper.setText(htmlStr, true);
             helper.setTo(new InternetAddress(email, email, "utf-8"));
