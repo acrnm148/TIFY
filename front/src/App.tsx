@@ -32,6 +32,7 @@ import { OrderList } from './components/OrderList';
 import { CongratsPage } from './pages/CongratsPage';
 import { CongratsPayPage } from './pages/CongratsPayPage';
 import { CongratsCardPage } from './pages/CongratsCardPage';
+import { Delivery } from './components/Delivery';
 
 import { Footer } from './fixture/Footer';
 import { MainPage } from './pages/MainPage';
@@ -109,7 +110,9 @@ function App() {
             <Route path="friend" element={<Friend />} />
             <Route path="info" element={<MyInfo />} />
             <Route path="phone" element={<PhoneBook />} />
-            <Route path="order" element={<OrderList />} />
+            <Route path="order" element={<OrderList />}>
+              <Route path="delivery" element={<Delivery />} />
+            </Route>
           </Route>
           <Route path="/checkwish" element={<CheckWishPage />} />
           <Route path="/thanks/:wishId/:conId" element={<ThanksPage />} />
@@ -146,8 +149,6 @@ function App() {
           <Route path="kakaopay" element={<PayingService />} />
         </Route>
         <Route path="/congrats/kakaopay/result" element={<PayResult />} />
-        {/* <Route path="/congrats/import" element={<PayingPort />} /> */}
-
         <Route path="/faq" element={<FaqPage />} />
 
         <Route path="/*" element={<NotFound />} />

@@ -165,17 +165,17 @@ export function MakeWishPage() {
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
-  const [wishCart, setWishCart] = useState<Gift[]>();
-  const pushItem = (i: number) => {
-    if (wishCart) {
-      setWishCart([...wishCart, cartList[i]]);
-    } else {
-      setWishCart([cartList[i]]);
-    }
-    setTotalPrice(totalPrice + cartList[i].price);
-    setTotalProduct([...totalProduct, { productId: cartList[i].id }]);
-    console.log(totalPrice, totalProduct);
-  };
+  const [wishCart, setWishCart] = useState<Gift[]>()
+  const pushItem = (i:number) =>{
+      if (wishCart){
+        setWishCart([...wishCart,cartList[i]])
+      } else {
+        setWishCart([cartList[i]])
+      }
+      setTotalPrice(totalPrice+cartList[i].price)
+      setTotalProduct([...totalProduct,{"productId" : cartList[i].id, "maxAmount": cartList[i].price+Math.round(cartList[i].price*0.05) , 'purePrice':cartList[i].price, 'userOption':cartList[i].options[0], 'giftImgUrl':cartList[i].repImg }])
+      console.log(totalPrice, totalProduct)
+  }
   const CartList = () => {
     return (
       <>
@@ -261,27 +261,33 @@ export function MakeWishPage() {
   };
 
   // 사진 등록
-  const formData = new FormData();
   const handleChangeFile = (event: any) => {
-    if (event.target.files[0]) {
-      formData.append('file', event.target.files[0]); // 파일 상태 업데이트
+    const formData = new FormData();
+    const sizeLimit = 300*10000
+    // 300만 byte 넘으면 경고문구 출력
+    if (event.target.files[0].size > sizeLimit){
+      alert('사진 크기가 3MB를 넘을 수 없습니다.')
+    } else{
+      if (event.target.files[0]) {
+        formData.append('file', event.target.files[0] ); // 파일 상태 업데이트
+      }
+      // imgFile 을 보내서 S3에 저장된 url받기
+      const getImgUrl = async () => {
+        const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
+        await axios
+          .post(API_URL, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          })
+          .then((con) => {
+            console.log('이미지주소불러오기 성공', con.data);
+            setImgUrlS3(con.data);
+          })
+          .catch((err) => {
+            console.log('이미지주소불러오기 실패', err);
+          });
+      };
+      getImgUrl();
     }
-    // imgFile 을 보내서 S3에 저장된 url받기
-    const getImgUrl = async () => {
-      const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
-      await axios
-        .post(API_URL, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        })
-        .then((con) => {
-          console.log('이미지주소불러오기 성공', con.data);
-          setImgUrlS3(con.data);
-        })
-        .catch((err) => {
-          console.log('이미지주소불러오기 실패', err);
-        });
-    };
-    getImgUrl();
   };
   const onUploadImageButtonClick = useCallback(() => {
     inputRef.current?.click();
@@ -294,7 +300,7 @@ export function MakeWishPage() {
       setSelectCardUrl(cardList[id]);
       console.log(selectCardUrl);
     } else {
-      setSelectCardUrl(imgBase64);
+      setSelectCardUrl(imgUrlS3);
     }
   }
   const CardList = (): JSX.Element[] => {
@@ -345,17 +351,13 @@ export function MakeWishPage() {
               </div>
             </div>
           </div>
+        </div>
           <div className="finish-wish-comment">
             <h1>위시 생성이 완료되었습니다!</h1>
             <NavLink to={'/checkwish'}>
               <p>위시목록으로 고고고</p>
             </NavLink>
           </div>
-        </div>
-        <div className="finish-wish-comment">
-          <h1>위시 생성이 완료되었습니다!</h1>
-          <p></p>
-        </div>
       </div>
     );
   };

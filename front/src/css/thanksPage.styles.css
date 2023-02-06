@@ -17,14 +17,14 @@
 }
 .thanks-page-container{
     width: 90%;
-    border: 1px solid gray;
+    /* border: 1px solid gray; */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
 .con-thanks-container{
     width: 100%;
-    border: 1px solid rgb(72, 96, 182);
+    /* border: 1px solid rgb(72, 96, 182); */
     min-height: 890px;
     display: flex;
     justify-content: space-evenly;
@@ -34,6 +34,7 @@
 .con-card-detail{
     display: flex;
     align-items: center;
+    width: 50%;
 }
 .con-card{
     background-image: url('../assets/conCard.svg');
@@ -46,12 +47,12 @@
 .con-photo{
     width: inherit - 20px;
     min-height: 15em;
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
 }
 .con-text{
     width: inherit - 20px;
     min-height: 17em;
-    border: 1px solid aqua;
+    /* border: 1px solid aqua; */
     margin-top: 1em;
 
     font-family: 'NanumGothic';
@@ -83,6 +84,8 @@
     justify-content: center;
     width: 100%;
     
+}.thanks-card-con-container{
+    width: 50%;
 }
 .thanks-card{
     display: flex;
@@ -99,6 +102,7 @@
     flex-direction: column;
     justify-content: left;
     margin-top: 10px;
+    width: 100%;
 }
 .thanks-input textarea{
     min-height: 200px;
@@ -158,6 +162,7 @@
     border-radius: 10px;
     height: 52px;
     margin-top: 20px;
+    
 }
 
 .form-title{
@@ -167,7 +172,8 @@
     font-weight: 400;
     font-size: 22.652px;
     line-height: 23px;
-    margin-bottom: 25px;
+    /* margin-bottom: 25px; */
+    padding: 5%;
 }
 
 .img-input{

@@ -14,61 +14,109 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
 import { CheckWish } from "../interface/interface";
 
-// [TODO] wish정보 props로 받아서 표출 
-const wishTitle = '졸업해버렸습니다'
-const wishCategory = '졸업'
-const wishDday = 34
-const wishAchieved=33
-const wishId = 1
-
 export function CheckWishPage() {
-  const [userId, setUserId] = useState(useSelector((state: RootState) => state.authToken.userId))
+  // const [userId, setUserId] = useState(useSelector((state: RootState) => state.authToken.userId))
+  const userId = 133
   const [isWish, setIsWish] = useState<Boolean>(false)
   const [wishGoing, setWishGoing] = useState<Boolean>(true)
   const [conList, setConList] = useState<Array<CheckWish>>([])
   const [goOpenList, setGoOpenList] = useState<Array<CheckWish>>([])
   const [ setLsts, setSetLsts ] = useState<Boolean>(false)
-  
+  const [ showIng, setShowIng] = useState<Boolean>(false)
+  const accessToken = useSelector(
+    (state: RootState) => state.authToken.accessToken,
+  );
   useEffect(()=>{
     const API_URL = `https://i8e208.p.ssafy.io/api/wish/wish/${userId}`;
-    axios.get(API_URL, userId
+    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    axios.get(API_URL, 
+      
       ).then((res)=>{
-        console.log('유저의 위시정보 get', res.data)
-        // nList = res.data.finishYN이 N이고 감사카드까지 모두 작성한??? 위시리스트
+        
+        // console.log('유저의 위시정보 get', res.data)
+        // nList = res.data.finishYN이 ㅛ위시리스트
         // 1. nList가 빈값일 때 진행중인 위시가 없습니다
         // 2. nList를 checkWishPage 에 표출
         // 2-1. nList 진행중인 위시
         // 2-2. nList 완료되었고 축하카드를 확인하지 않은 위시
         if (res.data.length > 0){
           setIsWish(true)
-          res.data.map((e:any)=>{
-            // 1. 날짜 종료여부 확인
-            if(e.finishYN === 1){
-              // a. 완료된 리스트에서 금액 달성과 카드를 아직 안열어봤다면 => goOpenList
-              if (e.totPrice <= e.nowPrice && e.cardOpen !== 1){
-                alert('완료되었는데 아직 카드를 안열어본 리스트 아고복잡해ㅋㅋㅋㅋ')
-                // 여기서는 percent를 -1로 
-              }       
-            } else {
-              // b. conList => 진행중인 위시
-              // conList.percent => nowPrice에서 totPrice가 몇퍼센트인지 
-              // conList.restDay => 남은 일수
-              let diff = new Date(e.endDate).getTime() - new Date().getTime();
-              setConList([...conList,{
-                wishId : e.id,
-                userName : e.user.username,
-                title : e.title,
-                category : e.category,
+// =-====================reduce방식으로 시도===================
+          setConList(res.data.reduce(function(res:Array<any>, wish:any){
+            const result = conList.some((con: { wishId: any; }) => con.wishId === wish.id)
+            if(wish.finishYN !== 'y' && !result){
+              let diff = new Date(wish.endDate).getTime() - new Date().getTime();
+              const froms = wish.giftItems.map((gift: { payList: { pay_id: any; celeb_from:string;  }[]; }, i:number)=>{
+                if(gift){
+                  let payids = gift.payList.map((p: { pay_id: any; celeb_from:string; }) => {
+                    return {'id' : p.pay_id, 'from': p.celeb_from}
+                  })
+                    return {data : payids}
+                  }
+                }
+              )
+              const data = {
+                wishId : wish.id,
+                userName : wish.user.username,
+                title : wish.title,
+                category : wish.category,
                 restDay : String(Math.floor((diff) / (1000*60*60*24))), // 오늘 날짜랑 계산해서 몇일남았는지
-                percent : (e.nowPrice % e.totPrice)*100,
-                fromList : e.payList, // payList어떻게 생겼는지 모름...!!!!!!! 
-                fromId : 1 // payList어떻게 생겼는지 모름...!!!!!!! 
-              }])
-            }
-          })
+                percent : (wish.nowPrice / wish.totPrice)*100,
+                fromList : froms[0].data,
+                cardOpen : wish.cardopen,
+              }
+              res.push(data)
+              }
+              return res
+            },[]
+          ))
 
-      }
-      }).catch((err)=>{
+          setGoOpenList(res.data.reduce(function(res:Array<any>, wish:any){
+            const result = goOpenList.some((go: { wishId:any; }) => go.wishId === wish.id)
+            if(wish.finishYN === 'y'){
+              let diff = new Date(wish.endDate).getTime() - new Date().getTime();
+              const froms = wish.giftItems.map((gift: { payList: { pay_id: any; celeb_from:string;  }[]; }, i:number)=>{
+                if(gift){
+                  let payids = gift.payList.map((p: { pay_id: any; celeb_from:string; }) => {
+                    return {'id' : p.pay_id, 'from': p.celeb_from}
+                  })
+                    return {data : payids}
+                  }
+                }
+              )
+              const data= {
+                wishId : wish.id,
+                userName : wish.user.username,
+                title : wish.title,
+                category : wish.category,
+                restDay : String(Math.floor((diff) / (1000*60*60*24))), 
+                percent : (wish.nowPrice / wish.totPrice)*100,
+                fromList : froms[0].data,
+                cardOpen : wish.cardopen,
+              }
+              res.push(data)
+            }
+            return res
+          },[]
+          ))
+        }
+        // }).then(()=>{
+        //   return new Promise (function myo(){
+        //     console.log(conList, 'here is myo')
+        //     // 리스트 restDay가 적은 순서로 정렬
+        //     let newArr = [...conList]
+        //     newArr.sort(function (comp1, comp2){
+        //       return Number(comp1.restDay) - Number(comp2.restDay)
+        //     })
+        //     setConList(newArr)
+
+        //     // let newArr2 = [...goOpenList]
+        //     // newArr2.sort(function (comp1, comp2){
+        //     //   return Number(comp1.restDay) - Number(comp2.restDay)
+        //     // })
+        //     // setGoOpenList(newArr2)
+        //   })
+        }).catch((err)=>{
         console.log('유저의 위시정보 불러오지못함')
       })
   },[])
@@ -87,27 +135,15 @@ export function CheckWishPage() {
       </div>
     )
   }
-  const CongratsCards = (props:{fromList:string[], fromId : number, userName:string}) =>{
+  const CongratsCards = (props:{fromList:any[], wishId:string, userName:string}) =>{
     return(
       <div className="congrat-card-list">
-      {/* {props.fromList.map((from, i:number) =>(
-        <NavLink to={`/thanks/${wishId}/${props.fromId}`}>
-          <CongratCard key={i} from={from} to={props.userName} />
+      {props.fromList && props.fromList.map((from: { id: any; from: string; }, i:number) =>(
+        <NavLink to={`/thanks/${props.wishId}/${from.id}`}>
+          <CongratCard key={i} from={from.from} to={props.userName} />
         </NavLink>
-      ))} */}
+      ))}
     </div>
-    )
-  }
-  const CongratCardList = () =>{
-
-    return(
-      <>{
-        <div className="congrat-card-container">
-          {/* <WishOpened goOpenList={...goOpenList}/> */}
-          <WishOnGoing conList={[...conList]}/>
-        </div>
-      }
-      </>
     )
   }
   const WishOpened = ({ goOpenList } : {goOpenList : CheckWish[]}) => {
@@ -116,11 +152,16 @@ export function CheckWishPage() {
         {
           goOpenList.map((lst:CheckWish) =>{
             return(
-              <div>
-                <div className="wish-open">
+              <div className="wish-container">
+                <CongratsCards fromList={lst.fromList} wishId={lst.wishId} userName={lst.userName}/>
+                <div className="wish-open wish-on-going-background">
+                  
                   위시 오픈 애니메이션
+                  <NavLink to={`/congrats/${lst.wishId}`}>
+                    <h1>{lst.userName}님의 {lst.category}위시</h1>
+                    <h1>"{lst.title}"</h1>
+                  </NavLink>
                 </div>
-                <CongratsCards fromList={lst.fromList} fromId={lst.fromId} userName={lst.userName}/>
               </div>
             )
           })
@@ -129,12 +170,18 @@ export function CheckWishPage() {
       </>
     )
   }
+  const CheckConList = ()=>{
+    console.log(conList, 'conListconListconList')
+    console.log(goOpenList, 'goOpenListgoOpenListgoOpenListgoOpenListgoOpenList')
+  }
   const WishOnGoing = ({ conList } : {conList : CheckWish[]}) => {
     return(
       <>
+      <button onClick={CheckConList}>list확인용</button>
         {conList && conList.map((lst:CheckWish)=>{
           return(
-            <div>
+            <div className="wish-container">
+              <CongratsCards fromList={lst.fromList} wishId={lst.wishId} userName={lst.userName}/>
               <NavLink to={`/congrats/${lst.wishId}`} className="wish-on-going-background" >
                 <div className="wish-on-going-box">
                   <h3 className="font-lg">{lst.userName}님의 {lst.category}위시</h3>
@@ -155,7 +202,6 @@ export function CheckWishPage() {
                   </div>
                 </div>
               </NavLink>
-              <CongratsCards fromList={lst.fromList} fromId={lst.fromId} userName={lst.userName}/>
             </div>
             
           )
@@ -167,7 +213,17 @@ export function CheckWishPage() {
   const IsWishLayout = () =>{
     return(
       <div className="is-wish-layout">
-        <WishOnGoing conList={[...conList]}/>
+        <div className="show-toggle-btn-con">
+          <button onClick={()=>setShowIng(false)} className={`show-toggle-btn ${!showIng && 'show-toggle-selected'}`}>완료</button>
+          <button onClick={()=>setShowIng(true)} className={`show-toggle-btn ${showIng && 'show-toggle-selected'}`}>진행중</button>
+        </div>
+        {
+          showIng
+          ?
+          <WishOnGoing conList={[...conList]}/>
+          :
+          <WishOpened goOpenList={[...goOpenList]} />
+        }
       </div>
       
     )
@@ -185,8 +241,8 @@ export function CheckWishPage() {
     return(
       <>
       <div className="page-name-block">
-        <h1>userid:{userId}</h1>
-          <button className="temp-button" onClick={()=>(setIsWish(!isWish))}>{isWish?'위시있음':'위시없음'}</button>
+        {/* <h1>userid:{userId}</h1>
+          <button className="temp-button" onClick={()=>(setIsWish(!isWish))}>{isWish?'위시있음':'위시없음'}</button> */}
         <div className={isWish?'page-name check-wish':''} />
       </div>
       <div className="check-wish-container">

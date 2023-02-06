@@ -28,11 +28,11 @@ export function CheckTokenByKey(key?: string) {
   const refreshToken = getCookieToken();
   const dispatch = useDispatch();
   // const navigate = useNavigate();
-  console.log(
-    authenticated,
-    expireTime,
-    'authenticated, expireTime 이렇습니다!!!',
-  );
+  // console.log(
+  //   authenticated,
+  //   expireTime,
+  //   'authenticated, expireTime 이렇습니다!!!',
+  // );
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
@@ -79,14 +79,14 @@ export function CheckTokenByKey(key?: string) {
         // access코드 이상하면 리프레쉬 토큰으로 리프레쉬 시도
         console.log('리프레쉬 시도');
         const response = await requestToken(refreshToken);
-        console.log(response);
+        // console.log(response);
 
         if (response) {
           setRefreshToken(response.refresh_token);
           dispatch(SET_TOKEN(response.access_token));
           dispatch(SET_USERID(response.user_id));
           dispatch(SET_USEREMAIL(response.user_email));
-          console.log(response);
+          // console.log(response);
           console.log('리프레쉬 성공');
           setIsAuth('Success');
         } else {
@@ -130,7 +130,7 @@ async function requestToken(
       },
     }).then((res) => {
       console.log('리프레쉬 요청한 거 받음');
-      console.log(res);
+      // console.log(res);
 
       const tokens: TokenType = {
         access_token: res.data.accessToken,
@@ -138,12 +138,12 @@ async function requestToken(
         user_email: res.data.email,
         user_id: res.data.userSeq,
       };
-      console.log(tokens);
+      // console.log(tokens);
       console.log('토큰 오브젝트 보냅니다. 페이지야 받아라');
       return tokens;
     });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     console.log('Errrrrrr');
     return false;
   }

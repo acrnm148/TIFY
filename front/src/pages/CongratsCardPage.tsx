@@ -45,25 +45,31 @@ export function CongratsCardPage(){
     const onUploadImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) {
         return;
-    }
+        }
+        const sizeLimit = 300*10000
+        // 300만 byte 넘으면 경고문구 출력
+        if (e.target.files[0].size > sizeLimit){
+        alert('사진 크기가 3MB를 넘을 수 없습니다.')
+        } else{
+            // 파일을 formData로 만들어주기
+            const formData = new FormData();
+            formData.append('file', e.target.files[0]);
+    
+            // 3. imgFile 을 보내서 S3에 저장된 url받기 
+            const getImgUrl = async() =>{
+                const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
+                await axios.post(API_URL, formData, {
+                headers: {'Content-Type' : 'multipart/form-data'},
+                }).then((con) => {
+                console.log('이미지주소불러오기 성공', con.data)
+                setImgUrl(con.data)
+                }).catch((err) => {
+                    console.log('이미지주소불러오기 실패', err)
+                })
+            }
+            getImgUrl();
+        }
 
-    // 파일을 formData로 만들어주기
-    const formData = new FormData();
-    formData.append('file', e.target.files[0]);
-
-    // 3. imgFile 을 보내서 S3에 저장된 url받기 
-    const getImgUrl = async() =>{
-        const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
-        await axios.post(API_URL, formData, {
-          headers: {'Content-Type' : 'multipart/form-data'},
-        }).then((con) => {
-          console.log('이미지주소불러오기 성공', con.data)
-          setImgUrl(con.data)
-        }).catch((err) => {
-            console.log('이미지주소불러오기 실패', err)
-        })
-      }
-      getImgUrl();
     }, []);
 // end file upload----------------------------------------------------------------
 

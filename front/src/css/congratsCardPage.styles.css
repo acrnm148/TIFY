@@ -29,8 +29,8 @@
     padding-top: 10%;
     width: 40%;
 }
-.selected>div{
-    border: 2px solid #BBDAF7;
+.selected{
+    border: 2px solid #fe3360;
 }
 .gift-img{
     cursor: pointer;
