@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserUpdateDto {
     private String userid; //수정불가
+    private String username;
     private String nickname;
     private String tel;
     private String addr1;

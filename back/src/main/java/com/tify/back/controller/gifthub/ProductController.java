@@ -126,8 +126,8 @@ public class ProductController {
 
     // 상품 정보 update
     @PutMapping("/product")
-    public Product updateProduct(@RequestBody String message) throws Exception {
-        return productService.updateProduct(message);
+    public Product updateProduct(@RequestBody ProductDto dto) throws Exception {
+        return productService.testUpdateProduct(dto);
     }
 
     // 상품 삭제.

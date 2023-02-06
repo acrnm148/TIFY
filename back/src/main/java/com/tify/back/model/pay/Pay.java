@@ -42,16 +42,12 @@ public class Pay {
     @ManyToOne(fetch=LAZY)
     @JoinColumn(name="id") //변수명에 맞춰야함
     private Gift gift;
-
     private Long user_id;
     private LocalDateTime createTime;
-
     @OneToOne
     @JoinColumn(name = "order_id")
     private Order order;
-
     @OneToMany(mappedBy= "pay")
     private List<Thkcard> thkcardList = new ArrayList<>();
-
     public void updateOrder(Order order) {this.order = order;}
 }
