@@ -50,10 +50,10 @@ import { Login } from './modules/Auth/LogIn';
 import ScrollTop from '../src/interface/scroll';
 
 import { AdminPage } from './pages/AdminPage';
-import Users from "./components/AdminPage/Users"
-import Wishes from "./components/AdminPage/Wishes"
+import Users from './components/AdminPage/Users';
+import Wishes from './components/AdminPage/Wishes';
 import UserInfoEdit from './components/AdminPage/UserInfoEdit';
-import Products from './components/AdminPage/Products'
+import Products from './components/AdminPage/Products';
 
 // const initialState = {
 //   authenticated: false,
@@ -151,12 +151,12 @@ function App() {
         <Route path="/faq" element={<FaqPage />} />
 
         <Route path="/*" element={<NotFound />} />
-        <Route path="/admin" element={<Admin/>}/>
-        <Route path="/admin/users" element={<Users/>}/>
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/users" element={<Users />} />
         <Route path="/admin/users/:userPk" element={<UserInfoEdit />} />
 
-        <Route path="/admin/wishes" element={<Wishes/>}/>
-        <Route path="/admin/products" element={<Products/>}/>
+        <Route path="/admin/wishes" element={<Wishes />} />
+        <Route path="/admin/products" element={<Products />} />
       </Routes>
       <Footer />
     </BrowserRouter>
