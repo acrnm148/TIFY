@@ -48,6 +48,7 @@ public class Pay {
     @JoinColumn(name = "order_id")
     private Order order;
     @OneToOne(mappedBy= "pay")
+    @JsonIgnore
     private Thkcard thkcardList;
     public void updateOrder(Order order) {this.order = order;}
 }
