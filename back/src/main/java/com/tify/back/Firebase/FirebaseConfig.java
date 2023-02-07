@@ -17,7 +17,7 @@ public class FirebaseConfig {
     //@Value("${firebase.credential.resource-path}")
     //private String keyPath;
 
-    @Bean
+    //@Bean
     @Primary
     @PostConstruct
     public void init(){
