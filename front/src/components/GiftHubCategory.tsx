@@ -21,9 +21,13 @@ const CATEGORY_DATA = [
     {id: 7, name : 'dogcat', ko:'반려동물', src:dogcat},
 
 ]
-const GiftHubCategory = (props:{propFunction: (arg0: number) => void}) =>{
-    const [selectCategory, setSelectCategory] = useState<number>(0)
-    
+const GiftHubCategory = (props:{propFunction: (arg0: number) => void, goCategory:number|null|undefined}) =>{
+    const [selectCategory, setSelectCategory] = useState<number|null|undefined>(props.goCategory)
+    useEffect(()=>{
+        if(!props.goCategory){
+            setSelectCategory(0)
+        }
+    }, [props.goCategory])
     const cateChangeHandler =async (i:number) =>{
         props.propFunction(i)
         // 현재 선택한 카테고리의 색 변경

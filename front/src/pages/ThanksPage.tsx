@@ -103,7 +103,6 @@ const onUploadImage = (event: any) => {
       }
     }
     useEffect(()=>{
-      
       const API_URL = `https://i8e208.p.ssafy.io/api/thkcards/${userId}`
       axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
       // 2. userId로 작성한 감사카드, payid와 같이 조회
