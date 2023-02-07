@@ -120,7 +120,7 @@ export function JoinFirstPage() {
                   // disabled
                 />
                 <button type="submit" className="loginButton font-bold">
-                  이메일 인증 완료
+                  이메일 인증 완료하기
                 </button>
               </form>
             ) : (

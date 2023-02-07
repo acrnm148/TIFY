@@ -72,6 +72,7 @@ export function MyInfo() {
           address: res.data.addr1,
           zonecode: res.data.zipcode,
         });
+
         setAddr2(res.data.addr2);
       })
       .catch((err) => {
@@ -92,16 +93,16 @@ export function MyInfo() {
           'Accept-Encoding': 'gzip, deflate, br',
           Connection: 'keep-alive',
         };
-        console.log(enroll_company.zonecode);
-        console.log({
-          username,
-          nickname,
-          addr1,
-          addr2,
-          tel,
-          userId,
-        });
-        console.log(accessToken);
+        // console.log(enroll_company.zonecode, enroll_company.address);
+        // console.log({
+        //   username,
+        //   nickname,
+        //   addr1: enroll_company.address,
+        //   addr2,
+        //   tel,
+        //   userId,
+        // });
+        // console.log(accessToken);
         const zipcode = enroll_company.zonecode;
         axios.defaults.headers.common[
           'Authorization'
@@ -109,7 +110,7 @@ export function MyInfo() {
         return await axios
           .post('https://i8e208.p.ssafy.io/api/account/update', {
             userid: userId,
-            addr1,
+            addr1: enroll_company.address,
             addr2,
             zipcode: enroll_company.zonecode,
             tel,
@@ -134,9 +135,10 @@ export function MyInfo() {
     event: React.FormEvent<HTMLFormElement>,
   ) => {
     event.preventDefault();
-    console.log(password1);
-    console.log(password2);
-    console.log(confirmPassword2);
+    // console.log(enroll_company.address);
+    // console.log(password1);
+    // console.log(password2);
+    // console.log(confirmPassword2);
     if (CheckValidPassword()) {
       try {
         axios.defaults.headers.common[
@@ -144,8 +146,8 @@ export function MyInfo() {
         ] = `Bearer ${accessToken}`;
         return await axios
           .post('https://i8e208.p.ssafy.io/api/account/updatePw', {
-            nowPw: 'password1',
-            newPw: 'password2',
+            nowPw: password1,
+            newPw: password2,
           })
           .then((res) => {
             console.log(res, '비밀번호 변경 api 시도 성공!');
@@ -251,8 +253,8 @@ export function MyInfo() {
       return false;
     }
 
-    console.log(birthYear, birthMonth, birthDay);
-    console.log(typeof birthYear, typeof birthMonth, typeof birthDay);
+    // console.log(birthYear, birthMonth, birthDay);
+    // console.log(typeof birthYear, typeof birthMonth, typeof birthDay);
 
     if (tel1 == '' || tel2 == '' || tel3 == '') {
       alert('전화번호를 입력해주세요.');
