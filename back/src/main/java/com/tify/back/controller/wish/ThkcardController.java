@@ -27,6 +27,7 @@ public class ThkcardController {
 		thkcard.setPhoneNumber(thkcardDto.getPhoneNumber());
 		thkcard.setContent(thkcardDto.getContent());
 		thkcard.setImageUrl(thkcardDto.getImageUrl());
+		thkcard.setUserId(thkcardDto.getUserId());
 		thkcard.setPay(thkcardDto.getPay());
 		return thkcardService.saveThkcard(thkcard);
 	}

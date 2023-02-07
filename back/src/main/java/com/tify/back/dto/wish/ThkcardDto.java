@@ -12,6 +12,6 @@ public class ThkcardDto {
 	private String phoneNumber;
 	private String content;
 	private String imageUrl;
-
+	private Long userId;
 	private Pay pay;
 }
