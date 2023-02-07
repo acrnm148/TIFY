@@ -60,18 +60,6 @@ public class JwtProviderService {
         return accessToken;
     }
 
-    public String createRefreshToken(Long id , String userId) {
-        Date now = new Date();
-
-        return JWT.create()
-                .withSubject(userId)
-                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.RefreshToken_TIME))
-                .withClaim("id", id)
-                .withClaim("userid", userId)
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
-    }
-
-
     /**
      * refreshToken validation 체크(refresh token 이 넘어왔을때)
      * 정상 - access 토큰 생성후 반환
@@ -90,7 +78,6 @@ public class JwtProviderService {
                 return accessToken;
             }
         }catch (Exception e) {
-
             //refresh 토큰이 만료됨
             return null;
         }

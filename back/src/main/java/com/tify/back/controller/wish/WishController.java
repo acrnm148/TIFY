@@ -1,5 +1,6 @@
 package com.tify.back.controller.wish;
 import com.tify.back.dto.wish.AddWishDto;
+import com.tify.back.model.friend.Friend;
 import com.tify.back.model.wish.Wish;
 import com.tify.back.repository.wish.WishRepository;
 import com.tify.back.service.wish.WishService;
@@ -7,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,9 +39,54 @@ public class WishController {
     public Wish wishList(@RequestParam(value = "wishId", required = true) Long wishId){
         return wishService.wishDetailId(wishId);
     }
+
+    @PutMapping("/cardopen/{wishId}")
+    public String cardOpen(@PathVariable Long wishId) {
+        Wish wish = wishRepository.findById(wishId).orElse(null);
+        if (wish == null) {
+            return "wish not found";
+        }
+        wish.setCardopen("open");
+        wishRepository.save(wish);
+        return "card open";
+    }
+
+    @GetMapping("/wish/{userId}")
+    public List<Wish> getWish(@PathVariable long userId) {
+        List<Wish> wish = wishService.getWish(userId);
+        return wish;
+    }
     @GetMapping
     public List<Wish> Wish() {
         return wishRepository.findAll();
+    }
+
+    @PutMapping("/edit")
+    public String editWish(@RequestBody AddWishDto dto) {
+        // Validate if the wish exists
+        Optional<Wish> wishOptional = wishRepository.findById(dto.getWishId());
+        if (!wishOptional.isPresent()) {
+            return "Wish not found!";
+        }
+        Wish wish = wishOptional.get();
+
+        // Update the wish with the new values
+        wish.setTotPrice(dto.getTotalPrice());
+        wish.setNowPrice(dto.getNowPrice());
+        wish.setTitle(dto.getWishTitle());
+        wish.setContent(dto.getWishContent());
+        wish.setCategory(dto.getCategory());
+        wish.setFinishYN(dto.getFinishYN());
+        wish.setStartDate(dto.getStartDate());
+        wish.setEndDate(dto.getEndDate());
+        wish.setCardImageCode(dto.getWishCard());
+        wish.setAddr1(dto.getAddr1());
+        wish.setAddr2(dto.getAddr2());
+        wish.setZipCode(dto.getZipCode());
+
+        // Save the changes to the database
+        wishRepository.save(wish);
+        return "Wish updated!";
     }
 
     @PostMapping// test용 빈 wish 만드는 컨트롤러

@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/back.main.iml" filepath="$PROJECT_DIR$/.idea/modules/back.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.tify.back.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.tify.back.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/피쳐백.back.main.iml" filepath="$PROJECT_DIR$/.idea/modules/피쳐백.back.main.iml" />
     </modules>
   </component>
 </project>

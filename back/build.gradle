@@ -33,6 +33,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
     implementation 'junit:junit:4.13.1'
     implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    implementation 'io.findify:s3mock_2.13:0.2.6'
+    implementation 'io.findify:s3mock_2.11:0.2.6'
+    implementation 'io.findify:s3mock_2.12:0.2.6'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.mysql:mysql-connector-j'
@@ -59,8 +62,6 @@ dependencies {
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.0.2'
 
-
-
     //GCP
     //implementation group: 'com.google.cloud', name: 'spring-cloud-gcp-starter', version: '3.0.0'
     //implementation group: 'com.google.cloud', name: 'spring-cloud-gcp-storage', version: '3.0.0'
@@ -79,6 +80,12 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
     implementation group: 'org.json', name: 'json', version: '20090211'
     implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+
+    //firebase
+    implementation group: 'com.google.firebase', name: 'firebase-admin', version: '8.1.0'
+
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.11.795'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 }
 
 tasks.named('test') {

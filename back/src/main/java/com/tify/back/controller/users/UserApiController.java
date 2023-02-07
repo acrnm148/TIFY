@@ -2,17 +2,27 @@ package com.tify.back.controller.users;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.tify.back.auth.jwt.JwtProperties;
 import com.tify.back.auth.jwt.JwtToken;
+import com.tify.back.auth.jwt.refreshToken.RefreshToken;
+import com.tify.back.auth.jwt.refreshToken.RefreshTokenRepository;
 import com.tify.back.auth.jwt.service.JwtProviderService;
 import com.tify.back.auth.jwt.service.JwtService;
+import com.tify.back.dto.users.MailDto;
 import com.tify.back.dto.users.UserProfileDto;
 import com.tify.back.dto.users.UserUpdateDto;
 import com.tify.back.dto.users.request.EmailAuthRequestDto;
+import com.tify.back.dto.users.request.FindPwRequestDto;
 import com.tify.back.dto.users.request.JoinRequestDto;
 import com.tify.back.dto.users.request.LoginRequestDto;
+import com.tify.back.dto.users.response.DataResponseDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
+import com.tify.back.exception.UserLoginException;
 import com.tify.back.model.users.EmailAuth;
+import com.tify.back.model.users.UserProperties;
 import com.tify.back.repository.users.EmailAuthRepository;
 import com.tify.back.service.users.EmailService;
 import com.tify.back.service.users.UserService;
@@ -29,15 +39,16 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
 
 @Tag(name = "user", description = "유저 API")
 @RestController
@@ -45,6 +56,7 @@ import java.util.Map;
 @RequestMapping("/api")
 public class UserApiController {
 
+    private final RefreshTokenRepository refreshTokenRepository;
     private final EmailAuthRepository emailAuthRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
@@ -53,7 +65,6 @@ public class UserApiController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final KakaoService kakaoService;
     private final NaverService naverService;
-    private final GoogleService googleService;
     private final JwtProviderService jwtProviderService;
 
     private final RedisTemplate<String, String> redisTemplate;
@@ -72,7 +83,7 @@ public class UserApiController {
     public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto) {
         LoginResponseDto responseDto = userService.login(requestDto);
         if (responseDto == null) {
-            return ResponseEntity.ok().body("로그인에 실패했습니다.");
+            return ResponseEntity.ok().body("로그인에 실패했습니다.");//"로그인에 실패했습니다.");
         }
         return ResponseEntity.ok().body(responseDto);
     }
@@ -84,8 +95,10 @@ public class UserApiController {
     @PostMapping("/account/signin")
     public ResponseEntity<?> join(@RequestBody JoinRequestDto joinRequestDto){ //authToken, email 받아옴
         JoinResponseDto responseDto = userService.register(joinRequestDto);
-        if (responseDto == null) {
+        if (responseDto.getResult().equals(UserProperties.EXISTED_USER)) {
             return ResponseEntity.status(HttpStatus.MULTI_STATUS).body("존재하는 유저입니다.");
+        } else if (responseDto.getResult().equals(UserProperties.NO_CHECKED_EMAIL)) {
+            return ResponseEntity.status(HttpStatus.MULTI_STATUS).body("이메일 인증이 필요합니다.");
         }
         //login(new LoginRequestDto(responseDto.getUserid(), responseDto.getPassword()));
         return ResponseEntity.ok().body(responseDto);
@@ -96,14 +109,18 @@ public class UserApiController {
      */
     @Operation(summary = "comfirm email", description = "이메일 인증 완료")
     @GetMapping("/account/confirmEmail")
-    public ResponseEntity<?> confirmEmail(@ModelAttribute EmailAuthRequestDto requestDto) { //json으로 전달이 안됨
+    public ResponseEntity<?> confirmEmail(@ModelAttribute EmailAuthRequestDto requestDto, HttpServletResponse response) throws URISyntaxException { //json으로 전달이 안됨
         System.out.println("전송된 링크 진입");
-        //User user = userService.confirmEmail(requestDto);
         String authToken = userService.confirmEmail(requestDto);
-        //System.out.println("이메일 인증 성공, 이메일 토큰: "+authToken);
-        //return ResponseEntity.ok().body("이메일 인증 성공, 이메일 토큰: "+authToken);
-        return ResponseEntity.ok().body(authToken);
+
+        URI redirectUri = new URI("https://i8e208.p.ssafy.io/join2");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(redirectUri);
+        httpHeaders.add("email", requestDto.getEmail());
+        //httpHeaders.set("email", requestDto.getEmail());
+        return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
     }
+
     /**
      * 이메일 인증 했는지 체크
      */
@@ -111,11 +128,15 @@ public class UserApiController {
     @GetMapping("/account/checkEmailState")
     public ResponseEntity<?> checkEmailState(String email) {
         System.out.println("이메일 인증 했는지 체크");
-        List<EmailAuth> emailAuths = new ArrayList<>();
-        emailAuths = emailAuthRepository.findByEmail(email);
-        if (emailAuths.size() == 0) {
+        User user = userRepository.findByUserid(email);
+        List<EmailAuth> emailAuths = emailAuthRepository.findAllByEmail(email);
+        if (emailAuths.size() == 0 || emailAuths.get(emailAuths.size()-1).getExpired() ==false) {
             return ResponseEntity.ok().body("N");
         }
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://tify-noti-default-rtdb.firebaseio.com/");
+        DatabaseReference reference = database.getReference("test/tify");
+        String uid = email.replace("@","-").replace(".","-");
+        reference.child(uid).setValueAsync("");
         return ResponseEntity.ok().body("Y");
 
     }
@@ -128,12 +149,11 @@ public class UserApiController {
     public ResponseEntity<?> sendEmailAuth(@RequestParam("email") String email) {
         System.out.println("이메일 인증 - 이미 가입된 메일 체크 :"+userService.validateDuplicated(email));
         if (userService.validateDuplicated(email)) {
-            return ResponseEntity.ok().body("이미 인증이 완료된 이메일입니다.");
+            return ResponseEntity.ok().body("해당 이메일의 유저가 존재합니다.");
         }
         userService.sendEmailAuth(email);
         return ResponseEntity.ok().body(email); //인증된 이메일 리턴
     }
-
 
     /**
      * 회원 조회
@@ -141,22 +161,22 @@ public class UserApiController {
     @Operation(summary = "user info", description = "유저 프로필 정보를 가져옴")
     @GetMapping("/account/userInfo")
     public ResponseEntity<?> getUserProfile(@RequestHeader(value = "Authorization") String token) {
+        UserProfileDto userProfileDto = null;
         try {
             System.out.println("유저 조회 token 체크 : "+token);
-            UserProfileDto userProfileDto = userService.getUser(token.substring(7));
-            //return ResponseEntity.ok().body(new UserProfileDto(user));
-            return ResponseEntity.ok().body(userProfileDto);
+             userProfileDto = userService.getUser(token.substring(7));
+             System.out.println("userprofile:"+userProfileDto);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("유저 정보가 없습니다. 다시 로그인해주세요.");
         }
+        return ResponseEntity.ok().body(userProfileDto);
     }
 
     /**
      * 회원 탈퇴
      */
     @DeleteMapping("/account/signout")
-    public ResponseEntity<?> signout(@RequestHeader("Authorization") String token) { //@RequestHeader(value = "Authorization") String token) {
-        try {
+    public ResponseEntity<?> signout(@RequestHeader("Authorization") String token) {
             token = token.substring(7);
             if (jwtService.validAccessToken(token) == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰이 만료되었습니다.");
@@ -164,13 +184,8 @@ public class UserApiController {
             String userid = userService.getUserid(token);
             userService.deleteUser(userid);
             System.out.println("탈퇴되었습니다.");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        } catch(Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("헤더에 토큰이 없습니다.");
-        }
+            return ResponseEntity.ok().body("탈퇴되었습니다.");
     }
-
-
 
     /**
      * 회원 정보 수정
@@ -186,11 +201,9 @@ public class UserApiController {
             }
             return ResponseEntity.ok().body(updatedUser);
         } catch(Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수정에 실패했습니다..");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수정에 실패했습니다.");
         }
     }
-
-
 
     /**
      * 로그아웃
@@ -208,14 +221,14 @@ public class UserApiController {
      */
     /**front-end로 부터 받은 인가 코드 받기 및 사용자 정보 받기,회원가입 */
     @GetMapping("/account/auth/login/kakao")
-    public Map<String,String> KakaoLogin(@RequestParam("code") String code) {
+    public Map<String,Object> KakaoLogin(@RequestParam("code") String code) {
         //access 토큰 받기
         KakaoToken oauthToken = kakaoService.getAccessToken(code);
         //사용자 정보받기 및 회원가입
         User saveUser = kakaoService.saveUser(oauthToken.getAccess_token());
         //jwt토큰 저장
         JwtToken jwtTokenDTO = jwtService.getJwtToken(saveUser.getUserid());
-        return jwtService.successLoginResponse(jwtTokenDTO);
+        return jwtService.successLoginResponse(jwtTokenDTO, saveUser);
     }
     //test로 직접 인가 코드 받기
     @GetMapping("/login/oauth2/code/kakao")
@@ -228,11 +241,11 @@ public class UserApiController {
      * JWT를 이용한 네이버 로그인
      */
     @GetMapping("/account/auth/login/naver")
-    public Map<String, String> NaverLogin(@RequestParam("code") String code) {
+    public Map<String, Object> NaverLogin(@RequestParam("code") String code) {
         NaverToken oauthToken = naverService.getAccessToken(code);
         User saveUser = naverService.saveUser(oauthToken.getAccess_token());
         JwtToken jwtToken = jwtService.getJwtToken(saveUser.getUserid());
-        return jwtService.successLoginResponse(jwtToken);
+        return jwtService.successLoginResponse(jwtToken, saveUser);
     }
     @GetMapping("/login/oauth2/code/naver")
     public String NaverCode(@RequestParam("code") String code) {
@@ -240,40 +253,28 @@ public class UserApiController {
     }
 
     /**
-     * JWT를 이용한 구글 로그인
-     */
-    @GetMapping("/account/auth/login/google")
-    public Map<String,String> googleLogin(@RequestParam("code") String code) {
-        //access 토큰 받기
-        GoogleToken oauthToken = googleService.getAccessToken(code);
-        //사용자 정보받기 및 회원가입
-        User saveUser = googleService.saveUser(oauthToken.getAccess_token());
-        //jwt토큰 저장
-        JwtToken jwtTokenDTO = jwtService.getJwtToken(saveUser.getUserid());
-        return jwtService.successLoginResponse(jwtTokenDTO);
-    }
-    //test로 직접 인가 코드 받기
-    @GetMapping("/login/oauth2/code/google")
-    public String googleCode(@RequestParam("code") String code) {
-        return "구글 로그인 인증완료, code: "  + code;
-    }
-
-    /**
-     * refresh token 재발급
+     * access, refresh token 재발급
+     * access 만료 + refresh 유효 => access 재발급
+     * refresh 만료 => access, refresh 재발급
      */
     @Operation(summary = "get refresh token", description = "refresh token 재발급")
-    @Parameter(description = "userid를 파라미터로 받습니다.")
-    @GetMapping("/refresh/{userId}")
-    public Map<String,String> refreshToken(@PathVariable("userId") String userid, @RequestHeader("refreshToken") String refreshToken,
-                                           HttpServletResponse response) throws JsonProcessingException {
+    @GetMapping("/refresh")
+    public Map<String,Object> refreshToken(@RequestHeader("refreshToken") String refreshToken) {
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("utf-8");
+        //Long userSeq = userService.getUseridByRefresh(refreshToken);
+        Optional<RefreshToken> token = refreshTokenRepository.findByRefreshToken(refreshToken);
+        if (token.get() != null) {
+            Long userSeq = userRepository.findByUserid(token.get().getUserid()).getId();
+            System.out.println(userSeq+" / "+refreshToken);
 
-        JwtToken jwtToken = jwtService.validRefreshToken(userid, refreshToken);
-        Map<String, String> jsonResponse = jwtService.recreateTokenResponse(jwtToken);
+            User user = userRepository.findById(userSeq).get();
+            String userid = user.getUserid();
+            JwtToken jwtToken = jwtService.validRefreshToken(userid, refreshToken);
 
-        return jsonResponse;
+            Map<String, Object> jsonResponse = jwtService.recreateTokenResponse(jwtToken, user);
+            return jsonResponse;
+        }
+        return null;
     }
 
     /**
@@ -287,6 +288,45 @@ public class UserApiController {
             return ResponseEntity.status(HttpStatus.MULTI_STATUS).body("Y");
         }
         return ResponseEntity.ok().body("N");
+    }
+
+    /**
+     * 유저 권한 확인 (USER, ADMIN)
+     */
+    @GetMapping("/roleCheck")
+    public ResponseEntity<?> checkRole(@RequestParam("userid") String userid) {
+        User user = userRepository.findByUserid(userid);
+        if (user != null) {
+            List<String> list = user.getRoleList();
+            return ResponseEntity.status(HttpStatus.MULTI_STATUS).body(list.get(0));
+        }
+        return ResponseEntity.ok().body("해당 유저가 없습니다.");
+    }
+
+    /**
+     * 비밀번호 찾기
+     */
+    @PostMapping("/account/findPw")
+    public ResponseEntity<?> findPassword(@RequestParam("email") String email) throws URISyntaxException {
+        User user = userRepository.findByUserid(email);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("이메일이 존재하지 않습니다.");
+        }
+        userService.sendMailAndChangePassword(user);
+        System.out.println("임시 비밀번호로 변경 완료");
+        return ResponseEntity.ok().body("임시 비밀번호로 변경 완료");
+    }
+
+    /**
+     * 이메일 중복 확인
+     */
+    @GetMapping("/dupEmailCheck")
+    public ResponseEntity<?> checkDuplicatedEmail(@RequestParam("userid") String userid) {
+        User user = userRepository.findByUserid(userid);
+        if (user != null) {
+            return ResponseEntity.ok().body("유저가 존재합니다.");
+        }
+        return ResponseEntity.ok().body("가입이 가능합니다.");
     }
 
 }

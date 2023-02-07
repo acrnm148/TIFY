@@ -1,9 +1,11 @@
 package com.tify.back.auth.jwt.refreshToken;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -18,7 +20,12 @@ public class RefreshToken {
     @Column(name = "refreshToken", length = 500)
     private String refreshToken;
 
-    public RefreshToken(String refreshToken) {
+    @Column(name = "user_id", length = 500)
+    private String userid;
+
+    @Builder
+    public RefreshToken(String refreshToken, String userid) {
         this.refreshToken = refreshToken;
+        this.userid = userid;
     }
 }

@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginResponseDto {
-    private Long id;
+    private Long userSeq;
     private String userid;
+    private String email;
     private String accessToken;
     private String refreshToken;
 }

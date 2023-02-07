@@ -9,6 +9,7 @@ import com.tify.back.repository.gifthub.ProductRepository;
 import com.tify.back.service.gifthub.CartService;
 import com.tify.back.service.gifthub.ImgService;
 import com.tify.back.service.gifthub.ProductService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -92,23 +93,29 @@ public class ProductController {
     }
 
     //검색, 필터링.
+    @ApiOperation(value = "sortingCode 0=인기순, 1=가격 오름차 , 2=가격 내림차")
     @GetMapping("/search")
     public Page<Product> searchProductsByConditions(@RequestParam(value = "minPrice", required = false) Integer minPrice,
                                                     @RequestParam(value = "maxPrice", required = false) Integer maxPrice,
                                                     @RequestParam(value = "name", required = false) String name,
                                                     @RequestParam(value = "category", required = false) Integer category,
                                                     @RequestParam(value = "page", required = false) Integer page,
-                                                    @RequestParam(value = "max_result", required = false) Integer max_result) {
+                                                    @RequestParam(value = "max_result", required = false) Integer max_result,
+                                                    @RequestParam(value = "sortingCode", required = false) Integer sortingCode) {
         Integer min = 0;
         Integer maxp = 999999999;
+        Page<Product> products;
+
         if (page == null) { page = 0;}
         if (max_result == null) { max_result = 10;}
-
-        Page<Product> products;
-        Pageable pageable = PageRequest.of(page, Math.max(10, max_result));
-
+        if (sortingCode == null || sortingCode < -1 || sortingCode > 2) { sortingCode = 0;}
         if (minPrice == null) { minPrice = 0;}
         if (maxPrice == null) { maxPrice = 999999999;}
+
+//        Pageable pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("fieldName1").ascending().and(Sort.by("fieldName2").descending()));
+        Pageable pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("likeCount").descending());
+        if (sortingCode == 1) {pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("price").ascending());}
+        else if (sortingCode == 2) {pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("price").descending());}
 
         if (category!= null) {products = productService.searchProducts(minPrice, maxPrice, name, category, pageable);}
         else {products = productService.searchProducts2(minPrice, maxPrice, name, pageable);} // 변수 이름도 다 맞춰야 한다...

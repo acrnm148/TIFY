@@ -53,8 +53,6 @@ spring:
   #file system
   servlet:
     multipart:
-      enabled: true
-      location: C:/Temp
       file-size-threshold: 2KB
       max-file-size: 200MB
       max-request-size: 215MB
@@ -64,8 +62,24 @@ spring:
 file:
   uploadDir: ./88files
 
+#aws s3
+aws:
+  access_key: AKIA2CCTTED2IIZLQOHS
+  secret_key: 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
+  s3:
+    bucket: tifyimage
+
 #iamport Keys
 imp_key: 8753437
 imp_secret: fec4af82c2d97e8fa4ebdb2c6a8ffb5d021b5794
 
+#firebase
+app:
+  firebase-configuration-file: firebaseconfig/sp-fcm-key.json
 
+# naver kgh key
+naver-cloud-sms:
+  accessKey: Ins3y4evD9z8sY45fTXN
+  secretKey: 5Xz1XV8TnS5EmRnQo6PAKJISbDt2xHAvrX2JJhzb
+  serviceId: ncp:sms:kr:299557230184:tify
+  senderPhone: 01049221157

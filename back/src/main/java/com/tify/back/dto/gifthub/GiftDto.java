@@ -5,7 +5,12 @@ import com.tify.back.repository.gifthub.ProductRepository;
 import com.tify.back.repository.wish.WishRepository;
 
 public class GiftDto {
+
+
+    private String giftImgUrl;
+    private String giftUrl;
     private Long productId;
+    private String giftName;
     private int quantity;
     private String userOption;
     private String type;
@@ -96,15 +101,42 @@ public class GiftDto {
         this.idx = idx;
     }
 
+    public String getGiftImgUrl() {
+        return giftImgUrl;
+    }
+
+    public void setGiftImgUrl(String giftImgUrl) {
+        this.giftImgUrl = giftImgUrl;
+    }
+
+    public String getGiftUrl() {
+        return giftUrl;
+    }
+
+    public String getGiftName() {
+        return giftName;
+    }
+
+    public void setGiftName(String giftName) {
+        this.giftName = giftName;
+    }
+
+    public void setGiftUrl(String giftUrl) {
+        this.giftUrl = giftUrl;
+    }
+
     public Gift toEntity(ProductRepository productRepository) {
         Gift gift = new Gift();
-        gift.setProduct(productRepository.findById(this.productId).orElse(null));
+        gift.setGiftUrl(this.giftUrl);
+        gift.setProductId(this.productId);
+        gift.setGiftImgUrl(this.giftImgUrl);
+        gift.setGiftname(this.giftName);
         gift.setQuantity(this.quantity);
         gift.setUserOption(this.userOption);
         gift.setType(this.type);
         gift.setFinishYN(this.finishYN);
         gift.setMaxAmount(this.maxAmount);
-        gift.setPurePrice(this.purePrice);
+        gift.setPurePrice(this.purePrice*this.quantity);
         gift.setGathered(this.gathered);
         gift.setSuccessYN(this.successYN);
         gift.setIdx(this.idx);

@@ -82,4 +82,3 @@ export function onClickPayment(congratsInfo:Paying, giftName:string) {
     } 
 
 export default onClickPayment;
-
