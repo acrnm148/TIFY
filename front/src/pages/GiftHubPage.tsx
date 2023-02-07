@@ -13,16 +13,34 @@ import { NavLink, Link, MemoryRouter, Route, Routes, useLocation } from 'react-r
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
 
+// mui option 
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { query } from 'firebase/database';
+
+const CATEGORY_DATA = [
+  {id: 0, name : '전체'},
+  {id: 1, name : '뷰티'},
+  {id: 2, name : '전자기기'},
+  {id: 3, name : '키친'},
+  {id: 4, name : '식품'},
+  {id: 5, name : '출산유아'},
+  {id: 6, name : '인테리어'},
+  {id: 7, name : '반려동물'},
+
+]
 export function GiftHubPage() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [category, setCategory] = useState<number | null>();
   let [giftList, setGiftList] = useState<Array<any>>([]);
-
+  const [sortingCode, setSortingCode] = useState<string|number|null>()
   // Slider 설정
-  const [priceRange, setPriceRange] = useState([0, 100000000]);
-  const [min, max] = [0, 1000000];
+  const [priceRange, setPriceRange] = useState([10000, 10000000]);
+  const [min, max] = [10000, 10000000];
   const step = 1000;
-  const [value, setValue] = useState<number[]>([10000, 1000000]);
+  const [value, setValue] = useState<number[]>([10000, 10000000]);
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);
@@ -66,6 +84,7 @@ export function GiftHubPage() {
             category: category,
             max_result: max_result,
             page: pageNum,
+            sortingCode : sortingCode // sortingCode 0=인기순, 1=가격 오름차 , 2=가격 내림차
           },
         })
         .then((e) => {
@@ -83,10 +102,10 @@ export function GiftHubPage() {
         });
     };
     fetchData();
-  }, [searchQuery, priceRange, category, pageNum]);
-
+  }, [searchQuery, priceRange, category, pageNum, sortingCode]);
 
   const getQuery = (q: string) => {
+    console.log('쿼리받음')
     setSearchQuery(q);
     setPageNum(0);
   };
@@ -96,6 +115,10 @@ export function GiftHubPage() {
     if (c === 0) {
       setCategory(null);
     }
+  };
+
+  const handleFilterChange = (e: SelectChangeEvent) => {
+    setSortingCode(e.target.value)
   };
 
   const NoResult = () => {
@@ -122,7 +145,7 @@ export function GiftHubPage() {
   }
   return (
     <div>
-      <GiftHubCategory propFunction={getCategory} />
+      <GiftHubCategory propFunction={getCategory} goCategory={category}/>
       <SearchBar propFunction={getQuery} initailQuery={searchQuery} />
       <div className="filter-bar-container">
         <div className="filter-bar">
@@ -166,17 +189,52 @@ export function GiftHubPage() {
       </div>
 
       <div className="gift-sortig">
-        <div>
-          {/* <p>인기순</p>
-          <p> |</p>
-          <p className="sort-btn" onClick={() => ExpensiveList()}>
-            높은가격순
-          </p>
-          <p> |</p>
-          <p className="sort-btn" onClick={() => CheapestList()}>
-            낮은가격순
-          </p> */}
+        <div className='sorting'>
+          <div className='sorting-keyword'>
+                {searchQuery && <div className='filter-show'>{searchQuery}<span onClick={()=>setSearchQuery('')}>x</span></div>}
+                {priceRange[0] !== 10000 && <div className='filter-show'>최소가격{priceRange[0]}
+                  <span 
+                    onClick={()=>{
+                      setPriceRange([10000, priceRange[1]])
+                      setValue([10000, priceRange[1]])
+                      }}>x
+                  </span></div> }
+                {priceRange[1] !== 10000000 && <div className='filter-show'>최대가격{priceRange[1]}
+                  <span 
+                    onClick={()=>{
+                      setPriceRange([priceRange[0], 10000000])
+                      setValue([priceRange[0], 10000000])
+                    }}>x
+                    </span></div> }
+                {category && <div className='filter-show'>{CATEGORY_DATA[category].name}<span onClick={()=>setCategory(null)}>x</span></div>}
+            </div>
+          <div className='dropdown'>
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="demo-simple-select-standard-label">정렬방식</InputLabel>
+              <Select
+                labelId="demo-simple-select-standard-label"
+                id="demo-simple-select-standard"
+                // value={sortingCode}
+                onChange={handleFilterChange}
+                label="인기순"
+              >
+                <MenuItem value="">
+                  <em>선택안함</em>
+                </MenuItem>
+                <MenuItem value={0}>인기순</MenuItem>
+                <MenuItem value={1}>낮은가격순</MenuItem>
+                <MenuItem value={2}>높은가격순</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
         </div>
+      </div>
+      <div className="gift-sortig">
+
+            
+      </div>
+      <div>
+        
       </div>
 
       <div>
@@ -211,5 +269,4 @@ export function GiftHubPage() {
 
     /* 
   [TODO] 사이트 들어왔을 때 기본 노출 상품들 요청처리 (인기 데이터 요청..)
-  [TODO] -인기순- 높은가격순 낮은가격순 선택 시  ( 데이터 요청..)
 */

@@ -129,7 +129,7 @@ export function MakeWishPage() {
   };
   // gift cart
   const [cartList, setCartList] = useState<Gift[]>([]);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0); ['','']
   const [totalProduct, setTotalProduct] = useState<Object[]>([]);
 
   const wishData = { title: '', content: '', wishCard: '', giftItem: [] };
