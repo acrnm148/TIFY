@@ -38,7 +38,6 @@ export function ThanksPage() {
 
   let fromList;
 
-  console.log('엥엥엥')
   // 사진 업로드하는 html 버튼에 직접 접근해서 값을 가져오는 inputRef
   const inputRef = useRef<HTMLInputElement | null>(null);
   
@@ -121,36 +120,34 @@ const onUploadImage = (event: any) => {
     // 카드 하나의 정보 useState로 관리
   const ThanksReply = () => {
     return(
-      <div>감사카드답장 유
+      <div>
+        <div className="con-card">
+          <div className='tofrom'>From </div>
+          <div className='con-photo' style={{"backgroundImage":`url(${conInfo.img})`}}></div>
+          <div className='con-text'></div>
+          <div className='userName tofrom'>To </div>
+        </div>
       </div>
 
     )
   }
-  const thkGo = () =>{
-    // form 유효성검사
-    let result;
-    if(!title){
-      result = confirm('제목을 작성하지 않으셨군요')
-      if (!result){
-        return
-      }
-    }
-    if(!phone){
-      alert('')
+  const isThkCard = (i : boolean) => {
+    if(i){
+      // 감사카드 조회 요청보내고 데이터 바꿔주기
+      setIsThanksCard(true)
     }
   }
   const ThanksForm = memo(function ThanksForm(){
     return(
       <div className='thanks-card-con-container'>
         <div className='form-title'>감사카드 보내기</div>
-        {/* <MakeCardComponent 
-          setTitleFun={setTitle} setMessageFunc={setMessage} 
-          setPhoneFunc={setPhone} setImgFunc={setImgUrl}
+        <MakeCardComponent 
+          payId={conId}
+          userId={userId}
           phone={conInfo.tel}
-          /> */}
-        <div className='thanks-input'>
-            <div className='thanks-form-btn' onClick={()=>thkGo()}>감사보내기</div>
-        </div>
+          propFunction={isThkCard}
+          />
+        
       </div>
     )
   })

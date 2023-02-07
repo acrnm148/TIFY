@@ -79,6 +79,7 @@ export function GiftHubPage() {
 
 
   const getQuery = (q: string) => {
+    console.log('쿼리받음')
     setSearchQuery(q);
     setPageNum(0);
   };

@@ -29,6 +29,7 @@ export function CheckWishPage() {
   useEffect(()=>{
     const API_URL = `https://i8e208.p.ssafy.io/api/wish/wish/${userId}`;
     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    // axios.defaults.headers.common['withCredentials'] = true;
     axios.get(API_URL, 
       
       ).then((res)=>{
@@ -118,7 +119,7 @@ export function CheckWishPage() {
         //     // setGoOpenList(newArr2)
         //   })
         }).catch((err)=>{
-        console.log('유저의 위시정보 불러오지못함')
+        console.log('유저의 위시정보 불러오지못함', err)
       })
   },[])
 
