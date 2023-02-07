@@ -55,7 +55,7 @@ export function onClickPayment(congratsInfo:Paying, giftName:string) {
       
       if (success) {
         // success = true
-        alert(`결제 성공 ${success}`);
+        alert(`결제가 완료되었습니다.`);
         // api/celebrate/ 로 축하요청
         const data = {
           "amount": paying.amount?String(paying.amount):88,

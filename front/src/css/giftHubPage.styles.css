@@ -1,28 +1,40 @@
-.gift-sortig{
-    display: flex;
-    flex-direction: row;
-}
+
+
 .filter-bar-container{
-    display: inline-block;
-    width: 100vw;
-    height: 104px;
-    margin-top: 14px;
-    border: #C1C1C1;
-    border-radius: 8px;
-/* text/200 */
-
+  display: inline-block;
+  width: 100vw;
+  height: 104px;
+  margin-top: 14px;
+  border: #C1C1C1;
+  border-radius: 8px;
+  /* text/200 */
+  
 }
 
 .gift-sortig{
-    margin-top: 14px;
+  display: flex;
+  flex-direction: row;
     margin-bottom: 14px;
     width: 100vw;
     display: flex;
     justify-content: center;
+    
 }
-
-.gift-sortig p {
-    margin-right: 10px;
+.sorting{
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+}
+.sorting-keyword{
+  width: 80%;
+  display: flex;
+  flex-wrap: nowrap;
+  margin-top: 10px;
+}
+.dropdown{
+  display: flex;
+  flex-direction: row-reverse;
+  width: 20%;
 }
 
 .filter-bar{
@@ -35,10 +47,29 @@
     border-radius: 10px;
     height: 14vh;
 }
-
+.filter-show{
+  margin: 5px;
+  background-color: #C1C1C1;
+  color: white;
+  padding: 3px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  width: fit-content;
+  height: fit-content;
+}
+.filter-show span{
+  cursor: pointer;
+  margin-left: 5px;
+}
 .gift-sortig > div {
     display: flex;
     justify-content: left;
+    /* border: 1px solid #C1C1C1; */
+    color: #C1C1C1;
+    padding: 5px;
+    border-radius: 8px;
 }
 @media (min-width : 1025px)
 {
@@ -202,3 +233,4 @@
   .gift-list-container{
     width: 65%;
   }
+
