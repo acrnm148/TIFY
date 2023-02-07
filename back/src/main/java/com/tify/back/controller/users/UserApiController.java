@@ -20,9 +20,12 @@ import com.tify.back.dto.users.response.DataResponseDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
 import com.tify.back.exception.UserLoginException;
+import com.tify.back.model.gifthub.Order;
 import com.tify.back.model.users.EmailAuth;
 import com.tify.back.model.users.UserProperties;
+import com.tify.back.repository.gifthub.OrderRepository;
 import com.tify.back.repository.users.EmailAuthRepository;
+import com.tify.back.service.gifthub.OrderService;
 import com.tify.back.service.users.EmailService;
 import com.tify.back.service.users.UserService;
 import com.tify.back.model.users.User;
@@ -61,6 +64,7 @@ import java.util.*;
 @RequestMapping("/api")
 public class UserApiController {
     private final S3Services s3Services;
+    private final OrderRepository orderRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final EmailAuthRepository emailAuthRepository;
     private final UserRepository userRepository;
@@ -390,5 +394,19 @@ public class UserApiController {
         //비밀번호 변경
         userService.updatePassword(user, dto.getNewPw());
         return ResponseEntity.ok().body("비밀번호가 수정되었습니다.");
+    }
+
+    /**
+     * 유저 토큰으로 orderList 불러오기
+     */
+    @GetMapping("/account/getOrder")
+    public ResponseEntity<?> getOrder(@RequestHeader("Authorization") String token) { //@RequestHeader(value = "Authorization") String token) {
+        token = token.substring(7);
+        User user = userRepository.findById(userService.getUser(token).getId()).get();
+
+        List<Order> orderList = orderRepository.findAllByUser(user);
+        System.out.println(user.getUsername()+"님의 주문목록:"+orderList);
+
+        return ResponseEntity.ok().body(orderList);
     }
 }
