@@ -164,8 +164,8 @@ public class UserService {
         } else {
             return null;
         }
-        String successAuthHtml2 = "<div style=\"font-family: 'Nanum Gothic', 'sans-serif' !important; width: 500px; height: 700px; margin: 2px auto; box-sizing: border-box;\">"
-                +	"<img src=\"https://tifyimage.s3.ap-northeast-2.amazonaws.com/f8085730-8f18-419d-8c4c-5a9c360739e3.png\" style=\"width:500px; height:700px;\"/>"
+        String successAuthHtml2 = "<div style=\"font-family: 'Nanum Gothic', 'sans-serif' !important; width: 100%;\">"
+                +	"<img src=\"https://tifyimage.s3.ap-northeast-2.amazonaws.com/beadedaf-bd8c-4765-b097-f9cd6d545db1.png\" style=\"width:89%;\"/>"
                 +"</div>";
         return successAuthHtml2;
     }

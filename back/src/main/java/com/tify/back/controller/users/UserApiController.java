@@ -149,12 +149,12 @@ public class UserApiController {
             return ResponseEntity.ok().body("N");
         }
 
-        /*
+
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://tify-noti-default-rtdb.firebaseio.com/");
         DatabaseReference reference = database.getReference("test/tify");
         String uid = email.replace("@","-").replace(".","-");
         reference.child(uid).setValueAsync("");
-        */
+
         return ResponseEntity.ok().body("Y");
 
     }
@@ -358,7 +358,7 @@ public class UserApiController {
         // 이미지 업로드
         try {
             if (file.getOriginalFilename().equals("")) {
-                String fileUrl = "https://tifyimage.s3.ap-northeast-2.amazonaws.com/5e1dc3dc-12c3-4363-8e91-8676c44f122b.png";
+                String fileUrl = "https://tifyimage.s3.ap-northeast-2.amazonaws.com/beadedaf-bd8c-4765-b097-f9cd6d545db1.png";
                 userService.updateProfImg(user, fileUrl);
                 return ResponseEntity.ok().body("프로필 사진이 수정되었습니다. " +fileUrl);
             }
