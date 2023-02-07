@@ -32,6 +32,8 @@ public class QnA extends BaseEntity {
 
     @OneToMany(mappedBy = "qna", cascade = CascadeType.ALL)
     private List<QnAFile> files;
+    @OneToMany(mappedBy = "qna", cascade = CascadeType.ALL)
+    private List<Answer> answers;
 
 }
 
