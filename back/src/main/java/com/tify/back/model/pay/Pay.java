@@ -45,5 +45,6 @@ public class Pay {
     private Long user_id;
     private LocalDateTime createTime;
     @OneToOne(mappedBy= "pay")
+    @JsonIgnore
     private Thkcard thkcardList;
 }
