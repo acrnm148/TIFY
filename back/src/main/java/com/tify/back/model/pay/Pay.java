@@ -44,11 +44,8 @@ public class Pay {
     private Gift gift;
     private Long user_id;
     private LocalDateTime createTime;
-    @OneToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+
     @OneToOne(mappedBy= "pay")
     @JsonIgnore
     private Thkcard thkcardList;
-    public void updateOrder(Order order) {this.order = order;}
 }
