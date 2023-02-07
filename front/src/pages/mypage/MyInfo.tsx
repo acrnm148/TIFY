@@ -1,9 +1,15 @@
 import axios from 'axios';
 import { RootState } from '../../store/Auth';
 import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import '../../css/mypage/MyInfo.styles.css';
 import Postcode from '../../components/Post';
+import { useOutletContext } from 'react-router-dom';
+
+type ChildType = {
+  Setname: (arg0: any) => void;
+  SetNickName: (arg0: any) => void;
+};
 
 export function MyInfo() {
   const [userId, setUserId] = useState(
@@ -24,6 +30,7 @@ export function MyInfo() {
   const [tel1, setTel1] = useState<string>('');
   const [tel2, setTel2] = useState<string>('');
   const [tel3, setTel3] = useState<string>('');
+  const { Setname, SetNickName } = useOutletContext<ChildType>();
 
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
@@ -119,6 +126,8 @@ export function MyInfo() {
           })
           .then((res) => {
             console.log(res, '정보 변경 api 시도 성공!');
+            Setname(username);
+            SetNickName(nickname);
             alert('정보가 변경되었습니다.');
           })
           .catch((err) => {

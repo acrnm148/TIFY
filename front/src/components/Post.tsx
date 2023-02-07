@@ -14,7 +14,7 @@ const Postcode = (props: { setcompany: (arg0: any) => void; company: any }) => {
     props.setcompany({
       ...props.company,
       address: fullAddress,
-      zonecode : zonecode,
+      zonecode: zonecode,
     });
   };
 
