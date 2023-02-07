@@ -41,7 +41,7 @@ export function GiftHubDetailPage(){
     const accessToken = useSelector(
         (state: RootState) => state.authToken.accessToken,
       );
-
+    const [showMore, setShowMore] = useState<boolean>(false)
 
     const [data, setData] = useState<Gift>(
         {id:0,name:'', imgList : [], description:'', category:0, 
@@ -61,6 +61,32 @@ export function GiftHubDetailPage(){
             })
         }
         fetchData();
+
+        const fetchData2 = async () => {
+            console.log('data.category',data.category)
+            const API_URL = 'https://i8e208.p.ssafy.io/api/gifthub/search/';
+            axios
+              .get(API_URL, {
+                params: {
+                    minPrice: '',
+                    maxPrice: '',
+                    name: '',
+                    category: data.category,
+                    max_result:10,
+                    page: 0,
+                },
+              })
+              .then((e) => {
+                let copy:Array<any> = [...e.data.content];
+                setGiftList(copy)
+                console.log('카테고리별 추천선물 요청', e)
+                
+              })
+              .catch((err) => {
+                console.log('error', err);
+              });
+          };
+          fetchData2();
     },[]);
     const checkHeart = () =>{
         if (heart){
@@ -104,31 +130,12 @@ export function GiftHubDetailPage(){
 
     let [giftList, setGiftList] = useState<Array<any>>([]);
   
-        useEffect(() => {
-            const fetchData = async () => {
-                const API_URL = 'https://i8e208.p.ssafy.io/api/gifthub/search/';
-                axios
-                  .get(API_URL, {
-                    params: {
-                      category: Number(data.category),
-                    },
-                  })
-                  .then((e) => {
-                    let copy:Array<any> = [...e.data];
-                    setGiftList(copy)
-                  })
-                  .catch((err) => {
-                    console.log('error', err);
-                  });
-              };
-              fetchData();
-        },[]);
     const GiftRecommend = (props:{giftList: any;}) =>{
             return(
-                <div className="gift-recommend-list">
-                        <p>{data.category} 카테고리에서 가장 많이 주고받은 선물</p>
-                        <div className="gift-only-list">
-                            {props.giftList.slice(0, 3).map((gift: any, i:number) => (
+                <div className="gift-recommend-list" style={{"width": "90%"}}>
+                        <p>{CATEGORY_DATA[data.category].name} 카테고리에서 가장 많이 주고받은 선물</p>
+                        <div className="gift-only-list" style={{'display' : 'flex'}}>
+                            {props.giftList.slice(0, 4).map((gift: any, i:number) => (
                                 <GiftItem key={i} gift={gift} />
                             ))}
                         </div>
@@ -138,7 +145,7 @@ export function GiftHubDetailPage(){
     return(
         <div className="concon">
             <div className="gift-item-detail-container">
-                <div className="go-back"><p>뒤로가기</p></div>
+                <div className="go-back" onClick={()=>(window.location.href='/gifthub')}><p>상품 목록으로</p></div>
                 <div className="product-info">
                     <img className="product-img" src={data.repImg} alt="" /> 
                     <div className="product-info-right">
@@ -171,14 +178,21 @@ export function GiftHubDetailPage(){
                 </div>
                 <GiftRecommend giftList={giftList}/>
                 <div className="product-image">
-                    {data.imgList.map(img => {
-                        const copy = img
-                        return(
-                            <img src={img['url']} alt="" />
-                        )
+                    {data.imgList.map((img:{url:string}, i:number) => {
+                        if(i===0){return <img src={img.url} alt="" />}
+                        else if(i!==0 &&showMore){return <img src={img.url} alt="" />}
                     })}
+                    {
+                        data.imgList.length > 1 &&
+                        <div className='more-img' >
+                            <button className="more-img-btn" onClick={()=>setShowMore(!showMore)}>
+                                {showMore? '상세이미지 닫기' : '상세이미지 더보기'}
+                            </button>
+                        </div>
+
+                    }
+
                 </div>
-                
             </div>
         </div>
     )

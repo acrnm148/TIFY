@@ -40,9 +40,9 @@ export function MainPage() {
         </div>
       </div>
       <div>
-        <GiftHubCategory propFunction={propFunction}/>
+        <GiftHubCategory propFunction={propFunction} goCategory={undefined}/>
         <SearchBar propFunction={getQuery} initailQuery={''}/>
-        <GiftRecommendList giftList={giftList} />
+        {/* <GiftRecommendList giftList={giftList} /> */}
       </div>
     </div>
   );

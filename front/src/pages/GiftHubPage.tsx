@@ -9,7 +9,7 @@ import axios from 'axios';
 import Slider from '@mui/material/Slider';
 // import { NavLink } from 'react-router-dom';
 import { GiftItem } from '../components/GiftItem';
-import { NavLink, Link, MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { NavLink, Link, MemoryRouter,  Routes, Route, useLocation } from 'react-router-dom';
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
 
@@ -31,6 +31,7 @@ const CATEGORY_DATA = [
   {id: 7, name : '반려동물'},
 
 ]
+
 export function GiftHubPage() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [category, setCategory] = useState<number | null>();
@@ -50,26 +51,7 @@ export function GiftHubPage() {
   // Pagination
   const [pageNum, setPageNum] = useState(0);
 
-  function Content() {
-    const location = useLocation();
-    const query = new URLSearchParams(location.search);
-    const page = parseInt(query.get('page') || '1', 10);
-    return (
-      <Pagination
-        page={page}
-        count={10}
-        renderItem={(item) => (
-          <PaginationItem
-            component={Link}
-            to={`/inbox${item.page === 1 ? '' : `?page=${item.page}`}`}
-            {...item}
-          />
-        )}
-      />
-    );
-  }
-
-  let max_result = 100; //디폴트
+  let max_result = 10000; //디폴트
   // 기본값은 상품목록에서 보여주는 Recommend 리스트는 검색어가 없을 때 store에 저장한 리스트 표출
   // (검색어 | 카테고리 선택 | 상품리스트에 변경)이 있을 때 실행되는 함수
   useEffect(() => {
@@ -90,12 +72,7 @@ export function GiftHubPage() {
         .then((e) => {
           console.log(e.data);
           let copy: Array<any> = [...e.data.content]; // let copy = [...giftList,{name:'new', price:9999, gitId:4}];
-          if (pageNum === 0){
-            setGiftList([...e.data.content]);
-          } else {
-            setGiftList([...giftList,...e.data.content]);
-          }
-          
+          setGiftList([...e.data.content]);
         })
         .catch((err) => {
           console.log('error', err);
@@ -252,11 +229,7 @@ export function GiftHubPage() {
                </div>
            </div> 
            <div>
-           <MemoryRouter initialEntries={['/inbox']} initialIndex={0}>
-            <Routes>
-              <Route path="*" element={<Content />} />
-            </Routes>
-          </MemoryRouter>
+  
            </div>
        </div>
         ) : (

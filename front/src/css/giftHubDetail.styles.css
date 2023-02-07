@@ -133,3 +133,19 @@
 .product-cate-like h3{
     color: gray;
 }
+.more-img{
+    width: inherit;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    padding-bottom: 30px;
+   
+}
+.more-img-btn{
+    padding: 7px;
+    padding-left: 50px;
+    padding-right: 50px;
+    border: 1px solid #828483;
+    border-radius: 5px;
+}
