@@ -20,21 +20,21 @@ export function JoinThirdPage() {
         <div className="loginBox">
           <div className="processTab">
             <div className="processBox">
-              <p className="text-primary processtext">이메일 인증</p>
+              <p className="text-[#fe3360] processtext">이메일 인증</p>
               <img src={coloredCheckIcon} className="checkIcon" />
             </div>
             <div>
               <hr className="line" />
             </div>
             <div className="processBox">
-              <p className="text-primary processtext">회원정보 입력</p>
+              <p className="text-[#fe3360] processtext">회원정보 입력</p>
               <img src={coloredCheckIcon} className="checkIcon" />
             </div>
             <div>
               <hr className="line" />
             </div>
             <div className="processBox">
-              <p className="text-primary processtext">가입 완료</p>
+              <p className="text-[#fe3360] processtext">가입 완료</p>
               <img src={coloredCheckIcon} className="checkIcon" />
             </div>
           </div>

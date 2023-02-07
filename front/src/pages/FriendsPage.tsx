@@ -16,8 +16,12 @@ interface User {
 const FriendsPage: React.FC = () => {
   const [nickname, setNickname] = useState("");
   const [users, setUsers] = useState<Array<User>>([]);
+  const [selectedUserId, setSelectedUserId] = useState<number>(0);
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
+  );
+  const userPk = useSelector(
+    (state: RootState) => state.authToken.userId,
   );
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -38,6 +42,28 @@ const FriendsPage: React.FC = () => {
     }
   };
 
+  const handleRequestFriend = async (userId: number) => {
+
+    console.log(userPk)
+    console.log(userId)
+    try {
+      const response = await axios.post(`https://i8e208.p.ssafy.io/api/friends`, {
+        userId: userPk ,
+        friendId: userId,
+      }, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-type': 'application/json',
+        }
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  
+
   return (
   <div className="backcolor">
     <div className="items-center">
@@ -56,8 +82,8 @@ const FriendsPage: React.FC = () => {
         {user.state === 'ACCEPTED' ? '친구' : 
          user.state === 'RECEIVED' ? '요청받음' :
          user.state === 'REQUESTED' ? '요청보냄' : 
-         '친구요청'}</p>
-        
+         <button onClick={() => handleRequestFriend(user.id)}>친구요청</button>}
+        </p>
       </div>
   ))}
 </div>
