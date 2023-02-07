@@ -40,7 +40,20 @@ export function Header() {
   // console.log(accessToken);
   // console.log('요것이 accessToken');
 
+  const [checkAdmin, setCheckAdmin] = useState<boolean>(false);
+
   const refreshToken = getCookieToken();
+
+  function checkRole() {
+    const accessToken = useSelector(
+      (state: RootState) => state.authToken.accessToken,
+    );
+    axios({
+      url: 'https://i8e208.p.ssafy.io/api/roleCheck',
+      method: 'GET',
+      params: { userid: '' },
+    });
+  }
 
   useEffect(() => {
     if (refreshToken != undefined) {
@@ -56,9 +69,7 @@ export function Header() {
         <NavLink to="">
           <img src={logo} className="logo logo-left" alt="Tify logo" />
         </NavLink>
-        <div
-          className="nav-cate"
-        >
+        <div className="nav-cate">
           {/* <NavLink to="/qna" className="nav-cate-item">문의하기</NavLink> */}
           <NavLink to="/gifthub" className="nav-cate-item">
             기프트허브

@@ -16,7 +16,7 @@ export function SignOut() {
     console.log('회원탈퇴 시도');
     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
     axios
-      .delete('https://i8e208.p.ssafy.io/api/account/signout')
+      .post('https://i8e208.p.ssafy.io/api/account/signout')
       .then((res) => {
         console.log(res);
         console.log('회원탈퇴 성공');

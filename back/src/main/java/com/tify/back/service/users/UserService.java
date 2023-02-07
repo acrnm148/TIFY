@@ -391,12 +391,14 @@ public class UserService {
                 //SearchedUserDto searchedUser = new SearchedUserDto();
                 //Long id = userRepository.findByEmail(myId)
                 FriendStatus friendStatus = friendService.getFriendshipStatus(myId, user.getId());
+                Long friendshipId = friendService.getFriendshipId(myId, user.getId());
                 SearchedUserDto searchedUser = SearchedUserDto.builder()
                     .id(user.getId())
                     .profileImg(user.getProfileImg())
                     .name(user.getUsername())
                     .nickname(user.getNickname())
                     .email(user.getEmail())
+                    .friendshipId(friendshipId)
                     .state(friendStatus)
                     .build();
 
