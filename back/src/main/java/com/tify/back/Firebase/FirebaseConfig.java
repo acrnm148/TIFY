@@ -23,6 +23,7 @@ public class FirebaseConfig {
     public void init(){
         try{
             String userDirectory = System.getProperty("user.dir");
+            System.out.println("userDeirectory:"+userDirectory);
             String filePath = userDirectory + "src/main/resources/firebaseconfig/tify-noti-firebase.json";
 
             FileInputStream serviceAccount =
