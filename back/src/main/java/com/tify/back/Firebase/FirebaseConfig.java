@@ -14,8 +14,8 @@ import java.io.FileInputStream;
 @Configuration
 public class FirebaseConfig {
 
-    @Value("${firebase.credential.resource-path}")
-    private String keyPath;
+    //@Value("${firebase.credential.resource-path}")
+    //private String keyPath;
 
     @Bean
     @Primary
