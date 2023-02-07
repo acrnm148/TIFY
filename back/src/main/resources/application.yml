@@ -20,6 +20,9 @@ spring:
           connectiontimeout: 5000 #링크 만료시간 5분
           timeout: 5000
           writetimeout: 5000
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://i8e208.p.ssafy.io:3306/tify?useSSL=false&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
