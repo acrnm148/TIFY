@@ -12,7 +12,7 @@ export function GiftRecommendList(props:{ giftList: GiftProps, category:number})
             <div className="gift-recommend-list">
                     <p>{props.wish}위시에 가장 많이 주고받은 선물</p>
                     <div className="gift-only-list">
-                        {props.giftList.slice(props.num, props.num+3).map((gift, i:number) => (
+                        {props.giftList.slice(props.num, props.num+3).map((gift: { name: string; price: number; repImg: string; id: number; }, i:number) => (
                             <GiftItem key={i} gift={gift} />
                         ))}
                     </div>
@@ -22,9 +22,9 @@ export function GiftRecommendList(props:{ giftList: GiftProps, category:number})
     return(
         <div className="gift-recommend-list-container">
             <div className="recommend-lists">
-                <GiftRecommend wish='생일' num = {Math.random()  * (props.giftList.length-3)}/>
-                <GiftRecommend wish='결혼' num = {Math.random()  * (props.giftList.length-3)}/>
-                <GiftRecommend wish='졸업' num = {Math.random()  * (props.giftList.length-3)}/>
+                <GiftRecommend giftList={props.giftList} wish='생일' num = {Math.random()  * (props.giftList.length-3)}/>
+                <GiftRecommend giftList={props.giftList} wish='결혼' num = {Math.random()  * (props.giftList.length-3)}/>
+                <GiftRecommend giftList={props.giftList} wish='졸업' num = {Math.random()  * (props.giftList.length-3)}/>
                 
             </div>
         </div>
