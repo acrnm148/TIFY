@@ -18,6 +18,7 @@ export interface GiftList {
   rep_img: string;
 }
 export interface GiftProps {
+  length: number;
   giftList: Gift[];
 }
 export interface Paying{
