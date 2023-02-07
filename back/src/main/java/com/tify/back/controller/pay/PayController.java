@@ -9,6 +9,7 @@ import com.tify.back.model.pay.Pay;
 import com.tify.back.model.users.User;
 import com.tify.back.repository.gifthub.GiftRepository;
 import com.tify.back.repository.users.UserRepository;
+import com.tify.back.service.gifthub.OrderService;
 import com.tify.back.service.pay.PayService;
 import com.tify.back.service.users.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +29,7 @@ public class PayController {
     private final JwtService jwtService;
     private final PayService payService;
     private final UserService userService;
+    private final OrderService orderService;
     private final GiftRepository giftRepository;
     private final UserRepository userRepository;
 
@@ -64,6 +66,7 @@ public class PayController {
             return ResponseEntity.ok().body("펀딩이 완료된 기프트입니다.");
         }
         Pay pay = payService.fund(payRequestDto);
+
         System.out.println("결제 완료 : "+pay);
 
         return ResponseEntity.ok().body("축하가 완료되었습니다.");

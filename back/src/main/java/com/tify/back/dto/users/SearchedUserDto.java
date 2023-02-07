@@ -20,4 +20,5 @@ public class SearchedUserDto {
 	private String nickname;
 	private String email;
 	private FriendStatus state;
+	private Long friendshipId;
 }
