@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tify.back.Firebase.FirebaseConfig;
 import com.tify.back.auth.jwt.JwtProperties;
 import com.tify.back.auth.jwt.JwtToken;
 import com.tify.back.auth.jwt.refreshToken.RefreshToken;
@@ -70,7 +71,7 @@ public class UserApiController {
     private final KakaoService kakaoService;
     private final NaverService naverService;
     private final JwtProviderService jwtProviderService;
-
+    private final FirebaseConfig firebase;
     private final RedisTemplate<String, String> redisTemplate;
 
 
@@ -149,12 +150,12 @@ public class UserApiController {
             return ResponseEntity.ok().body("N");
         }
 
-        /*
+
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://tify-noti-default-rtdb.firebaseio.com/");
         DatabaseReference reference = database.getReference("test/tify");
         String uid = email.replace("@","-").replace(".","-");
         reference.child(uid).setValueAsync("");
-        */
+
         return ResponseEntity.ok().body("Y");
 
     }
