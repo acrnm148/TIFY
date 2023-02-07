@@ -23,7 +23,7 @@ const Postcode = (props: { setcompany: (arg0: any) => void; company: any }) => {
   };
 
   return (
-    <button type="button" onClick={handleClick}>
+    <button type="button" onClick={handleClick} style={{ width: '20%' }}>
       주소찾기
     </button>
   );
