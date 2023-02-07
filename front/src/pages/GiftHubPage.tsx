@@ -7,8 +7,11 @@ import axios from 'axios';
 
 // mui Slider 사용
 import Slider from '@mui/material/Slider';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import { GiftItem } from '../components/GiftItem';
+import { NavLink, Link, MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
+import Pagination from '@mui/material/Pagination';
+import PaginationItem from '@mui/material/PaginationItem';
 
 export function GiftHubPage() {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -26,22 +29,27 @@ export function GiftHubPage() {
     console.log(value);
   };
 
-  // scroll
+  // Pagination
   const [pageNum, setPageNum] = useState(0);
 
-  const observer = useRef<IntersectionObserver | null>(null);
-  const lastGiftElement = useCallback(  // (*)
-    (node: HTMLDivElement) => {
-      if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          setPageNum((prev) => prev + 1);
-        }
-      });
-      if (node) observer.current.observe(node);
-    },
-    []
-  );
+  function Content() {
+    const location = useLocation();
+    const query = new URLSearchParams(location.search);
+    const page = parseInt(query.get('page') || '1', 10);
+    return (
+      <Pagination
+        page={page}
+        count={10}
+        renderItem={(item) => (
+          <PaginationItem
+            component={Link}
+            to={`/inbox${item.page === 1 ? '' : `?page=${item.page}`}`}
+            {...item}
+          />
+        )}
+      />
+    );
+  }
 
   let max_result = 100; //디폴트
   // 기본값은 상품목록에서 보여주는 Recommend 리스트는 검색어가 없을 때 store에 저장한 리스트 표출
@@ -177,25 +185,20 @@ export function GiftHubPage() {
           <div className="gift-list-container">
                <div className="gift-list">
                {giftList.map((gift, i:number) => {
-                if(giftList.length === i + 1){
-                  return (
-                    <div ref={lastGiftElement}>
-                      <NavLink to={`/gifthub/${gift.giftId}`} >
-                        <GiftItem key={i} gift={gift} />
-                    </NavLink>
-                    </div>
-                  )
-                } else {
                   return(
                     <NavLink to={`/gifthub/${gift.giftId}`} >
                        <GiftItem key={i} gift={gift} />
                    </NavLink>
                      )
-                }})}
+                })}
                </div>
            </div> 
            <div>
-               
+           <MemoryRouter initialEntries={['/inbox']} initialIndex={0}>
+            <Routes>
+              <Route path="*" element={<Content />} />
+            </Routes>
+          </MemoryRouter>
            </div>
        </div>
         ) : (
