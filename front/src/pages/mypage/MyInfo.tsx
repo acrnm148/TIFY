@@ -2,7 +2,7 @@ import axios from 'axios';
 import { RootState } from '../../store/Auth';
 import { useSelector } from 'react-redux';
 import { useEffect, useState, Dispatch, SetStateAction } from 'react';
-import '../../css/mypage/MyInfo.styles.css';
+import '../../css/mypage/myInfo.styles.css';
 import Postcode from '../../components/Post';
 import { useOutletContext } from 'react-router-dom';
 
