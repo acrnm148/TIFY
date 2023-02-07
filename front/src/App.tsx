@@ -28,7 +28,7 @@ import { Joined } from './components/Joined';
 import { Friend } from './components/Friend';
 import { MyInfo } from './pages/mypage/MyInfo';
 import { PhoneBook } from './components/PhoneBook';
-import { OrderList } from './components/OrderList';
+import OrderList from './components/OrderList';
 import { CongratsPage } from './pages/CongratsPage';
 import { CongratsPayPage } from './pages/CongratsPayPage';
 import { CongratsCardPage } from './pages/CongratsCardPage';
