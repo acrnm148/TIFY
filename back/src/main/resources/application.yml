@@ -83,3 +83,7 @@ naver-cloud-sms:
   secretKey: 5Xz1XV8TnS5EmRnQo6PAKJISbDt2xHAvrX2JJhzb
   serviceId: ncp:sms:kr:299557230184:tify
   senderPhone: 01049221157
+
+firebase:
+  credential:
+    resource-path: tify-noti-firebase.json
