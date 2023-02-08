@@ -204,8 +204,13 @@ export function MyInfo() {
       .then((e) => {
         console.log('닉네임 확인 완료');
         console.log(e);
-        alert('You can do it! 👍');
-        setNickDubCheck(true);
+        if (e.data === 'Y') {
+          alert(`You can't do it! 😅`);
+          setNickDubCheck(false);
+        } else if (e.data === 'N') {
+          alert('You can do it! 👍');
+          setNickDubCheck(true);
+        }
       })
       .catch((err) => {
         alert(`You can't do it! 😅`);
@@ -359,7 +364,11 @@ export function MyInfo() {
 
         <p className="m-1">생년월일</p>
         <form className="emailForm">
-          <div className="mini-input-container" id="birth-box">
+          <div
+            className="mini-input-container"
+            id="birth-box"
+            style={{ color: '#B6BAC1', background: '#eeeeee' }}
+          >
             <input
               type="number"
               className="mini-input-box"
@@ -432,8 +441,12 @@ export function MyInfo() {
               value={enroll_company.zonecode}
               placeholder="우편번호"
               disabled
+              style={{ width: '20%' }}
             />
-            <div className="address-form">
+            <div
+              className="address-form"
+              style={{ width: '100%', marginBottom: '20px' }}
+            >
               <input
                 type="text"
                 placeholder="주소"
@@ -458,6 +471,7 @@ export function MyInfo() {
                 name="상세주소"
                 onChange={(e) => setAddr2(e.target.value)}
                 value={addr2}
+                style={{ width: '100%' }}
               />
             </div>
           </div>
@@ -484,6 +498,7 @@ export function MyInfo() {
               maxLength={12}
               placeholder={'영어, 숫자, 특수문자를 포함한 8~12자리'}
               onChange={(e) => setPassword1(e.target.value)}
+              style={{ width: '100%', marginBottom: '40px' }}
             />
           </form>
           <span className="m-1">새로운 비밀번호</span>
@@ -494,6 +509,7 @@ export function MyInfo() {
               maxLength={12}
               placeholder={'영어, 숫자, 특수문자를 포함한 8~12자리'}
               onChange={(e) => setPassword2(e.target.value)}
+              style={{ width: '100%', marginBottom: '10px' }}
             />
           </form>
           <span className="m-1">새로운 비밀번호 확인</span>

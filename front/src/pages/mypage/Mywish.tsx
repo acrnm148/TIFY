@@ -167,10 +167,10 @@ export function MyWish() {
   return (
     <div className="my-wish-div">
       <WishCard conList={[...conList]}></WishCard>
+      {/* <WishCardActive title={'안녕안녕'}></WishCardActive>
       <WishCardActive title={'안녕안녕'}></WishCardActive>
       <WishCardActive title={'안녕안녕'}></WishCardActive>
-      <WishCardActive title={'안녕안녕'}></WishCardActive>
-      <WishCardActive title={'안녕안녕'}></WishCardActive>
+      <WishCardActive title={'안녕안녕'}></WishCardActive> */}
 
       <WishCardDeactive title={'안녕안녕'}></WishCardDeactive>
       <WishCardDeactive title={'안녕안녕'}></WishCardDeactive>
