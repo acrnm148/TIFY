@@ -40,9 +40,8 @@ public class Order extends BaseEntity {
     private int state; // 주문 상태 코드화
 
     @Builder
-    public Order(String wishName, Long wishId, String deliveryNumber, User user, Gift gift, String tel, int gatheredPrice, int orderPrice, int state, LocalDateTime createdTime, String createdDt, String giftName, int purePrice) {
+    public Order(String wishName, Long wishId, String deliveryNumber, User user, Gift gift, String tel, int gatheredPrice, int orderPrice, int state, LocalDateTime createdTime, String createdDt, String giftName) {
         this.giftName = giftName;
-        this.purePrice = purePrice;
         this.wishName = wishName;
         this.wishId = wishId;
         this.user = user;

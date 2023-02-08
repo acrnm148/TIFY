@@ -101,11 +101,15 @@ public class OrderService {
     public Order addNewOrder(Gift gift, User user) {
         Wish wish = gift.getWish();
         System.out.println("해당 gift의 wish:"+wish);
+
+        String year = Integer.toString(LocalDateTime.now().getYear());
+        String month = Integer.toString(LocalDateTime.now().getMonthValue());
+        String day = Integer.toString(LocalDateTime.now().getDayOfMonth());
+
         //주문 생성
         Order order = orderRepository.save(
                 Order.builder()
                         .giftName(gift.getGiftname())
-                        .purePrice(gift.getPurePrice())
                         .wishId(wish.getId())
                         .wishName(wish.getTitle())
                         .orderPrice(gift.getMaxAmount())
@@ -115,7 +119,7 @@ public class OrderService {
                         .gift(gift)
                         .deliveryNumber(null)
                         .createdTime(LocalDateTime.now())
-                        .createdDt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
+                        .createdDt(year+"."+month+"."+day)
                         .state(0)
                         .build()
         );

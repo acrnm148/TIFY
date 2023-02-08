@@ -84,14 +84,14 @@ const OrderCardActive = (props: { searchResults: orders[] }) => {
               <div className="wrap-detail-div">
                 <div className="detail-left-div">
                   <p className="p-gift-name">
-                    플레이스테이션 5{order.gift.giftname}
+                    플레이스테이션 5{order.giftName}
                   </p>
-                  <p className="p-gift-price">{order.gift.purePrice}원</p>
+                  <p className="p-gift-price">{order.purePrice}원</p>
                 </div>
                 <div className="detail-right-div">
                   <p className="p-gift-option">옵션 : 듀얼쇼크/512gb</p>
                   <p className="p-gift-gathered-price">
-                    축하금액 : {order.gift.gathered}원
+                    축하금액 : {order.gatheredPrice}원
                   </p>
                 </div>
               </div>
