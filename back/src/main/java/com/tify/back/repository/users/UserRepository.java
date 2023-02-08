@@ -27,8 +27,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.nickname LIKE %:nickname%")
     List<User> findByNicknameLike(@Param("nickname") String nickname);
 
-
     @Query("SELECT u FROM User u ORDER BY u.username ASC")
     Page<UserListMap> findAllUsers(Pageable pageable);
+
+
 
 }
