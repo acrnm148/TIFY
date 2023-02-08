@@ -34,7 +34,7 @@ export function CheckWishPage() {
       
       ).then((res)=>{
         
-        // console.log('유저의 위시정보 get', res.data)
+        console.log('유저의 위시정보 get', res.data)
         // nList = res.data.finishYN이 ㅛ위시리스트
         // 1. nList가 빈값일 때 진행중인 위시가 없습니다
         // 2. nList를 checkWishPage 에 표출

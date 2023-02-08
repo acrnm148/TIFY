@@ -46,11 +46,11 @@ export function GiftHubPage() {
   const [searchPrice, setSearchPrice] = useState<number[]>([min,max])
   const [comval, setComval] = useState<string[]>([value[0].toLocaleString('ko-KR'), value[1].toLocaleString('ko-KR')])
   
-  const handleChange = (event: Event, newValue: number[]) => {
+  const handleChange = async (event: Event, newValue: number|number[]) => {
     // setValue(newValue as number[]);
-    setPriceRange(newValue as number[])
-    setValue(newValue as number[])
-    setComval([newValue[0].toLocaleString('ko-KR'),newValue[1].toLocaleString('ko-KR')])
+    await setPriceRange(newValue as number[])
+    await setValue(newValue as number[])
+    await setComval([value[0].toLocaleString('ko-KR'),value[1].toLocaleString('ko-KR'),])
   };
 
   // Pagination
@@ -172,10 +172,22 @@ export function GiftHubPage() {
     );
   };
  const GoToNextPage = () =>{
-  setNowPage(nowLastNum+1)
-  getData(nowLastNum+1)
-  setNowStartNum(nowLastNum+1)
+  let target = nowLastNum+1
+  // if(target)
+  setNowPage(target)
+  getData(target)
+  setNowStartNum(target)
   setNowLastNum(nowLastNum+pamount)
+ }
+ const GoToBeforePage = () =>{
+  let target = nowStartNum-pamount
+  if(target < 1){
+    return
+  }
+  setNowPage(target)
+  getData(target)
+  setNowLastNum(nowStartNum-1)
+  setNowStartNum(target)
  }
   return (
     <div className='gifthub-page-con-continer'>
@@ -192,7 +204,7 @@ export function GiftHubPage() {
                   <Slider
                     getAriaLabel={() => 'Temperature range'}
                     value={value}
-                    onChange={()=>handleChange}
+                    onChange={handleChange}
                     valueLabelDisplay="auto"
                     aria-labelledby="range-slider"
                     step={step}
@@ -224,8 +236,8 @@ export function GiftHubPage() {
       <div className="gift-sortig">
         <div className='sorting'>
           <div className='sorting-keyword'>
-                {searchQuery && <div className='filter-show'>{searchQuery}<span onClick={()=>setSearchQuery('')}>x</span></div>}
-                {searchPrice[0] !== 0 && <div className='filter-show'>최소가격{searchPrice[0]}
+                {giftList.length > 0 && searchQuery && <div className='filter-show'>{searchQuery}<span onClick={()=>setSearchQuery('')}>x</span></div>}
+                {giftList.length > 0 && searchPrice[0] !== 0 && <div className='filter-show'>최소가격{searchPrice[0]}
                   <span 
                     onClick={()=>{
                       const v = [0, priceRange[1]]
@@ -235,7 +247,7 @@ export function GiftHubPage() {
                       setComval([String(min), v[1].toLocaleString('ko-KR')])
                       }}>x
                   </span></div> }
-                {searchPrice[1] !== max && <div className='filter-show'>최대가격{searchPrice[1]}
+                {giftList.length > 0 && searchPrice[1] !== max && <div className='filter-show'>최대가격{searchPrice[1]}
                   <span 
                     onClick={()=>{
                       const v = [priceRange[0], max]
@@ -245,7 +257,7 @@ export function GiftHubPage() {
                       setComval([v[0].toLocaleString('ko-kr'),String(max)])
                     }}>x
                     </span></div> }
-                {category && <div className='filter-show'>{CATEGORY_DATA[category].name}<span onClick={()=>setCategory(null)}>x</span></div>}
+                {giftList.length > 0 && category && <div className='filter-show'>{CATEGORY_DATA[category].name}<span onClick={()=>setCategory(null)}>x</span></div>}
             </div>
           <div className='dropdown'>
             <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
@@ -298,9 +310,9 @@ export function GiftHubPage() {
           <NoResult />
           )}
                  {
-                  giftList &&
+                  giftList.length > 0 &&
                   <ul className='page-btns'>
-                    <div>좌</div>
+                    <div onClick={()=>GoToBeforePage()}>좌</div>
                     <PageButtons totalPages={totalPages} />
                     <button onClick={()=>GoToNextPage()}>우</button>
                   </ul>
