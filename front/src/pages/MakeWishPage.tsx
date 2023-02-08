@@ -82,6 +82,7 @@ export function MakeWishPage() {
   const [selectCard, setSelectCard] = useState('-1');
   const [selectCardUrl, setSelectCardUrl] = useState('');
   const [addr2, setAddr2] = useState<string>();
+  const [tooMany, setToomany] = useState<boolean>();
   // calendar
   const [range, setRange] = useState<any[]>([
     {
@@ -129,8 +130,16 @@ export function MakeWishPage() {
   };
   // gift cart
   const [cartList, setCartList] = useState<Gift[]>([]);
-  const [totalPrice, setTotalPrice] = useState(0); ['','']
-  const [totalProduct, setTotalProduct] = useState<Object[]>([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalProduct, setTotalProduct] = useState<{
+    productId:number
+    purePrice:number, 
+    userOption:any, 
+    giftImgUrl:string, 
+    giftName: string,
+    maxAmount:number,
+    quantity: number
+  }[]>([]);
 
   const wishData = { title: '', content: '', wishCard: '', giftItem: [] };
 
@@ -150,8 +159,8 @@ export function MakeWishPage() {
           lst.map((d: any) => {
             conlst.push(d.product);
           });
-          console.log('카트 리스트불러오기 성공', conlst);
           setCartList(conlst);
+          console.log('카트 리스트불러오기 성공',conlst);
         })
         .catch((err) => {
           console.log('카트 리스트불러오기 실패', err);
@@ -168,6 +177,10 @@ export function MakeWishPage() {
   const [wishCart, setWishCart] = useState<Gift[]>()
   const pushItem = (i:number) =>{
       if (wishCart){
+        if (wishCart.length == 6){
+          setToomany(true)
+          return
+        }
         setWishCart([...wishCart,cartList[i]])
       } else {
         setWishCart([cartList[i]])
@@ -182,15 +195,30 @@ export function MakeWishPage() {
                                         "quantity" : 1 }])
       console.log(totalPrice, totalProduct)
   }
+  function checkItemAmount(i:number){
+    //cartList[i]가 wishList에 몇개 담겼는지 확인
+    let num=0;
+    totalProduct.map((item)=>{
+      if(item.productId === i){
+        num+=1
+      }
+    })
+    return num
+  }
   const CartList = () => {
     return (
       <>
         {cartList.length > 0 ? (
           <div>
             <div className="like-list">
+              <div>
+                <h1>카트상품목록</h1>
+                <button>카트관리</button>
+              </div>
+              <hr></hr>
+              {tooMany && <span>선물은 최대 6개까지 선택 가능합니다!</span>}
               {cartList.map((gift, i: number) => (
                 <div
-                  onClick={() => pushItem(i)}
                   className="like-item-card-container"
                 >
                   <div className="like-item-card">
@@ -206,7 +234,12 @@ export function MakeWishPage() {
                     </div>
                     <div className="gift-text">
                       <p>{gift.name}</p>
-                      <p>{gift.price}원</p>
+                      <p className='gift-price'>{gift.price.toLocaleString('ko-KR')}원</p>
+                    </div>
+                    <div className='pm-btn'>
+                      <button onClick={()=>delWishGift(gift.id, i)}>-</button>
+                      <p>{checkItemAmount(gift.id)}</p>
+                      <button onClick={() => pushItem(i)}>+</button>
                     </div>
                   </div>
                 </div>
@@ -216,6 +249,9 @@ export function MakeWishPage() {
         ) : (
           <p>카드에 상품이 없습니다.</p>
         )}
+        <div>
+          <h1>총가격 : {}</h1>
+        </div>
       </>
     );
   };
@@ -324,15 +360,32 @@ export function MakeWishPage() {
     });
     return filteredTitles;
   };
-  const delWishGift = (i: number) => {
-    if (wishCart) {
-      const minusPrice = wishCart[i].price;
-      setTotalPrice(totalPrice - minusPrice);
+  const delWishGift = (id: number, wishIdx:number) => {
+    // wishCart에 담긴 상품의 id가 i 인 것을 삭제
+    if(wishCart){
+      let copy = wishCart
+      for (let i=0; i<copy?.length;i++){
+        if(copy[i].id === id){
+          copy.splice(i,1)
+          return
+        }
+      }
+      setWishCart(copy)
+      if(wishCart.length<7){
+            setToomany(false)
+          }
     }
-    setWishCart(wishCart?.filter((w, idx: number) => idx !== i));
-    // wishCart의 idx번호로 삭제
-    setTotalProduct(totalProduct?.filter((p, idx: Number) => idx !== i));
-    console.log(i);
+    if(totalProduct.length>0){
+      let copy = totalProduct
+      for (let i=0; i<copy?.length;i++){
+        console.log(totalProduct)
+        if(copy[i].productId === id){
+          copy.splice(i,1)
+          return
+        }
+      }
+      setTotalProduct(copy)
+    }
   };
   const FinishedWishComponent = () => {
     return (
@@ -393,11 +446,12 @@ export function MakeWishPage() {
             </div>
             <div className="input-form input-wide">
               <label htmlFor="태그">내용</label>
-              <input
-                type="textarea"
-                name="태그"
-                onChange={(e) => setContent(e.target.value)}
-              />
+              <textarea
+              name="태그"
+              onChange={(e) => setContent(e.target.value.replaceAll(/(\n|\r\n)/g,'<br>'))}
+              >
+
+              </textarea>
             </div>
 
             <div className="duration-container">
@@ -489,7 +543,7 @@ export function MakeWishPage() {
                     return (
                       <div
                         className="wish-card-gift"
-                        onClick={() => delWishGift(i)}
+                        onClick={() => delWishGift(e.id, i)}
                       >
                         <img src={e.repImg}></img>
                       </div>
@@ -497,7 +551,21 @@ export function MakeWishPage() {
                   })}
                 </div>
               </div>
-              <div>총 위시금액 : {totalPrice}원</div>
+              <div>
+                {/* {
+                  totalProduct.map(item=>{
+                    return(
+                      <div>
+                        <p>{item.giftName}</p>
+                        <p>{item.purePrice}</p>
+                      </div>
+                    )
+                  })
+                } */}
+                <p>총 위시금액 : {totalPrice}원</p>
+                
+                
+                </div>
             </div>
             <div className="address-form-container">
               <label htmlFor="태그">주소</label>

@@ -1,9 +1,0 @@
-.ongoing-wishes {
-  border: 1px solid black;
-}
-
-.ongoing-wishes > .ongoing-wish {
-  border: 1px solid #c1c1c1;
-  border-radius: 10px;
-  padding: 20px;
-}
