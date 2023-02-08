@@ -41,8 +41,8 @@ public class ProductController {
     //https://devjaewoo.tistory.com/88 error 참고.
     // 상품 등록 단일 json 형태
     @PostMapping("/product")
-    public Product addProduct(@RequestBody String message) throws Exception {
-        return productService.createProduct(message);
+    public Product addProduct(@RequestBody ProductDto dto) {
+        return productService.pyProduct(dto);
     }
 
     @PostMapping("/pyproduct")
@@ -127,7 +127,7 @@ public class ProductController {
     // 상품 정보 update
     @PutMapping("/product")
     public Product updateProduct(@RequestBody ProductDto dto) throws Exception {
-        return productService.testUpdateProduct(dto);
+        return productService.pyProductUpdate(dto);
     }
 
     // 상품 삭제.

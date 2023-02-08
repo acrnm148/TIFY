@@ -17,6 +17,7 @@ import com.tify.back.model.gifthub.ProductOption;
 import com.tify.back.model.gifthub.ProductOptionDetail;
 import com.tify.back.repository.gifthub.ImgRepository;
 import com.tify.back.repository.gifthub.ProductOptionDetailRepository;
+import com.tify.back.repository.gifthub.ProductOptionRepository;
 import com.tify.back.repository.gifthub.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
@@ -38,6 +39,7 @@ public class ProductService {
     ObjectMapper objectMapper = new ObjectMapper();
     private final ProductOptionDetailRepository productOptionDetailRepository;
     private final ImgRepository imgRepository;
+    private final ProductOptionRepository productOptionRepository;
 
     public Product saveProduct(Product product) {
         return productRepository.save(product);
@@ -92,13 +94,62 @@ public class ProductService {
     public Product pyProduct(ProductDto dto) {
         Product product = dto.toEntity();
         productRepository.save(product);
-
+        System.out.println("----------------------------------------------------------------");
         List<Img> imgList = product.getImgList();
         for (ImgDto imgDto : dto.getImgList()) {
             Img img = imgDto.toEntity();
             img.setProduct(product);
             imgService.saveImg(img);
             imgList.add(img);
+        }
+        System.out.println("----------------------------------------------------------------");
+        System.out.println(product.getOptions());
+        List<ProductOption> options = new ArrayList<>();
+        for (ProductOptionDto optionDto : dto.getOptions()) {
+            ProductOption productOption = optionDto.toEntity();
+            productOption.setProduct(product);
+            productOptionService.saveProductOption(productOption);
+            List<ProductOptionDetail> details = new ArrayList<>();
+
+            for (ProductOptionDetailDto detailDto : optionDto.getDetails()) {
+                ProductOptionDetail productOptionDetail = detailDto.toEntity();
+                productOptionDetail.setProductOption(productOption);
+                productOptionDetailService.saveProductOptionDetail(productOptionDetail);
+                details.add(productOptionDetail);
+            }
+            productOption.setDetails(details);
+            productOptionService.saveProductOption(productOption);
+            options.add(productOption);
+        }
+        product.setOptions(options);
+        product.setImgList(imgList);
+        return productRepository.save(product);
+    }
+    @Transactional
+    public Product pyProductUpdate(ProductDto dto) {
+        Product pdto = dto.toEntity();
+        Product product = productRepository.findById(dto.getId()).orElse(null);
+        product.setName(pdto.getName());
+        product.setDescription(pdto.getDescription());
+        product.setRepImg(pdto.getRepImg());
+        product.setPrice(pdto.getPrice());
+        product.setCategory(pdto.getCategory());
+        product.setQuantity(pdto.getQuantity());
+        //기존 이미지 삭제
+        for (Img img:product.getImgList()) {
+            imgRepository.deleteById(img.getId());
+        }
+        List<Img> imgList = new ArrayList<>();
+        for (ImgDto imgDto : dto.getImgList()) {
+            Img img = imgDto.toEntity();
+            img.setProduct(product);
+            imgService.saveImg(img);
+            imgList.add(img);
+        }
+        System.out.println("----------------------------------------------------------------");
+        System.out.println(dto.getOptions());
+        for (ProductOption option : product.getOptions()) {
+            productOptionRepository.deleteById(option.getId());
         }
 
         List<ProductOption> options = new ArrayList<>();
@@ -122,7 +173,6 @@ public class ProductService {
         product.setImgList(imgList);
         return productRepository.save(product);
     }
-
     @Transactional
     public Product createProduct(String message) throws Exception {
 //        TypeReference<Map<String, String>> typeReference = new TypeReference<Map<String,String>>() {};
@@ -198,6 +248,8 @@ public class ProductService {
             imgService.deleteImg(img.getId());
         }
         // 일단 귀차나서 새로 생성하는 식으로 해버렸음.
+        System.out.println(map.get("options"));
+        System.out.println("000000000000000000000000000000000000000000000");
         for(int i=0; i<optionlist.length() ; i++){
             JSONObject option = optionlist.getJSONObject(i);
             List<JSONObject> details = new ArrayList<>();
