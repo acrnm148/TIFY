@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 // user
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import { RootState } from '../../store/Auth';
 import { CheckWish } from '../../interface/interface';
 
@@ -24,6 +25,7 @@ export function MyWish() {
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
+  const navigate = useNavigate();
   useEffect(() => {
     const API_URL = `https://i8e208.p.ssafy.io/api/wish/wish/${userId}`;
     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
@@ -68,7 +70,7 @@ export function MyWish() {
                   userName: wish.user.username,
                   title: wish.title,
                   category: wish.category,
-                  restDay: String(Math.floor(diff / (1000 * 60 * 60 * 24))), // 오늘 날짜랑 계산해서 몇일남았는지
+                  restDay: Math.floor(diff / (1000 * 60 * 60 * 24)), // 오늘 날짜랑 계산해서 몇일남았는지
                   percent: (wish.nowPrice / wish.totPrice) * 100,
                   fromList: froms[0].data,
                   cardOpen: wish.cardopen,
@@ -139,26 +141,68 @@ export function MyWish() {
         console.log('유저의 위시정보 불러오지못함');
       });
   }, []);
-  console.log(conList);
 
+  const GoToWish = (wishId: string): any => {
+    console.log('클릭클릭클릭클릭클릭클릭클릭클릭');
+    console.log(wishId);
+    navigate(`/congrats/${wishId}`);
+  };
+
+  function Categorize(category: any) {
+    const RC = category.category;
+    if (RC == '생일') {
+      return <img src={iconCategory1Birthday} alt="" />;
+    } else if (RC == '결혼') {
+      return <img src={iconCategory2Marry} alt="" />;
+    } else if (RC == '취업') {
+      return <img src={iconCategory3Employed} alt="" />;
+    } else if (RC == '건강') {
+      return <img src={iconCategory4Health} alt="" />;
+    } else if (RC == '출산') {
+      return <img src={iconCategory5Childbirth} alt="" />;
+    } else if (RC == '비혼') {
+      return <img src={iconCategory6Unmarried} alt="" />;
+    } else {
+      return <img src={iconCategory7Etc} alt="" />;
+    }
+  }
   const WishCard = ({ conList }: { conList: CheckWish[] }) => {
+    // 알맞는 카드 골라주는 함수
     return (
       <>
         {conList.map((con: CheckWish) => {
-          return (
-            <div className="wish-box shadow-xl">
-              <p className="p-date">완료까지 {con.restDay}일</p>
-              <p className="p-proceed">진행중</p>
-              <div className="category-div">
-                <img src={iconCategory1Birthday} alt="" />
-                <p className="wish-title">"{con.title}"</p>
+          // 완료된 위시
+          if (Number(con.restDay) < 1) {
+            return (
+              <div
+                className="wish-box shadow-xl"
+                onClick={() => GoToWish(con.wishId)}
+              >
+                <p className="p-date">완료 후 {-con.restDay}일</p>
+                <p className="p-done">완료됨</p>
+                <div className="category-div">
+                  <Categorize category={con.category}></Categorize>
+                  <p className="wish-title">"{con.title}"</p>
+                </div>
+                <Donator />
               </div>
-              <Donator />
-            </div>
-            // <div>
-            //   <h1>{con.title}</h1>
-            // </div>
-          );
+            );
+          } else {
+            return (
+              <div
+                className="wish-box shadow-xl"
+                onClick={() => GoToWish(con.wishId)}
+              >
+                <p className="p-date">완료까지 {con.restDay}일</p>
+                <p className="p-proceed">진행중</p>
+                <div className="category-div">
+                  <Categorize category={con.category}></Categorize>
+                  <p className="wish-title">"{con.title}"</p>
+                </div>
+                <Donator />
+              </div>
+            );
+          }
         })}
       </>
     );
@@ -167,21 +211,6 @@ export function MyWish() {
   return (
     <div className="my-wish-div">
       <WishCard conList={[...conList]}></WishCard>
-      {/* <WishCardActive title={'안녕안녕'}></WishCardActive>
-      <WishCardActive title={'안녕안녕'}></WishCardActive>
-      <WishCardActive title={'안녕안녕'}></WishCardActive>
-      <WishCardActive title={'안녕안녕'}></WishCardActive> */}
-
-      <WishCardDeactive title={'안녕안녕'}></WishCardDeactive>
-      <WishCardDeactive title={'안녕안녕'}></WishCardDeactive>
-      <div style={{ width: '200px' }}>
-        <img src={iconCategory2Marry} alt="" />
-        <img src={iconCategory3Employed} alt="" />
-        <img src={iconCategory4Health} alt="" />
-        <img src={iconCategory5Childbirth} alt="" />
-        <img src={iconCategory6Unmarried} alt="" />
-        <img src={iconCategory7Etc} alt="" />
-      </div>
     </div>
   );
 }

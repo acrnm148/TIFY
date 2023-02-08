@@ -68,6 +68,12 @@
   height: 300px;
   padding: 20px;
   margin-bottom: 20px;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.my-wish-div > .wish-box:hover {
+  background-color: #e1f1ff;
 }
 
 .wish-box > .p-date {

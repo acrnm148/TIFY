@@ -9,11 +9,11 @@ import { useState, useEffect } from 'react';
 import { RootState } from '../store/Auth';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCookieToken } from '../modules/Auth/Cookie';
+import { getCookieToken } from '../modules/Auth/RefreshtokenLocal';
 
 import axios from 'axios';
 
-import { removeCookieToken } from '../modules/Auth/Cookie';
+import { removeCookieToken } from '../modules/Auth/RefreshtokenLocal';
 import { DELETE_TOKEN } from '../store/Auth';
 
 import AlarmDropdown from '../components/AlarmDropdown';

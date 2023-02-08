@@ -1,6 +1,6 @@
 // import type { WishProps } from '../interface/interface';
 import { useState } from 'react';
-import '../css/mypage/friend.styles.css';
+import '../../css/mypage/myFriend.styles.css';
 
 export function Friend() {
   let [wishes, setWishes] = useState([
