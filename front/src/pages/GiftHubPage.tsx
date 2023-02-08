@@ -45,6 +45,7 @@ export function GiftHubPage() {
   const [value, setValue] = useState<number[]>([min,max]);
   const [searchPrice, setSearchPrice] = useState<number[]>([min,max])
   const [comval, setComval] = useState<string[]>([value[0].toLocaleString('ko-KR'), value[1].toLocaleString('ko-KR')])
+  
   const handleChange = (event: Event, newValue: number[]) => {
     // setValue(newValue as number[]);
     setPriceRange(newValue as number[])
@@ -53,46 +54,54 @@ export function GiftHubPage() {
   };
 
   // Pagination
-  const [pageNum, setPageNum] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [page, setPage] = useState(1);
+  const [nowPage, setNowPage] = useState<number>();
+  const pamount = 5
+  const [nowStartNum, setNowStartNum] = useState<number>(1)
+  const [nowLastNum, setNowLastNum] = useState<number>(pamount)
 
-  let max_result = 10; //디폴트
+  let max_result =30 ; //디폴트
   // 기본값은 상품목록에서 보여주는 Recommend 리스트는 검색어가 없을 때 store에 저장한 리스트 표출
   // (검색어 | 카테고리 선택 | 상품리스트에 변경)이 있을 때 실행되는 함수
+  const getData = async (page:number) => {
+    const API_URL = 'https://i8e208.p.ssafy.io/api/gifthub/search/';
+    axios
+      .get(API_URL, {
+        params: {
+          minPrice: searchPrice[0],
+          maxPrice: searchPrice[1],
+          name: searchQuery,
+          category: category,
+          max_result: max_result,
+          page: page-1,
+          sortingCode : sortingCode // sortingCode 0=인기순, 1=가격 오름차 , 2=가격 내림차
+        },
+      })
+      .then((e) => {
+        console.log(e.data);
+        let copy: Array<any> = [...e.data.content]; // let copy = [...giftList,{name:'new', price:9999, gitId:4}];
+        setGiftList([...e.data.content]);
+        setTotalPages(e.data.totalPages);
+        // setNowPage(1);
+
+      })
+      .catch((err) => {
+        console.log('error', err);
+      });
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      const API_URL = 'https://i8e208.p.ssafy.io/api/gifthub/search/';
-      axios
-        .get(API_URL, {
-          params: {
-            minPrice: searchPrice[0],
-            maxPrice: searchPrice[1],
-            name: searchQuery,
-            category: category,
-            max_result: max_result,
-            page: pageNum,
-            sortingCode : sortingCode // sortingCode 0=인기순, 1=가격 오름차 , 2=가격 내림차
-          },
-        })
-        .then((e) => {
-          console.log(e.data);
-          let copy: Array<any> = [...e.data.content]; // let copy = [...giftList,{name:'new', price:9999, gitId:4}];
-          setGiftList([...e.data.content]);
-        })
-        .catch((err) => {
-          console.log('error', err);
-        });
-    };
-    fetchData();
-  }, [searchQuery, category, pageNum, sortingCode, searchPrice]);
+    getData(1);
+  }, [searchQuery, category, sortingCode, searchPrice]);
 
   const getQuery = (q: string) => {
     console.log('쿼리받음')
     setSearchQuery(q);
-    setPageNum(0);
+    setPage(0);
   };
   const getCategory = (c: number) => {
     setCategory(c);
-    setPageNum(0);
+    setPage(0);
     if (c === 0) {
       setCategory(null);
     }
@@ -141,8 +150,36 @@ export function GiftHubPage() {
     }
     setValue([value[0], e.target.value])
   }
+  const PageButtons = ({ totalPages }: { totalPages: number }) => {
+    let buttons = [];
+    if(nowLastNum > totalPages){
+      setNowLastNum(totalPages)
+    }
+    for (let i = nowStartNum; i <= nowLastNum; i++) {
+      buttons.push(
+        <li className={`page-item ${nowPage==i&&'isNowPage'}`}  key={i}>
+            <button 
+              className='page-link'
+              onClick={() => {getData(i),setNowPage(i)}}
+            >{i}</button>
+        </li>
+      )
+    }
+    return (
+      <>
+        {buttons}
+      </>
+    );
+  };
+ const GoToNextPage = () =>{
+  setNowPage(nowLastNum+1)
+  getData(nowLastNum+1)
+  setNowStartNum(nowLastNum+1)
+  setNowLastNum(nowLastNum+pamount)
+ }
   return (
-    <div>
+    <div className='gifthub-page-con-continer'>
+    <div className='gifthub-page-continer'>
       <GiftHubCategory propFunction={getCategory} goCategory={category}/>
       <SearchBar propFunction={getQuery} initailQuery={searchQuery} />
       <div className="filter-bar-container">
@@ -155,7 +192,7 @@ export function GiftHubPage() {
                   <Slider
                     getAriaLabel={() => 'Temperature range'}
                     value={value}
-                    onChange={handleChange}
+                    onChange={()=>handleChange}
                     valueLabelDisplay="auto"
                     aria-labelledby="range-slider"
                     step={step}
@@ -173,7 +210,7 @@ export function GiftHubPage() {
                 <img
                   onClick={() => {
                     setSearchPrice([priceRange[0],priceRange[1]])
-                    setPageNum(0)
+                    setPage(0)
                   }}
                   src={iconFilter}
                   alt=""
@@ -253,15 +290,27 @@ export function GiftHubPage() {
                 })}
                </div>
            </div> 
+
            <div>
-  
-           </div>
+            </div>
        </div>
         ) : (
           <NoResult />
-                  )}
+          )}
+                 {
+                  giftList &&
+                  <ul className='page-btns'>
+                    <div>좌</div>
+                    <PageButtons totalPages={totalPages} />
+                    <button onClick={()=>GoToNextPage()}>우</button>
+                  </ul>
+                 }
                 </div>
-              </div>
+              </div> 
+            <div className='to-top'>
+              TOP
+            </div>
+          </div>
             );
           }
 
