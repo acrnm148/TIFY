@@ -21,11 +21,14 @@ import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
 import com.tify.back.exception.UserLoginException;
 import com.tify.back.model.gifthub.Order;
+import com.tify.back.model.pay.Pay;
 import com.tify.back.model.users.EmailAuth;
 import com.tify.back.model.users.UserProperties;
 import com.tify.back.repository.gifthub.OrderRepository;
+import com.tify.back.repository.pay.PayRepository;
 import com.tify.back.repository.users.EmailAuthRepository;
 import com.tify.back.service.gifthub.OrderService;
+import com.tify.back.service.pay.PayService;
 import com.tify.back.service.users.EmailService;
 import com.tify.back.service.users.UserService;
 import com.tify.back.model.users.User;
@@ -68,6 +71,7 @@ public class UserApiController {
     private final RefreshTokenRepository refreshTokenRepository;
     private final EmailAuthRepository emailAuthRepository;
     private final UserRepository userRepository;
+    private final PayRepository payRepository;
     private final JwtService jwtService;
     private final UserService userService;
     private final EmailService emailService;
@@ -408,5 +412,19 @@ public class UserApiController {
         System.out.println(user.getUsername()+"님의 주문목록:"+orderList);
 
         return ResponseEntity.ok().body(orderList);
+    }
+
+    /**
+     * 유저 id로 paylist(결제목록) 불러오기
+     */
+    @GetMapping("/account/getPay")
+    public ResponseEntity<?> getPay(@RequestHeader("Authorization") String token) {
+        token = token.substring(7);
+        User user = userRepository.findById(userService.getUser(token).getId()).get();
+
+        List<Pay> payList = payRepository.findAllByUserId(user.getId());
+        System.out.println(user.getUsername()+"님의 결제목록:"+payList);
+
+        return ResponseEntity.ok().body(payList);
     }
 }

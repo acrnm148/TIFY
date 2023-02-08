@@ -42,7 +42,7 @@ public class Pay {
     @ManyToOne(fetch=LAZY)
     @JoinColumn(name="id") //변수명에 맞춰야함
     private Gift gift;
-    private Long user_id;
+    private Long userId;
     private LocalDateTime createTime;
     @OneToOne(mappedBy= "pay")
     @JsonIgnore

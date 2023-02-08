@@ -3,6 +3,7 @@ package com.tify.back.model.users;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tify.back.auth.jwt.refreshToken.RefreshToken;
 import com.tify.back.model.gifthub.Cart;
+import com.tify.back.model.pay.Pay;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,7 +48,6 @@ public class User {
 
     private LocalDateTime createTime;
 
-    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "refreshToken_id")
     private RefreshToken jwtRefreshToken;
@@ -55,41 +55,7 @@ public class User {
     @JsonIgnore
     @OneToOne(mappedBy = "user")
     private Cart cart;
-    /**
-     * 연결
 
-    @OneToMany(mappedBy = "user")
-    private List<Noti> notis = new ArrayList<> ();
-
-
-    @OneToMany(mappedBy = "user")
-    private List<Order> orders = new ArrayList<> ();
-
-    @OneToMany(mappedBy = "user")
-    private List<Friend> friends = new ArrayList<> ();
-
-    @OneToMany(mappedBy = "user")
-    private List<Pay> pay = new ArrayList<> ();
-
-    @OneToMany(mappedBy = "user")
-    private List<TelBook> telBooks = new ArrayList<> ();
-
-    @OneToMany(mappedBy = "user")
-    private List<QnA> qnas = new ArrayList<> ();
-
-
-    @OneToMany(mappedBy = "user")
-    private List<Wish> wishes = new ArrayList<> ();
-
-    @OneToMany(mappedBy = "user")
-    private List<JoinedWish> joinedWishes = new ArrayList<> ();
-
-    @OneToMany(mappedBy = "fromUser")
-    private List<UserLikes> from_user = new ArrayList<>();
-
-    @OneToMany(mappedBy = "toUser")
-    private List<UserLikes> to_user = new ArrayList<>();
-     */
 
     /**
      *  refresh 생성자, setter
