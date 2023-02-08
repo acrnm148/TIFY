@@ -68,8 +68,8 @@ const Faq = () => {
     // const [newImgs,setNewImgs] = useState<Array<pImg>>([]);
     const [totalPages, setTotalPages] = useState(0);
     const maxResults = 10;
-    // const baseUrl = "https://i8e208.p.ssafy.io/api/qna";
-    const baseUrl = "http://localhost:8081/api/faq";
+    const baseUrl = "https://i8e208.p.ssafy.io/api/qna";
+    // const baseUrl = "https://i8e208.p.ssafy.io/api/faq";
     const [faqInfo, setFaqInfo] = useState<FaqForm|null> (null);// for 상품정보 edit
 
     const handleSearch = async (event:any) => {
@@ -216,7 +216,7 @@ const Faq = () => {
       await getImgUrl_one();
     }
     let arr = [];
-    const response = await axios.put(`http://localhost:8081/api/faq/${id}`,{ content, imgUrl, idx, title, type })
+    const response = await axios.put(`https://i8e208.p.ssafy.io/api/faq/${id}`,{ content, imgUrl, idx, title, type })
     .then(
       (response) => {
         console.log(response);
