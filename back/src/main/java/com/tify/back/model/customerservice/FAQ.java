@@ -20,6 +20,7 @@ public class FAQ extends BaseEntity {
     private String title;
     private String content;
     private int idx;
-
+    private int type;
+    private String imgUrl;
 }
 

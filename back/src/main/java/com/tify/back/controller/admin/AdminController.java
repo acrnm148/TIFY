@@ -119,6 +119,9 @@ public class AdminController {
 
     @PutMapping("/wish/{id}")
     public Wish updateWish(@PathVariable Long id, @RequestBody EditWishDto dto) {
+        System.out.println(dto.getTitle());
+        System.out.println(dto.getAddr2());
+        System.out.println("--------------------------");
         Wish existedWish = wishRepository.findById(id).orElse(null);
         existedWish.setTotPrice(dto.getTotPrice());
         existedWish.setNowPrice(dto.getNowPrice());

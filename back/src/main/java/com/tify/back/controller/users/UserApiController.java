@@ -1,9 +1,11 @@
 package com.tify.back.controller.users;
 
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tify.back.Firebase.FirebaseConfig;
 import com.tify.back.auth.jwt.JwtProperties;
 import com.tify.back.auth.jwt.JwtToken;
 import com.tify.back.auth.jwt.refreshToken.RefreshToken;
@@ -13,17 +15,17 @@ import com.tify.back.auth.jwt.service.JwtService;
 import com.tify.back.dto.users.MailDto;
 import com.tify.back.dto.users.UserProfileDto;
 import com.tify.back.dto.users.UserUpdateDto;
-import com.tify.back.dto.users.request.EmailAuthRequestDto;
-import com.tify.back.dto.users.request.FindPwRequestDto;
-import com.tify.back.dto.users.request.JoinRequestDto;
-import com.tify.back.dto.users.request.LoginRequestDto;
+import com.tify.back.dto.users.request.*;
 import com.tify.back.dto.users.response.DataResponseDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
 import com.tify.back.exception.UserLoginException;
+import com.tify.back.model.gifthub.Order;
 import com.tify.back.model.users.EmailAuth;
 import com.tify.back.model.users.UserProperties;
+import com.tify.back.repository.gifthub.OrderRepository;
 import com.tify.back.repository.users.EmailAuthRepository;
+import com.tify.back.service.gifthub.OrderService;
 import com.tify.back.service.users.EmailService;
 import com.tify.back.service.users.UserService;
 import com.tify.back.model.users.User;
@@ -34,18 +36,24 @@ import com.tify.back.oauth.service.GoogleService;
 import com.tify.back.oauth.service.KakaoService;
 import com.tify.back.oauth.service.NaverService;
 import com.tify.back.repository.users.UserRepository;
+import com.tify.back.upload.FileSizeException;
+import com.tify.back.upload.S3Services;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -55,7 +63,8 @@ import java.util.*;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class UserApiController {
-
+    private final S3Services s3Services;
+    private final OrderRepository orderRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final EmailAuthRepository emailAuthRepository;
     private final UserRepository userRepository;
@@ -66,7 +75,7 @@ public class UserApiController {
     private final KakaoService kakaoService;
     private final NaverService naverService;
     private final JwtProviderService jwtProviderService;
-
+    private final FirebaseConfig firebase;
     private final RedisTemplate<String, String> redisTemplate;
 
 
@@ -108,17 +117,28 @@ public class UserApiController {
      * 회원가입 - 이메일 인증
      */
     @Operation(summary = "comfirm email", description = "이메일 인증 완료")
-    @GetMapping("/account/confirmEmail")
-    public ResponseEntity<?> confirmEmail(@ModelAttribute EmailAuthRequestDto requestDto, HttpServletResponse response) throws URISyntaxException { //json으로 전달이 안됨
+    @GetMapping("/account/confirmEmail/{email}")
+    public ResponseEntity<String> confirmEmail(@PathVariable(value = "email") String email, HttpServletResponse response) throws URISyntaxException { //json으로 전달이 안됨
         System.out.println("전송된 링크 진입");
-        String authToken = userService.confirmEmail(requestDto);
+        String successPage = userService.confirmEmail(email);
+        if (successPage == null) {
+            URI redirectUri = new URI("https://i8e208.p.ssafy.io/404");
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setLocation(redirectUri);
+            return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
+        }
 
-        URI redirectUri = new URI("https://i8e208.p.ssafy.io/join2");
+        //방식1 리다이렉트
+        /* URI redirectUri = new URI("https://i8e208.p.ssafy.io/join2");
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(redirectUri);
         httpHeaders.add("email", requestDto.getEmail());
-        //httpHeaders.set("email", requestDto.getEmail());
-        return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
+        return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);*/
+
+        //방식2 html 리턴
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.TEXT_HTML);
+        return new ResponseEntity<String>(successPage, httpHeaders, HttpStatus.OK);
     }
 
     /**
@@ -133,10 +153,13 @@ public class UserApiController {
         if (emailAuths.size() == 0 || emailAuths.get(emailAuths.size()-1).getExpired() ==false) {
             return ResponseEntity.ok().body("N");
         }
+
+
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://tify-noti-default-rtdb.firebaseio.com/");
         DatabaseReference reference = database.getReference("test/tify");
         String uid = email.replace("@","-").replace(".","-");
         reference.child(uid).setValueAsync("");
+
         return ResponseEntity.ok().body("Y");
 
     }
@@ -185,24 +208,6 @@ public class UserApiController {
             userService.deleteUser(userid);
             System.out.println("탈퇴되었습니다.");
             return ResponseEntity.ok().body("탈퇴되었습니다.");
-    }
-
-    /**
-     * 회원 정보 수정
-     */
-    @PostMapping("/account/update")
-    public ResponseEntity<?> updateUserInfo(@RequestBody UserUpdateDto userUpdateDto) { //@RequestHeader(value = "Authorization") String token) {
-        try {
-            User updatedUser = userService.updateUserInfo(userUpdateDto);
-            if (updatedUser != null) {
-                System.out.println("수정되었습니다.");
-            } else {
-                System.out.println("수정에 실패했습니다.");
-            }
-            return ResponseEntity.ok().body(updatedUser);
-        } catch(Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수정에 실패했습니다.");
-        }
     }
 
     /**
@@ -329,4 +334,79 @@ public class UserApiController {
         return ResponseEntity.ok().body("가입이 가능합니다.");
     }
 
+    /**
+     * 회원 정보 수정
+     */
+    @PostMapping("/account/update")
+    public ResponseEntity<?> updateUserInfo(@RequestBody UserUpdateDto userUpdateDto) { //@RequestHeader(value = "Authorization") String token) {
+        try {
+            User updatedUser = userService.updateUserInfo(userUpdateDto);
+            if (updatedUser != null) {
+                System.out.println("수정되었습니다.");
+            } else {
+                System.out.println("수정에 실패했습니다.");
+            }
+            return ResponseEntity.ok().body(updatedUser);
+        } catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수정에 실패했습니다.");
+        }
+    }
+
+    /**
+     * 프로필 사진 수정
+     */
+    @PostMapping("/account/updateProfImg")
+    public ResponseEntity<?> updateProfImg(@RequestHeader("Authorization") String token, @RequestPart(value = "image", required = false) MultipartFile file) { //@RequestHeader(value = "Authorization") String token) {
+        token = token.substring(7);
+        User user = userRepository.findById(userService.getUser(token).getId()).get();
+
+        // 이미지 업로드
+        try {
+            if (file.getOriginalFilename().equals("")) {
+                String fileUrl = "https://tifyimage.s3.ap-northeast-2.amazonaws.com/beadedaf-bd8c-4765-b097-f9cd6d545db1.png";
+                userService.updateProfImg(user, fileUrl);
+                return ResponseEntity.ok().body("프로필 사진이 수정되었습니다. " +fileUrl);
+            }
+            if (file.getSize() > 3 * 1024 * 1024) {
+                throw new FileSizeException("File size should not exceed 3MB");
+            }
+            String fileUrl = s3Services.uploadFile(file.getOriginalFilename(), file.getInputStream());
+            userService.updateProfImg(user, fileUrl);
+            return ResponseEntity.ok().body("프로필 사진이 수정되었습니다. " +fileUrl);
+        } catch (FileSizeException | IOException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    /**
+     * 비밀번호 변경
+     */
+    @PostMapping("/account/updatePw")
+    public ResponseEntity<?> updatePw(@RequestHeader("Authorization") String token, @RequestBody UdatePwRequestDto dto) { //@RequestHeader(value = "Authorization") String token) {
+        token = token.substring(7);
+        User user = userRepository.findById(userService.getUser(token).getId()).get();
+        //현재 비밀번호 확인
+        if (!bCryptPasswordEncoder.matches(dto.getNowPw(),user.getPassword())) { //맞지않을 때
+            System.out.println("저장된pw:"+user.getPassword()+" / 날아온pw:"+dto.getNewPw());
+            System.out.println("비밀번호가 일치하지 않습니다.");
+            return ResponseEntity.ok().body("비밀번호가 일치하지 않습니다.");
+        }
+        //비밀번호 변경
+        userService.updatePassword(user, dto.getNewPw());
+        return ResponseEntity.ok().body("비밀번호가 수정되었습니다.");
+    }
+
+    /**
+     * 유저 토큰으로 orderList 불러오기
+     */
+    @GetMapping("/account/getOrder")
+    public ResponseEntity<?> getOrder(@RequestHeader("Authorization") String token) { //@RequestHeader(value = "Authorization") String token) {
+        token = token.substring(7);
+        User user = userRepository.findById(userService.getUser(token).getId()).get();
+
+        List<Order> orderList = orderRepository.findAllByUser(user);
+        System.out.println(user.getUsername()+"님의 주문목록:"+orderList);
+
+        return ResponseEntity.ok().body(orderList);
+    }
 }
