@@ -30,10 +30,32 @@ public class GiftController {
     private final WishService wishService;
     private final ProductService productService;
     private final GiftRepository giftRepository;
-
     @GetMapping("/detail/{id}")
     public Map<String,Object> getGift(@PathVariable Long id) {
         return giftService.getGiftInfoById(id);
+    }
+
+    @GetMapping("/admin/{id}")
+    public GiftDto adminGetGift(@PathVariable Long id) {
+        Gift gift = giftService.getGiftById(id);
+        GiftDto dto = new GiftDto();
+        dto.setGiftUrl(gift.getGiftUrl());
+        dto.setGiftImgUrl(gift.getGiftImgUrl());
+        dto.setProductId(gift.getProductId());
+        dto.setGiftname(gift.getGiftname());
+        dto.setQuantity(gift.getQuantity());
+        dto.setUserOption(gift.getUserOption());
+        dto.setType(gift.getType());
+        dto.setFinishYN(gift.getFinishYN());
+        dto.setMaxAmount(gift.getMaxAmount());
+        dto.setPurePrice(gift.getPurePrice());
+        dto.setGathered(gift.getGathered());
+        dto.setSuccessYN(gift.getSuccessYN());
+        dto.setIdx(gift.getIdx());
+        dto.setGiftOptionList(gift.getGiftOptionList());
+        dto.setPayList(gift.getPayList());
+        dto.setId(gift.getId());
+        return dto;
     }
 
 //    @PostMapping
@@ -60,6 +82,7 @@ public class GiftController {
         existingGift.setMaxAmount(gift.getMaxAmount());
         existingGift.setSuccessYN(gift.getSuccessYN());
         existingGift.setPurePrice(gift.getPurePrice());
+        existingGift.setGiftname(gift.getGiftname());
         existingGift.setType(gift.getType());
         // wish, product는 생성시, order는 order 생성시.
         return giftService.updateGift(existingGift);

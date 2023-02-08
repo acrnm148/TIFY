@@ -55,7 +55,9 @@ import Users from './components/AdminPage/Users';
 import Wishes from './components/AdminPage/Wishes';
 import UserInfoEdit from './components/AdminPage/UserInfoEdit';
 import Products from './components/AdminPage/Products';
-
+import Qna from './components/AdminPage/Qna';
+import Faq from './components/AdminPage/Faq';
+import Gifts from './components/AdminPage/Gifts';
 // const initialState = {
 //   authenticated: false,
 //   token: null,
@@ -158,6 +160,9 @@ function App() {
 
         <Route path="/admin/wishes" element={<Wishes />} />
         <Route path="/admin/products" element={<Products />} />
+        <Route path="/admin/qna" element={<Qna />} />
+        <Route path="/admin/faq" element={<Faq />} />
+        <Route path="/admin/gifts" element={<Gifts />} />
       </Routes>
       <Footer />
     </BrowserRouter>
