@@ -1,8 +1,13 @@
 
+.gifthub-page-con-continer{
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+}
 
 .filter-bar-container{
   display: inline-block;
-  width: 100vw;
+  width: 100%;
   height: 104px;
   margin-top: 14px;
   border: #C1C1C1;
@@ -15,18 +20,18 @@
   display: flex;
   flex-direction: row;
     margin-bottom: 14px;
-    width: 100vw;
+    width: 100%;
     display: flex;
     justify-content: center;
     
 }
 .sorting{
-  width: 70%;
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }
 .sorting-keyword{
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-wrap: nowrap;
   margin-top: 10px;
@@ -74,31 +79,37 @@
 @media (min-width : 1025px)
 {
     .filter-bar > input{
-        width: 60%;
+        width: 100%;
     }
     .gift-sortig > div {
-        width: 60%;
+        width:90%;
     }
     .slider-container{
-        width: 60%;
+        width: 90%;
     }
     .price-slider {
         width: 50%;
+    }
+    .gifthub-page-continer{
+      width: 70%;
     }
 }
 @media (max-width : 1024px)
 {
     .filter-bar > input{
-        width: 70%;
+        width: 100%;
     }
     .gift-sortig > div {
-        width: 70%;
+        width: 100%;
     }
     .slider-container{
-        width: 70%;
+        width: 100%;
     }
     .price-slider {
-        width: 60%;
+        width: 70%;
+    }
+    .gifthub-page-continer{
+      width: 90%;
     }
 }
 @media (max-width : 768px)
@@ -114,6 +125,9 @@
     }
     .price-slider {
         width: 80%;
+    }
+    .gifthub-page-continer{
+      width: 95%;
     }
 }
 
@@ -200,7 +214,7 @@
   }
 
   .no-result{
-    width: 100vw;
+    width: 100%;
     height: 20vw;
     display: flex;
     justify-content: center;
@@ -231,6 +245,29 @@
     justify-content: center;
   }
   .gift-list-container{
-    width: 65%;
+    width: 100%;
   }
 
+
+  .page-btns{
+    display: flex;
+    list-style:none;
+    align-items: center;
+    justify-content: center;
+}
+.page-btns>*{
+  padding: 5px; 
+}
+  .page-btns>li{
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 50%;
+  }
+  .page-btns>li:hover{
+    background-color: #ff373779;
+  }
+
+  /* page buttons */
+  .isNowPage{
+    background-color: #ff3737;
+  }
