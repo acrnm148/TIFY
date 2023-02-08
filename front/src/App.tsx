@@ -11,7 +11,7 @@ import { ThanksPage } from './pages/ThanksPage';
 import FriendsPage from './pages/FriendsPage';
 import { MyPage } from './pages/mypage/MyPage';
 import { LikePage } from './pages/LikePage';
-import { AlramPage } from './pages/AlramPage';
+import { AlarmPage } from './pages/AlarmPage';
 import { FaqPage } from './pages/FaqPage';
 import { AskPage } from './pages/AskPage';
 
@@ -23,16 +23,16 @@ import { JoinSecondPage } from './pages/JoinSecondPage';
 import { JoinThirdPage } from './pages/JoinThirdPage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 
-import { MyWish } from './components/Mywish';
+import { MyWish } from './pages/mypage/Mywish';
 import { Joined } from './components/Joined';
 import { Friend } from './components/Friend';
-import { MyInfo } from './components/MyInfo';
+import { MyInfo } from './pages/mypage/MyInfo';
 import { PhoneBook } from './components/PhoneBook';
 import { OrderList } from './components/OrderList';
 import { CongratsPage } from './pages/CongratsPage';
 import { CongratsPayPage } from './pages/CongratsPayPage';
 import { CongratsCardPage } from './pages/CongratsCardPage';
-//import PayingPort from './components/PayingPort';
+import { Delivery } from './components/Delivery';
 
 import { Footer } from './fixture/Footer';
 import { MainPage } from './pages/MainPage';
@@ -40,6 +40,7 @@ import { NotFound } from './pages/NotFound';
 import PayingService from './components/PayingService';
 import PayResult from './components/PayResult';
 import WishSuccess from './components/WishSuccess';
+import Admin from './pages/AdminPage/AdminPage';
 
 import './css/styles.css';
 import { GiftHubDetailPage } from './pages/GiftHubDetailPage';
@@ -48,6 +49,12 @@ import { useReducer } from 'react';
 import { Login } from './modules/Auth/LogIn';
 
 import ScrollTop from '../src/interface/scroll';
+
+import { AdminPage } from './pages/AdminPage';
+import Users from './components/AdminPage/Users';
+import Wishes from './components/AdminPage/Wishes';
+import UserInfoEdit from './components/AdminPage/UserInfoEdit';
+import Products from './components/AdminPage/Products';
 
 // const initialState = {
 //   authenticated: false,
@@ -103,25 +110,29 @@ function App() {
             <Route path="friend" element={<Friend />} />
             <Route path="info" element={<MyInfo />} />
             <Route path="phone" element={<PhoneBook />} />
-            <Route path="order" element={<OrderList />} />
+            <Route path="order" element={<OrderList />}>
+              <Route path="delivery" element={<Delivery />} />
+            </Route>
           </Route>
           <Route path="/checkwish" element={<CheckWishPage />} />
           <Route path="/thanks/:wishId/:conId" element={<ThanksPage />} />
           <Route path="/friends" element={<FriendsPage />} />
           <Route path="/makewish/success" element={<WishSuccess />} />
           <Route path="/like" element={<LikePage />} />
-          <Route path="/alram" element={<AlramPage />} />
+          {/* <Route path="/alarm" element={<AlarmPage />} /> */}
           <Route path="/ask" element={<AskPage />} />
         </Route>
 
+        {/* 테스트용 */}
+        <Route path="/join2" element={<JoinSecondPage />} />
         <Route element={<PublicRoute />}>
           <Route path="/join1" element={<JoinFirstPage />} />
-          <Route path="/join2" element={<JoinSecondPage />} />
+          {/* <Route path="/join2" element={<JoinSecondPage />} /> */}
           <Route path="/reset" element={<ForgotPasswordPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />}>
           <Route path="oauth2/code/kakao" element={<AuthKakao />} />
-          <Route path="Oauth2/code/naver" element={<AuthNaver />} />
+          <Route path="oauth2/code/naver" element={<AuthNaver />} />
         </Route>
         <Route path="/join3" element={<JoinThirdPage />} />
 
@@ -138,10 +149,15 @@ function App() {
           <Route path="kakaopay" element={<PayingService />} />
         </Route>
         <Route path="/congrats/kakaopay/result" element={<PayResult />} />
-
         <Route path="/faq" element={<FaqPage />} />
 
         <Route path="/*" element={<NotFound />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/users" element={<Users />} />
+        <Route path="/admin/users/:userPk" element={<UserInfoEdit />} />
+
+        <Route path="/admin/wishes" element={<Wishes />} />
+        <Route path="/admin/products" element={<Products />} />
       </Routes>
       <Footer />
     </BrowserRouter>

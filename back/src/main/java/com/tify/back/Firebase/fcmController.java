@@ -34,13 +34,13 @@ public class fcmController {
         DatabaseReference reference = database.getReference("test/tify/"+collection);
         Map<String, Object> updates = new HashMap<>();
         updates.put("data", "Hello, World!");
-        updates.put("time", System.currentTimeMillis());
-        updates.put("state", false);
-        updates.put("title", "test title");
-        updates.put("content", "content");
-        updates.put("image_url","img");
-        updates.put("link_url","link");
-        updates.put("type","friends");
+        updates.put("time", System.currentTimeMillis()); // 발송 시간
+        updates.put("state", false); // 읽은 상태
+        updates.put("title", "test title"); // 알림 제목
+        updates.put("content", "content"); // 알림 내용
+        updates.put("image_url","img"); // 알림 첨부 이미지
+        updates.put("link_url","link"); // 알림 첨부 링크
+        updates.put("type","friends"); // 어떤 알림인지 ?
         reference.push().setValue(updates,new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError error, DatabaseReference ref) {
@@ -68,5 +68,14 @@ public class fcmController {
                 }
             }
         });
+    }
+
+    @PostMapping("/newuser")
+    public String newCollection(@RequestBody String email) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://tify-noti-default-rtdb.firebaseio.com/");
+        DatabaseReference reference = database.getReference("test/tify");
+        String uid = email.replace("@","-").replace(".","-");
+        reference.child(uid).setValueAsync("");
+        return "collection for " + uid + " created";
     }
 }

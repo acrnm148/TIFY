@@ -10,14 +10,14 @@
     margin-left: 54px;
     margin-right: 54px;
     height: auto;
-    background-image: url('https://user-images.githubusercontent.com/87971876/215250292-4d85d3c3-f278-4a15-96cc-5d2a66b4a8b1.png');
+    /* background-image: url('https://user-images.githubusercontent.com/87971876/215250292-4d85d3c3-f278-4a15-96cc-5d2a66b4a8b1.png'); */
     justify-content: center;
     display: flex;
     align-items: flex-start;
 }
 
 .wish-components{
-    width: 60%;
+    width: 80%;
     height: auto;
     /* border: 3px solid pink; */
     
@@ -29,16 +29,16 @@
 }
 .wish-components-title {
     display: flex;
-    justify-content: left;
+    justify-content: flex-end;
     width: 100%;
 }
-.wish-components h1{
-    font-family: 'Black Han Sans';
+.wish-components-title h1{
+    font-family: ui-monospace;
     font-style: normal;
-    font-weight: 400;
-    font-size: 43px;
+    font-weight: 200;
+    font-size: 41px;
     line-height: 54px;
-    background: linear-gradient(180deg, #FE3360 0%, #FF7062 91.67%);
+    background: linear-gradient(180deg, #FE3360 44%, #fad5d9 91.67%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -64,27 +64,42 @@
     overflow: cover;
 }
 .wish-card-content{
-    background: linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), conic-gradient(from 156.54deg at 37.79% 55.75%, rgba(232, 0, 36, 0.63) -6.92deg, rgba(245, 15, 0, 0.88) 148.13deg, rgba(255, 68, 97, 0.45) 255deg, rgba(232, 0, 36, 0.63) 353.08deg, rgba(245, 15, 0, 0.88) 508.13deg);
-    opacity: 0.8;
+    background: linear-gradient(0deg, rgba(164, 164, 164, 0.1), rgba(255, 255, 255, 0.1)), conic-gradient(from 156.54deg at 50% 50%, rgb(207 207 207 / 63%) -6.92deg, rgba(197, 197, 197, 0.88) 148.13deg, rgba(255, 134, 152, 0.45) 255deg, rgb(208 208 208 / 63%) 353.08deg, rgb(193 193 193 / 88%) 508.13deg);    /* opacity: 0.5; */
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
     color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
-.wish-card-content h1{
-    font-size: large;
-}
+
 .wish-gift-list{
     width: 100%;
     min-height: 150px;
     /* border: 1px solid #FE3360; */
     border-radius: 8px;
-    background: radial-gradient(71.83% 71.82% at 49.82% 57.27%, #FE3360 0%, #FE3360 36.98%, rgba(254, 51, 96, 0.791562) 55.73%, rgba(254, 51, 96, 0.574062) 67.71%, rgba(254, 51, 96, 0.339394) 80.21%, rgba(254, 51, 96, 0.28) 87.5%, rgba(255, 255, 255, 0.42) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+    /* background: radial-gradient(71.83% 71.82% at 49.82% 57.27%, #FE3360 0%, #FE3360 36.98%, rgba(254, 51, 96, 0.791562) 55.73%, rgba(254, 51, 96, 0.574062) 67.71%, rgba(254, 51, 96, 0.339394) 80.21%, rgba(254, 51, 96, 0.28) 87.5%, rgba(255, 255, 255, 0.42) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected ; */
     opacity: 0.8;
-    box-shadow: 0px 4px 4px rgba(229, 85, 77, 0.2);
+    box-shadow: 0px 4px 4px rgba(171, 171, 171, 0.2);
     border-radius: 10px;
     margin-top: 1em;
+    /* background: #dddddd; */
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
-
+.wish-gift{
+    word-break: break-all;
+    width: 132px;
+    min-height: 149px;
+    font-size: x-small;
+    color: white;
+    background: white;
+    display: flex;
+    border-radius: 8px;
+    flex-direction: column;
+    align-items: center;
+}
 .wish-congrats-btns{
     width: 100%;
     display: flex;
@@ -114,12 +129,15 @@
     color: #828483;
 }
 .wish-gift>div{
-    width: 94px;
-    height: 94px;
-    border: 1px solid #828483;
-    border-radius: 20px;
+    width: 112px;
+    height: 112px;
     display: flex;
     flex-direction: column-reverse;
+    align-items: center;
+    justify-content: space-between;
+}
+.wish-gift>p{
+    color: #828483;
 }
 .wish-gift-list{
     display: flex;
@@ -129,7 +147,7 @@
 .gift-bar-gray{
     width: 81px;
     background-color: gray;
-    height: 10px;
+    height: 5px;
     margin: 5px;
     margin-bottom: 10px;
     border-radius: 5px;
@@ -143,6 +161,14 @@
 .wish-card wish-card-content h1{
 
 }
-.wish-card wish-card-content p{
-
+.wish-card-content p{
+    font-size: 14px;
+    color: #3f3f3f;
+    font-family: ui-monospace;
+}
+.wish-title{
+    font-family: ui-monospace;
+    font-size: 1.5em;
+    font-weight: 300;
+    -webkit-text-fill-color: #ff5e7a;
 }

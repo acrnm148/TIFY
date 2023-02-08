@@ -18,6 +18,7 @@ export interface GiftList {
   rep_img: string;
 }
 export interface GiftProps {
+  length: number;
   giftList: Gift[];
 }
 export interface Paying{
@@ -29,4 +30,29 @@ export interface Paying{
   celebImgUrl : string;
   giftId : number;
   userId : number;
+}
+
+export interface Wish { 
+  giftItems: Gift[];
+  totalPrice: number;
+  wishTitle: string;
+  wishConten :string;
+  category:number;
+  startDate : string;
+  endDate:string;
+  wishCard: string; //string
+  addr1: string;
+  addr2:string;
+}
+
+export interface CheckWish{
+  wishId : string;
+  userName : string;
+  title : string;
+  category : string;
+  restDay : string;
+  percent : number;
+  fromList : string[];
+  fromId : number;
+  cardOpen : string;
 }

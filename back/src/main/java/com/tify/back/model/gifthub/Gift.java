@@ -43,6 +43,7 @@ public class Gift {
     //state
     @Column(name = "user_option")
     private String userOption;// json 형태
+    private String giftname;
     private String type;
     private String finishYN;
     @Column(name = "max_amount")
@@ -59,5 +60,5 @@ public class Gift {
     @OneToMany(mappedBy= "gift")
     private List<Pay> payList = new ArrayList<>();
     @OneToMany(mappedBy= "gift")
-    private List<GiftOption> giftOption = new ArrayList<>();
+    private List<GiftOption> giftOptionList = new ArrayList<>();
 }

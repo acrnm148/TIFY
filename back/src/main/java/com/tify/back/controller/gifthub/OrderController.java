@@ -65,17 +65,25 @@ public class OrderController {
 
     /**
      * 배송 조회
-
-    @GetMapping("/deliver")
-    private ResponseEntity<?> checkDelivery(@RequestParam("company") String company, @RequestParam("number") String number) {
-        //운송장번호를 가지고 배송 조회
-        String KEY = "Hzm5Yw8F24dc4RJvSYkGWA";
-        String url = "https://info.sweettracker.co.kr/api/v1/trackingInfo?"+
-                "t_code="+company+ //04
-                "&t_invoice="+number+ //568706335164
-                "&t_key="+KEY;
-        DeliveryDto deliveryDto = orderService.getDeliveryList(url);
-        return ResponseEntity.ok().body(deliveryDto);
-    }
      */
+//    @GetMapping("/deliver")
+//    private ResponseEntity<?> checkDelivery(@RequestParam("company") String company, @RequestParam("number") String number) {
+//        //운송장번호를 가지고 배송 조회
+//        String KEY = "Hzm5Yw8F24dc4RJvSYkGWA";
+//        String url = "https://info.sweettracker.co.kr/api/v1/trackingInfo?"+
+//                "t_code="+company+ //04
+//                "&t_invoice="+number+ //568706335164
+//                "&t_key="+KEY;
+//        DeliveryDto deliveryDto = orderService.getDeliveryList(url);
+//        return ResponseEntity.ok().body(deliveryDto);
+//    }
+
+    /**
+     * 운송장번호 수정, 주문상태 변경
+     */
+    @PostMapping("/updateOrderState")
+    private ResponseEntity<?> udpateOrderState(@RequestBody OrderStateDto orderStateDto) {
+        Order order = orderService.updateDeliverState(orderStateDto);
+        return ResponseEntity.ok().body(order);
+    }
 }

@@ -57,6 +57,7 @@
   font-weight: 800;
   font-size: 36.65px;
   line-height: 125.5%;
+
   /* identical to box height, or 46px */
 
   display: flex;
@@ -140,6 +141,40 @@
   padding-left: 15px;
 }
 
+.mini-input-container {
+  border: 1px solid #c1c1c1;
+  border-radius: 8px;
+  width: 250px;
+  height: 52px;
+  margin-bottom: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mini-input-box {
+  width: 60px;
+  text-align: center;
+}
+
+.nickname-box {
+  border: 1px solid #c1c1c1;
+  border-radius: 8px;
+  width: 250px;
+  height: 52px;
+  margin-bottom: 20px;
+  padding-left: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.formSideButton {
+  background-color: ;
+}
+
 .findPassword {
   float: right;
 }
@@ -202,4 +237,8 @@
   justify-content: space-evenly;
   width: 300px;
   /* background-color: black; */
+}
+
+.checkedNickname {
+  background-color: #f9fafb;
 }

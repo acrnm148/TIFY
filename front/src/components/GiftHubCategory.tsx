@@ -8,7 +8,7 @@ import interior from "../assets/category/iconInterior.svg";
 import dogcat from "../assets/category/iconDogcat.svg";
 
 import "../css/giftHubCategory.styles.css"
-import { useRef, useState } from "react";
+import { createRef, MouseEventHandler, useEffect, useRef, useState } from "react";
 
 const CATEGORY_DATA = [
     {id: 0, name : 'all', ko:'전체', src:home},
@@ -21,57 +21,38 @@ const CATEGORY_DATA = [
     {id: 7, name : 'dogcat', ko:'반려동물', src:dogcat},
 
 ]
-const GiftHubCategory = (props:{propFunction: (arg0: number) => void}) =>{
-    const [selectCategory, setSelectCategory] = useState<number>()
-    // ts에서 useref사용시 반드시 초기값과 자료형 지정
-    // HTML ELE 접근시 초기값null
-    const selected = useRef<HTMLDivElement>(null)
-    const cateChangeHandler =(e:number) =>{
-        props.propFunction(e)
-        console.log(e , 'e') // 
-        // 현재 선택한 카테고리의 색 변경
-        if(selectCategory === e){
-            setSelectCategory(-1)
-        } else{
-            setSelectCategory(e)
-            // const sc = selected.current
-            // if(sc){
-            //     sc.className = 'selectedCategory';
-            //     sc.style.border = "1px solid red"
-            // }
+const GiftHubCategory = (props:{propFunction: (arg0: number) => void, goCategory:number|null|undefined}) =>{
+    const [selectCategory, setSelectCategory] = useState<number|null|undefined>(props.goCategory)
+    useEffect(()=>{
+        if(!props.goCategory){
+            setSelectCategory(0)
         }
+    }, [props.goCategory])
+    const cateChangeHandler =async (i:number) =>{
+        props.propFunction(i)
+        // 현재 선택한 카테고리의 색 변경
+        setSelectCategory(i)
+        console.log(i, selectCategory)
     }
-
-    const checkCategory = (i: number) =>{
+    
+    const checkCategory = (i:number) =>{
         if (selectCategory === i){
             return true
         } else{
             return false
         }
     }
-    return(
-        <div className="gift-category-icon"  >
-            {CATEGORY_DATA.map((data, i:number) => {
-                return(
-                    <div>
-                        <div  className={`gh-icon ${checkCategory(i) ? 'selectedCategory':''}`} ref={selected}>
-                            <img onClick={() =>cateChangeHandler(i)} src={data.src} alt={data.name} key={data.id}/>
-                        </div>    
-                        <p>{data.ko}</p>
-                    </div>
-                )
-            })}
-        </div>
-    );
 
     return(
         <div className="gift-category-icon"  >
             {CATEGORY_DATA.map((data, i:number) => {
                 return(
-                    <div >
-                        <div  className={`gh-icon ${checkCategory(i) ? 'selectedCategory':''}`} >
-                            <img onClick={()=>cateChangeHandler} src={data.src} alt={data.name} key={data.id}/>
-                        </div>
+                    <div>
+                        <div onClick={()=>cateChangeHandler(i)} 
+                            className={`gh-icon ${checkCategory(i) ? 'selectedCategory':''}`}    
+                            >
+                            <img src={data.src} alt={data.name} key={i}/>
+                        </div>    
                         <p>{data.ko}</p>
                     </div>
                 )
