@@ -29,6 +29,7 @@ public class Pay {
     @Column(name ="pay_id")
     private Long pay_id;
 
+    private String profImgUrl;
     private String amount;
     private String celeb_img_url;
     private String celeb_from;

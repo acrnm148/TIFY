@@ -75,7 +75,6 @@ public class WishService {
 
     }
 
-
     public String deleteWishById(Long id) {
         Wish wish = wishRepository.findById(id).orElse(null);
         List<Gift> gifts = wish.getGiftItems();
@@ -96,6 +95,18 @@ public class WishService {
                 wishRepository.save(wish);
             }
         }
+    }
+
+    public List<Wish> getParticipatedWish(Long userId) {
+//        if (wishRepository.findById(wishId).isPresent()) {
+//            return wishRepository.findById(wishId).get();
+//        } else {
+//            return null;
+//        }
+        List<Wish> wishList = new List<> ();
+
+
+        return null;
     }
 }
 

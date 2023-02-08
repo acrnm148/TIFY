@@ -39,6 +39,13 @@ public class PayService {
         Gift gift = giftRepository.findById(payRequestDto.getGiftId()).get();
         Wish wish = gift.getWish();
 
+        String profImg = null;
+        if (payRequestDto.getUserId() != null) {
+            User user = userRepository.findById(payRequestDto.getUserId()).get();
+            profImg = profImg + user.getProfileImg();
+            System.out.println("profImg: ["+profImg+"]");
+        }
+
         System.out.println("wish:"+wish);
 
         //pay 생성
@@ -52,6 +59,7 @@ public class PayService {
                         .celeb_img_url(payRequestDto.getCelebImgUrl())
                         .createTime(LocalDateTime.now())
                         .userId(payRequestDto.getUserId())
+                        .profImgUrl(profImg)
                         .build()
         );
         gift.setGathered(gift.getGathered()+Integer.parseInt(pay.getAmount())); //모인 펀딩 금액에 추가
