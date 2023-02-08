@@ -14,7 +14,6 @@ import { Justify, Search } from 'react-bootstrap-icons';
 import { NavLink } from 'react-router-dom';
 import {Modal, Form, Collapse, Container, Row, Col, ListGroup} from 'react-bootstrap';
 import { borderRadius } from "@mui/system";
-import { setRefreshToken } from "../../modules/Auth/Cookie";
 
 
 
@@ -83,6 +82,11 @@ const Products = () => {
     const [category, setCategory] = useState<string>('')
     const [description, setDescription] = useState<string>('')
     const [openStates, setOpenStates] = useState<{[index: string]: boolean}>({});
+
+    const [addOpt, setAddOpt] = useState<string>('');
+    const [addODC, setAddODC] = useState<string>("");
+    const [addODV,setAddODV] = useState<string>("");
+    const [addODI,setAddODI] = useState<string>("");
 
     const [refresh, setRefresh] = useState<boolean>(false);
     useEffect(() => {
@@ -188,9 +192,13 @@ const Products = () => {
     const handleClose = () => setShow(false);
     const handleShow = async (id:number) => {
       await handleEdit(id);
+      setAddOpt('')
       setFiles([])
       setRFiles([])
       setNewImgs([])
+      setAddODC("")
+      setAddODV("")
+      setAddODI("")
       setShow(true)
       setOpen(false)
     };
@@ -294,7 +302,7 @@ const Products = () => {
     })
     console.log(newImgs)
     setProductInfo({...productInfo,imgList:newImgs})
-    const response = axios.put(`https://i8e208.p.ssafy.io/api/gifthub/product`,{...productInfo,imgList:newImgs})
+    const response = axios.put(`${baseUrl}/product`,{...productInfo,imgList:newImgs, options, quantity})
     .then(
       (response) => {
         console.log(response);
@@ -305,20 +313,31 @@ const Products = () => {
         // <UserInfoEdit userInfo={selectUser} />
   };
 
-  const addOption = () => {
-    setOptions([...options,{    
+  const addOption = (title:string) => {
+    setOptions([...options,{
       idx:options.length+1,
-      title:"",
+      title:title,
       details: []
     }])
   }
 
-  const addOptionDetail = (pos:number) => {
+  const addOptionDetail = (pos:number,content:string, value:string) => {
     options[pos].details.push({
       idx:options[pos].details.length+1,
-      content:"",
-      value:"",
+      content,
+      value,
     })
+    setOptions([...options])
+  }
+
+  const deleteOption = (idx:number) => {
+    options.splice(idx,1);
+    setOptions([...options]);
+  }
+  // 마지막 idx 녀석만 삭제
+  const deleteOptionDetail = (pos:number) => {
+    options[pos].details.pop();
+    setOptions([...options]);
   }
 
   interface Option {
@@ -465,8 +484,8 @@ const Products = () => {
                 <p>Drag and drop your images here(max /9)<br/>(우클릭시 이미지 빼기)</p>
                 { <h1>{files.length} / 9 개</h1> }
                 {/* auto 속성존재 */}
-                <div style={{ display:"grid", width:"400px", margin: "0 auto", 
-                  gridTemplateColumns:"repeat(3,1fr)", gridTemplateRows:"repeat(3, minmax(50px, auto))" 
+                <div style={{ display:"grid", width:"400px", margin: "0 auto",
+                  gridTemplateColumns:"repeat(3,1fr)", gridTemplateRows:"repeat(3, minmax(50px, auto))"
                   , border:"1px solid", borderRadius:"5px", color:"lightgray"}}>
                     {files.length === 0 ? (
                       <div>
@@ -536,22 +555,68 @@ const Products = () => {
                 <Form.Control type="text" placeholder="1" readOnly value={productInfo?.likeCount}/>
               </Form.Group><br/>
               <Form.Group controlId="formBasicOpts">
-                <Form.Label style={formTitleStyle}>Options</Form.Label>
+                <Form.Label style={formTitleStyle}>Options
+                  <button onClick={(e) => {e.preventDefault(); addOption(addOpt);}}
+                        style={{ backgroundColor:"white", width:"20px", marginLeft:"10px",
+                        borderRadius:"5px", border:"1px lightgray solid" }}>+</button>
+                </Form.Label>
+                <Form.Control type="text" placeholder="추가할 옵션 대분류명" value={addOpt} onChange={(e) => setAddOpt(e.target.value)}/>
+                <br />
+                { options.length > 0 &&
+                 ( <>
+                <Form.Label style={formTitleStyle}>OptionDetail
+                <button onClick={(e) => {
+                  let vari = parseInt(addODI);
+                  e.preventDefault();
+                  if ( ( vari>(-1) ) && (vari < options.length) ) {
+                    addOptionDetail(vari, addODC, addODV);
+                  } }}
+                    style={{backgroundColor:"white", width:"20px", marginLeft:"10px",
+                    borderRadius:"5px", border:"1px lightgray solid"}}>+</button>
+                </Form.Label>
+
+                <div>
+                  <Form.Control type="text" placeholder="옵션 세부 추가할 대분류 idx" value={addODI} onChange={(e) => setAddODI(e.target.value)}/>
+                  <Form.Control type="text" placeholder="옵션 세부 내용" value={addODC} onChange={(e) => setAddODC(e.target.value)}/>
+                  <Form.Control type="text" placeholder="옵션 세부 추가금액" value={addODV} onChange={(e) => setAddODV(e.target.value)}/>
+                  <br/>
+                </div>
+                </>)
+                }
+
+
                 <ListGroup>
                 {options.map((val, index) => (
                   <div key={val.title}>
                     <h1></h1>
-                    <ListGroup.Item style={{backgroundColor:"lightgrey"}} onClick={(e) => {e.preventDefault(); toggleCollapse(index)}}>옵션명 : {val.title}</ListGroup.Item>
+                    <ListGroup.Item style={{backgroundColor:"lightgrey", cursor:"pointer"}} onClick={(e) => {e.preventDefault(); toggleCollapse(index)}}>
+                      옵션명 - {index} : {val.title}
+                      <button onClick={(e) => {
+                              e.preventDefault();
+                                deleteOptionDetail(index);}}
+                                style={{backgroundColor:"white", width:"20px", marginLeft:"10px",
+                                borderRadius:"5px", border:"1px lightgray solid"}}>-</button>
+                      <button onClick={(e) => {
+                              e.preventDefault();
+                                deleteOption(index);}}
+                                style={{backgroundColor:"white", width:"20px", marginLeft:"10px",
+                                borderRadius:"5px", border:"1px lightgray solid"}}>x</button>
+                      <Form.Control type="text" placeholder="옵션 대분류명 변경 (Enter 입력)" onChange={(e) => {options[index].title=e.target.value}}
+                      onKeyUp={(e) => { if (e.key == "Enter") {setOptions([...options])}  }}/>
+                      </ListGroup.Item>
                     {/* <button style={{border:"1px solid black", borderRadius:"10px", color:"black"}} >옵션명 : {val.title}</button> */}
                     <h1>{openStates.index}</h1>
                     <Collapse in={openStates[index]}>
                       <div style={{visibility: "visible"}}>
                         {
-                          val.details.map(detail => (
+                          val.details.map((detail,didx) => (
                             <ListGroup.Item key={detail.id}>
-                              <p>detail - {detail.idx}</p>
-                              <p style={{textOverflow: "ellipsis", overflow: "hidden"}}>content: {detail.content}</p> 
+                              <p style={{fontWeight:"bolder"}} >detail - {detail.idx}</p>
+                              <Form.Control type="text" placeholder="옵션 세부 idx" value={options[index].details[didx].idx} onChange={(e) => {options[index].details[didx].idx = parseInt(e.target.value); setOptions([...options])} }/>
+                              <p style={{textOverflow: "ellipsis", overflow: "hidden"}}>content: {detail.content}</p>
+                              <Form.Control type="text" placeholder="옵션 세부 내용" value={options[index].details[didx].content} onChange={(e) => {options[index].details[didx].content = e.target.value; setOptions([...options])} }/>
                               <p>price: {detail.value} 원 </p>
+                              <Form.Control type="text" placeholder="옵션 세부 추가금액" value={options[index].details[didx].value} onChange={(e) => {options[index].details[didx].value = e.target.value; setOptions([...options])} }/>
                             </ListGroup.Item>
                             // <div key={detail.id}>
                             //   <h1>detail {detail.content}</h1>
@@ -564,7 +629,7 @@ const Products = () => {
                 ))}
                 </ListGroup>
                 {/* <Form.Control type="text" placeholder="Options json array form" value={options} onChange={(e) => handleOptions(e)}/> */}
-              </Form.Group>
+              </Form.Group> <br/>
 
               <button className="btn" style={{backgroundColor:"blue", color:"white"}} onClick={(e) => submitEdit(e)}>수정</button>
               {/* <Button variant="primary" type="submit" >
