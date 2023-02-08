@@ -19,6 +19,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { query } from 'firebase/database';
+import priceFormat from '../modules/comma';
 
 const CATEGORY_DATA = [
   {id: 0, name : '전체'},
@@ -38,57 +39,69 @@ export function GiftHubPage() {
   let [giftList, setGiftList] = useState<Array<any>>([]);
   const [sortingCode, setSortingCode] = useState<string|number|null>()
   // Slider 설정
-  const [priceRange, setPriceRange] = useState([10000, 10000000]);
-  const [min, max] = [10000, 10000000];
+  const [min, max] = [0, 10000000];
+  const [priceRange, setPriceRange] = useState([min,max]);
   const step = 1000;
-  const [value, setValue] = useState<number[]>([10000, 10000000]);
-
-  const handleChange = (event: Event, newValue: number | number[]) => {
-    setValue(newValue as number[]);
-    console.log(value);
+  const [value, setValue] = useState<number[]>([min,max]);
+  const [searchPrice, setSearchPrice] = useState<number[]>([min,max])
+  const [comval, setComval] = useState<string[]>([value[0].toLocaleString('ko-KR'), value[1].toLocaleString('ko-KR')])
+  
+  const handleChange = async (event: Event, newValue: number|number[]) => {
+    // setValue(newValue as number[]);
+    await setPriceRange(newValue as number[])
+    await setValue(newValue as number[])
+    await setComval([value[0].toLocaleString('ko-KR'),value[1].toLocaleString('ko-KR'),])
   };
 
   // Pagination
-  const [pageNum, setPageNum] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [page, setPage] = useState(1);
+  const [nowPage, setNowPage] = useState<number>();
+  const pamount = 5
+  const [nowStartNum, setNowStartNum] = useState<number>(1)
+  const [nowLastNum, setNowLastNum] = useState<number>(pamount)
 
-  let max_result = 10000; //디폴트
+  let max_result =30 ; //디폴트
   // 기본값은 상품목록에서 보여주는 Recommend 리스트는 검색어가 없을 때 store에 저장한 리스트 표출
   // (검색어 | 카테고리 선택 | 상품리스트에 변경)이 있을 때 실행되는 함수
+  const getData = async (page:number) => {
+    const API_URL = 'https://i8e208.p.ssafy.io/api/gifthub/search/';
+    axios
+      .get(API_URL, {
+        params: {
+          minPrice: searchPrice[0],
+          maxPrice: searchPrice[1],
+          name: searchQuery,
+          category: category,
+          max_result: max_result,
+          page: page-1,
+          sortingCode : sortingCode // sortingCode 0=인기순, 1=가격 오름차 , 2=가격 내림차
+        },
+      })
+      .then((e) => {
+        console.log(e.data);
+        let copy: Array<any> = [...e.data.content]; // let copy = [...giftList,{name:'new', price:9999, gitId:4}];
+        setGiftList([...e.data.content]);
+        setTotalPages(e.data.totalPages);
+        // setNowPage(1);
+
+      })
+      .catch((err) => {
+        console.log('error', err);
+      });
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      const API_URL = 'https://i8e208.p.ssafy.io/api/gifthub/search/';
-      axios
-        .get(API_URL, {
-          params: {
-            minPrice: priceRange[0],
-            maxPrice: priceRange[1],
-            name: searchQuery,
-            category: category,
-            max_result: max_result,
-            page: pageNum,
-            sortingCode : sortingCode // sortingCode 0=인기순, 1=가격 오름차 , 2=가격 내림차
-          },
-        })
-        .then((e) => {
-          console.log(e.data);
-          let copy: Array<any> = [...e.data.content]; // let copy = [...giftList,{name:'new', price:9999, gitId:4}];
-          setGiftList([...e.data.content]);
-        })
-        .catch((err) => {
-          console.log('error', err);
-        });
-    };
-    fetchData();
-  }, [searchQuery, priceRange, category, pageNum, sortingCode]);
+    getData(1);
+  }, [searchQuery, category, sortingCode, searchPrice]);
 
   const getQuery = (q: string) => {
     console.log('쿼리받음')
     setSearchQuery(q);
-    setPageNum(0);
+    setPage(0);
   };
   const getCategory = (c: number) => {
     setCategory(c);
-    setPageNum(0);
+    setPage(0);
     if (c === 0) {
       setCategory(null);
     }
@@ -115,13 +128,70 @@ export function GiftHubPage() {
     );
   };
   const SetRange1 = (e:any) =>{
-    setValue([e.target.value, value[1]])
+    let v = e.target.value
+    let nv = Number(v.replaceAll(',',''))
+    if(isNaN(nv)){
+      setComval(['0', comval[1]])
+      setValue([0, value[1]])
+    } else {
+      setComval([nv.toLocaleString('ko-KR'), comval[1]])
+      setValue([nv, value[1]])
+    }
   }
   const SetRange2 = (e:any) =>{
+    let v = e.target.value
+    let nv = Number(v.replaceAll(',',''))
+    if(isNaN(nv)){
+      setComval([comval[0], String(max)])
+      setValue([value[0], max])
+    } else {
+      setComval([comval[0],nv.toLocaleString('ko-KR')])
+      setValue([value[0], nv])
+    }
     setValue([value[0], e.target.value])
   }
+  const PageButtons = ({ totalPages }: { totalPages: number }) => {
+    let buttons = [];
+    if(nowLastNum > totalPages){
+      setNowLastNum(totalPages)
+    }
+    for (let i = nowStartNum; i <= nowLastNum; i++) {
+      buttons.push(
+        <li className={`page-item ${nowPage==i&&'isNowPage'}`}  key={i}>
+            <button 
+              className='page-link'
+              onClick={() => {getData(i),setNowPage(i)}}
+            >{i}</button>
+        </li>
+      )
+    }
+    return (
+      <>
+        {buttons}
+      </>
+    );
+  };
+ const GoToNextPage = () =>{
+  let target = nowLastNum+1
+  // if(target)
+  setNowPage(target)
+  getData(target)
+  setNowStartNum(target)
+  setNowLastNum(nowLastNum+pamount)
+ }
+ const GoToBeforePage = () =>{
+  let target = nowStartNum-pamount
+  if(target < 1){
+    return
+  }
+  setNowPage(target)
+  getData(target)
+  setNowLastNum(nowStartNum-1)
+  setNowStartNum(target)
+ }
   return (
-    <div>
+    <div className='gifthub-page-con-continer'>
+    <div className='gifthub-page-continer'>
       <GiftHubCategory propFunction={getCategory} goCategory={category}/>
       <SearchBar propFunction={getQuery} initailQuery={searchQuery} />
       <div className="filter-bar-container">
@@ -142,19 +212,17 @@ export function GiftHubPage() {
                     max={max}
                   />
                   <div className="slider-numbers-range">
-                    {/* <p>{value[0]}원</p> */}
-                    <input className="range-input" type="text" value={value[0]} onChange={(e)=>SetRange1(e)}/>
+                    <input className="range-input" type="text" value={comval[0]} placeholder={comval[0]} onChange={(e)=>SetRange1(e)}/>
                     <p>~</p>
-                    <input className="range-input" type="text" value={value[1]} onChange={(e)=>SetRange2(e)}/>
-                    {/* <p>{value[1]}원</p> */}
+                    <input className="range-input" type="text" value={comval[1]} onChange={(e)=>SetRange2(e)}/>
                   </div>
                 </div>
               </div>
               <div className="slider-filter">
                 <img
                   onClick={() => {
-                    setPriceRange([value[0], value[1]])
-                    setPageNum(0)
+                    setSearchPrice([priceRange[0],priceRange[1]])
+                    setPage(0)
                   }}
                   src={iconFilter}
                   alt=""
@@ -168,22 +236,28 @@ export function GiftHubPage() {
       <div className="gift-sortig">
         <div className='sorting'>
           <div className='sorting-keyword'>
-                {searchQuery && <div className='filter-show'>{searchQuery}<span onClick={()=>setSearchQuery('')}>x</span></div>}
-                {priceRange[0] !== 10000 && <div className='filter-show'>최소가격{priceRange[0]}
+                {giftList.length > 0 && searchQuery && <div className='filter-show'>{searchQuery}<span onClick={()=>setSearchQuery('')}>x</span></div>}
+                {giftList.length > 0 && searchPrice[0] !== 0 && <div className='filter-show'>최소가격{searchPrice[0]}
                   <span 
                     onClick={()=>{
-                      setPriceRange([10000, priceRange[1]])
-                      setValue([10000, priceRange[1]])
+                      const v = [0, priceRange[1]]
+                      setPriceRange(v)
+                      setValue(v)
+                      setSearchPrice(v)
+                      setComval([String(min), v[1].toLocaleString('ko-KR')])
                       }}>x
                   </span></div> }
-                {priceRange[1] !== 10000000 && <div className='filter-show'>최대가격{priceRange[1]}
+                {giftList.length > 0 && searchPrice[1] !== max && <div className='filter-show'>최대가격{searchPrice[1]}
                   <span 
                     onClick={()=>{
-                      setPriceRange([priceRange[0], 10000000])
-                      setValue([priceRange[0], 10000000])
+                      const v = [priceRange[0], max]
+                      setPriceRange(v)
+                      setValue(v)
+                      setSearchPrice(v)
+                      setComval([v[0].toLocaleString('ko-kr'),String(max)])
                     }}>x
                     </span></div> }
-                {category && <div className='filter-show'>{CATEGORY_DATA[category].name}<span onClick={()=>setCategory(null)}>x</span></div>}
+                {giftList.length > 0 && category && <div className='filter-show'>{CATEGORY_DATA[category].name}<span onClick={()=>setCategory(null)}>x</span></div>}
             </div>
           <div className='dropdown'>
             <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
@@ -228,15 +302,27 @@ export function GiftHubPage() {
                 })}
                </div>
            </div> 
+
            <div>
-  
-           </div>
+            </div>
        </div>
         ) : (
           <NoResult />
-                  )}
+          )}
+                 {
+                  giftList.length > 0 &&
+                  <ul className='page-btns'>
+                    <div onClick={()=>GoToBeforePage()}>좌</div>
+                    <PageButtons totalPages={totalPages} />
+                    <button onClick={()=>GoToNextPage()}>우</button>
+                  </ul>
+                 }
                 </div>
-              </div>
+              </div> 
+            <div className='to-top'>
+              TOP
+            </div>
+          </div>
             );
           }
 

@@ -24,7 +24,7 @@ export function GiftItem({ gift } : GiftProps, key:number){
                     <div>
                         <div>
                             <p>{gift.name}</p>
-                            <p>{gift.price}원</p>
+                            <p>{gift.price.toLocaleString('ko-KR')}원</p>
                         </div>
                     </div>
                 </div>
