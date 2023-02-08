@@ -270,7 +270,7 @@ const Products = () => {
     })
     console.log(newImgs)
     setProductInfo({...productInfo,imgList:newImgs})
-    const response = axios.put(`http://localhost:8081/api/gifthub/product`,{...productInfo,imgList:newImgs})
+    const response = axios.put(`https://i8e208.p.ssafy.io/api/gifthub/product`,{...productInfo,imgList:newImgs})
     .then(
       (response) => {
         console.log(response);
