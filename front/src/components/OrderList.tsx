@@ -79,7 +79,7 @@ const OrderCardActive = (props: { searchResults: orders[] }) => {
                 <p className="p-finished-date">
                   {order.gift.finishDate} 기프트 종료&nbsp;
                 </p>
-                <p className="p-wish-name">({order.gift.giftname})</p>
+                <p className="p-wish-name">({order.wishName})</p>
               </div>
               <div className="wrap-detail-div">
                 <div className="detail-left-div">
