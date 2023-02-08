@@ -5,12 +5,19 @@ import com.tify.back.dto.admin.OrderStateDto;
 import com.tify.back.exception.OrderAlreadyExistException;
 import com.tify.back.model.gifthub.Gift;
 import com.tify.back.model.gifthub.Order;
+import com.tify.back.model.pay.Pay;
+import com.tify.back.model.users.User;
+import com.tify.back.model.wish.Wish;
 import com.tify.back.repository.gifthub.OrderRepository;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static net.minidev.json.JSONValue.isValidJson;
@@ -85,6 +92,37 @@ public class OrderService {
         Order order = orderRepository.getReferenceById(dto.getOrderId());
         order.setDeliveryNumber(dto.getDeliveryNumber());
         order.setState(dto.getState());
+        return order;
+    }
+
+    /**
+     * 주문하기
+     */
+    public Order addNewOrder(Gift gift, User user) {
+        Wish wish = gift.getWish();
+        System.out.println("해당 gift의 wish:"+wish);
+
+        String year = Integer.toString(LocalDateTime.now().getYear());
+        String month = Integer.toString(LocalDateTime.now().getMonthValue());
+        String day = Integer.toString(LocalDateTime.now().getDayOfMonth());
+
+        //주문 생성
+        Order order = orderRepository.save(
+                Order.builder()
+                        .giftName(gift.getGiftname())
+                        .wishId(wish.getId())
+                        .wishName(wish.getTitle())
+                        .orderPrice(gift.getMaxAmount())
+                        .tel(user.getTel())
+                        .gatheredPrice(gift.getGathered())
+                        .user(user)
+                        .gift(gift)
+                        .deliveryNumber(null)
+                        .createdTime(LocalDateTime.now())
+                        .createdDt(year+"."+month+"."+day)
+                        .state(0)
+                        .build()
+        );
         return order;
     }
 }

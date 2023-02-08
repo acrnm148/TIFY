@@ -1,16 +1,21 @@
 package com.tify.back.dto.gifthub;
 
 import com.tify.back.model.gifthub.Gift;
+import com.tify.back.model.gifthub.GiftOption;
+import com.tify.back.model.pay.Pay;
 import com.tify.back.repository.gifthub.ProductRepository;
 import com.tify.back.repository.wish.WishRepository;
 
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
+
 public class GiftDto {
-
-
+    private Long id;
     private String giftImgUrl;
     private String giftUrl;
     private Long productId;
-    private String giftName;
+    private String giftname;
     private int quantity;
     private String userOption;
     private String type;
@@ -20,6 +25,24 @@ public class GiftDto {
     private int gathered;
     private String successYN;
     private Integer idx;
+    private List<Pay> payList;
+    private List<GiftOption> giftOptionList;
+
+    public List<Pay> getPayList() {
+        return payList;
+    }
+
+    public void setPayList(List<Pay> payList) {
+        this.payList = payList;
+    }
+
+    public List<GiftOption> getGiftOptionList() {
+        return giftOptionList;
+    }
+
+    public void setGiftOptionList(List<GiftOption> giftOption) {
+        this.giftOptionList = giftOption;
+    }
 
     public Long getProductId() {
         return productId;
@@ -113,12 +136,12 @@ public class GiftDto {
         return giftUrl;
     }
 
-    public String getGiftName() {
-        return giftName;
+    public String getGiftname() {
+        return giftname;
     }
 
-    public void setGiftName(String giftName) {
-        this.giftName = giftName;
+    public void setGiftname(String giftname) {
+        this.giftname = giftname;
     }
 
     public void setGiftUrl(String giftUrl) {
@@ -130,7 +153,7 @@ public class GiftDto {
         gift.setGiftUrl(this.giftUrl);
         gift.setProductId(this.productId);
         gift.setGiftImgUrl(this.giftImgUrl);
-        gift.setGiftname(this.giftName);
+        gift.setGiftname(this.giftname);
         gift.setQuantity(this.quantity);
         gift.setUserOption(this.userOption);
         gift.setType(this.type);
@@ -140,6 +163,16 @@ public class GiftDto {
         gift.setGathered(this.gathered);
         gift.setSuccessYN(this.successYN);
         gift.setIdx(this.idx);
+        gift.setPayList(this.payList);
+        gift.setGiftOptionList(this.giftOptionList);
         return gift;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

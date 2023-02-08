@@ -32,7 +32,7 @@ public class Gift {
     private Wish wish;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "gift")
+    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private Order order;
 
@@ -53,12 +53,11 @@ public class Gift {
     private int gathered; // 모인 돈
     private String successYN;
     private Integer idx;
-
     private LocalDateTime finishDate;
     private String giftImgUrl;
     private String giftUrl;
     @OneToMany(mappedBy= "gift")
     private List<Pay> payList = new ArrayList<>();
     @OneToMany(mappedBy= "gift")
-    private List<GiftOption> giftOption = new ArrayList<>();
+    private List<GiftOption> giftOptionList = new ArrayList<>();
 }

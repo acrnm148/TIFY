@@ -179,6 +179,9 @@ export function Header() {
           <NavLink to="/admin/wishes" className="nav-cate-item">
             위시관리
           </NavLink>
+          <NavLink to="/admin/gifts" className="nav-cate-item">
+            기프트관리
+          </NavLink>
           <NavLink to="/admin/products" className="nav-cate-item">
             상품관리
           </NavLink>
@@ -187,9 +190,6 @@ export function Header() {
           </NavLink>
           <NavLink to="/admin/faq" className="nav-cate-item">
             FAQ관리
-          </NavLink>
-          <NavLink to="/admin/refund" className="nav-cate-item">
-            환불관리
           </NavLink>
         </div>
       </>

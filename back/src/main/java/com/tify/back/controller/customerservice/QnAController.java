@@ -50,13 +50,24 @@ public class QnAController {
         return qnARepository.pagingAll(pageable);
     }
 
+    @GetMapping(value="/search/{userPk}",produces = "application/json")
+    public Page<QnA> qnaSearch(@RequestParam(value = "page", required = false) Integer page,
+                             @RequestParam(value = "max_result", required = false) Integer max_result,
+                               @PathVariable("userPk") Long userPk) {
+        if (page == null) { page = 0; }
+        if (max_result == null) {max_result = 0; }
+        Pageable pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("createdDate").descending());
+        User user = userRepository.findById(userPk).orElse(null);
+        return qnARepository.findAllByUser(user, pageable);
+    }
+
     @GetMapping(value = "/{id}", produces = "application/json")
     public QnA findById(@PathVariable Long id) {
         return qnaService.findById(id);
     }
 
     @PutMapping(value ="/{qnaId}")
-    public QnA updateFAQ(@PathVariable Long qnaId,QnADto dto) {
+    public QnA updateFAQ(@RequestBody QnADto dto,@PathVariable Long qnaId) {
         QnA existingQnA = qnaService.findById(qnaId);
         existingQnA.setTitle(dto.getTitle());
         existingQnA.setContent(dto.getContent());
@@ -67,14 +78,16 @@ public class QnAController {
         }
 
         List<QnAFile> includes = new ArrayList<>();
-        List<FileUploadDTO> fileList = Arrays.asList(dto.getFiles())
-                .stream()
-                .map(file -> uploadFile(file,existingQnA.getId()))
-                .collect(Collectors.toList());
+        if (dto.getFiles().length > 0) {
+            List<FileUploadDTO> fileList = Arrays.asList(dto.getFiles())
+                    .stream()
+                    .map(file -> uploadFile(file,existingQnA.getId()))
+                    .collect(Collectors.toList());
 
-        includes.addAll(qnaFileRepository.findByQnAId(existingQnA.getId()));
-        existingQnA.setFiles(includes);
-        System.out.println(includes.size());
+            includes.addAll(qnaFileRepository.findByQnAId(existingQnA.getId()));
+            existingQnA.setFiles(includes);
+            System.out.println(includes.size());
+        }
         return qnaService.save(existingQnA);
     }
 

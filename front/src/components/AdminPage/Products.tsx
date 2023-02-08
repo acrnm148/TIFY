@@ -12,8 +12,13 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Justify, Search } from 'react-bootstrap-icons';
 import { NavLink } from 'react-router-dom';
-import {Modal, Form, Collapse, Container, Row, Col} from 'react-bootstrap';
+import {Modal, Form, Collapse, Container, Row, Col, ListGroup} from 'react-bootstrap';
 import { borderRadius } from "@mui/system";
+import { setRefreshToken } from "../../modules/Auth/Cookie";
+
+
+
+
 
 interface product {
   id:number;
@@ -30,7 +35,18 @@ interface pImg {
   url?:string;
   id?:number;
 }
-
+interface Option {
+  id?:number;
+  idx?:number;
+  title:string;
+  details: Array<OptionDetail>;
+}
+interface OptionDetail {
+  id:number;
+  content: string;
+  value: string;
+  idx: number;
+}
 interface productDetail {
   id?:number;
   name?:string;
@@ -40,22 +56,12 @@ interface productDetail {
   price?:string;
   description?:string;
   category?:string;
-  options?:string;
+  options?:Array<Option>;
   likeCount?:string;
 }
 
-interface OptionDetail {
-  content: string;
-  value: string;
-  idx: number;
-}
-
-interface Option {
-  optionDetails: Array<OptionDetail>;
-}
-
 const Products = () => {
-  const [options, setOptions] = useState<Array<Option>>([]); // for Option
+    const [options, setOptions] = useState<Array<Option>>([]); // for Option
     const [imgUrlS3, setImgUrlS3] = useState<string>(''); // img upload
     const [show, setShow] = useState(false); // modal
     const [open, setOpen] = useState(false); // img collapse
@@ -67,27 +73,30 @@ const Products = () => {
     const [newImgs,setNewImgs] = useState<Array<pImg>>([]);
     const [totalPages, setTotalPages] = useState(0);
     const maxResults = 10;
-    const baseUrl = "https://i8e208.p.ssafy.io/api/gifthub";
+    // const baseUrl = "https://i8e208.p.ssafy.io/api/gifthub";
+    const baseUrl = "http://localhost:8081/api/gifthub";
     const [productInfo, setProductInfo] = useState<productDetail|null> (null);// for 상품정보 edit
-    
-    const handleName = async (event:React.ChangeEvent) => {
-        setProductInfo({...productInfo, name:(event.target as HTMLInputElement).value});
-      };
-    const handleQuantity = async (event:React.ChangeEvent) => {
-      setProductInfo({...productInfo, quantity:(event.target as HTMLInputElement).value});
+
+    const [name, setName] = useState<string>('')
+    const [quantity, setQuantity] = useState<string>('')
+    const [price, setPrice] = useState<string>('')
+    const [category, setCategory] = useState<string>('')
+    const [description, setDescription] = useState<string>('')
+    const [openStates, setOpenStates] = useState<{[index: string]: boolean}>({});
+
+    const [refresh, setRefresh] = useState<boolean>(false);
+    useEffect(() => {
+      getData(page)}, [refresh]);
+
+    const toggleCollapse = (index:number) => {
+      setOpenStates({
+        ...openStates,
+        [index]: !openStates[index],
+      });
     };
-    const handlePrice = async (event:React.ChangeEvent) => {
-      setProductInfo({...productInfo, price:(event.target as HTMLInputElement).value});
-    };
-    const handleDescription = async (event:React.ChangeEvent) => {
-      setProductInfo({...productInfo, description:(event.target as HTMLInputElement).value});
-    };
-    const handleCategory = async (event:React.ChangeEvent) => {
-      setProductInfo({...productInfo, category:(event.target as HTMLInputElement).value});
-    };
-    const handleOptions = async (event:React.ChangeEvent) => {
-      setProductInfo({...productInfo, options:(event.target as HTMLInputElement).value});
-    };
+    // const handleOptions = async (event:React.ChangeEvent) => {
+    //   setProductInfo({...productInfo, options:(event.target as HTMLInputElement).value});
+    // };
     // const handleSearch = async (event) => {
     //   if (event.key === 'Enter' || event.type === 'click') {
     //     const response = await axios.get('localhost:8081/api/users/search', {
@@ -138,10 +147,25 @@ const Products = () => {
     const handleEdit = async (id: number) => {
         console.log(id);
         console.log("-----------------");
-        const response = await axios.get(`${baseUrl}/product/${id}`);
-        setProductInfo(response.data);
-        console.log(response.data);
-        return response.data;
+        const response = await axios.get(`${baseUrl}/product/${id}`).then((res) => {
+          let data = res.data;
+          setName(data.name);
+          setCategory(data.category);
+          setQuantity(data.quantity);
+          setPrice(data.price);
+          setDescription(data.description);
+          setOptions(data.options);
+          for (let i=0; i<options.length ; i++){
+            setOpenStates({
+              ...openStates,
+              [i]: false,
+            });
+          }
+          return data
+        });
+        setProductInfo(response);
+        console.log(response);
+        return response;
             // <UserInfoEdit userInfo={selectUser} />
     };
   
@@ -270,7 +294,7 @@ const Products = () => {
     })
     console.log(newImgs)
     setProductInfo({...productInfo,imgList:newImgs})
-    const response = axios.put(`http://localhost:8081/api/gifthub/product`,{...productInfo,imgList:newImgs})
+    const response = axios.put(`https://i8e208.p.ssafy.io/api/gifthub/product`,{...productInfo,imgList:newImgs})
     .then(
       (response) => {
         console.log(response);
@@ -280,6 +304,36 @@ const Products = () => {
     handleClose();
         // <UserInfoEdit userInfo={selectUser} />
   };
+
+  const addOption = () => {
+    setOptions([...options,{    
+      idx:options.length+1,
+      title:"",
+      details: []
+    }])
+  }
+
+  const addOptionDetail = (pos:number) => {
+    options[pos].details.push({
+      idx:options[pos].details.length+1,
+      content:"",
+      value:"",
+    })
+  }
+
+  interface Option {
+    id?:number;
+    idx?:number;
+    title:string;
+    details: Array<OptionDetail>;
+  }
+  interface OptionDetail {
+    id?:number;
+    content: string;
+    value: string;
+    idx: number;
+  }
+
 
     return (
         <div className="m-12">
@@ -363,7 +417,7 @@ const Products = () => {
               </Form.Group><br/>
               <Form.Group controlId="formBasicName">
                 <Form.Label style={formTitleStyle}>Name</Form.Label>
-                <Form.Control type="text" placeholder="Enter Name" value={productInfo?.name} onChange={(e) => handleName(e)}/>
+                <Form.Control type="text" placeholder="Enter Name" value={name} onChange={(e) => setName(e.target.value)}/>
               </Form.Group><br/>
               <Form.Group controlId="formBasicEmail">
                 <div onDrop={onDropRep} onDragOver={onDragOverRep}>
@@ -463,19 +517,19 @@ const Products = () => {
                 </Collapse><br/><br/>
               <Form.Group controlId="formBasicQuantity">
                 <Form.Label style={formTitleStyle}>Quantity</Form.Label>
-                <Form.Control type="text" placeholder="quantity" value={productInfo?.quantity} onChange={(e) => handleQuantity(e)}/>
+                <Form.Control type="text" placeholder="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)}/>
               </Form.Group><br/>
               <Form.Group controlId="formBasicPrice">
                 <Form.Label style={formTitleStyle}>Price</Form.Label>
-                <Form.Control type="text" placeholder="price 000 won" value={productInfo?.price} onChange={(e) => handlePrice(e)}/>
+                <Form.Control type="text" placeholder="price 000 won" value={price} onChange={(e) => setPrice(e.target.value)}/>
               </Form.Group><br/>
               <Form.Group controlId="formBasicDesc">
                 <Form.Label style={formTitleStyle}>description</Form.Label>
-                <Form.Control type="text" placeholder="product description" value={productInfo?.description} onChange={(e) => handleDescription(e)}/>
+                <Form.Control type="text" placeholder="product description" value={description} onChange={(e) => setDescription(e.target.value)}/>
               </Form.Group><br/>
               <Form.Group controlId="formBasicCategory">
                 <Form.Label style={formTitleStyle}>category</Form.Label>
-                <Form.Control type="text" placeholder="category code" value={productInfo?.category} onChange={(e) => handleCategory(e)}/>
+                <Form.Control type="text" placeholder="category code" value={category} onChange={(e) => setCategory(e.target.value)}/>
               </Form.Group><br/>
               <Form.Group controlId="formBasicLC">
                 <Form.Label style={formTitleStyle}>likeCount</Form.Label>
@@ -483,7 +537,33 @@ const Products = () => {
               </Form.Group><br/>
               <Form.Group controlId="formBasicOpts">
                 <Form.Label style={formTitleStyle}>Options</Form.Label>
-                <Form.Control type="text" placeholder="Options json array form" value={productInfo?.options} onChange={(e) => handleOptions(e)}/>
+                <ListGroup>
+                {options.map((val, index) => (
+                  <div key={val.title}>
+                    <h1></h1>
+                    <ListGroup.Item style={{backgroundColor:"lightgrey"}} onClick={(e) => {e.preventDefault(); toggleCollapse(index)}}>옵션명 : {val.title}</ListGroup.Item>
+                    {/* <button style={{border:"1px solid black", borderRadius:"10px", color:"black"}} >옵션명 : {val.title}</button> */}
+                    <h1>{openStates.index}</h1>
+                    <Collapse in={openStates[index]}>
+                      <div style={{visibility: "visible"}}>
+                        {
+                          val.details.map(detail => (
+                            <ListGroup.Item key={detail.id}>
+                              <p>detail - {detail.idx}</p>
+                              <p style={{textOverflow: "ellipsis", overflow: "hidden"}}>content: {detail.content}</p> 
+                              <p>price: {detail.value} 원 </p>
+                            </ListGroup.Item>
+                            // <div key={detail.id}>
+                            //   <h1>detail {detail.content}</h1>
+                            // </div>
+                          ))
+                        }
+                      </div>
+                    </Collapse>
+                  </div>
+                ))}
+                </ListGroup>
+                {/* <Form.Control type="text" placeholder="Options json array form" value={options} onChange={(e) => handleOptions(e)}/> */}
               </Form.Group>
 
               <button className="btn" style={{backgroundColor:"blue", color:"white"}} onClick={(e) => submitEdit(e)}>수정</button>
