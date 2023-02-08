@@ -51,7 +51,7 @@ public class PayService {
                         .celeb_tel(payRequestDto.getCelebTel())
                         .celeb_img_url(payRequestDto.getCelebImgUrl())
                         .createTime(LocalDateTime.now())
-                        .user_id(payRequestDto.getUserId())
+                        .userId(payRequestDto.getUserId())
                         .build()
         );
         gift.setGathered(gift.getGathered()+Integer.parseInt(pay.getAmount())); //모인 펀딩 금액에 추가
