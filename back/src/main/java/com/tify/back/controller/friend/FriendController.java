@@ -14,6 +14,8 @@ import java.util.Map;
 
 import com.tify.back.service.wish.WishService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -70,4 +72,14 @@ public class FriendController {
         return friendAcceptanceDTO.isAccepted() ? friendService.acceptFriend(friendAcceptanceDTO.getFriendId()) : friendService.rejectFriend(friendAcceptanceDTO.getFriendId());
     }
     //친구 수락할때는 friendID는 친구요청의 id, accepted는 true는 수락 false는 거절
+    @DeleteMapping("friend/reqdelete/{friendId}")
+    public void deleteFriendRequest(@PathVariable long friendId) {
+        friendService.deleteFriendRequest(friendId);
+    }
+
+    @DeleteMapping("friend/delete/{friendId}")
+    public void deleteFriend(@PathVariable long friendId) {
+        friendService.deleteFriend(friendId);
+    }
 }
+

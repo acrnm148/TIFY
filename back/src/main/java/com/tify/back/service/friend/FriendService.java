@@ -91,4 +91,22 @@ public class FriendService {
     public List<Friend> getReceivedRequests(long userId) {
         return friendRepository.findByFriendIdAndStatus(userId, FriendStatus.REQUESTED);
     }
+
+    public void deleteFriendRequest(long friendId) {
+        Friend friend = friendRepository.findByIdAndStatus(friendId, FriendStatus.REQUESTED);
+        if (friend != null) {
+            friendRepository.delete(friend);
+        }
+    }
+
+    public void deleteFriend(long friendId) {
+        Friend friend = friendRepository.findByIdAndStatus(friendId, FriendStatus.ACCEPTED);
+        if (friend != null) {
+            friendRepository.delete(friend);
+            Friend mutualFriend = friendRepository.findByUserIdAndFriendIdAndStatus(friend.getFriendId(), friend.getUserId(), FriendStatus.ACCEPTED);
+            if (mutualFriend != null) {
+                friendRepository.delete(mutualFriend);
+            }
+        }
+    }
 }
