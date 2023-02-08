@@ -1,116 +1,118 @@
-import { Dictionary } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { urlencoded } from 'express';
-import { useCallback, useMemo, useRef, useState } from 'react';
-import imageCompression from 'browser-image-compression';
+import { useCallback, useRef, useState } from 'react';
 
 type UploadImage = {
   file: File;
   thumbnail: string;
   type: string;
 };
-const MakeCardComponent = (
-  cardData: Dictionary<string>,
-  setCardData: Dictionary<string>,
-  phone: string,
-  disable: boolean,
-  card: string,
-  cardEng: string,
-) => {
+const MakeCardComponent = (props:{phone: string,payId:string|undefined, userId:number|string|undefined, propFunction:(arg0:boolean)=>void,}) => {
   // 사진 업로드하는 html 버튼에 직접 접근해서 값을 가져오는 inputRef
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const API_HOST = '';
-  const [cardImage, setCardImage] = useState<UploadImage | null>(null);
+  const [title, setTitle] = useState<string>()
+  const [contents, setContents] = useState<string>()
+  const [iphone, setPhone] = useState<string>()
+  const [image, setImage] = useState<string>()
+
   const onUploadImageButtonClick = useCallback(() => {
     // inputRef.current html객체(input) 클릭
     inputRef.current?.click();
   }, []);
 
-  const onUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    let fileUrl = '';
-    if (!e.target.files) {
-      return;
+  const onUploadImage = async (e: any) => {
+    const formData = new FormData();
+    const sizeLimit = 300*10000
+    // 300만 byte 넘으면 경고문구 출력
+    if (e.target.files[0].size > sizeLimit){
+      alert('사진 크기가 3MB를 넘을 수 없습니다.')
+    } else{
+      if (e.target.files[0]) {
+        formData.append('file', e.target.files[0] ); // 파일 상태 업데이트
+      }
+      // imgFile 을 보내서 S3에 저장된 url받기
+      const getImgUrl = async () => {
+        const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
+        await axios
+          .post(API_URL, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          })
+          .then((con) => {
+            console.log('이미지주소불러오기 성공', con.data);
+            setImage(con.data);
+          })
+          .catch((err) => {
+            console.log('이미지주소불러오기 실패', err);
+          });
+      };
+      getImgUrl();
     }
-    const fileList = e.target.files[0];
-
-    let img = new Image();
-    img.src = e.target.value;
-    let width = img.width;
-    let height = img.height;
-    alert(width + height);
-
-    // 이미지 resize 옵션 설정 (최대 width을 100px로 지정)
-    const options = {
-      maxSizeMB: 500,
-      maxWidthOrHeight: 1000,
-    };
-    try {
-      const compressedFile = await imageCompression(fileList, options);
-      // resize된 이미지의 url을 받아 fileUrl에 저장
-      const promise = imageCompression.getDataUrlFromFile(compressedFile);
-      promise.then((result) => {
-        fileUrl = result;
-        console.log(fileList);
-        console.log(fileUrl);
-      });
-    } catch (err) {
-      console.log(err);
-    }
-
-    if (fileList && fileList) {
-      const url = URL.createObjectURL(fileList);
-      setCardImage({
-        file: fileList,
-        thumbnail: url,
-        type: fileList.type.slice(0, 5),
-      });
-    }
+    
   };
-  const showImage = useMemo(() => {
-    if (!cardImage && cardImage == null) {
-      return <p>사진 추가 버튼</p>;
+
+  function setTitleFunc(e: any) {
+    setTitle(e.target.value) ;
+  }
+  function setPhoneFunc(e: any) {
+    setPhone(e.target.value) ;
+  }
+  function setMessageFunc(e: any) {
+    setContents(e.target.value) ;
+  }
+
+  const thkGo = () =>{
+    // form 유효성검사
+    let result;
+    if(!title){
+      result = confirm('제목을 작성하지 않으셨군요')
+      if (!result){
+        return
+      }
     }
-    return (
-      <div
-        style={{
-          position: 'relative',
-          width: '420px',
-          height: '150px',
-          overflow: 'hidden',
-        }}
-      >
-        <img
-          style={{ position: 'absolute', width: '100%' }}
-          src={cardImage.thumbnail}
-          alt={cardImage.type}
-          onClick={onUploadImageButtonClick}
-        />
-      </div>
-    );
-  }, [cardImage]);
+    if(!iphone){
+      setPhone(props.phone)
+    }
+    if(!contents){
+      alert('감사메세지가 비어있습니다.')
+      return
+    }
+    console.log('감사 보내자')
+    const API_URL = 'https://i8e208.p.ssafy.io/api/thkcards'
+    const data = {
+      "title":title,
+      "phoneNumber":iphone,
+      "content":contents,
+      "imagURL":image,
+      "pay":{
+        "pay_id":Number(props.payId),
+        "user_id":Number(props.userId)
+      }
+    }
+    axios.post(API_URL, data
+      ).then((res) =>{
+        console.log('감사메세지 보내기 성공!!!', res)
+        alert("감사카드가 연락처로 문자전송될예정")
+        props.propFunction(true)
+      }).catch((err) => {
+        console.log('감사메세지 보내기 실패', err)
+      })
 
-  function setTitle(e: any) {
-    setCardData = { title: e.target.value };
   }
-  function setPhone(e: any) {
-    setCardData = { phone: e.target.value };
-  }
-  function setMessage(e: any) {
-    setCardData = { contents: e.target.value };
-  }
-
+  const inputChange=useCallback((e:any) =>{
+    const value = e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
+    setPhone(value)
+  }, [])
   return (
     <div className="thanks-card-container">
       <div className="thanks-card">
         <div className="thanks-input">
           <label htmlFor="제목">
-            {card === '축하' ? '보내는 사람' : '제목'}
+            제목
           </label>
           <input
             className="input-small"
             type="text"
             name="제목"
-            onKeyUp={setTitle}
+            onKeyUp={(e)=>setTitleFunc(e)}
           />
         </div>
         <div className="thanks-input">
@@ -119,21 +121,20 @@ const MakeCardComponent = (
             className="input-small"
             type="text"
             name="연락처"
-            onKeyUp={setPhone}
-            placeholder={phone}
-            disabled={disable}
+            onChange={inputChange}
+            value={iphone?iphone:props.phone}
           />
         </div>
         <div className="thanks-input">
-          <label htmlFor="내용">{card}메세지</label>
+          <label htmlFor="내용">감사메세지</label>
           <textarea
             name="내용"
             id=""
-            onKeyUp={setMessage}
+            onKeyUp={(e)=>setMessageFunc(e)}
             placeholder="카드 내용을 입력하세요"
           ></textarea>
         </div>
-        <div className="thanks-input">
+        <div className="thanks-input" style={{"backgroundImage":`url(${image})`}}>
           <label htmlFor="">사진</label>
           <input
             className="img-input"
@@ -147,10 +148,12 @@ const MakeCardComponent = (
             className={`thanks-photo-btn`}
             onClick={onUploadImageButtonClick}
           >
-            {showImage}
           </div>
         </div>
       </div>
+      <div className='thanks-input'>
+            <div className='thanks-form-btn' onClick={()=>thkGo()}>감사보내기</div>
+        </div>
     </div>
   );
 };

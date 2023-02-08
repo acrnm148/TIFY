@@ -21,9 +21,13 @@ const CATEGORY_DATA = [
     {id: 7, name : 'dogcat', ko:'반려동물', src:dogcat},
 
 ]
-const GiftHubCategory = (props:{propFunction: (arg0: number) => void}) =>{
-    const [selectCategory, setSelectCategory] = useState<number>(0)
-    
+const GiftHubCategory = (props:{propFunction: (arg0: number) => void, goCategory:number|null|undefined}) =>{
+    const [selectCategory, setSelectCategory] = useState<number|null|undefined>(props.goCategory)
+    useEffect(()=>{
+        if(!props.goCategory){
+            setSelectCategory(0)
+        }
+    }, [props.goCategory])
     const cateChangeHandler =async (i:number) =>{
         props.propFunction(i)
         // 현재 선택한 카테고리의 색 변경
@@ -49,21 +53,6 @@ const GiftHubCategory = (props:{propFunction: (arg0: number) => void}) =>{
                             >
                             <img src={data.src} alt={data.name} key={i}/>
                         </div>    
-                        <p>{data.ko}</p>
-                    </div>
-                )
-            })}
-        </div>
-    );
-
-    return(
-        <div className="gift-category-icon"  >
-            {CATEGORY_DATA.map((data, i:number) => {
-                return(
-                    <div >
-                        <div  className={`gh-icon ${checkCategory(i) ? 'selectedCategory':''}`} >
-                            <img onClick={()=>cateChangeHandler} src={data.src} alt={data.name} key={data.id}/>
-                        </div>
                         <p>{data.ko}</p>
                     </div>
                 )
