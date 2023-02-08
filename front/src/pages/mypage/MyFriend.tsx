@@ -1,15 +1,10 @@
 // import type { WishProps } from '../interface/interface';
 import { useState } from 'react';
 import '../../css/mypage/myFriend.styles.css';
-import { Component } from 'react';
-// import Carousel from 'react-material-ui-carousel';
-import { Paper, Button } from '@mui/material';
-import Home from '@mui/icons-material/Home';
-
+import profileIcon from '../../assets/iconDefaultProfile.png';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-// import Carousel from '../../modules/Carousel';
 
 export function Friend() {
   let [wishes, setWishes] = useState([
@@ -25,13 +20,26 @@ export function Friend() {
     },
   ]);
   console.log(wishes);
-  // const StyledSlider = styled(Slider)`
-  //   .slick-slide div {
-  //     outline: none; // 슬라이드 클릭시 파란선을 제거하기 위해서 작성
-  //   }
-  // `;
 
-  var items = [
+  return (
+    <div id="base-div">
+      <h1>Friend</h1>
+      {/* <div className="ongoing-wishes">
+        {wishes.map(function (wish) {
+          return <WishCard wish={wish} />;
+        })}
+      </div> */}
+      <div className="carousel-div">
+        <Carousel></Carousel>
+      </div>
+    </div>
+  );
+}
+
+// 캐러셀 부분
+const Carousel = (items: any) => {
+  // 옵션
+  var items: any = [
     {
       img: '',
       name: '강기한1',
@@ -57,22 +65,6 @@ export function Friend() {
       title: 'Probably the most random thing you have ever seen!',
     },
   ];
-
-  return (
-    <div id="base-div">
-      <h1>Friend</h1>
-      {/* <div className="ongoing-wishes">
-        {wishes.map(function (wish) {
-          return <WishCard wish={wish} />;
-        })}
-      </div> */}
-      <Carousel items={items}></Carousel>
-    </div>
-  );
-}
-
-const Carousel = (items: any) => {
-  // 옵션
   var settings = {
     dots: true,
     infinite: false,
@@ -110,31 +102,34 @@ const Carousel = (items: any) => {
   };
 
   return (
-    <div>
+    <div className="ongoing-wishes">
       <h2> Responsive </h2>
       <Slider {...settings}>
-        <div>
+        {items.map((item: any) => {
+          return <WishCard item={item}></WishCard>;
+        })}
+        <div className="ongoing-wish">
           <h3>1</h3>
         </div>
-        <div>
+        <div className="ongoing-wish">
           <h3>2</h3>
         </div>
-        <div>
+        <div className="ongoing-wish">
           <h3>3</h3>
         </div>
-        <div>
+        <div className="ongoing-wish">
           <h3>4</h3>
         </div>
-        <div>
+        <div className="ongoing-wish">
           <h3>5</h3>
         </div>
-        <div>
+        <div className="ongoing-wish">
           <h3>6</h3>
         </div>
-        <div>
+        <div className="ongoing-wish">
           <h3>7</h3>
         </div>
-        <div>
+        <div className="ongoing-wish">
           <h3>8</h3>
         </div>
       </Slider>
@@ -142,26 +137,17 @@ const Carousel = (items: any) => {
   );
 };
 
-// function Item(props) {
-//   return (
-//     <Paper>
-//       <div className="ongoing-wishes">
-//         <div className="ongoing-wish">
-//           <div>
-//             <p>{props.item.name}</p>
-//             <p>{props.item.description}</p>
-//           </div>
-//         </div>
-//       </div>
-//     </Paper>
-//   );
-// }
-
-function WishCard({ wish }: any) {
+function WishCard({ item }: any) {
   return (
     <div className="ongoing-wish">
-      <h1>카드</h1>
-      <p>{wish.title}</p>
+      <div className="profile-div">
+        <img src={profileIcon} alt="" className="profile-img" />
+        <div className="name-div">
+          <p>{item.name}</p>
+          <p>{item.nickname}</p>
+        </div>
+      </div>
+      <p>{item.title}</p>
     </div>
   );
 }

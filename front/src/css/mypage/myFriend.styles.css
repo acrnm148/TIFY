@@ -1,18 +1,33 @@
 #base-div {
   width: 1200px;
+  /* width: 70vw; */
   height: 200px;
+  /* background-color: #c1c1c1; */
+}
+#base-div > .carousel-div {
+  /* width: 1100px; */
 }
 
 .ongoing-wishes {
   border: 1px solid black;
-  display: flex;
 }
 
-.ongoing-wishes > .ongoing-wish {
+.ongoing-wishes .ongoing-wish {
   border: 1px solid #c1c1c1;
   border-radius: 10px;
   padding: 20px;
-  width: 240px;
+  /* width: 240px; */
   height: 150px;
-  margin-right: 10px;
+  /* margin-right: 10px; */
+}
+
+.ongoing-wish .profile-img {
+  width: 50px;
+}
+
+.ongoing-wish > .profile-img {
+  display: flex;
+}
+.profile-div > .name-div {
+  width: 100px;
 }
