@@ -4,7 +4,6 @@ import { RootState } from '../store/Auth';
 import axios from "axios";
 import "../css/friendspage.styles.css"
 import '../css/giftHubPage.styles.css';
-import "../css/searchBar.styles.css"
 
 interface User {
   id: number;
@@ -80,6 +79,7 @@ const FriendsPage: React.FC = () => {
       console.log(response.data);
       setRefresh(!refresh); 
     } catch (error) {
+      console.log(error)
     }
   };    
   const handleCancelFriend = async (friendId: number) => {
@@ -114,10 +114,15 @@ const FriendsPage: React.FC = () => {
   <div className="backcolor">
     <div className="items-center justify-center">
       <div className="search-bar-container">
+      <div className="line-3" />
+        <div className="탭-이-름">
+          <p className="text-1">Find Friends</p>
+          <p className="text-2">닉네임을 검색하여 당신의 친구를 찾아보세요.</p>
+        </div>
         <input
-          className="serach-bar"
+          className="search-bar"
           type="text"
-          placeholder="Enter nickname"
+          placeholder="닉네임을 입력해 주세요"
           value={nickname}
           onKeyUp= {(e)=> { if(e.key=="Enter") {handleSubmit()} }}
           onChange={(e) => setNickname(e.target.value)}
@@ -128,7 +133,7 @@ const FriendsPage: React.FC = () => {
   
 <div className="friend-list">
   {users.map(user => (
-    <div className="w-1/5 p-6 mx-6 my-2 cardcolor items-center" key={user.id}>
+    <div className= "w-1/5 p-6 mx-6 my-2 items-center justify-center flex flex-col cardcolor cardsize" key={user.id}>
       <img className="img-4" src={user.profileImg}/>
         <p className="w-96 text-lg text-center">{user.name}</p>
         <p className="w-96 text-center">{user.nickname}</p>
