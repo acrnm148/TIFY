@@ -1,7 +1,6 @@
 // import type { WishProps } from '../interface/interface';
 import { ClassAttributes, HTMLAttributes, useState, useEffect } from 'react';
 import '../../css/mypage/myFriend.styles.css';
-import profileIcon from '../../assets/iconDefaultProfile.png';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -13,6 +12,9 @@ import axios from 'axios';
 // slider
 import ReactSlider from 'react-slider';
 import 'rc-slider/assets/index.css';
+
+// scrollBar
+import { Scrollbar } from 'react-scrollbars-custom';
 
 export function Friend() {
   const userId = useSelector((state: RootState) => state.authToken.userId);
@@ -33,20 +35,20 @@ export function Friend() {
           // console.log(wishFriendObj, 'wishFriendObj입니다.');
           for (let key in wishFriendObj) {
             const value: any = wishFriendObj[key];
-            console.log(value, 'value는 이거야.');
-            console.log(
-              Object.values(value),
-              'wishFriendObj 순회 돌린 결과의 밸류',
-            );
+            // console.log(value, 'value는 이거야.');
+            // console.log(
+            //   Object.values(value),
+            //   'wishFriendObj 순회 돌린 결과의 밸류',
+            // );
             const friendWishes = Object.values(value);
-            console.log(typeof friendWishes);
+            // console.log(typeof friendWishes);
             for (let key in value) {
               const friendWishes = value[key];
               for (let key in friendWishes) {
                 const friendWish = friendWishes[key];
-                console.log(friendWish);
+                // console.log(friendWish);
                 if (friendWish.finishYN !== 'Y') {
-                  console.log(friendWish, '안 끝난 frinedWish');
+                  // console.log(friendWish, '안 끝난 frinedWish');
                   const data = {
                     wishId: friendWish.id,
                     totPrice: friendWish.totPrice,
@@ -58,24 +60,24 @@ export function Friend() {
                     nickName: friendWish.user.nickname,
                     userImg: friendWish.user.profileImg,
                   };
-                  console.log(data, 'data는 요것!!!!!!!!!!!!!!!!!');
+                  // console.log(data, 'data는 요것!!!!!!!!!!!!!!!!!');
                   result.push(data);
                 }
               }
             }
           }
         }
-        console.log(result, 'result는 이것입니다~~~');
+        // console.log(result, 'result는 이것입니다~~~');
         const sortedResult: any = result.sort(function (a, b) {
           if (a.endDate < b.endDate) {
             return -1;
-          } else if (a.grade > b.grade) {
+          } else if (a.endDate > b.endDate) {
             return 1;
           } else {
             return 0;
           }
         });
-        console.log(sortedResult);
+        // console.log(sortedResult);
         setFriendWishList(sortedResult);
       })
       .catch((err) => {
@@ -85,7 +87,6 @@ export function Friend() {
 
   return (
     <div id="base-div">
-      <h1>Friend</h1>
       {/* <div className="ongoing-wishes">
         {wishes.map(function (wish) {
           return <WishCard wish={wish} />;
@@ -94,15 +95,98 @@ export function Friend() {
       <div className="carousel-div">
         {/* <Carousel></Carousel> */}
         <Carousel friendWishList={friendWishList}></Carousel>
+        <FriendsList></FriendsList>
       </div>
     </div>
   );
 }
 
+const FriendsList = () => {
+  const userId = useSelector((state: RootState) => state.authToken.userId);
+  const [friendList, setFriendList] = useState<Array<any>>();
+  const [requestsList, setRequestsList] = useState<Array<any>>();
+
+  useEffect(() => {
+    const API_URL = `https://i8e208.p.ssafy.io/api/friendsinfo/${userId}`;
+    axios
+      .get(API_URL)
+      .then((res) => {
+        const friendsResult: any[] = [];
+        const requetsResult: any[] = [];
+        console.log('친구 목록 받아오기 성공!');
+        // console.log(res.data);
+
+        // 친구인 놈들 데이터 받아옴
+        if (res.data.friends.length > 0) {
+          // console.log(res.data.friends);
+          // console.log(typeof res.data.friends);
+          const friendsList = Object.values(res.data.friends);
+
+          for (let key in friendsList) {
+            const value: any = friendsList[key];
+            // console.log(value);
+            const data = {
+              profileImg: value.user.profileImg,
+              nickname: value.user.nickname,
+              username: value.user.username,
+              id: value.id,
+            };
+            // console.log(data);
+            friendsResult.push(data);
+          }
+        }
+        const sortedFriendsResult: any = friendsResult.sort(function (a, b) {
+          return b.id - a.id;
+        });
+        setFriendList(sortedFriendsResult);
+
+        // 친구 요청 받은 목록을 받아옴.
+        if (res.data.receivedRequests.length > 0) {
+          // console.log(res.data.receivedRequests);
+          // console.log(typeof res.data.receivedRequests);
+          const requestsList = Object.values(res.data.receivedRequests);
+
+          for (let key in requestsList) {
+            const value: any = requestsList[key];
+            // console.log(value);
+            const data = {
+              profileImg: value.user.profileImg,
+              nickname: value.user.nickname,
+              username: value.user.username,
+              friendId: value.friendId,
+              // 순서 조정을 위한
+              id: value.id,
+            };
+            // console.log(data);
+            requetsResult.push(data);
+          }
+        }
+        const sortedRequestsResult: any = requetsResult.sort(function (a, b) {
+          return b.id - a.id;
+        });
+        setRequestsList(sortedRequestsResult);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  return (
+    <div className="friends-div">
+      친구 목록들
+      <div className="test-div">안녕</div>
+      <div className="test-div">안녕</div>
+      <div className="test-div">안녕</div>
+      <div className="test-div">안녕</div>
+      <div className="test-div">안녕</div>
+      <div className="test-div">안녕</div>
+    </div>
+  );
+};
+
 // 캐러셀 부분
 const Carousel = ({ friendWishList }: any) => {
   // 옵션
-  console.log(friendWishList);
+  // console.log(friendWishList);
   var settings = {
     dots: true,
     infinite: false,
@@ -178,8 +262,9 @@ const Carousel = ({ friendWishList }: any) => {
   );
 };
 
+// 진행 중인 위시 부분
 function WishCard({ friendWish }: any) {
-  console.log(friendWish);
+  // console.log(friendWish);
   return (
     <div className="ongoing-wish">
       <div className="wish-profile-div">
