@@ -18,16 +18,16 @@ import { RootState } from '../store/Auth';
 interface orders {
   state: number;
   wishFinishDate: string;
-  giftImgUrl:string;
-  wishName:string;
-  giftName:string;
-  orderPrice:number;
-  gatheredPrice:number;
+  giftImgUrl: string;
+  wishName: string;
+  giftName: string;
+  orderPrice: number;
+  gatheredPrice: number;
 }
 
 const OrderInfo = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState<orders[]>(null);
+  const [orders, setOrders] = useState<orders[]>(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const maxResults = 10;
@@ -43,7 +43,7 @@ const OrderInfo = () => {
       headers: { Authorization: `Bearer ${accessToken}` },
     })
       .then((response) => {
-        setSearchResults([...response.data]);
+        setOrders([...response.data]);
         // setTotalPages(response.data.totalPages);
         console.log(response.data);
         return response.data;
@@ -52,14 +52,14 @@ const OrderInfo = () => {
         console.error(error);
       });
   };
-  if (searchResults === null) {
+  if (orders === null) {
     getData(0);
   }
   return (
     <div className="order-div">
-      {searchResults && (
+      {orders && (
         <>
-          <OrderCardActive searchResults={searchResults}></OrderCardActive>
+          <OrderCardActive orders={orders}></OrderCardActive>
           {/* <OrderCardActive searchResults={searchResults}></OrderCardActive> */}
           {/* <OrderCardActive searchResults={searchResults}></OrderCardActive> */}
           {/* <OrderCardActive searchResults={searchResults}></OrderCardActive> */}
@@ -69,13 +69,14 @@ const OrderInfo = () => {
   );
 };
 
-const OrderCardActive = (props: { searchResults: orders[] }) => {
+const OrderCardActive = (props: { orders: orders[] }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
 
+  /*
   function getOrderState(state) {
     switch (state) {
       case 0:
@@ -92,11 +93,12 @@ const OrderCardActive = (props: { searchResults: orders[] }) => {
         return <p className="p-order-state">상태없음</p>;
     }
   }
+  */
 
   return (
     // jsx요소로 쓸 때 리턴값이 <div></div> 나 <></> 하나로 묶여있어야함
     <div className="order-div">
-      {props.searchResults.map((order: orders, idx: any) => (
+      {props.orders.map((order: orders, idx: any) => (
         <div className="order-box shadow-xl">
           <div className="order-box-top">
             <p className="p-order-state">
