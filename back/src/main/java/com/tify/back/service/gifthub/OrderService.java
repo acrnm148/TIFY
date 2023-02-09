@@ -106,9 +106,14 @@ public class OrderService {
         String month = Integer.toString(LocalDateTime.now().getMonthValue());
         String day = Integer.toString(LocalDateTime.now().getDayOfMonth());
 
+        String wishYear = Integer.toString(wish.getEndDate().getYear());
+        String wishMonth = Integer.toString(wish.getEndDate().getMonth());
+        String wishDay = Integer.toString(wish.getEndDate().getDay());
+
         //주문 생성
         Order order = orderRepository.save(
                 Order.builder()
+                        .giftImgUrl(gift.getGiftImgUrl())
                         .giftName(gift.getGiftname())
                         .wishId(wish.getId())
                         .wishName(wish.getTitle())
@@ -117,6 +122,7 @@ public class OrderService {
                         .gatheredPrice(gift.getGathered())
                         .user(user)
                         .gift(gift)
+                        .wishFinishDate(wishYear+"."+wishMonth+"."+wishDay )
                         .deliveryNumber(null)
                         .createdTime(LocalDateTime.now())
                         .createdDt(year+"."+month+"."+day)

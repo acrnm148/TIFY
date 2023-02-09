@@ -3,20 +3,20 @@ package com.tify.back.controller.friend;
 import com.tify.back.dto.friend.FriendAcceptanceDTO;
 import com.tify.back.dto.friend.FriendDTO;
 import com.tify.back.model.friend.Friend;
+import com.tify.back.model.friend.FriendList;
 import com.tify.back.model.friend.FriendStatus;
+import com.tify.back.model.users.User;
 import com.tify.back.model.wish.Wish;
+import com.tify.back.repository.users.UserRepository;
 import com.tify.back.service.friend.FriendService;
+import com.tify.back.service.wish.WishService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.tify.back.service.wish.WishService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -26,6 +26,8 @@ public class FriendController {
     private WishService wishService;
     @Autowired
     private FriendService friendService;
+    @Autowired
+    private UserRepository userRepository;
     @GetMapping("/wishfriend/{userId}")
     public List<Map<Long,Object>> wishes(@PathVariable long userId) {
         List<Friend> friends = friendService.getFriends(userId);
@@ -39,6 +41,34 @@ public class FriendController {
         return data;
 
     }
+
+    @GetMapping("/friendsinfo/{userId}")
+    public FriendList getFriend(@PathVariable long userId) {
+
+        List<Friend> friends = friendService.getFriends(userId);
+        List<Friend> pendingRequests = friendService.getPendingRequests(userId);
+        List<Friend> receivedRequests = friendService.getReceivedRequests(userId);
+        for (Friend friend : friends) {
+            friend.setStatus(FriendStatus.ACCEPTED);
+            friend.setUser(userRepository.findById(friend.getFriendId()));
+        }
+        for (Friend pendingRequest : pendingRequests) {
+            pendingRequest.setStatus(FriendStatus.REQUESTED);
+            pendingRequest.setUser(userRepository.findById(pendingRequest.getFriendId()));
+        }
+        for (Friend receivedRequest : receivedRequests) {
+            receivedRequest.setStatus(FriendStatus.RECEIVED);
+            receivedRequest.setUser(userRepository.findById(receivedRequest.getFriendId()));
+        }
+
+        FriendList friendsList = new FriendList();
+        friendsList.setFriends(friends);
+        friendsList.setPendingRequests(pendingRequests);
+        friendsList.setReceivedRequests(receivedRequests);
+
+        return friendsList;
+    }
+
     @GetMapping("/friends/{userId}")
     public List<Friend> getFriends(@PathVariable long userId) {
         List<Friend> friends = friendService.getFriends(userId);
@@ -57,6 +87,7 @@ public class FriendController {
         friends.addAll(receivedRequests);
         return friends;
     }
+
     @GetMapping("/friends/{userId1}/{userId2}")
     public FriendStatus getFriendshipStatus(@PathVariable long userId1, @PathVariable long userId2) {
         return friendService.getFriendshipStatus(userId1, userId2);
@@ -82,4 +113,3 @@ public class FriendController {
         friendService.deleteFriend(friendId);
     }
 }
-

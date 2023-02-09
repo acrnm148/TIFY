@@ -19,11 +19,13 @@ import com.tify.back.dto.users.request.*;
 import com.tify.back.dto.users.response.DataResponseDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
+import com.tify.back.dto.wish.JoinedWishDto;
 import com.tify.back.exception.UserLoginException;
 import com.tify.back.model.gifthub.Order;
 import com.tify.back.model.pay.Pay;
 import com.tify.back.model.users.EmailAuth;
 import com.tify.back.model.users.UserProperties;
+import com.tify.back.model.wish.Wish;
 import com.tify.back.repository.gifthub.OrderRepository;
 import com.tify.back.repository.pay.PayRepository;
 import com.tify.back.repository.users.EmailAuthRepository;
@@ -39,6 +41,7 @@ import com.tify.back.oauth.service.GoogleService;
 import com.tify.back.oauth.service.KakaoService;
 import com.tify.back.oauth.service.NaverService;
 import com.tify.back.repository.users.UserRepository;
+import com.tify.back.service.wish.WishService;
 import com.tify.back.upload.FileSizeException;
 import com.tify.back.upload.S3Services;
 import io.swagger.v3.oas.annotations.Operation;
@@ -74,6 +77,7 @@ public class UserApiController {
     private final PayRepository payRepository;
     private final JwtService jwtService;
     private final UserService userService;
+    private final WishService wishService;
     private final EmailService emailService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final KakaoService kakaoService;
@@ -427,4 +431,20 @@ public class UserApiController {
 
         return ResponseEntity.ok().body(payList);
     }
+
+    /**
+     * 토큰으로 내가 참여한 위시 목록 가져오기
+     */
+    @GetMapping("/account/getPartcpWish")
+    public ResponseEntity<?> getParticipatedWish(@RequestHeader("Authorization") String token) {
+        token = token.substring(7);
+        User user = userRepository.findById(userService.getUser(token).getId()).get();
+        System.out.println("userId: "+user.getId());
+
+        List<JoinedWishDto> wishList = wishService.getParticipatedWish(user.getId());
+        System.out.println(user.getUsername()+"님이 참여한 위시목록:"+wishList);
+
+        return ResponseEntity.ok().body(wishList);
+    }
+
 }

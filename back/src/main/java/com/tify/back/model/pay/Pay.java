@@ -29,11 +29,14 @@ public class Pay {
     @Column(name ="pay_id")
     private Long pay_id;
 
+    private String profImgUrl;
     private String amount;
     private String celeb_img_url;
     private String celeb_from;
     private String celeb_tel;
     private String celeb_content;
+    private Long userId;
+    private LocalDateTime createTime;
 
     @Column(length = 3000)
     private String pay_type;
@@ -42,8 +45,6 @@ public class Pay {
     @ManyToOne(fetch=LAZY)
     @JoinColumn(name="id") //변수명에 맞춰야함
     private Gift gift;
-    private Long userId;
-    private LocalDateTime createTime;
     @OneToOne(mappedBy= "pay")
     @JsonIgnore
     private Thkcard thkcardList;

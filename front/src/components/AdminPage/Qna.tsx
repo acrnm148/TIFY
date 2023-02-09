@@ -80,13 +80,13 @@ const Qna = () => {
     // const [newImgs,setNewImgs] = useState<Array<pImg>>([]);
     const [totalPages, setTotalPages] = useState(0);
     const maxResults = 10;
-    const baseUrl = "https://i8e208.p.ssafy.io/api/qna";
-    // const baseUrl = "http://localhost:8081/api/qna";
+    // const baseUrl = "https://i8e208.p.ssafy.io/api/qna";
+    const baseUrl = "http://localhost:8081/api/qna";
     const [qnaInfo, setQnaInfo] = useState<QnaForm|null> (null);// for 상품정보 edit
 
     const handleSearch = async (event:any) => {
       if (event.key === 'Enter' || event.type === 'click') {
-        const response = await axios.get(`https://i8e208.p.ssafy.io/api/qna/search/${user?.id}`);
+        const response = await axios.get(`localhost:8081/api/qna/search/${user?.id}`);
         setSearchResults(response.data.content);
       }
     };
@@ -226,7 +226,7 @@ const Qna = () => {
       await getImgUrl_one();
     }
     let arr = [];
-    const response = await axios.post(`https://i8e208.p.ssafy.io/api/api/answer/${id}`,{ content:acontent,imgUrl:aurl,userPk:user?.id  })
+    const response = await axios.post(`http://localhost:8081/api/answer/${id}`,{ content:acontent,imgUrl:aurl,userPk:user?.id  })
     .then(
       (response) => {
         console.log(response);

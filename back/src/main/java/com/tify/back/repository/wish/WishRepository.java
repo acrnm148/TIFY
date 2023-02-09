@@ -16,4 +16,5 @@ public interface WishRepository extends JpaRepository<Wish, Long> {
     @Query("SELECT w FROM Wish w ORDER BY w.createDate DESC")
     Page<Wish> findAllWishes(Pageable pageable);
     List<Wish> findByUserId(long userId);
+    List<Wish> findAllByGiftItems(Long giftItem);
 }

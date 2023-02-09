@@ -126,7 +126,7 @@ const Users = () => {
 
     const handlePageChange = async (newPage:number) => {
       setPage(newPage);
-      const response = await axios.get('https://i8e208.p.ssafy.io/api/users/', {
+      const response = await axios.get('localhost:8081/api/users/', {
         params: {
           page: newPage,
           max_results: maxResults,

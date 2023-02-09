@@ -13,14 +13,12 @@ interface User {
   nickname: string;
   email: string;
   state: string;
-  friendshipId: number;
 }
 
 const FriendsPage: React.FC = () => {
   const [nickname, setNickname] = useState('');
   const [users, setUsers] = useState<Array<User>>([]);
   const [selectedUserId, setSelectedUserId] = useState<number>(0);
-  const [refresh, setRefresh] = useState<boolean>(false);
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
