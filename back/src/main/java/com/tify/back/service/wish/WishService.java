@@ -134,8 +134,9 @@ public class WishService {
                         .celebContent(payItem.getCeleb_content())
                         .build();
                 String year = String.valueOf(payItem.getCreateTime().getYear());
-                String month = String.valueOf(payItem.getCreateTime().getMonth());
+                String month = String.valueOf(payItem.getCreateTime().getMonthValue());
                 String day = String.valueOf(payItem.getCreateTime().getDayOfMonth());
+                System.out.println( year+"."+month+"."+day );
                 MyCelebDto myCelebDto = MyCelebDto.builder()
                         .giftId(gift.getId())
                         .giftImgUrl(gift.getGiftImgUrl())
