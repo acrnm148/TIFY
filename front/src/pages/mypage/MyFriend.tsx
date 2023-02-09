@@ -6,7 +6,53 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/Auth';
+import axios from 'axios';
+
 export function Friend() {
+  const userId = useSelector((state: RootState) => state.authToken.userId);
+  const [friendWish, setFriendWish] = useState<Array<string>>();
+
+  const API_URL = `https://i8e208.p.ssafy.io/api/wishfriend/${userId}`;
+  // const API_URL = `https://i8e208.p.ssafy.io/api/friendsinfo/119`;
+  const result = [];
+  axios
+    .get(API_URL)
+    .then((res) => {
+      // console.log(res.data, '내가 바로 친구놈들의 wish 입니다!!!!');
+      // console.log(typeof res.data, '내가 바로 친구놈들의 wish type 입니다!!!!');
+      if (res.data.length > 0) {
+        const wishFriendObj = Object.values(res.data);
+        // console.log(wishFriendObj, 'wishFriendObj입니다.');
+        for (let key in wishFriendObj) {
+          const value = wishFriendObj[key];
+          console.log(value, 'value는 이거야.');
+          console.log(
+            Object.values(value),
+            'wishFriendObj 순회 돌린 결과의 밸류',
+          );
+          const friendWishes = Object.values(value);
+          console.log(typeof friendWishes);
+          for (let key in value) {
+            const friendWishes = value[key];
+            for (let key in friendWishes) {
+              const friendWish = friendWishes[key];
+              console.log(friendWish);
+              if (friendWish.finishYN !== 'Y') {
+                const temp: { any } = {};
+                console.log(friendWish, '안 끝난 frinedWish');
+                temp.wishId = friendWish.id;
+              }
+            }
+          }
+        }
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
   let [wishes, setWishes] = useState([
     {
       title: '왈라비 주머니의 고영일 생일 위시',
