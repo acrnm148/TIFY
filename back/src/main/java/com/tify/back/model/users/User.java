@@ -47,7 +47,7 @@ public class User {
     private Boolean emailAuth; //이메일인증 - 인증링크 클릭 시, 권한 상태 업데이트
 
     private LocalDateTime createTime;
-
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "refreshToken_id")
     private RefreshToken jwtRefreshToken;
@@ -85,5 +85,7 @@ public class User {
     }
 
     public void emailVerifiedSuccess() {this.emailAuth = true;}
+
+
 
 }

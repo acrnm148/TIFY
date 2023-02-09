@@ -14,6 +14,7 @@ import static org.hibernate.query.criteria.internal.ValueHandlerFactory.isNumeri
 @Getter
 @Setter
 public class ProductDto {
+    private long id;
     private String name;
     private String repImg;
     private int quantity;
@@ -24,8 +25,6 @@ public class ProductDto {
     private int likeCount;
     private List<ImgDto> imgList;
     private List<ProductOptionDto> options;
-    private long id;
-
     private List<String> categories = Arrays.asList("뷰티", "전자제품", "키친", "의류", "음식", "출산유아", "홈인테리어", "반려동물용품");
     public Product toEntity() {
         Product product = new Product();
@@ -34,8 +33,6 @@ public class ProductDto {
         product.setQuantity(this.quantity);
         String herePrice = this.price.replaceAll(",", "");
         herePrice = herePrice.replace("원","");
-        System.out.println(herePrice);
-        System.out.println("sssssssssssssssssssssss");
         try {
             product.setPrice(Integer.parseInt(herePrice));
         } catch (NumberFormatException e) {
@@ -54,10 +51,6 @@ public class ProductDto {
             product.setCategory(this.categoryId);
         }
         product.setLikeCount(this.likeCount);
-
-        if (this.id!= 0) {
-            product.setId(this.id);
-        }
         return product;
     }
 }
