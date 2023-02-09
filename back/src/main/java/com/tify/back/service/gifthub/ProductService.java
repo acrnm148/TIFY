@@ -95,7 +95,8 @@ public class ProductService {
         Product product = dto.toEntity();
         productRepository.save(product);
         System.out.println("----------------------------------------------------------------");
-        List<Img> imgList = product.getImgList();
+        System.out.println(dto.getImgList());
+        List<Img> imgList = new ArrayList<>();
         for (ImgDto imgDto : dto.getImgList()) {
             Img img = imgDto.toEntity();
             img.setProduct(product);
@@ -147,6 +148,7 @@ public class ProductService {
             imgList.add(img);
         }
         System.out.println("----------------------------------------------------------------");
+        System.out.println(dto.getImgList());
         System.out.println(dto.getOptions());
         for (ProductOption option : product.getOptions()) {
             productOptionRepository.deleteById(option.getId());
