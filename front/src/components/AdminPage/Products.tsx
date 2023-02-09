@@ -87,8 +87,8 @@ const Products = () => {
   const [newImgs, setNewImgs] = useState<Array<pImg>>([]);
   const [totalPages, setTotalPages] = useState(0);
   const maxResults = 10;
-  const baseUrl = "https://i8e208.p.ssafy.io/api/gifthub";
-  // const baseUrl = 'http://localhost:8081/api/gifthub';
+  // const baseUrl = "https://i8e208.p.ssafy.io/api/gifthub";
+  const baseUrl = 'http://localhost:8081/api/gifthub';
   const [productInfo, setProductInfo] = useState<productDetail | null>(null); // for 상품정보 edit
 
   const [name, setName] = useState<string>('');
@@ -542,7 +542,7 @@ const Products = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
+          {/* <tr>
             <th scope="row">0</th>
             <th scope="col">ID</th>
             <th scope="col">Name</th>
@@ -558,7 +558,6 @@ const Products = () => {
               >
                 수정
               </button>
-              {/* <button className="btn" style={{backgroundColor:"blue", color:"white"}} onClick={() => setIsModalOpen(true)}>수정</button> */}
               <button
                 className="btn"
                 style={{ backgroundColor: 'gray', color: 'black' }}
@@ -566,7 +565,7 @@ const Products = () => {
                 삭제
               </button>
             </td>
-          </tr>
+          </tr> */}
           {searchResults?.map((item: product, idx: any) => (
             <tr key={idx + 1}>
               <td>{idx + 1}</td>
@@ -657,7 +656,7 @@ const Products = () => {
                     <p>기존 대표 이미지</p>
                     <img
                       style={{ width: '100px', height: '100px' }}
-                      src={productInfo?.repImg}
+                      src={productInfo?.repImg || "https://t3.ftcdn.net/jpg/04/34/72/82/240_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg"}
                       alt="addImg"
                       height={100}
                     />
