@@ -45,8 +45,8 @@ const Gifts = () => {
     const [userEmail, setUserEmail] = useState<string>('')
 
     const maxResults = 10;
-    // const baseUrl = "https://i8e208.p.ssafy.io/api/admin";
-    const baseUrl = "http://localhost:8081/api/gift";
+    const baseUrl = "https://i8e208.p.ssafy.io/api/gift";
+    // const baseUrl = "http://localhost:8081/api/gift";
     const getData = async (page: number) => {
       try {
         const response = await axios.get(`${baseUrl}`, {
