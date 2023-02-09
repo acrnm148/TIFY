@@ -19,6 +19,7 @@ import com.tify.back.dto.users.request.*;
 import com.tify.back.dto.users.response.DataResponseDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
+import com.tify.back.dto.wish.JoinedWishDto;
 import com.tify.back.exception.UserLoginException;
 import com.tify.back.model.gifthub.Order;
 import com.tify.back.model.pay.Pay;
@@ -438,10 +439,12 @@ public class UserApiController {
     public ResponseEntity<?> getParticipatedWish(@RequestHeader("Authorization") String token) {
         token = token.substring(7);
         User user = userRepository.findById(userService.getUser(token).getId()).get();
+        System.out.println("userId: "+user.getId());
 
-        List<Wish> wishList = wishService.getParticipatedWish(user.getId());
+        List<JoinedWishDto> wishList = wishService.getParticipatedWish(user.getId());
         System.out.println(user.getUsername()+"님이 참여한 위시목록:"+wishList);
 
         return ResponseEntity.ok().body(wishList);
     }
+
 }

@@ -10,8 +10,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class JoinedWishService {
-    private final JoinedWishRepository joinedWishRepository;
+    //private final JoinedWishRepository joinedWishRepository;
 
+    /*
     public boolean saveJoinedWish(JoinedWishDto dto) {
         JoinedWish joinedWishEntity = new JoinedWish();
         joinedWishEntity.setUserId(dto.getUserId());
@@ -26,4 +27,5 @@ public class JoinedWishService {
             return false;
         }
     }
+     */
 }

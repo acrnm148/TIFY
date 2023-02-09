@@ -2,12 +2,20 @@ package com.tify.back.service.wish;
 
 import com.tify.back.dto.gifthub.GiftDto;
 import com.tify.back.dto.wish.AddWishDto;
+import com.tify.back.dto.wish.CelebCardDto;
+import com.tify.back.dto.wish.JoinedWishDto;
+import com.tify.back.dto.wish.MyCelebDto;
 import com.tify.back.model.friend.Friend;
 import com.tify.back.model.friend.FriendStatus;
 import com.tify.back.model.gifthub.Gift;
+import com.tify.back.model.pay.Pay;
+import com.tify.back.model.wish.JoinedWish;
 import com.tify.back.model.wish.Wish;
 import com.tify.back.repository.gifthub.ProductRepository;
+import com.tify.back.repository.pay.PayCustomRepository;
+import com.tify.back.repository.pay.PayRepository;
 import com.tify.back.repository.users.UserRepository;
+import com.tify.back.repository.wish.JoinedWishRepository;
 import com.tify.back.repository.wish.WishRepository;
 
 import com.tify.back.service.gifthub.GiftService;
@@ -25,6 +33,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WishService {
     private final WishRepository wishRepository;
+    private final PayRepository payRepository;
+    private final PayCustomRepository payCustomRepository;
+    private final JoinedWishRepository joinedWishRepository;
     private final GiftService giftService;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
@@ -83,7 +94,6 @@ public class WishService {
         }
         wishRepository.delete(wish);
         return wish.getUser().getEmail() + "의 wish" + wish.getId() + " 번 위시 " + "successfully deleted";
-
     }
 
     @Scheduled(cron = "0 0 0 * * *") // run every day at midnight
@@ -97,16 +107,64 @@ public class WishService {
         }
     }
 
-    public List<Wish> getParticipatedWish(Long userId) {
-//        if (wishRepository.findById(wishId).isPresent()) {
-//            return wishRepository.findById(wishId).get();
-//        } else {
-//            return null;
-//        }
+    /**
+     * 내가 참여한 위시 리스트
+     */
+    public List<JoinedWishDto> getParticipatedWish(Long userId) {
+        List<JoinedWish> joinedWishList = joinedWishRepository.findAllByUserIdOrderByWishId(userId);
+        List<JoinedWishDto> list = new ArrayList<> ();
+        Long lastWishId = -1L;
 
+        for (JoinedWish item : joinedWishList) {
+            if (lastWishId == item.getWishId()) continue;
+            lastWishId = item.getWishId();
 
+            Pay pay = payRepository.findById(item.getPayId()).get();
+            Gift gift = pay.getGift();
+            Wish wish = wishRepository.findById(item.getWishId()).get();
+            List<CelebCardDto> celebCardDtoList = new ArrayList<> ();
+            List<MyCelebDto> myCelebDtoList = new ArrayList<> ();
 
-        return null;
+            List<Pay> payListByGiftIdAndUserId = payCustomRepository.findMyPayListByGiftId(gift, userId);
+            for (Pay payItem : payListByGiftIdAndUserId) {
+                CelebCardDto celebCardDto = CelebCardDto.builder()
+                        .payId(payItem.getPay_id())
+                        .celebFrom(payItem.getCeleb_from())
+                        .celebContent(payItem.getCeleb_content())
+                        .celebContent(payItem.getCeleb_content())
+                        .build();
+                String year = String.valueOf(payItem.getCreateTime().getYear());
+                String month = String.valueOf(payItem.getCreateTime().getMonth());
+                String day = String.valueOf(payItem.getCreateTime().getDayOfMonth());
+                MyCelebDto myCelebDto = MyCelebDto.builder()
+                        .giftId(gift.getId())
+                        .giftImgUrl(gift.getGiftImgUrl())
+                        .giftName(gift.getGiftname())
+                        .amount(payItem.getAmount())
+                        .payedDate( year+"."+month+"."+day )
+                        .build();
+
+                celebCardDtoList.add(celebCardDto);
+                myCelebDtoList.add(myCelebDto);
+            }
+
+            JoinedWishDto joinedWishDto = JoinedWishDto.builder()
+                    .joinedWishId(item.getId())
+                    .wishId(item.getWishId())
+                    .userId(item.getUserId())
+                    //.pay(pay)
+                    .wishCategory(wish.getCategory())
+                    .wishName(wish.getTitle())
+                    .wishUser(wish.getUser().getUserid())
+                    .wishUserId(wish.getUser().getId())
+                    .wishFinishYN(wish.getFinishYN())
+                    .wishEndDate(wish.getEndDate())
+                    .celebCardDtoList(celebCardDtoList)
+                    .myCelebDtoList(myCelebDtoList)
+                    .build();
+            list.add(joinedWishDto);
+        }
+        return list;
     }
 }
 
