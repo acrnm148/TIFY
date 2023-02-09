@@ -70,7 +70,7 @@ const FriendsPage: React.FC = () => {
     try {
       const response = await axios.post(`https://i8e208.p.ssafy.io/api/friends/accept`, {
         friendId: friendId ,
-        Accepted: true,
+        accepted: true,
       }, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
