@@ -40,8 +40,8 @@ const Wishes = () => {
       getData(page)}, [refresh]);
 
     const maxResults = 10;
-    // const baseUrl = "https://i8e208.p.ssafy.io/api/admin";
-    const baseUrl = "http://localhost:8081/api/admin";
+    const baseUrl = "https://i8e208.p.ssafy.io/api/admin";
+    // const baseUrl = "http://localhost:8081/api/admin";
     const getData = async (page: number) => {
       try {
         const response = await axios.get(`${baseUrl}/wish`, {

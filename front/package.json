@@ -15,7 +15,7 @@
     "@reduxjs/toolkit": "^1.9.2",
     "@types/kakao-js-sdk": "^1.39.1",
     "@types/react-date-range": "^1.4.4",
-    "axios": "^1.2.3",
+    "axios": "^1.3.2",
     "bootstrap": "^5.2.3",
     "browser-image-compression": "^2.0.0",
     "express": "^4.18.2",
