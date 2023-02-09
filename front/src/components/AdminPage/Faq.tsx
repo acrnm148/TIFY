@@ -26,28 +26,11 @@ export interface FaqForm {
   imgUrl: string;
 }
 
-export interface User {
-	id: number;
-	userid: string;
-	password: string;
-	roles: string;
-	provider?: any;
-	nickname: string;
-	profileImg: string;
-	username: string;
-	birth: string;
-	email: string;
-	tel: string;
-	addr1: string;
-	addr2: string;
-	zipcode: string;
-	birthYear: string;
-	gender: string;
-	emailAuth: boolean;
-	createTime: string;
-	roleList: string[];
+interface pImg {
+  idx?: number;
+  url?: string;
+  id?: number;
 }
-
 
 const Faq = () => {
     const [id, setId] = useState<string>(''); // faq id
@@ -56,6 +39,7 @@ const Faq = () => {
     const [type, setType] = useState<string>(''); // faq type
     const [idx, setIdx] = useState<string>(''); // faq idx
     const [imgUrl, setImgUrl] = useState<string>(''); // faq img
+    const [newImgs, setNewImgs] = useState<Array<pImg>>([]);
 
     const [show, setShow] = useState(false); // modal
     const [open, setOpen] = useState(false); // img collapse
@@ -71,6 +55,8 @@ const Faq = () => {
     const baseUrl = "https://i8e208.p.ssafy.io/api/faq";
     // const baseUrl = "http://localhost:8081/api/faq";
     const [faqInfo, setFaqInfo] = useState<FaqForm|null> (null);// for 상품정보 edit
+
+    const [newShow, setNewShow] = useState(false); // modal
 
     const handleSearch = async (event:any) => {
       if (event.key === 'Enter' || event.type === 'click') {
@@ -226,6 +212,17 @@ const Faq = () => {
     handleClose();
   };
 
+  const handleNewClose = () => {
+    setNewShow(false);
+   }
+  const handleNewShow = () => {
+    setFiles([])
+    setRFiles([])
+    setNewImgs([])
+    setNewShow(true)
+  };
+
+
     return (
         <div className="m-12">
             <div className="input-group mb-3">
@@ -234,7 +231,11 @@ const Faq = () => {
                 </div>
                 <button className="input-group-text"><Search size={24} style={{ margin: "0 auto" }} onClick={(e) => handleSearch(e)}/></button>
             </div>
-            
+            <button
+                  className="btn"
+                  style={{ backgroundColor: '#FA4141', color: 'white' }}
+                  onClick={() => handleNewShow()}
+                >FAQ 등록</button>
             <table className="table table-hover" style={{backgroundColor: "white",color: "unset"}}>
             <thead>
                 <tr>
@@ -359,6 +360,93 @@ const Faq = () => {
             </Form>
             </div>
           </Modal>
+
+
+
+          <Modal show={newShow} onHide={handleNewClose}>
+        <Modal.Header closeButton>
+          <Modal.Title style={{ fontWeight: 'bold' }}>
+            FAQ 등록하기
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ color: 'red' }}>
+          양식에 맞게 정보를 입력해주세요.
+        </Modal.Body>
+        <div style={{ width: '400px', margin: '50px', marginBottom: '20px' }}>
+          <Form>
+            <Form.Group controlId="formBasicName">
+              <Form.Label style={formTitleStyle}>Title</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="제목을 입력하세요."
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </Form.Group>
+            <br />
+
+`           <Form.Group controlId="formBasicContent">
+              <Form.Label style={formTitleStyle}>Content</Form.Label>
+              <Form.Control type="text" placeholder="내용을 입력해주세요." value={content} onChange={(e) => setTitle(e.target.value)}/>
+            </Form.Group><br/>
+            <Form.Group controlId="formBasicRI">
+            <div onDrop={onDropRep} onDragOver={onDragOverRep}>`
+                <h1 style={formTitleStyle}>FAQ 첨부 이미지</h1>
+                <p>
+                  첨부 이미지를 끌어다가 올려주세요.
+                  <br />
+                  (우클릭시 이미지 빼기)
+                </p>
+                <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                  <div>
+                    <p>선택한 첨부 이미지</p>
+                    {Rfiles.length === 0 ? (
+                      <img
+                        style={{ width: '100px', height: '100px' }}
+                        height={100}
+                        src="data:image/png;base64,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"
+                      />
+                    ) : (
+                      <img
+                        style={{ width: '100px', height: '100px' }}
+                        src={URL.createObjectURL(Rfiles[0])}
+                        alt={Rfiles[0].name}
+                        height={100}
+                        onContextMenu={(e) => {
+                          e.preventDefault();
+                          setRFiles([]);
+                        }}
+                      />
+                    )}
+                  </div>
+                  </div>
+                </div>
+              </Form.Group><br/>
+              <Form.Group controlId="formBasicType">
+                <Form.Label style={formTitleStyle}>타입</Form.Label>
+                <Form.Control type="text" placeholder="FAQ 타입" value={type} onChange={(e) => setType(e.target.value)}/>
+              </Form.Group><br/>
+              <Form.Group controlId="formBasicIdx">
+                <Form.Label style={formTitleStyle}>인덱스 설정</Form.Label>
+                <Form.Control type="text" placeholder="글 게시 순서 지정해주세요." value={idx} onChange={(e) => setIdx(e.target.value)}/>
+              </Form.Group><br/>
+
+            <button
+              className="btn"
+              style={{ backgroundColor: 'blue', color: 'white' }}
+              // onClick={(e) => createProduct(e)}
+            >
+              등록
+            </button>
+            {/* <Button variant="primary" type="submit" >
+                수정하기
+              </Button> */}
+          </Form>
+        </div>
+        </Modal>
+
+
+
 
             <nav aria-label="Page navigation example">
                 <ul className="pagination" style={{justifyContent:"center"}}>

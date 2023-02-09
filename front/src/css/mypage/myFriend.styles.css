@@ -1,9 +1,82 @@
-.ongoing-wishes {
-  border: 1px solid black;
+#base-div {
+  width: 1200px;
+  /* width: 70vw; */
+  height: 200px;
+  /* background-color: #c1c1c1; */
+}
+#base-div > .carousel-div {
+  /* width: 1100px; */
 }
 
-.ongoing-wishes > .ongoing-wish {
+/* .ongoing-wishes {
+  border: 1px solid black;
+} */
+
+.ongoing-wishes .ongoing-wish {
   border: 1px solid #c1c1c1;
   border-radius: 10px;
   padding: 20px;
+  /* width: 240px; */
+  /* height: 150px; */
+  height: 180px;
+  margin-right: 10px;
+  /* box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1); */
+  box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.1);
+}
+/* border-radius: 50%; */
+
+.ongoing-wish > .wish-profile-div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.ongoing-wish .wish-profile-img {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+}
+
+.name-div > .friend-wish-username {
+  font-size: 22.65px;
+  font-weight: bold;
+}
+
+.ongoing-wish > .profile-img {
+  display: flex;
+}
+.wish-profile-div > .name-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.ongoing-wish > .friend-wish-title {
+  display: flex;
+  justify-content: center;
+  color: #a1a3a2;
+}
+
+/* 슬라이더 */
+.horizontal-slider-myfriend {
+  height: 100%;
+  max-height: 500px;
+  width: 100%;
+  margin: auto;
+  padding-bottom: 5px;
+  border-radius: 2px;
+}
+
+.horizontal-slider-myfriend .example-track {
+  top: 20px;
+  height: 5px;
+}
+
+.wish-slider-and-label-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  font-family: 'Nanum Gothic';
 }
