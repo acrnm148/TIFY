@@ -90,7 +90,7 @@ export function CongratsPage() {
     return (
       <div className="wish-card wish-card-content">
         <h1 className="wish-title">{title}</h1>
-        <p>{content}</p>
+        <pre>{content?.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n')}</pre>
       </div>
     );
   };

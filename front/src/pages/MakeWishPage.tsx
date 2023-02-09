@@ -1,5 +1,6 @@
-import '../css/makeWishPage.styles.css';
+import '../css/congratsPage.styles.css';
 import '../css/giftHubList.styles.css';
+import '../css/makeWishPage.styles.css';
 import '../css/styles.css';
 import addHeart from '../assets/addHeart.svg';
 import React, {
@@ -31,7 +32,6 @@ import { Gift } from '../interface/interface';
 import { CongratsPage } from './CongratsPage';
 import BlueLogoTify from '../assets/BlueLogoTify.svg';
 
-import '../css/congratsPage.styles.css';
 
 // user
 import { useSelector } from 'react-redux';
@@ -40,16 +40,20 @@ import { NavLink } from 'react-router-dom';
 import ConfirmationDialog from '../components/WishCategoryOption';
 import CarouselComponent from '../components/ResponsiveCarousel';
 import { async } from '@firebase/util';
+import { positions } from '@mui/system';
+
+
 
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
+  minHeight: '400px',
+  width:'auto',
   p: 4,
 };
 // [TODO] 카테고리 선택 mui..
@@ -130,6 +134,7 @@ export function MakeWishPage() {
   // gift cart
   const [cartList, setCartList] = useState<Gift[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  // 카드 아이템(product) 컬럼과 위시생성시 만드는 기프트(gift)컬럼명이 달라서 conList와 totalProduct 두개 사용
   const [totalProduct, setTotalProduct] = useState<{
     productId:number
     purePrice:number, 
@@ -143,6 +148,12 @@ export function MakeWishPage() {
   // 유저 폼 유효성 검사
   const [wishValidated, setWishValidated] = useState<boolean>()
   const wishData = { title: '', content: '', wishCard: '', giftItem: [] };
+  const [goCategory, setGoCategory] = useState<boolean>()
+  const [goTitle, setGoTitle] = useState<boolean>()
+  const [goContent, setGoContent] = useState<boolean>()
+  const [goImgUrl, setGoImgUrl] = useState<boolean>()
+  const [goAddr1, setGoAddr1] = useState<boolean>()
+  const [goAddr2, setGoAddr2] = useState<boolean>()
 
   // 위시생성페이지 mount시 유저의 id를 담아서 cart정보 요청
   useEffect(() => {
@@ -152,9 +163,12 @@ export function MakeWishPage() {
         method: 'get',
         url: API_URL,
         headers: { Authorization: `Bearer ${accessToken}` },
+        params:{
+          'max_result' : 100
+        }
       })
         .then((con) => {
-          const lst = con.data;
+          const lst = con.data.content;
           const conlst: Gift[] = [];
 
           lst.map((d: any) => {
@@ -195,7 +209,8 @@ export function MakeWishPage() {
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
-  const [wishCart, setWishCart] = useState<Gift[]>()
+  const [wishCart, setWishCart] = useState<Gift[]>([])
+
   const pushItem = (i:number) =>{
       if (wishCart){
         if (wishCart.length == 6){
@@ -203,11 +218,27 @@ export function MakeWishPage() {
           return
         }
         setWishCart([...wishCart,cartList[i]])
+        setTotalProduct([...totalProduct,{"productId" : cartList[i].id,
+                                          'purePrice': cartList[i].price, 
+                                          'userOption':cartList[i].options[0], 
+                                          'giftImgUrl':cartList[i].repImg, 
+                                          'giftName' : cartList[i].name,
+                                          "maxAmount": cartList[i].price+Math.round(cartList[i].price*0.05),
+                                          "quantity" : 1 }])
       } else {
         setWishCart([cartList[i]])
+        setTotalProduct([{"productId" : cartList[i].id,
+                        'purePrice': cartList[i].price, 
+                        'userOption':cartList[i].options[0], 
+                        'giftImgUrl':cartList[i].repImg, 
+                        'giftName' : cartList[i].name,
+                        "maxAmount": cartList[i].price+Math.round(cartList[i].price*0.05),
+                        "quantity" : 1 }])
       }
       setTotalPrice(totalPrice+cartList[i].price)
+
   }
+
   function checkItemAmount(i:number){
     //cartList[i]가 wishList에 몇개 담겼는지 확인
     let num=0;
@@ -223,15 +254,15 @@ export function MakeWishPage() {
   const CartList = () => {
     return (
       <>
+        <div>
+          <h1 className='cart-list'>카트상품목록</h1>
+          {/* <button>카트관리</button> */}
+        </div>
+        <hr></hr>
+        {tooMany && <span>선물은 최대 6개까지 선택 가능합니다!</span>}
         {cartList.length > 0 ? (
           <div>
             <div className="like-list">
-              <div>
-                <h1 className='cart-list'>카트상품목록</h1>
-                {/* <button>카트관리</button> */}
-              </div>
-              <hr></hr>
-              {tooMany && <span>선물은 최대 6개까지 선택 가능합니다!</span>}
               {cartList.map((gift, i: number) => (
                 <div
                   className="like-item-card-container"
@@ -274,6 +305,30 @@ export function MakeWishPage() {
   const MakeWish = () => {
     const makeWish = async () => {
       const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';
+      const gift: {
+        productId: number;
+        purePrice: number;
+        userOption: string;
+        giftImgUrl: string;
+        giftName: string;
+        maxAmount: number;
+        quantity: number;
+    }[]  = wishCart.map((item)=>{
+        return (
+          {
+            "productId" : item.id,
+            'purePrice': item.price, 
+            'userOption':item.options[0], 
+            'giftImgUrl':item.repImg, 
+            'giftName' : item.name,
+            "maxAmount": item.price+Math.round(item.price*0.05),
+            "quantity" : 1
+          }
+        )
+      })
+      console.log(typeof(gift), 'gift')
+      console.log(typeof(wishCart), 'wishCart')
+      alert(`위시생성할거임?? + ${gift.length}`)
       axios({
         url: API_URL,
         method: 'POST',
@@ -299,7 +354,7 @@ export function MakeWishPage() {
         .then((con) => {
           console.log('위시생성 성공', con, userId);
           setFinished(true);
-          console.log('wishCart', wishCart);
+          console.log('totalProduct', totalProduct);
         })
         .catch((err) => {
           console.log('위시생성 실패', err);
@@ -346,10 +401,34 @@ export function MakeWishPage() {
       }
     })
   };
+  const scrollToTop = () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    })
+  }
+  const pannel = useRef<HTMLDivElement>(null)
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const handleScroll = () => {
+      const position = window.pageYOffset;
+      setScrollPosition(position);
+  };
+
+  useEffect(() => {
+      window.addEventListener('scroll', handleScroll, { passive: true });
+
+      return () => {
+          window.removeEventListener('scroll', handleScroll);
+      };
+  }, []);
+  function followPannel(){
+
+    };
+
   const FinishedWishComponent = () => {
     return (
       <div className="finish-wish-con">
-        <div className="finish-congrats congrats-page-container">
+        <div className="finish-congrats congrats-page-container" ref={pannel} style={{"top":`${positions}`}}>
           <div className="wish-components">
             <div className="wish-components-title">
               <h1>{category && userName ? userName+'의 '+category+cateKorean+' ':''}축하해주세요!</h1>
@@ -363,7 +442,7 @@ export function MakeWishPage() {
                 <h1>{title}</h1>
                 <pre>{content?.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n')}</pre>
               </div>
-              <div className="wish-congrats-btns">
+              <div className="wish-congrats-btns" style={{"justifyContent":"center"}}>
                 <div className="button color">선택한 선물로 축하하기 →</div>
                 <div className="button gray">축하금으로 보내기 →</div>
               </div>
@@ -404,6 +483,17 @@ export function MakeWishPage() {
       setWishValidated(true)
     }
   }, [totalProduct,title, content, category, startDate, endDate, imgUrlS3, addr1, addr2])
+
+  const notValid = () => {
+    category?setGoCategory(true):setGoCategory(false)
+    title?setGoTitle(true):setGoTitle(false)
+    content?setGoContent(true):setGoContent(false)
+    // !startDate?setGoContent(true):setGocontent(false)
+    imgUrlS3?setGoImgUrl(true):setGoImgUrl(false)
+    addr1?setGoAddr1(true):setGoAddr1(false)
+    addr2?setGoAddr2(true):setGoAddr2(false)
+  }
+  
   return (
     <>
       <div className="page-name-block">
@@ -434,6 +524,10 @@ export function MakeWishPage() {
                 <ConfirmationDialog propFunction={getCategory}/>
                 {cateForm&&
                   <div  className='wid-50 start-bottom'>
+                    {
+                      !goCategory&&
+                      <span className='warning'>축하 카테고리를 입력해주세요!</span>
+                    }
                     <input onChange={(e)=>setCategory(e.target.value)} className='wid-100 cate-input' placeholder='축하 카테고리를 입력해주세요!' />
                   </div>
                 }
@@ -446,6 +540,10 @@ export function MakeWishPage() {
                   name="태그"
                   onChange={(e) => setTitle(e.target.value)}
                 />
+                {
+                    goTitle===false&&
+                    <span className='warning'>제목을 입력해주세요!</span>
+                  }
               </div>
             
               <div className="input-form input-wide">
@@ -456,13 +554,19 @@ export function MakeWishPage() {
                 >
 
                 </textarea>
+                {
+                    goContent===false&&
+                    <span className='warning'>내용을 입력해주세요!</span>
+                  }
               </div>
               <div className="brbr padd"></div>
               <div className="duration-container wid-100">
                 <label htmlFor="">기간</label>
-                <h1>
-                  위시 진행 기간 <span>{duration}일</span>
-                </h1>
+                <div className='wid-100 padding-10 disp-flex just-btwn bg-gray align-center'>
+                  <p className='font-lrg'>총<span>{duration.toFixed(0)}</span>일</p>
+                  <p>위시 진행 기간 <span className='padding-10'>{startDate}</span><span>00시</span>-<span className='padding-10'>{endDate}</span><span>밤 12시</span></p>
+                </div>
+
 
                 <div className="duration-from calendar-container">
                   <DateRange
@@ -479,11 +583,19 @@ export function MakeWishPage() {
                     dateDisplayFormat="yyyy년 MM월 dd일"
                   />
                 </div>
+                {/* {
+                    !go&&
+                    <span className='warning'>기간을 선택해주세요</span>
+                  } */}
               </div>
               <div className="brbr padd"></div>
               <div className="card-container wid-100">
                 <label htmlFor="">카드</label>
                 <CarouselComponent  propFunction={CardClicked}/>
+                {
+                    goImgUrl===false&&
+                    <span className='warning'>카드를 선택해주세요</span>
+                  }
               </div>
               <div className="brbr padd"></div>
               <div className='wid-100'>
@@ -509,7 +621,7 @@ export function MakeWishPage() {
                       </Fade>
                     </Modal>
                   </div>
-                  <div className="">
+                  <div className="wid-100">
                     <div className="add-gift-icon-con" onClick={handleOpen}>
                       <img className="add-gift-icon" src={addHeart} alt="" />
                     </div>
@@ -519,18 +631,17 @@ export function MakeWishPage() {
                           className="wish-card-gift"
                           onClick={() => delWishGift(e.id, i)}
                         >
-                          <img src={e.repImg}></img>
-                          <p>{e.name}</p>
-                          <p>{e.price}</p>
+                          <div className='disp-flex align-center'>
+                            <img src={e.repImg}></img>
+                            <p className='padding-10 '>{e.name}</p>
+                          </div>
+                          <p className='font-lrg font-bold'>{e.price.toLocaleString('ko-KR')}</p>
                         </div>
                       );
                     })}
                   </div>
-                <div>
-                
-                  <p>총 위시금액 : {}원</p>
-                  
-                  
+                <div className='font-bold padding-10 font-lrg  tot-price'>
+                  <p>총 위시금액 : {totalPrice.toLocaleString('ko-KR')}원</p>
                   </div>
                 </div>
               </div>
@@ -562,6 +673,9 @@ export function MakeWishPage() {
                     setcompany={setEnroll_company}
                     setNewAddr={setCallMyAddr}
                   />
+                  {goAddr1===false&&
+                    <span className='warning'>주소지를 작성해주세요</span>
+                  }
                 </div>
               </div>
               <div className='wid-100'>
@@ -574,7 +688,11 @@ export function MakeWishPage() {
                     value={callMyAddr? userAddr2:addr2}
                   />
                 </div>
+                {goAddr2===false&&
+                    <span className='warning'>상세주소지를 작성해주세요</span>
+                  }
               </div>
+              <div className="brbr padd"></div>
               {/* 위시 폼 유효하면 위시만들기 버튼 활성화 */}
               {wishValidated?
                 <div className="make-wish-btn-con wid-100">
@@ -583,8 +701,8 @@ export function MakeWishPage() {
                   </div>
                 </div>
                 :
-                <div className="make-wish-btn-con wid-100">
-                  <div className="make-wish-btn" onClick={MakeWish}>
+                <div className="make-wish-btn-con-mw wid-100">
+                  <div className="make-wish-btn wid-100 disable-btn" onClick={notValid}>
                     위시만들기
                   </div>
                 </div>
