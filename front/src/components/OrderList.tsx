@@ -16,17 +16,13 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
 
 interface orders {
-  content: any;
-  pageable: any;
-  totalElements: Number;
-  totalPages: Number;
-  sort: any;
-  numberOfElements: 10;
-  first: Boolean;
-  size: Number;
-  number: Number;
-  empty: Boolean;
-  last: Number;
+  state: number;
+  wishFinishDate: string;
+  giftImgUrl:string;
+  wishName:string;
+  giftName:string;
+  orderPrice:number;
+  gatheredPrice:number;
 }
 
 const OrderInfo = () => {
