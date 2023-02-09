@@ -23,7 +23,7 @@ import { JoinSecondPage } from './pages/JoinSecondPage';
 import { JoinThirdPage } from './pages/JoinThirdPage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 
-import { MyWish } from './pages/mypage/MyWish';
+import { MyWish } from './pages/mypage/Mywish';
 import { Joined } from './components/Joined';
 import { Friend } from './pages/mypage/MyFriend';
 import { MyInfo } from './pages/mypage/MyInfo';
