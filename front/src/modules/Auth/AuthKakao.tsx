@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { setRefreshToken } from './Cookie';
+import { setRefreshToken } from './RefreshtokenLocal';
 import { SET_TOKEN, SET_USERID, SET_USEREMAIL } from '../../store/Auth';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Auth';

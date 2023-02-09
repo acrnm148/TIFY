@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // import { useNavigate } from 'react-router';
-import { getCookieToken, removeCookieToken } from './Cookie';
+import { getCookieToken, removeCookieToken } from './RefreshtokenLocal';
 // import { requestToken } from '../api/Users';
 import {
   DELETE_TOKEN,
@@ -11,7 +11,7 @@ import {
   SET_USEREMAIL,
 } from '../../store/Auth';
 import axios from 'axios';
-import { setRefreshToken } from './Cookie';
+import { setRefreshToken } from './RefreshtokenLocal';
 
 type TokenType = {
   access_token: string;
@@ -95,7 +95,7 @@ export function CheckTokenByKey(key?: string) {
           // 로그아웃 요청
           setIsAuth('Failed');
           console.log('리프레쉬 실패');
-          alert('로그아웃 되셨습니다.');
+          // alert('로그아웃 되셨습니다.');
           // return navigate('/');
         }
       }
