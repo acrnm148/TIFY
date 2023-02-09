@@ -27,7 +27,7 @@ interface orders {
 
 const OrderInfo = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [orders, setOrders] = useState<orders[]>(null);
+  const [orders, setOrders] = useState<orders[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const maxResults = 10;
@@ -105,7 +105,7 @@ const OrderCardActive = (props: { orders: orders[] }) => {
               {order.state === 1 ? '배송완료' : ''}
             </p>
             <p className="p-finished-date">
-              {order.wishFinishDate} 2023.02.09 위시 종료
+              {order.wishFinishDate} (2023.02.09) 위시 종료
             </p>
           </div>
           <div className="gift-info-div">
