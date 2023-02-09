@@ -19,7 +19,6 @@ import { Scrollbar } from 'react-scrollbars-custom';
 export function Friend() {
   const userId = useSelector((state: RootState) => state.authToken.userId);
   const [friendWishList, setFriendWishList] = useState<Array<any>>();
-  const [requestListBool, setrequestListBool] = useState<boolean>(false);
 
   useEffect(() => {
     const API_URL = `https://i8e208.p.ssafy.io/api/wishfriend/${userId}`;
@@ -98,17 +97,19 @@ export function Friend() {
         <Carousel friendWishList={friendWishList}></Carousel>
         <FriendsList></FriendsList>
       </div>
-      <button>현재 / 요청</button>
     </div>
   );
 }
 
+// 일촌 관리 부분
 const FriendsList = () => {
   const userId = useSelector((state: RootState) => state.authToken.userId);
   const [friendList, setFriendList] = useState<Array<any>>();
   const [requestsList, setRequestsList] = useState<Array<any>>();
+  const [requestListBool, setrequestListBool] = useState<boolean>(false);
 
-  useEffect(() => {
+  // 친구 목록 불러오기
+  const GetFriendData = () => {
     const API_URL = `https://i8e208.p.ssafy.io/api/friendsinfo/${userId}`;
     axios
       .get(API_URL)
@@ -172,43 +173,85 @@ const FriendsList = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  useEffect(() => {
+    GetFriendData();
   }, []);
   console.log(friendList, 'friendList 여기 있다.');
+
+  // 친구 삭제
+  const FriendDelete = (id: string) => {
+    console.log(id);
+    const API_URL = `https://i8e208.p.ssafy.io/api/friend/delete/${id}`;
+    axios
+      .delete(API_URL)
+      .then((res) => {
+        console.log(res, '친구 삭제 성공');
+        GetFriendData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // 친구 항목 하나
+  const SingleFriend = ({ friend }: any) => {
+    return (
+      <li className="list-group-item">
+        <img src={friend.profileImg} className="friend-profile"></img>
+        <p className="friend-nickname">{friend.nickname}</p>
+        <p className="friend-username">{friend.username}</p>
+        <button
+          className="friend-delete-button"
+          onClick={() => FriendDelete(friend.id)}
+        >
+          삭제
+        </button>
+      </li>
+    );
+  };
+
   return (
-    <div className="friends-div">
-      <ul className="list-group list-group-flush">
-        <li className="list-group-item">An item</li>
-        <li className="list-group-item">A second item</li>
-        <li className="list-group-item">A third item</li>
-        <li className="list-group-item">A fourth item</li>
-        <li className="list-group-item">And a fifth test</li>
-        {friendList &&
-          friendList.map((friend: object) => {
-            console.log(friend);
-            return <SingleFriend friend={friend}></SingleFriend>;
-          })}
-      </ul>
+    <div>
+      <div className="friends-div">
+        <ul className="list-group list-group-flush">
+          <li className="list-group-item">An item</li>
+          <li className="list-group-item">A second item</li>
+          <li className="list-group-item">A third item</li>
+          <li className="list-group-item">A fourth item</li>
+          <li className="list-group-item">And a fifth test</li>
+
+          {requestListBool === false
+            ? friendList &&
+              friendList.map((friend: object) => {
+                console.log(friend);
+                return <SingleFriend friend={friend}></SingleFriend>;
+              })
+            : requestsList &&
+              requestsList.map((request: object) => {
+                console.log(request);
+                return <RequestFriend request={request}></RequestFriend>;
+              })}
+        </ul>
+      </div>
+      <button
+        onClick={() =>
+          setrequestListBool((requestListBool: boolean) => !requestListBool)
+        }
+      >
+        현재 / 요청
+      </button>
     </div>
   );
 };
 
-const SingleFriend = ({ friend }: any) => {
+const RequestFriend = ({ request }: any) => {
   return (
     <li className="list-group-item">
-      <img src={friend.profileImg} className="friend-profile"></img>
-      <p className="friend-nickname">{friend.nickname}</p>
-      <p className="friend-username">{friend.username}</p>
-      <button className="friend-delete-button">삭제</button>
-    </li>
-  );
-};
-
-const RequestFriend = ({ friend }: any) => {
-  return (
-    <li className="list-group-item">
-      <img src={friend.profileImg} className="friend-profile"></img>
-      <p className="friend-nickname">{friend.nickname}</p>
-      <p className="friend-username">{friend.username}</p>
+      <img src={request.profileImg} className="friend-profile"></img>
+      <p className="friend-nickname">{request.nickname}</p>
+      <p className="friend-username">{request.username}</p>
       <button className="friend-delete-button">삭제</button>
     </li>
   );
