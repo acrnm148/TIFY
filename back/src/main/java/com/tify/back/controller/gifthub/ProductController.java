@@ -77,6 +77,19 @@ public class ProductController {
         return productService.getProducts(pageable);
     }
 
+    @GetMapping("/search/{name}")
+    public Page<Product> searchProductsByConditions(@RequestParam(value = "page", required = false) Integer page,
+                                                    @RequestParam(value = "max_result", required = false) Integer max_result,
+                                                    @PathVariable String name) {
+        if (page == null) { page = 0;}
+        if (max_result == null) { max_result = 10;}
+
+//        Pageable pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("fieldName1").ascending().and(Sort.by("fieldName2").descending()));
+        Pageable pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("name").ascending());
+        return productRepository.findByNameContaining(pageable, name);
+//        return productService.getProducts();
+    }
+
     // 이름, 가경, 대표이미지 정보만 가져온다. (like count 정렬 완료)
     @GetMapping("/main")
     public List<ProductSummary> getGifthubList() throws Exception { return productRepository.findAllProjectedBy();}
