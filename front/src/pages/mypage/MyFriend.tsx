@@ -100,7 +100,7 @@ export function Friend() {
 }
 
 // 캐러셀 부분
-const Carousel = ({ friendWishList }) => {
+const Carousel = ({ friendWishList }: any) => {
   // 옵션
   console.log(friendWishList);
   var settings = {
