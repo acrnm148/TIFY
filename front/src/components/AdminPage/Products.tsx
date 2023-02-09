@@ -87,8 +87,8 @@ const Products = () => {
   const [newImgs, setNewImgs] = useState<Array<pImg>>([]);
   const [totalPages, setTotalPages] = useState(0);
   const maxResults = 10;
-  // const baseUrl = "https://i8e208.p.ssafy.io/api/gifthub";
-  const baseUrl = 'http://localhost:8081/api/gifthub';
+  const baseUrl = "https://i8e208.p.ssafy.io/api/gifthub";
+  // const baseUrl = 'http://localhost:8081/api/gifthub';
   const [productInfo, setProductInfo] = useState<productDetail | null>(null); // for 상품정보 edit
 
   const [name, setName] = useState<string>('');
