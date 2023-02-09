@@ -43,6 +43,7 @@ export function Friend() {
                 const temp: { any } = {};
                 console.log(friendWish, '안 끝난 frinedWish');
                 temp.wishId = friendWish.id;
+                temp.totPrice = friendWish.totPrice;
               }
             }
           }
