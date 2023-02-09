@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
-import axios from 'axios';
-import '../css/friendspage.styles.css';
+import axios from "axios";
+import "../css/friendspage.styles.css"
+import '../css/giftHubPage.styles.css';
+import "../css/searchBar.styles.css"
 
 interface User {
   id: number;
@@ -28,15 +30,12 @@ const FriendsPage: React.FC = () => {
   }, [refresh]);
   const handleSubmit = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8081/api/searchuser/${nickname}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-type': 'application/json',
-          },
-        },
-      );
+      const response = await axios.get(`https://i8e208.p.ssafy.io/api/searchuser/${nickname}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-type': 'application/json',
+        }
+      });
       const friends = response.data;
 
       setUsers([...friends]);
@@ -45,19 +44,15 @@ const FriendsPage: React.FC = () => {
 
   const handleRequestFriend = async (userId: number) => {
     try {
-      const response = await axios.post(
-        `http://localhost:8081/api/friends`,
-        {
-          userId: userPk,
-          friendId: userId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-type': 'application/json',
-          },
-        },
-      );
+      const response = await axios.post(`https://i8e208.p.ssafy.io/api/friends`, {
+        userId: userPk ,
+        friendId: userId,
+      }, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-type': 'application/json',
+        }
+      });
       console.log(response.data);
       setUsers([...users]);
       setRefresh(!refresh);
@@ -66,19 +61,15 @@ const FriendsPage: React.FC = () => {
 
   const handleAcceptFriend = async (friendId: number) => {
     try {
-      const response = await axios.post(
-        `https://i8e208.p.ssafy.io/api/friends`,
-        {
-          friendId: friendId,
-          Accepted: true,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-type': 'application/json',
-          },
-        },
-      );
+      const response = await axios.post(`https://i8e208.p.ssafy.io/api/friends/accept`, {
+        friendId: friendId ,
+        Accepted: true,
+      }, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-type': 'application/json',
+        }
+      });
       console.log(response.data);
       setRefresh(!refresh);
     } catch (error) {}
@@ -115,107 +106,35 @@ const FriendsPage: React.FC = () => {
     } catch (error) {}
   };
 
-  // const UserSearchBar: React.FC<UserSearchBarProps> = ({
-  //   nickname,
-  //   onNicknameChange,
-  //   onSubmit
-  //   }) => (
-  // <form onSubmit={onSubmit}>
-  //   <input
-  //     className="searchbar"
-  //     type="text"
-  //     placeholder="Enter nickname"
-  //     value={nickname}
-  //     onChange={onNicknameChange}
-  //   />
-  //   <button className="search-btn" type="submit"></button>
-  // </form>
-  // );
-
   return (
-    <div className="backcolor">
-      <div className="items-center">
-        {/* <UserSearchBar
-        nickname={nickname}
-        onNicknameChange={event => setNickname(event.target.value)}
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        } }
-      /> */}
-        <form onSubmit={(e) => e.preventDefault()}>
-          <input
-            className="searchbar"
-            type="text"
-            placeholder="Enter nickname"
-            value={nickname}
-            onKeyUp={(e) => {
-              if (e.key == 'Enter') {
-                handleSubmit();
-              }
-            }}
-            onChange={(e) => setNickname(e.target.value)}
-          />
-        </form>
-        <button className="search-btn" onClick={handleSubmit}>
-          검색
-        </button>
-        <div className="flex flex-wrap mx-12">
-          {users.map((user) => (
-            <div
-              className="w-1/5 p-6 mx-6 my-2 cardcolor items-center"
-              key={user.id}
-            >
-              <img className="img-4" src={user.profileImg} />
-              <p className="w-96 text-lg text-center">{user.name}</p>
-              <p className="w-96 text-xs text-center">{user.nickname}</p>
-              <p className="w-96 text-xs text-center">
-                {user.id === userPk ? (
-                  <p>본인</p>
-                ) : user.state === 'ACCEPTED' ? (
-                  <button
-                    onClick={() => {
-                      handleDeleteFriend(user.friendshipId);
-                    }}
-                  >
-                    친구삭제
-                  </button>
-                ) : user.state === 'RECEIVED' ? (
-                  <div>
-                    <button
-                      onClick={() => {
-                        handleAcceptFriend(user.friendshipId);
-                      }}
-                    >
-                      친구수락
-                    </button>
-                    <button
-                      onClick={() => handleCancelFriend(user.friendshipId)}
-                    >
-                      친구거절
-                    </button>
-                  </div>
-                ) : user.state === 'REQUESTED' ? (
-                  <button
-                    onClick={() => {
-                      handleCancelFriend(user.friendshipId);
-                    }}
-                  >
-                    요청취소
-                  </button>
-                ) : user.state === 'NONE' ? (
-                  <button
-                    onClick={() => {
-                      handleRequestFriend(user.id);
-                    }}
-                  >
-                    친구요청
-                  </button>
-                ) : null}
-              </p>
-            </div>
-          ))}
-        </div>
+  <div className="backcolor">
+    <div className="items-center justify-center">
+      <div className="search-bar-container">
+        <input
+          className="serach-bar"
+          type="text"
+          placeholder="Enter nickname"
+          value={nickname}
+          onKeyUp= {(e)=> { if(e.key=="Enter") {handleSubmit()} }}
+          onChange={(e) => setNickname(e.target.value)}
+    />
+      </div>
+
+  
+  
+<div className="friend-list">
+  {users.map(user => (
+    <div className="w-1/5 p-6 mx-6 my-2 cardcolor items-center" key={user.id}>
+      <img className="img-4" src={user.profileImg}/>
+        <p className="w-96 text-lg text-center">{user.name}</p>
+        <p className="w-96 text-center">{user.nickname}</p>
+        <p className="w-96 text-xs text-center">
+        {user.id === userPk ? <p>본인</p> :
+        user.state === 'ACCEPTED' ? <button className="rectangle-2-5" onClick={() => {handleDeleteFriend(user.friendshipId);}}>친구삭제</button> : 
+         user.state === 'RECEIVED' ? <div><button className="rectangle-2-7" onClick={() => {handleAcceptFriend(user.friendshipId);}}>친구수락</button><button className="rectangle-2-7" onClick={() => handleCancelFriend(user.friendshipId)}>친구거절</button></div> :
+         user.state === 'REQUESTED' ? <button className="rectangle-2-7" onClick={() => {handleCancelFriend(user.friendshipId);}}>요청취소</button> : 
+         user.state === 'NONE' ?<button className="rectangle-2-6" onClick={() => {handleRequestFriend(user.id);}}>친구요청</button>:null}
+        </p>
       </div>
     </div>
   );
