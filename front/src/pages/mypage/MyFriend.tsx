@@ -19,6 +19,7 @@ import { Scrollbar } from 'react-scrollbars-custom';
 export function Friend() {
   const userId = useSelector((state: RootState) => state.authToken.userId);
   const [friendWishList, setFriendWishList] = useState<Array<any>>();
+  const [requestListBool, setrequestListBool] = useState<boolean>(false);
 
   useEffect(() => {
     const API_URL = `https://i8e208.p.ssafy.io/api/wishfriend/${userId}`;
@@ -97,6 +98,7 @@ export function Friend() {
         <Carousel friendWishList={friendWishList}></Carousel>
         <FriendsList></FriendsList>
       </div>
+      <button>현재 / 요청</button>
     </div>
   );
 }
@@ -139,6 +141,7 @@ const FriendsList = () => {
           return b.id - a.id;
         });
         setFriendList(sortedFriendsResult);
+        console.log(friendList, 'friendList');
 
         // 친구 요청 받은 목록을 받아옴.
         if (res.data.receivedRequests.length > 0) {
@@ -173,7 +176,6 @@ const FriendsList = () => {
   console.log(friendList, 'friendList 여기 있다.');
   return (
     <div className="friends-div">
-      친구 목록들
       <ul className="list-group list-group-flush">
         <li className="list-group-item">An item</li>
         <li className="list-group-item">A second item</li>
@@ -185,20 +187,31 @@ const FriendsList = () => {
             console.log(friend);
             return <SingleFriend friend={friend}></SingleFriend>;
           })}
-        <SingleFriend></SingleFriend>
       </ul>
-      <div className="test-div">안녕</div>
-      <div className="test-div">안녕</div>
-      <div className="test-div">안녕</div>
-      <div className="test-div">안녕</div>
-      <div className="test-div">안녕</div>
-      <div className="test-div">안녕</div>
     </div>
   );
 };
 
-const SingleFriend = () => {
-  return <li className="list-group-item">And a fifth one</li>;
+const SingleFriend = ({ friend }: any) => {
+  return (
+    <li className="list-group-item">
+      <img src={friend.profileImg} className="friend-profile"></img>
+      <p className="friend-nickname">{friend.nickname}</p>
+      <p className="friend-username">{friend.username}</p>
+      <button className="friend-delete-button">삭제</button>
+    </li>
+  );
+};
+
+const RequestFriend = ({ friend }: any) => {
+  return (
+    <li className="list-group-item">
+      <img src={friend.profileImg} className="friend-profile"></img>
+      <p className="friend-nickname">{friend.nickname}</p>
+      <p className="friend-username">{friend.username}</p>
+      <button className="friend-delete-button">삭제</button>
+    </li>
+  );
 };
 
 // 캐러셀 부분

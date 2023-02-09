@@ -113,5 +113,32 @@
 }
 
 .list-group-item {
-  height: 100px;
+  height: 70px;
+  display: flex !important;
+  align-items: center;
+}
+
+.friend-profile {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-left: 10px;
+  margin-right: 20px;
+}
+
+.friend-nickname {
+  margin-right: 10vw;
+  font-weight: bold;
+}
+
+.friend-username {
+  margin-right: 25vw;
+  font-weight: bold;
+}
+
+.friend-delete-button {
+  background-color: #c1c1c1;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
 }
