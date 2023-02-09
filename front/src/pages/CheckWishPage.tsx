@@ -24,8 +24,7 @@ import { RootState } from '../store/Auth';
 import { CheckWish } from '../interface/interface';
 
 export function CheckWishPage() {
-  // const [userId, setUserId] = useState(useSelector((state: RootState) => state.authToken.userId))
-  const userId = 133;
+  const [userId, setUserId] = useState(useSelector((state: RootState) => state.authToken.userId))
   const [isWish, setIsWish] = useState<Boolean>(false);
   const [wishGoing, setWishGoing] = useState<Boolean>(true);
   const [conList, setConList] = useState<Array<CheckWish>>([]);

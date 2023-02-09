@@ -39,6 +39,7 @@ import { RootState } from '../store/Auth';
 import { NavLink } from 'react-router-dom';
 import ConfirmationDialog from '../components/WishCategoryOption';
 import CarouselComponent from '../components/ResponsiveCarousel';
+import { async } from '@firebase/util';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -62,28 +63,15 @@ export function MakeWishPage() {
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
-  const wishOption = [
-    '생일',
-    '결혼',
-    '취업',
-    '건강',
-    '출산',
-    '비혼',
-    '직접입력',
-  ];
-  const cardList = [
-    'https://user-images.githubusercontent.com/87971876/216435039-6eb5b4ba-24b6-4305-9274-2b9766fa68a2.jpg',
-    'https://user-images.githubusercontent.com/87971876/216435043-77c5fa12-a4ce-4b5a-b767-5e3c012efb9e.jpg',
-    'https://user-images.githubusercontent.com/87971876/216435045-ef976fc6-09db-4de6-9f89-c412196b609a.jpg',
-    'https://user-images.githubusercontent.com/87971876/216435046-1ef30270-a505-4f79-8f5e-d41eedaeb3ba.jpg',
-  ];
-  const [category, setCategory] = useState();
-  const [title, setTitle] = useState<string>();
-  const [content, setContent] = useState<string>();
-  const [selectCard, setSelectCard] = useState('-1');
-  const [selectCardUrl, setSelectCardUrl] = useState('');
-  const [addr2, setAddr2] = useState<string>();
-  const [tooMany, setToomany] = useState<boolean>();
+
+  const [category, setCategory] = useState<string>()
+  const [title, setTitle] = useState<string>()
+  const [content, setContent] = useState<string>()
+  const [addr1, setAddr1] = useState<string>()
+  const [addr2, setAddr2] = useState<string>()
+  const [zipCode, setZipCode] = useState<number>()
+  const [tooMany, setToomany] = useState<boolean>()
+  const [cateForm,setCateForm] = useState<boolean>(false)
   // calendar
   const [range, setRange] = useState<any[]>([
     {
@@ -117,6 +105,16 @@ export function MakeWishPage() {
   // photo
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  const [cateKorean, setCateKorean] = useState<string>()
+
+  // 가져온 유저정보
+  const [ userAddr1, setUserAddr1] = useState<string>()
+  const [ userAddr2, setUserAddr2]= useState<string>()
+  const [ userZipCode, setUserZipCode ] = useState<number>()
+  const [ userName, setUserName ] = useState<string>()
+
+  const [callMyAddr, setCallMyAddr] = useState<boolean>()
+
   // address
   const [enroll_company, setEnroll_company] = useState({
     address: '',
@@ -142,12 +140,14 @@ export function MakeWishPage() {
     quantity: number
   }[]>([]);
 
+  // 유저 폼 유효성 검사
+  const [wishValidated, setWishValidated] = useState<boolean>()
   const wishData = { title: '', content: '', wishCard: '', giftItem: [] };
 
   // 위시생성페이지 mount시 유저의 id를 담아서 cart정보 요청
   useEffect(() => {
     const putCart = async () => {
-      const API_URL = `https://i8e208.p.ssafy.io/api/cart/forwish/${userId}`;
+      const API_URL = `https://i8e208.p.ssafy.io/api/cart/list/${userId}`;
       axios({
         method: 'get',
         url: API_URL,
@@ -168,6 +168,26 @@ export function MakeWishPage() {
         });
     };
     putCart();
+
+    const getUser = async () =>{
+      const API_URL = `https://i8e208.p.ssafy.io/api/account/userInfo`
+      axios({
+        method: 'get',
+        url: API_URL,
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+        .then((con) => {
+          console.log('유저정보 불러오기 성공',con.data);
+          setUserAddr1(con.data.addr1)
+          setUserAddr2(con.data.addr2)
+          setUserZipCode(con.data.zipcode)
+          setUserName(con.data.username)
+        })
+        .catch((err) => {
+          console.log('유저정보 불러오기 실패', err);
+        });
+    }
+    getUser();
   }, []);
 
   const [open, setOpen] = React.useState(false);
@@ -252,8 +272,6 @@ export function MakeWishPage() {
   };
   const [finished, setFinished] = useState(false);
   const MakeWish = () => {
-    const selectedWishCard =
-      Number(selectCard) >= 0 ? cardList[Number(selectCard)] :imgUrlS3;
     const makeWish = async () => {
       const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';
       axios({
@@ -269,7 +287,7 @@ export function MakeWishPage() {
           category: category,
           startDate: startDate,
           endDate: endDate,
-          wishCard: selectedWishCard,
+          wishCard: imgUrlS3,
           addr1: enroll_company.address,
           addr2: addr2,
         },
@@ -293,9 +311,6 @@ export function MakeWishPage() {
     makeWish();
   };
 
-  const handleCategory = (e: any) => {
-    setCategory(e.target.value);
-  };
 
   const CardClicked=(e: string)=> {
     // console.log('자식 컴포넌트에서 선택한 카드의 url', e)
@@ -337,7 +352,7 @@ export function MakeWishPage() {
         <div className="finish-congrats congrats-page-container">
           <div className="wish-components">
             <div className="wish-components-title">
-              <h1>{category}축하해주세요!</h1>
+              <h1>{category && userName ? userName+'의 '+category+cateKorean+' ':''}축하해주세요!</h1>
             </div>
             <div className="wish-card-box">
               <div
@@ -364,20 +379,66 @@ export function MakeWishPage() {
       </div>
     );
   };
+  const getCategory = (e:string) =>{
+    if(e==='직접입력'){
+      setCateForm(true)
+      setCateKorean('')
+    } else{
+      setCategory(e)
+      setCateForm(false)
+      setCateKorean('을')
+    }
+  }
+  const CallMyAddr = () =>{
+    if(!userAddr1 && !userAddr2){
+      alert('저장된 주소가 없습니다')
+    } else{
+      setCallMyAddr(true)
+      setAddr1(userAddr1)
+      setAddr2(userAddr2)
+      setZipCode(userZipCode)
+    }
+  }
+  useEffect(()=>{
+    if(totalProduct && title && content && category && startDate && endDate && imgUrlS3 && addr1 && addr2){
+      setWishValidated(true)
+    }
+  }, [totalProduct,title, content, category, startDate, endDate, imgUrlS3, addr1, addr2])
   return (
     <>
       <div className="page-name-block">
         <div className="page-name" />
       </div>
       {finished ? (
-        <FinishedWishComponent />
+        <div className='wish-page-container'>
+        <div className='make-wish-container wid-50'>
+          <div>
+            <div className="finish-wish-comment">
+              <h1>위시 생성이 완료되었습니다!</h1>
+              <NavLink to={'/checkwish'}>
+                <p>위시목록으로 고고고</p>
+              </NavLink>
+            </div>
+          </div>
+          </div>
+          <div className='wid-50'>
+            <FinishedWishComponent />
+          </div>
+        </div>
       ) : (
         <div className='wish-page-container'>
           <div className='make-wish-container wid-50'>
+
             <div className="make-wish-form">
               <div className='wid-100 flex-between'>
-                <ConfirmationDialog />
+                <ConfirmationDialog propFunction={getCategory}/>
+                {cateForm&&
+                  <div  className='wid-50 start-bottom'>
+                    <input onChange={(e)=>setCategory(e.target.value)} className='wid-100 cate-input' placeholder='축하 카테고리를 입력해주세요!' />
+                  </div>
+                }
               </div>
+              <div className="padd"></div>
               <div className="input-form">
                 <label htmlFor="태그">제목</label>
                 <input
@@ -386,6 +447,7 @@ export function MakeWishPage() {
                   onChange={(e) => setTitle(e.target.value)}
                 />
               </div>
+            
               <div className="input-form input-wide">
                 <label htmlFor="태그">내용</label>
                 <textarea
@@ -395,7 +457,7 @@ export function MakeWishPage() {
 
                 </textarea>
               </div>
-
+              <div className="brbr padd"></div>
               <div className="duration-container wid-100">
                 <label htmlFor="">기간</label>
                 <h1>
@@ -418,10 +480,12 @@ export function MakeWishPage() {
                   />
                 </div>
               </div>
-              <div className="card-container">
+              <div className="brbr padd"></div>
+              <div className="card-container wid-100">
                 <label htmlFor="">카드</label>
                 <CarouselComponent  propFunction={CardClicked}/>
               </div>
+              <div className="brbr padd"></div>
               <div className='wid-100'>
                 <label htmlFor="">선물</label>
                 <div className="wish-card-container gift-container w-100">
@@ -470,17 +534,18 @@ export function MakeWishPage() {
                   </div>
                 </div>
               </div>
+              <div className="brbr padd"></div>
               <div className="address-form-container wid-100">
                 <label htmlFor="태그">주소</label>
                 <div className='postcode-myaddr'>
                   <input
                     className="address-form postcode wid-50"
                     type="text"
-                    value={enroll_company.zonecode}
+                    value={callMyAddr? userZipCode : enroll_company.zonecode}
                     placeholder="우편번호"
                     disabled
                   />
-                    <div>내 주소 불러오기</div>
+                    <div className='wid-20 my-addr' onClick={CallMyAddr}>내 주소 불러오기</div>
                 </div>
                 <div className="address-form wid-100">
                   <input
@@ -489,12 +554,13 @@ export function MakeWishPage() {
                     required={true}
                     name="address"
                     onChange={handleInput}
-                    value={enroll_company.address}
+                    value={callMyAddr? userAddr1 :enroll_company.address}
                     disabled
                   />
                   <Postcode
                     company={enroll_company}
                     setcompany={setEnroll_company}
+                    setNewAddr={setCallMyAddr}
                   />
                 </div>
               </div>
@@ -505,15 +571,27 @@ export function MakeWishPage() {
                     type="text"
                     name="상세주소"
                     onChange={(e) => setAddr2(e.target.value)}
+                    value={callMyAddr? userAddr2:addr2}
                   />
                 </div>
               </div>
-              <div className="make-wish-btn-con wid-100">
-                <div className="make-wish-btn" onClick={MakeWish}>
-                  위시만들기
+              {/* 위시 폼 유효하면 위시만들기 버튼 활성화 */}
+              {wishValidated?
+                <div className="make-wish-btn-con wid-100">
+                  <div className="make-wish-btn grd-btn" onClick={MakeWish} >
+                    위시만들기
+                  </div>
                 </div>
-              </div>
+                :
+                <div className="make-wish-btn-con wid-100">
+                  <div className="make-wish-btn" onClick={MakeWish}>
+                    위시만들기
+                  </div>
+                </div>
+            }
+
             </div>
+            
           </div>
           <div className='wid-50'>
             <FinishedWishComponent />

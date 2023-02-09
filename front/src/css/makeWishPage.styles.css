@@ -4,8 +4,9 @@
     display: flex;
     justify-content: space-around;
     flex-direction: row;
-    padding-left: 5%;
-    padding-right: 5%;
+    padding-left: 3%;
+    padding-right: 3%;
+    flex-wrap: wrap;
 }
 .make-wish-container{
     width: 100%;
@@ -13,6 +14,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+    min-width: 600px;
 }
 .input-form{
     display: flex;
@@ -259,7 +261,9 @@
 .address-form-container span{
     color:#C1C1C1 ;
 }
-
+.grd-btn{
+    background: radial-gradient(71.83% 71.82% at 49.82% 57.27%, #FE3360 0%, #FE3360 36.98%, rgba(254, 51, 96, 0.791562) 55.73%, rgba(254, 51, 96, 0.574062) 67.71%, rgba(254, 51, 96, 0.339394) 80.21%, rgba(254, 51, 96, 0.28) 87.5%, rgba(255, 255, 255, 0.42) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+}
 .make-wish-btn{
     display: flex;
     flex-direction: row;
@@ -267,7 +271,6 @@
     align-items: center;
     padding: 17px 0px;
     gap: 10px;
-    background: radial-gradient(71.83% 71.82% at 49.82% 57.27%, #FE3360 0%, #FE3360 36.98%, rgba(254, 51, 96, 0.791562) 55.73%, rgba(254, 51, 96, 0.574062) 67.71%, rgba(254, 51, 96, 0.339394) 80.21%, rgba(254, 51, 96, 0.28) 87.5%, rgba(255, 255, 255, 0.42) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
     width: 582px;
     border: 1px solid #FFF1EF;
     border-radius: 10px;
@@ -423,11 +426,18 @@
     flex-direction: column;
     word-break: normal;
     flex-wrap: nowrap;
-    background-color: #C1C1C1;
+    /* background-color: #C1C1C1; */
     background-size: cover;
     background-repeat: no-repeat;
     background-position:center;
+
+    min-height: 300px;
+    height: fit-content;
+    max-height: 600px;
 }
+.fin-wcd>pre::-webkit-scrollbar{
+    display:none;
+  }
 .gift-img{
     background-size: cover;
 }
@@ -446,6 +456,7 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
 }
 
 .cart-list{
@@ -508,4 +519,46 @@
 }
 .wish-card-vis-none{
     opacity: 10%;
+}
+.start-bottom{
+    display: flex;
+    
+}
+.border-bottom{
+    border-bottom: 1px solid black;
+}
+.cate-input{
+    height: 90%;
+    margin-bottom: 8px;
+    padding:8px;
+    background-color:#c1c1c176;
+    border-radius: 8px;
+}
+.wid-20{
+    width: 20%;
+}
+.my-addr{
+    justify-content: center;
+    align-content: center;
+    display: flex;
+    border: 1px solid #C1C1C1;
+    border-radius: 8px;
+    cursor: pointer;
+    height: 52px;
+    align-items: center;
+    min-width: fit-content;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.selected {
+    border: 2px solid #fe3360;
+}
+.brbr{
+    width: 100%;
+    height: 0;
+    border: 0.5px solid rgb(230, 230, 230);
+}
+.padd{
+    margin-top: 20px;
+    margin-bottom: 20px;
 }

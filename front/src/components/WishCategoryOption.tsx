@@ -92,7 +92,7 @@ function ConfirmationDialogRaw(props: ConfirmationDialogRawProps) {
   );
 }
 
-export default function ConfirmationDialog() {
+export default function ConfirmationDialog(props:{propFunction: (arg0: string) => void}) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("선택해주세요");
 
@@ -105,6 +105,7 @@ export default function ConfirmationDialog() {
 
     if (newValue) {
       setValue(newValue);
+      props.propFunction(newValue)
     }
   };
 
