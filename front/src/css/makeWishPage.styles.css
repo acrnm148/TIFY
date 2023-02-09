@@ -1,5 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
-
+.wish-page-container{
+    width: 100vw;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+.make-wish-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
 .input-form{
     display: flex;
     flex-direction: column;
@@ -9,6 +23,7 @@
     font-size: 14px;
     line-height: 14px;
     margin-bottom: 10px;
+    width: 100%;
 }
 .input-form >input, .input-form >textarea{
     width: 100%;
@@ -32,7 +47,13 @@
 }
 
 .make-wish-form{
-    margin-left: 270px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding-left: 5%;
+    padding-right: 5%;
+    align-items: center;
 }
 .input-select select{
     max-width: 200px;
@@ -53,6 +74,21 @@
     justify-content: left;
     align-items: center;
     margin-bottom: 10px;
+    /* flex-direction:column; */
+}
+.card-container{
+    width: 50%;
+    height: auto;
+}
+.wid-100{
+    width: 100%;
+}
+.wid-50{
+    width: 50%;
+}
+.flex-between{
+    display: flex;
+    justify-content: space-between;
 }
 .wish-card-container{
     min-height: 110px;
@@ -67,7 +103,12 @@
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
+
+    -ms-overflow-style: none; /*스크롤 안생기게*/
 }
+.wish-card-container::-webkit-scrollbar{
+    display:none;
+  }
 .wish-card-item{
     width: 215px;
     height: 128px;
@@ -87,18 +128,19 @@
 }
 
 .wish-card-gift{
+    display: flex;
     width: 138px;
-    height: 128px;
+    /* height: 128px; */
     border-radius: 8px;
     margin-left: 10px;
 }
 
-.duration-from{
-    width: 80vw;
-    max-width: 882px;
+.duration-from {
+    /* width: 80vw; */
+    /* max-width: 882px; */
     min-height: 52px;
-    border: solid 1px #C1C1C1;
-    border-radius: 8px;
+    /* border: solid 1px #C1C1C1; */
+    /* border-radius: 8px; */
     padding-left: 10px;
     padding-right: 10px;
     margin-top: 10px;
@@ -197,7 +239,6 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 80vw;
     max-width: 882px;
     min-height: 52px;
     border: solid 1px #C1C1C1;
@@ -382,6 +423,10 @@
     flex-direction: column;
     word-break: normal;
     flex-wrap: nowrap;
+    background-color: #C1C1C1;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position:center;
 }
 .gift-img{
     background-size: cover;
@@ -395,4 +440,72 @@
 }
 .css-1wnsr1i{
     width: auto;
+}
+
+.postcode-myaddr{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.cart-list{
+    font-size: 22px;
+    padding: 5px;
+    width: 100%;
+    border-bottom: 1px solid black;
+    margin-bottom: 15px;
+}
+.gift-container{
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    align-items: flex-start;
+}
+.MuiFormControlLabel-root{
+    border-bottom: 1px solid #e9e9e9;
+}
+.MuiFormControlLabel-root:hover{
+    background-color: #dcdce495;
+}
+/* carousel */
+.css-1t4vnk2-MuiDialogContent-root{
+    -ms-overflow-style: none;
+}
+.css-1t4vnk2-MuiDialogContent-root::-webkit-scrollbar{
+    display:none;
+  }
+  .carousel .slider-wrapper.axis-horizontal .slider {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.carousel .slide{
+    height: fit-content;
+    overflow: hidden;
+}
+.carousel .control-dots{
+    display: none;
+}
+.img-small{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.img-small > img{
+    /* height: 50%; */
+}
+.carousel .thumb{
+    height: 55px;
+    overflow: hidden;
+}
+.wish-card-sel{
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.wish-card-vis-none{
+    opacity: 10%;
 }
