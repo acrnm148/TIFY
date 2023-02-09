@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
 import axios from "axios";
@@ -13,19 +13,23 @@ interface User {
   nickname: string;
   email: string;
   state: string;
+  friendshipId: number;
 }
 
 const FriendsPage: React.FC = () => {
-  const [nickname, setNickname] = useState('');
+  const [nickname, setNickname] = useState("");
   const [users, setUsers] = useState<Array<User>>([]);
   const [selectedUserId, setSelectedUserId] = useState<number>(0);
+  const [refresh, setRefresh] = useState<boolean>(false);
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
-  const userPk = useSelector((state: RootState) => state.authToken.userId);
+  const userPk = useSelector(
+    (state: RootState) => state.authToken.userId,
+  );
   useEffect(() => {
-    handleSubmit();
-  }, [refresh]);
+    handleSubmit()
+  },[refresh])
   const handleSubmit = async () => {
     try {
       const response = await axios.get(`https://i8e208.p.ssafy.io/api/searchuser/${nickname}`, {
@@ -35,12 +39,15 @@ const FriendsPage: React.FC = () => {
         }
       });
       const friends = response.data;
-
+      
       setUsers([...friends]);
-    } catch (error) {}
+    } catch (error) {
+    }
   };
-
+  
   const handleRequestFriend = async (userId: number) => {
+
+
     try {
       const response = await axios.post(`https://i8e208.p.ssafy.io/api/friends`, {
         userId: userPk ,
@@ -53,11 +60,13 @@ const FriendsPage: React.FC = () => {
       });
       console.log(response.data);
       setUsers([...users]);
-      setRefresh(!refresh);
-    } catch (error) {}
+      setRefresh(!refresh); 
+    } catch (error) {
+    }
   };
 
   const handleAcceptFriend = async (friendId: number) => {
+
     try {
       const response = await axios.post(`https://i8e208.p.ssafy.io/api/friends/accept`, {
         friendId: friendId ,
@@ -69,39 +78,36 @@ const FriendsPage: React.FC = () => {
         }
       });
       console.log(response.data);
-      setRefresh(!refresh);
-    } catch (error) {}
-  };
+      setRefresh(!refresh); 
+    } catch (error) {
+    }
+  };    
   const handleCancelFriend = async (friendId: number) => {
     try {
-      const response = await axios.delete(
-        `https://i8e208.p.ssafy.io/api/friend/reqdelete/${friendId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-type': 'application/json',
-          },
-        },
-      );
+      const response = await axios.delete(`https://i8e208.p.ssafy.io/api/friend/reqdelete/${friendId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-type': 'application/json',
+        }
+      });
       console.log(response.data);
-      setRefresh(!refresh);
-    } catch (error) {}
+      setRefresh(!refresh); 
+    } catch (error) {
+    }
   };
-
+  
   const handleDeleteFriend = async (friendId: number) => {
     try {
-      const response = await axios.delete(
-        `https://i8e208.p.ssafy.io/api/friend/delete/${friendId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-type': 'application/json',
-          },
-        },
-      );
+      const response = await axios.delete(`https://i8e208.p.ssafy.io/api/friend/delete/${friendId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-type': 'application/json',
+        }
+      });
       console.log(response.data);
-      setRefresh(!refresh);
-    } catch (error) {}
+      setRefresh(!refresh); 
+    } catch (error) {
+    }
   };
 
   return (
@@ -134,6 +140,9 @@ const FriendsPage: React.FC = () => {
          user.state === 'NONE' ?<button className="rectangle-2-6" onClick={() => {handleRequestFriend(user.id);}}>친구요청</button>:null}
         </p>
       </div>
+  ))}
+</div>
+    </div>
     </div>
   );
 };
@@ -143,5 +152,6 @@ interface UserSearchBarProps {
   onNicknameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
+
 
 export default FriendsPage;
