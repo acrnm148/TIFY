@@ -16,22 +16,18 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
 
 interface orders {
-  content: any;
-  pageable: any;
-  totalElements: number;
-  totalPages: number;
-  sort: any;
-  numberOfElements: 10;
-  first: Boolean;
-  size: number;
-  number: number;
-  empty: boolean;
-  last: number;
+  state: number;
+  wishFinishDate: string;
+  giftImgUrl: string;
+  wishName: string;
+  giftName: string;
+  orderPrice: number;
+  gatheredPrice: number;
 }
 
 const OrderInfo = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState<Array<any>>([]);
+  const [orders, setOrders] = useState<orders[] | null>(null); //([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const maxResults = 10;
@@ -47,7 +43,7 @@ const OrderInfo = () => {
       headers: { Authorization: `Bearer ${accessToken}` },
     })
       .then((response) => {
-        setSearchResults([...response.data]);
+        setOrders([...response.data]);
         // setTotalPages(response.data.totalPages);
         console.log(response.data);
         return response.data;
@@ -56,14 +52,14 @@ const OrderInfo = () => {
         console.error(error);
       });
   };
-  if (searchResults === null) {
+  if (orders === null) {
     getData(0);
   }
   return (
     <div className="order-div">
-      {searchResults && (
+      {orders && (
         <>
-          <OrderCardActive searchResults={searchResults}></OrderCardActive>
+          <OrderCardActive orders={orders}></OrderCardActive>
           {/* <OrderCardActive searchResults={searchResults}></OrderCardActive> */}
           {/* <OrderCardActive searchResults={searchResults}></OrderCardActive> */}
           {/* <OrderCardActive searchResults={searchResults}></OrderCardActive> */}
@@ -73,14 +69,15 @@ const OrderInfo = () => {
   );
 };
 
-const OrderCardActive = (props: { searchResults:any }) => {
+const OrderCardActive = (props: { orders: orders[] }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
 
-  function getOrderState(state:number) {
+  /*
+  function getOrderState(state) {
     switch (state) {
       case 0:
         return <p className="p-order-state">축하부족</p>;
@@ -96,19 +93,18 @@ const OrderCardActive = (props: { searchResults:any }) => {
         return <p className="p-order-state">상태없음</p>;
     }
   }
+  */
 
   return (
     // jsx요소로 쓸 때 리턴값이 <div></div> 나 <></> 하나로 묶여있어야함
     <div className="order-div">
-      {props.searchResults.map((order:any, idx:number) => (
+      {props.orders.map((order: orders, idx: any) => (
         <div className="order-box shadow-xl">
           <div className="order-box-top">
             <p className="p-order-state">
               {order.state === 1 ? '배송완료' : ''}
             </p>
-            <p className="p-finished-date">
-              {order.wishFinishDate} 2023.02.09 위시 종료
-            </p>
+            <p className="p-finished-date">{order.wishFinishDate} 위시 종료</p>
           </div>
           <div className="gift-info-div">
             <img
