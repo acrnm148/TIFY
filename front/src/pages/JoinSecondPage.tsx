@@ -7,7 +7,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Login } from '../modules/Auth/LogIn';
-import { setRefreshToken } from '../modules/Auth/Cookie';
+import { setRefreshToken } from '../modules/Auth/RefreshtokenLocal';
 import { SET_TOKEN, SET_USERID, SET_USEREMAIL } from '../store/Auth';
 import { useDispatch } from 'react-redux';
 

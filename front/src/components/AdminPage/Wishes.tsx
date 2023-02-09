@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 
 import { ref, set, push, onValue, child, get, update, remove } from "firebase/database";
 import { List } from "@mui/material";
@@ -34,6 +34,10 @@ const Wishes = () => {
     const [zipCode,setZipCode] = useState<string>('')
     const [category,setCategory] = useState<string>('')
     const [id,SetId] = useState<number>(0)
+    
+    const [refresh, setRefresh] = useState<boolean>(false);
+    useEffect(() => {
+      getData(page)}, [refresh]);
 
     const maxResults = 10;
     // const baseUrl = "https://i8e208.p.ssafy.io/api/admin";
@@ -124,8 +128,11 @@ const Wishes = () => {
       setWishInfo(response.data);
       console.log(response.data);
       setShow(false);
+      setRefresh(!refresh);
       return response.data;
     };
+
+
 
     return (
         <div className="m-12">

@@ -6,7 +6,7 @@ import { RootState } from '../../store/Auth';
 
 import axios from 'axios';
 
-import { getCookieToken, removeCookieToken } from './Cookie';
+import { getCookieToken, removeCookieToken } from './RefreshtokenLocal';
 import { DELETE_TOKEN } from '../../store/Auth';
 // import { logoutUser } from '../api/Users';
 
