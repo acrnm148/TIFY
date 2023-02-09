@@ -170,9 +170,23 @@ const FriendsList = () => {
         console.log(err);
       });
   }, []);
+  console.log(friendList, 'friendList 여기 있다.');
   return (
     <div className="friends-div">
       친구 목록들
+      <ul className="list-group list-group-flush">
+        <li className="list-group-item">An item</li>
+        <li className="list-group-item">A second item</li>
+        <li className="list-group-item">A third item</li>
+        <li className="list-group-item">A fourth item</li>
+        <li className="list-group-item">And a fifth one</li>
+        {friendList &&
+          friendList.map((friend: object) => {
+            console.log(friend);
+            return <SingleFriend friend={friend}></SingleFriend>;
+          })}
+        <SingleFriend></SingleFriend>
+      </ul>
       <div className="test-div">안녕</div>
       <div className="test-div">안녕</div>
       <div className="test-div">안녕</div>
@@ -181,6 +195,10 @@ const FriendsList = () => {
       <div className="test-div">안녕</div>
     </div>
   );
+};
+
+const SingleFriend = () => {
+  return <li className="list-group-item">And a fifth one</li>;
 };
 
 // 캐러셀 부분
