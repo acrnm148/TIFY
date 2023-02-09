@@ -18,20 +18,20 @@ import { RootState } from '../store/Auth';
 interface orders {
   content: any;
   pageable: any;
-  totalElements: Number;
-  totalPages: Number;
+  totalElements: number;
+  totalPages: number;
   sort: any;
   numberOfElements: 10;
   first: Boolean;
-  size: Number;
-  number: Number;
-  empty: Boolean;
-  last: Number;
+  size: number;
+  number: number;
+  empty: boolean;
+  last: number;
 }
 
 const OrderInfo = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState<orders[]>(null);
+  const [searchResults, setSearchResults] = useState<Array<any>>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const maxResults = 10;
@@ -73,14 +73,14 @@ const OrderInfo = () => {
   );
 };
 
-const OrderCardActive = (props: { searchResults: orders[] }) => {
+const OrderCardActive = (props: { searchResults:any }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
 
-  function getOrderState(state) {
+  function getOrderState(state:number) {
     switch (state) {
       case 0:
         return <p className="p-order-state">축하부족</p>;
@@ -100,7 +100,7 @@ const OrderCardActive = (props: { searchResults: orders[] }) => {
   return (
     // jsx요소로 쓸 때 리턴값이 <div></div> 나 <></> 하나로 묶여있어야함
     <div className="order-div">
-      {props.searchResults.map((order: orders, idx: any) => (
+      {props.searchResults.map((order:any, idx:number) => (
         <div className="order-box shadow-xl">
           <div className="order-box-top">
             <p className="p-order-state">
