@@ -1,5 +1,6 @@
 import '../../css/mypage/phoneBook.styles.css';
 import { useEffect } from 'react';
+import axios from 'axios';
 
 export function PhoneBook() {
   useEffect(() => {
@@ -40,11 +41,11 @@ const RequestFriend = ({ request }: any) => {
         friendId: id,
         accepted: true,
       })
-      .then((res) => {
+      .then((res: any) => {
         console.log(res, '친구 요규 승락 성공');
-        GetFriendData();
+        // GetFriendData();
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.log(err);
       });
   };
@@ -54,11 +55,11 @@ const RequestFriend = ({ request }: any) => {
     const API_URL = `https://i8e208.p.ssafy.io/api/friend/reqdelete/${id}`;
     axios
       .delete(API_URL)
-      .then((res) => {
+      .then((res: any) => {
         console.log(res, '친구 요청 거부 성공');
-        GetFriendData();
+        // GetFriendData();
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.log(err);
       });
   };

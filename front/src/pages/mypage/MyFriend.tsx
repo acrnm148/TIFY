@@ -313,12 +313,6 @@ const FriendsList = () => {
           <li className="list-group-item">A third item</li>
           <li className="list-group-item">A fourth item</li>
           <li className="list-group-item">And a fifth test</li>
-          {console.log(lastRequestData, '판독하는 부분은 여기')}
-          {lastRequestData.requestCount !== 0 ? (
-            <GoRequest lastRequestData={lastRequestData}></GoRequest>
-          ) : (
-            <></>
-          )}
 
           {requestListBool === false
             ? friendList &&
