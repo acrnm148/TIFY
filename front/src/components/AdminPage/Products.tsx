@@ -29,6 +29,7 @@ import { Justify, Search } from 'react-bootstrap-icons';
 import { NavLink } from 'react-router-dom';
 import {Modal, Form, Collapse, Container, Row, Col, ListGroup} from 'react-bootstrap';
 import { borderRadius } from "@mui/system";
+import { now } from 'moment';
 
 
 
@@ -106,7 +107,7 @@ const Products = () => {
   const [nowPage, setNowPage] = useState<number>();
   const pamount = 10
   const [nowStartNum, setNowStartNum] = useState<number>(1)
-  const [nowLastNum, setNowLastNum] = useState<number>(pamount)
+  const [nowLastNum, setNowLastNum] = useState<number>(1)
 
   ////////////////////// 상품 등록용 state
   const [newProductInfo, setNewProductInfo] = useState<productDetail | null>({});
@@ -140,9 +141,10 @@ const Products = () => {
     let target = nowLastNum+1
     // if(target)
     setNowPage(target)
-    getData(target)
+    getData(target-1)
     setNowStartNum(target)
-    setNowLastNum(nowLastNum+pamount)
+    if (totalPages > (nowLastNum+pamount) ) { setNowLastNum(nowLastNum+pamount) }
+    else { setNowLastNum(totalPages) }
    }
    const GoToBeforePage = () =>{
     let target = nowStartNum-pamount
@@ -150,7 +152,7 @@ const Products = () => {
       return
     }
     setNowPage(target)
-    getData(target)
+    getData(target-1)
     setNowLastNum(nowStartNum-1)
     setNowStartNum(target)
    }
@@ -242,10 +244,13 @@ const Products = () => {
           page,
           max_result: 20,
         },
-      });
-      setSearchResults(response.data.content);
-      setTotalPages(response.data.totalPages);
-      console.log(response.data.content);
+      }).then((res) => {
+        console.log(res,"페이지 찐정보"); 
+        setSearchResults(res.data.content);
+        setTotalPages(res.data.totalPages);
+        totalPages > 10 ? setNowLastNum(10):setNowLastNum(res.data.totalPages)
+        console.log(totalPages,nowLastNum,"페이지 정보")
+        return res});
       return response.data.content;
     } catch (error) {
       console.error(error);
@@ -283,14 +288,14 @@ const Products = () => {
 
   const PageButtons = ({ totalPages }: { totalPages: number }) => {
     let buttons = [];
-    for (let i = nowStartNum; i < nowLastNum; i++) {
+    for (let i = nowStartNum; i <= nowLastNum; i++) {
       buttons.push(
         <li className="page-item" key={i}>
           <button
             className="page-link"
             onClick={() => {
               // setPage(i - 1);
-              setNowPage(i-1);
+              setNowPage(i);
               if (searchTerm.trim() == "" || searchTerm==null) {
                 getData(i - 1);
               }
@@ -466,7 +471,7 @@ const Products = () => {
     //   await getImgUrl(idx);
     // })
     setProductInfo({...productInfo,imgList:newImgs})
-    await axios.put(`${baseUrl}/product`,{...productInfo,imgList:newImgs, options, quantity})
+    await axios.put(`${baseUrl}/product`,{...productInfo,repImg,imgList:newImgs, options, quantity})
     .then(
       (response) => {
         console.log(response);
@@ -562,12 +567,12 @@ const Products = () => {
                 className="btn"
                 style={{ backgroundColor: 'gray', color: 'black' }}
               >
-                삭제
+                
               </button>
             </td>
           </tr> */}
           {searchResults?.map((item: product, idx: any) => (
-            <tr key={idx + 1}>
+            <tr key={`${idx + 1}${Date.now()}`}>
               <td>{idx + 1}</td>
               <td>{item?.id}</td>
               <td>{item?.name}</td>
@@ -724,14 +729,14 @@ const Products = () => {
                 onClick={handleImgShow}
                 aria-controls="example-collapse-text"
                 aria-expanded={open}>
-                Show old images
+                Show old images ({productInfo?.imgList?.length})
               </button>
               <Collapse in={open}>
                 <div>
                   {
                     productInfo?.imgList?.map((val,idx) => {
                       return (
-                          <div style={{visibility: "visible"}} key={idx}>
+                          <div style={{visibility: "visible"}} key={`${idx + 1}${Date.now()}`}>
                           <h2 style={{fontWeight:"bold"}}>{val?.idx} 번 이미지</h2>
                           <img key={val.url} src={val.url} alt={val.url} />
                           </div>
@@ -793,7 +798,7 @@ const Products = () => {
 
                 <ListGroup>
                 {options.map((val, index) => (
-                  <div key={val.title}>
+                  <div key={`${val.title} ${Date.now()}`}>
                     <h1></h1>
                     <ListGroup.Item style={{backgroundColor:"lightgrey", cursor:"pointer"}} onClick={(e) => {e.preventDefault(); toggleCollapse(index)}}>
                       옵션명 - {index} : {val.title}
@@ -816,7 +821,7 @@ const Products = () => {
                       <div style={{visibility: "visible"}}>
                         {
                           val.details.map((detail,didx) => (
-                            <ListGroup.Item key={detail.id}>
+                            <ListGroup.Item key={`${didx*100}${Date.now()}`}>
                               <p style={{fontWeight:"bolder"}} >detail - {detail.idx}</p>
                               <Form.Control type="text" placeholder="옵션 세부 idx" value={options[index].details[didx].idx} onChange={(e) => {options[index].details[didx].idx = parseInt(e.target.value); setOptions([...options])} }/>
                               <p style={{textOverflow: "ellipsis", overflow: "hidden"}}>content: {detail.content}</p>
@@ -861,7 +866,8 @@ const Products = () => {
           <PageButtons totalPages={totalPages} />
           <li className="page-item">
             { 
-              nowLastNum <= totalPages &&
+              
+              (nowLastNum > totalPages) &&
               <a className="page-link" onClick={(e)=>{e.preventDefault(); GoToNextPage()}}>
                 Next
               </a>
@@ -947,7 +953,7 @@ const Products = () => {
                     ) : (
                     files.map((file, index) => {
                       return (
-                          <div key={index}>
+                          <div key={`${index}${Date.now()}`}>
                             <p>{index + 1}. {file.name}</p>
                             <img style={{width:"100px",height:"100px"}}
                               src={URL.createObjectURL(file)}
@@ -1011,7 +1017,7 @@ const Products = () => {
 
                 <ListGroup>
                 {options.map((val, index) => (
-                  <div key={val.title}>
+                  <div key={`${val.title} ${Date.now()}`}>
                     <h1></h1>
                     <ListGroup.Item style={{backgroundColor:"lightgrey", cursor:"pointer"}} onClick={(e) => {e.preventDefault(); toggleCollapse(index)}}>
                       옵션명 - {index} : {val.title}
@@ -1034,7 +1040,7 @@ const Products = () => {
                       <div style={{visibility: "visible"}}>
                         {
                           val.details.map((detail,didx) => (
-                            <ListGroup.Item key={detail.id}>
+                            <ListGroup.Item key={`${didx+100}${Date.now()}`}>
                               <p style={{fontWeight:"bolder"}} >detail - {detail.idx}</p>
                               <Form.Control type="text" placeholder="옵션 세부 idx" value={options[index].details[didx].idx} onChange={(e) => {options[index].details[didx].idx = parseInt(e.target.value); setOptions([...options])} }/>
                               <p style={{textOverflow: "ellipsis", overflow: "hidden"}}>content: {detail.content}</p>

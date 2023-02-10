@@ -68,7 +68,7 @@ const Users = () => {
     const [userInfo,setUserInfo] = useState<UserDetailInfo>({},);
     const [show, setShow] = useState(false); // modal
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchResults, setSearchResults] = useState<userPageResult|null>(null);
+    const [searchResults, setSearchResults] = useState<userInfo[] | null>(null);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [selectUser,setSelectUser] = useState<UserDetailInfo|null> (null);
@@ -79,25 +79,21 @@ const Users = () => {
     const [nowPage, setNowPage] = useState<number>();
     const pamount = 10
     const [nowStartNum, setNowStartNum] = useState<number>(1)
-    const [nowLastNum, setNowLastNum] = useState<number>(pamount)
+    const [nowLastNum, setNowLastNum] = useState<number>(1)
 
-    // const handleSearch = async (event) => {
-    //   if (event.key === 'Enter' || event.type === 'click') {
-    //     const response = await axios.get('localhost:8081/api/users/search', {
-    //       params: {
-    //         email: searchTerm,
-    //       },
-    //     });
-    //     setSearchResults(response.data);
-    //   }
-    // };
+    const handleSearch = async (event:any) => {
+      if (event.key === 'Enter' || event.type === 'click') {
+        getData(0);
+      }
+    };
     const GoToNextPage = () =>{
       let target = nowLastNum+1
       // if(target)
       setNowPage(target)
-      getData(target)
+      getData(target-1)
       setNowStartNum(target)
-      setNowLastNum(nowLastNum+pamount)
+      if (totalPages > (nowLastNum+pamount) ) { setNowLastNum(nowLastNum+pamount) }
+      else { setNowLastNum(totalPages) }
      }
      const GoToBeforePage = () =>{
       let target = nowStartNum-pamount
@@ -105,22 +101,26 @@ const Users = () => {
         return
       }
       setNowPage(target)
-      getData(target)
+      getData(target-1)
       setNowLastNum(nowStartNum-1)
       setNowStartNum(target)
      }
 
     const getData = async (page: number) => {
       try {
-        const response = await axios.get(`${baseUrl}/user`, {
+        let url;
+        searchTerm=='' ? url=`${baseUrl}/user`:url=`${baseUrl}/usersearch/${searchTerm}`
+        const response = await axios.get(url, {
           params: {
             page,
           },
-        });
-        setSearchResults(response.data);
-        setTotalPages(response.data.totalPages);
-        if (totalPages <= 10) { setNowLastNum(totalPages)}
-        console.log(response.data);
+        }).then((res) => {
+          console.log(res,"페이지 찐정보"); 
+          setSearchResults(res.data.content);
+          setTotalPages(res.data.totalPages);
+          totalPages > 10 ? setNowLastNum(10):setNowLastNum(res.data.totalPages)
+          console.log(totalPages,nowLastNum,"페이지 정보")
+          return res});
         return response.data;
       } catch (error) {
         console.error(error);
@@ -153,7 +153,7 @@ const Users = () => {
               className="page-link"
               onClick={() => {
                 // setPage(i - 1);
-                setPage(i-1);
+                setNowPage(i);
                 if (searchTerm.trim() == "" || searchTerm==null) {
                   getData(i - 1);
                 }
@@ -169,6 +169,7 @@ const Users = () => {
       }
       return <>{buttons}</>;
     };
+
     const handleClose = () => setShow(false);
     const handleShow = async (id:number) => {
       await handleEdit(id);
@@ -252,10 +253,8 @@ const Users = () => {
     return (
         <div className="m-12">
             <div className="input-group mb-3">
-                <div className="form-floating">
-                    <input type="text" className="form-control" id="floatingInputGroup1" placeholder="Username"/>
-                </div>
-                <button className="input-group-text"><Search size={24} style={{ margin: "0 auto" }} /></button>
+                <Form.Control type="text" placeholder="Email로 검색하세요." value={searchTerm} onKeyUp={(e) => { if (e.key=="Enter") {getData(0)} }}  onChange={(e) => { e.preventDefault(); setSearchTerm(e.target.value)}}/>
+                <button className="input-group-text"><Search size={24} style={{ margin: "0 auto" }} onClick={()=>getData(0)}/></button>
             </div>
             {/* <td colSpan={2}>Larry the Bird</td> */}
             <table className="table table-hover">
@@ -283,16 +282,16 @@ const Users = () => {
                         <button className="btn" style={{backgroundColor:"gray", color:"black"}}>삭제</button>
                     </td>
                 </tr>
-                {searchResults?.content.map((user:userInfo,idx:any) => (
+                {searchResults?.map((user,idx) => (
                 <tr key={idx+1}>
                   <td>{idx+1}</td>
                   <td>
                     <img style={{borderRadius: '50%', width: '30px', height: '30px',}} src={user.profileImg || "https://mblogthumb-phinf.pstatic.net/MjAyMDExMDFfMTA1/MDAxNjA0MjI4ODc1Mzk0.05ODadJdsa3Std55y7vd2Vm8kxU1qScjh5-3eVJ9T-4g.h7lHansSdReVq7IggiFAc44t2W_ZPTPoZWihfRMB_TYg.JPEG.gambasg/%25EC%259C%25A0%25ED%258A%259C%25EB%25B8%258C_%25EA%25B8%25B0%25EB%25B3%25B8%25ED%2594%2584%25EB%25A1%259C%25ED%2595%2584_%25ED%258C%258C%25EB%259E%2591.jpg?type=w800" } alt="profile"/>
                   </td>
-                  <td>{user.userid}</td>
-                  <td>{user.username}</td>
-                  <td>{user.tel}</td>
-                  <td>{user.email}</td>
+                  <td>{user?.userid}</td>
+                  <td>{user?.username}</td>
+                  <td>{user?.tel}</td>
+                  <td>{user?.email}</td>
 
                   <td colSpan={2}>
                     <button
@@ -443,7 +442,6 @@ const Users = () => {
                 </Form>
               </div>
             </Modal>
-
             <nav aria-label="Page navigation example">
               <ul className="pagination" style={{ justifyContent: 'center' }}>
                 <li className="page-item">
@@ -454,7 +452,8 @@ const Users = () => {
                 <PageButtons totalPages={totalPages} />
                 <li className="page-item">
                   { 
-                    nowLastNum < totalPages &&
+                    
+                    (nowLastNum > totalPages) &&
                     <a className="page-link" onClick={(e)=>{e.preventDefault(); GoToNextPage()}}>
                       Next
                     </a>
