@@ -139,7 +139,7 @@ export function CongratsPayPage(){
       celebTel: cardPhone,
       celebContent: cardContents,
       celebImgUrl: imgUrl,
-      giftId: undefined,
+      giftId: -1,
       userId: userId,
     };
     // Paying 자료형 >> 결제창으로 넘어갈때 결제정보 인자로 넘기기

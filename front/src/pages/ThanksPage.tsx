@@ -126,7 +126,7 @@ export function ThanksPage() {
   })
   const ConCardDetail = memo(function ConCardDetail(){
     return(
-      <div>
+      <div className='disp-flex align-center'>
         받은 축하카드
         <div className="con-card">
           <div className='tofrom'>From {conInfo.from} </div>
