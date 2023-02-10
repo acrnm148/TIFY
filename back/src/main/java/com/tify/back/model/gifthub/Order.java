@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Entity
 @Table(name = "order_table")
-public class Order extends BaseEntity {
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
@@ -30,9 +30,12 @@ public class Order extends BaseEntity {
     private String wishFinishDate;
     private String giftName;
     private int purePrice;
+
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY) // 노비 파트는 fetch 타입 영향 안받음.
+    @JoinColumn(name = "id")
     private Gift gift;
+
     private String tel;
     private int gatheredPrice;
     private int orderPrice;

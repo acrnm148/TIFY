@@ -24,7 +24,7 @@ public class Cart {
 
 
     @OneToMany(mappedBy="cart")
-    private List<CartItem> cartItems = new ArrayList<>();;
+    private List<CartItem> cartItems = new ArrayList<>();
     private int price;
     private int quantity;// count 대신
 

@@ -36,10 +36,10 @@ public class OrderController {
         return orderService.getOrderById(gift.getId());
     }
 
-    @PostMapping("/gift/{id}")
-    public Order createOrderByGift(@RequestBody String message,@PathVariable Long id) throws JSONException {
-        return orderService.createOrder(message);
-    }
+//    @PostMapping("/gift/{id}")
+//    public Order createOrderByGift(@RequestBody String message,@PathVariable Long id) throws JSONException {
+//        return orderService.createOrder(message);
+//    }
 
     @PutMapping("/gift/{id}")
     public Order updateOrderByGift(@RequestBody Order order,@PathVariable Long id) {

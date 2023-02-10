@@ -52,7 +52,6 @@ public class GiftController {
         dto.setGathered(gift.getGathered());
         dto.setSuccessYN(gift.getSuccessYN());
         dto.setIdx(gift.getIdx());
-        dto.setGiftOptionList(gift.getGiftOptionList());
         dto.setPayList(gift.getPayList());
         dto.setId(gift.getId());
         return dto;

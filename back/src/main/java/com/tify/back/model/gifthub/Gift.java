@@ -31,9 +31,11 @@ public class Gift {
     @JoinColumn(name="wish_id") //OrderItem은 하나의 Order만 가진다. => order_id 매핑
     private Wish wish;
 
-    @JsonIgnore
-    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id")
+//    @JsonIgnore
+//    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "order_id")
+
+    @OneToOne(mappedBy= "gift")
     private Order order;
 
 //    @OneToMany
@@ -58,6 +60,4 @@ public class Gift {
     private String giftUrl;
     @OneToMany(mappedBy= "gift")
     private List<Pay> payList = new ArrayList<>();
-    @OneToMany(mappedBy= "gift")
-    private List<GiftOption> giftOptionList = new ArrayList<>();
 }

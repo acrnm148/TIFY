@@ -55,6 +55,7 @@ public class OrderService {
         return "order removed!!" + id;
     }
 
+    /*
     public Order createOrder(String message) throws JSONException {
         JSONObject map;
         if (isValidJson(message)) {
@@ -67,7 +68,7 @@ public class OrderService {
         if (gift.getOrder() != null) {
             throw new OrderAlreadyExistException("This gift's order is already taken.");
         }
-        order.setGift(gift);
+        //order.setGift(gift);
         order.setTel(map.getString("tel"));
         order.setGatheredPrice(map.getInt("gatheredPrice"));
         order.setOrderPrice(map.getInt("orderPrice"));
@@ -84,6 +85,7 @@ public class OrderService {
 
         return order;
     }
+     */
 
     /**
      * 운송장번호, 주문상태 수정 - 관리자
