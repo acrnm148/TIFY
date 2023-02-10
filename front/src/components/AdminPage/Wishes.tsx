@@ -34,22 +34,32 @@ const Wishes = () => {
     const [zipCode,setZipCode] = useState<string>('')
     const [category,setCategory] = useState<string>('')
     const [id,SetId] = useState<number>(0)
+    // Pagination
+    const [nowPage, setNowPage] = useState<number>();
+    const pamount = 10
+    const [nowStartNum, setNowStartNum] = useState<number>(1)
+    const [nowLastNum, setNowLastNum] = useState<number>(1)
     
     const [refresh, setRefresh] = useState<boolean>(false);
     useEffect(() => {
       getData(page)}, [refresh]);
 
     const maxResults = 10;
-    const baseUrl = "https://i8e208.p.ssafy.io/api/admin";
-    // const baseUrl = "http://localhost:8081/api/admin";
+    // const baseUrl = "https://i8e208.p.ssafy.io/api/admin";
+    const baseUrl = "http://localhost:8081/api/admin";
     const getData = async (page: number) => {
       try {
-        const response = await axios.get(`${baseUrl}/wish`, {
+        let url;
+        searchTerm=='' ? url=`${baseUrl}/wish`:url=`${baseUrl}/wishsearch/${searchTerm}`
+        const response = await axios.get(url, {
           // params: {page,},
-        });
-        setSearchResults(response.data.content);
-        setTotalPages(response.data.totalPages);
-        console.log(response.data.content);
+        }).then((res) => {
+          console.log(res,"페이지 찐정보"); 
+          setSearchResults(res.data.content);
+          setTotalPages(res.data.totalPages);
+          totalPages > 10 ? setNowLastNum(10):setNowLastNum(res.data.totalPages)
+          console.log(totalPages,nowLastNum,"페이지 정보")
+          return res});
         return response.data.content;
       } catch (error) {
         console.error(error);
@@ -82,21 +92,51 @@ const Wishes = () => {
       return response.data;
     };
 
-    const PageButtons = ({ totalPages }: { totalPages: number }) => {
-        let buttons = [];
-        for (let i = 1; i <= totalPages; i++) {
-          buttons.push(
-            <li className="page-item" key={i}>
-                <button className="page-link" onClick={() => {setPage(i-1); getData(i-1);}}>{i}</button>
-            </li>
-          )
-        }
-        return (
-          <>
-            {buttons}
-          </>
+    const GoToNextPage = () =>{
+      let target = nowLastNum+1
+      // if(target)
+      setNowPage(target)
+      getData(target-1)
+      setNowStartNum(target)
+      if (totalPages > (nowLastNum+pamount) ) { setNowLastNum(nowLastNum+pamount) }
+      else { setNowLastNum(totalPages) }
+     }
+     const GoToBeforePage = () =>{
+      let target = nowStartNum-pamount
+      if(target < 1){
+        return
+      }
+      setNowPage(target)
+      getData(target-1)
+      setNowLastNum(nowStartNum-1)
+      setNowStartNum(target)
+     }
+
+     const PageButtons = ({ totalPages }: { totalPages: number }) => {
+      let buttons = [];
+      for (let i = nowStartNum; i <= nowLastNum; i++) {
+        buttons.push(
+          <li className="page-item" key={i}>
+            <button
+              className="page-link"
+              onClick={() => {
+                // setPage(i - 1);
+                setNowPage(i);
+                if (searchTerm.trim() == "" || searchTerm==null) {
+                  getData(i - 1);
+                }
+                // else {
+                //   searchDataByName(i-1);
+                // }
+              }}
+            >
+              {i}
+            </button>
+          </li>,
         );
-      };
+      }
+      return <>{buttons}</>;
+    };
 
     const handleDelete = async (id: number|undefined) => {
         console.log(id);
@@ -137,10 +177,8 @@ const Wishes = () => {
     return (
         <div className="m-12">
             <div className="input-group mb-3">
-                <div className="form-floating">
-                    <input type="text" className="form-control" id="floatingInputGroup1" placeholder="Username"/>
-                </div>
-                <button className="input-group-text"><Search size={24} style={{ margin: "0 auto" }} /></button>
+                <Form.Control type="text" placeholder="Email로 검색하세요." value={searchTerm} onKeyUp={(e) => { if (e.key=="Enter") {getData(0)} }}  onChange={(e) => { e.preventDefault(); setSearchTerm(e.target.value)}}/>
+                <button className="input-group-text"><Search size={24} style={{ margin: "0 auto" }} onClick={()=>getData(0)}/></button>
             </div>
             {/* <td colSpan={2}>Larry the Bird</td> */}
             <table className="table table-hover">
@@ -199,12 +237,25 @@ const Wishes = () => {
             totalPages={totalPages}
           /> */}
           {/* <button onClick={handleCreate}>Create</button> */}
-            <nav aria-label="Page navigation example">
-                <ul className="pagination" style={{justifyContent:"center"}}>
-                    <li className="page-item"><a className="page-link" href="#">Previous</a></li>
-                    <PageButtons totalPages={totalPages} />
-                    <li className="page-item"><a className="page-link" href="#">Next</a></li>
-                </ul>
+          <nav aria-label="Page navigation example">
+              <ul className="pagination" style={{ justifyContent: 'center' }}>
+                <li className="page-item">
+                  <a className="page-link" onClick={(e)=>{e.preventDefault(); GoToBeforePage()}}>
+                    Previous
+                  </a>
+                </li>
+                <PageButtons totalPages={totalPages} />
+                <li className="page-item">
+                  { 
+                    
+                    (nowLastNum > totalPages) &&
+                    <a className="page-link" onClick={(e)=>{e.preventDefault(); GoToNextPage()}}>
+                      Next
+                    </a>
+                  }
+
+                </li>
+              </ul>
             </nav>
 
             <Modal show={show} onHide={handleClose}>
