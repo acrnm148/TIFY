@@ -49,6 +49,7 @@ public class FAQController {
     @PostMapping
     public FAQ addFAQ(@RequestBody FAQ faq) {
         System.out.println(faq.getImgUrl());
+        System.out.println("--------------------------------");
         return faqService.save(faq);
     }
 
@@ -68,10 +69,7 @@ public class FAQController {
         existingFAQ.setIdx(faq.getIdx());
         existingFAQ.setTitle(faq.getTitle());
         existingFAQ.setType(faq.getType());
-        String[] temp = faq.getImgUrl().split(".");
-        if (temp.length > 1) {
-            existingFAQ.setImgUrl(faq.getImgUrl());
-        }
+        existingFAQ.setImgUrl(faq.getImgUrl());
         return faqService.save(existingFAQ);
     }
 }

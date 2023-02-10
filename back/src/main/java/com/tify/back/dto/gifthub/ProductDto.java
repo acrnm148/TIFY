@@ -30,12 +30,6 @@ public class ProductDto {
         Product product = new Product();
         product.setName(this.name);
 
-        if (this.repImg != null) {
-            String[] temp = this.repImg.split(".");
-            if (Arrays.stream(temp).count() > 1) {
-                product.setRepImg(this.repImg);
-            }
-        }
         product.setQuantity(this.quantity);
         String herePrice = this.price.replaceAll(",", "");
         herePrice = herePrice.replace("원","");

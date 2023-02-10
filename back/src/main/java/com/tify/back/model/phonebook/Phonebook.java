@@ -1,28 +1,24 @@
 package com.tify.back.model.phonebook;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "phonebook")
-@Getter
+
 @Setter
+@Getter
+@RequiredArgsConstructor
+@Entity
+@Table(name = "Phonebook")
 public class Phonebook {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "phone_number")
+    private Long myId;
     private String phoneNumber;
-
-    // getters and setters
+    private String name;
 }
-
