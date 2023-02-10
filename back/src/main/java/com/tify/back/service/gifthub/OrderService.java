@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 import static net.minidev.json.JSONValue.isValidJson;
@@ -108,10 +109,6 @@ public class OrderService {
         String month = Integer.toString(LocalDateTime.now().getMonthValue());
         String day = Integer.toString(LocalDateTime.now().getDayOfMonth());
 
-        String wishYear = Integer.toString(wish.getEndDate().getYear());
-        String wishMonth = Integer.toString(wish.getEndDate().getMonth());
-        String wishDay = Integer.toString(wish.getEndDate().getDay());
-
         //주문 생성
         Order order = orderRepository.save(
                 Order.builder()
@@ -124,7 +121,7 @@ public class OrderService {
                         .gatheredPrice(gift.getGathered())
                         .user(user)
                         .gift(gift)
-                        .wishFinishDate(wishYear+"."+wishMonth+"."+wishDay )
+                        .wishFinishDate( wish.getEndDate().toString().substring(0,10) )
                         .deliveryNumber(null)
                         .createdTime(LocalDateTime.now())
                         .createdDt(year+"."+month+"."+day)
