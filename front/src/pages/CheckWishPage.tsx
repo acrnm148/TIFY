@@ -166,7 +166,7 @@ export function CheckWishPage() {
         //     // setGoOpenList(newArr2)
         //   })
       })
-      .catch((err) => {
+      .catch((err:any) => {
         console.log('유저의 위시정보 불러오지못함', err);
       });
   }, []);
@@ -205,10 +205,10 @@ export function CheckWishPage() {
       </div>
     );
   };
-  const WishOpened = ({ goOpenList }: { goOpenList: CheckWish[] }) => {
+  const WishOpened = ({ goOpenList }: { goOpenList: CheckWish[] | undefined}) => {
     return (
       <>
-        {goOpenList.map((lst: CheckWish, i: number) => {
+        {goOpenList?.map((lst: CheckWish, i: number) => {
           return (
             <div className="wish-container">
               <CongratsCards
@@ -239,7 +239,7 @@ export function CheckWishPage() {
       'goOpenListgoOpenListgoOpenListgoOpenListgoOpenList',
     );
   };
-  const WishOnGoing = ({ conList }: { conList: CheckWish[] }) => {
+  const WishOnGoing = ({ conList }: { conList: CheckWish[] | undefined}) => {
     return (
       <>
         {/* <button onClick={CheckConList}>list확인용</button> */}
@@ -308,9 +308,9 @@ export function CheckWishPage() {
           </button>
         </div>
         {showIng ? (
-          <WishOnGoing conList={[...conList]} />
+          <WishOnGoing conList={conList && [...conList]} />
         ) : (
-          <WishOpened goOpenList={[...goOpenList]} />
+          <WishOpened goOpenList={goOpenList && [...goOpenList]} />
         )}
       </div>
     );
