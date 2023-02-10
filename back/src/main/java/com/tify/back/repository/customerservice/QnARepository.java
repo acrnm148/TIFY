@@ -21,5 +21,8 @@ public interface QnARepository extends JpaRepository<QnA, Long> {
     @Query("SELECT q FROM QnA q ORDER BY q.createdDate DESC")
     Page<QnA> pagingAll(Pageable pageable);
     Page<QnA> findAllByUser(User user, Pageable pageable);
+
+    @Query("SELECT q FROM QnA q WHERE q.user.email LIKE %:search% OR q.title LIKE %:search%")
+    Page<QnA> findByUserEmailContainingOrTitleContaining(String search , Pageable pageable);
 }
 

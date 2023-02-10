@@ -26,12 +26,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.lang.reflect.Array;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ProductService {
     private final ProductRepository productRepository;
     private final ImgService imgService;
@@ -96,6 +98,8 @@ public class ProductService {
         Product product = dto.toEntity();
         productRepository.save(product);
 
+        product.setRepImg(dto.getRepImg());
+
         if (dto.getImgList().size() > 0) {
             List<Img> imgList = new ArrayList<>();
             for (ImgDto imgDto : dto.getImgList()) {
@@ -133,19 +137,17 @@ public class ProductService {
         Product product = productRepository.findById(dto.getId()).orElse(null);
         product.setName(pdto.getName());
         product.setDescription(pdto.getDescription());
-        System.out.println(product.getRepImg());
+        System.out.println("--------------------------------111111111111");
+        System.out.println(dto.getRepImg());
+        System.out.println(dto.getImgList().size());
         System.out.println("--------------------------------900432432");
-        if (pdto.getRepImg() != null) {
-            String[] temp = pdto.getRepImg().split(".");
-            if (Arrays.stream(temp).count() > 1) {
-                product.setRepImg(pdto.getRepImg());
-            }
-        }
+        product.setRepImg(dto.getRepImg());
+
         product.setPrice(pdto.getPrice());
         product.setCategory(pdto.getCategory());
         product.setQuantity(pdto.getQuantity());
         //기존 이미지 삭제
-        if (pdto.getImgList().size() > 0) {
+        if (dto.getImgList().size() > 0) {
             for (Img img:product.getImgList()) {
                 imgRepository.deleteById(img.getId());
             }
