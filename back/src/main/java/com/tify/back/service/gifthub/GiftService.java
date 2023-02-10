@@ -85,7 +85,6 @@ public class GiftService {
         map.put("idx", gift.getIdx());
         map.put("gathered", gift.getGathered());
         map.put("finishDate", gift.getFinishDate());
-        map.put("giftUrl", gift.getGiftUrl());
         map.put("giftImgUrl", gift.getGiftImgUrl());
         return map;
     }

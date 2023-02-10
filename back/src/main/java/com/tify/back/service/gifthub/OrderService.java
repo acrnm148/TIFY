@@ -2,6 +2,7 @@ package com.tify.back.service.gifthub;
 
 
 import com.tify.back.dto.admin.OrderStateDto;
+import com.tify.back.dto.pay.request.RefundRequestDto;
 import com.tify.back.exception.OrderAlreadyExistException;
 import com.tify.back.model.gifthub.Gift;
 import com.tify.back.model.gifthub.Order;
@@ -112,6 +113,7 @@ public class OrderService {
         //주문 생성
         Order order = orderRepository.save(
                 Order.builder()
+                        .userOption(gift.getUserOption())
                         .giftImgUrl(gift.getGiftImgUrl())
                         .giftName(gift.getGiftname())
                         .wishId(wish.getId())
@@ -129,5 +131,19 @@ public class OrderService {
                         .build()
         );
         return order;
+    }
+
+    /**
+     * 환불하기
+     */
+    public Order refund(RefundRequestDto refundDto) {
+        Order refOrder = orderRepository.findById(refundDto.getOrderId()).get();
+        refOrder.setRefState("Y");
+        refOrder.setRefUserAccount(refundDto.getAccount());
+        refOrder.setRefUserBank(refundDto.getBank());
+        refOrder.setRefUserName(refundDto.getUserName());
+
+        System.out.println("환불 요청되었습니다.");
+        return refOrder;
     }
 }

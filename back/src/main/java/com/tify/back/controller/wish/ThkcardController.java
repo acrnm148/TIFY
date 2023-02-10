@@ -19,17 +19,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/thkcards")
 public class ThkcardController {
 	private final ThkcardService thkcardService;
-	private final ThkcardRepository thkcardRepository;
 	private final PayRepository payRepository;
+
 	@PostMapping
 	public Thkcard saveThkcard(@RequestBody ThkcardDto thkcardDto) {
 		Thkcard thkcard = thkcardDto.toEntity(payRepository);
 		return thkcardService.saveThkcard(thkcard);
 	}
 
-		@GetMapping("/{userId}")
-		public List<Thkcard> findAllByUserId(@PathVariable Long userId) {
-			return thkcardService.findAllByUserId(userId);
-		}
+	@GetMapping("/{userId}")
+	public List<Thkcard> findAllByUserId(@PathVariable Long userId) {
+		return thkcardService.findAllByUserId(userId);
 	}
 
+	/**
+	 * payid로 감사카드 불러오기
+	 */
+	@GetMapping("/match/{celebId}")
+	public Thkcard getThkcardByCelebcard(@PathVariable("celebId") Long celebId) {
+		Thkcard thkcard = thkcardService.getThkcardByCelebcard(celebId);
+		return thkcard;
+	}
+}

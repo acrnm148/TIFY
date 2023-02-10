@@ -1,5 +1,6 @@
 package com.tify.back.model.wish;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tify.back.model.pay.Pay;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,6 +39,6 @@ public class Thkcard {
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pay_id")
+	@JsonIgnore
 	private Pay pay;
-
 }
