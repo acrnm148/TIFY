@@ -15,6 +15,7 @@ import com.tify.back.model.wish.Wish;
 import com.tify.back.repository.customerservice.FAQRepository;
 import com.tify.back.repository.customerservice.QnARepository;
 import com.tify.back.repository.gifthub.GiftRepository;
+import com.tify.back.repository.gifthub.OrderRepository;
 import com.tify.back.repository.users.UserRepository;
 import com.tify.back.repository.wish.WishRepository;
 import com.tify.back.service.gifthub.CartService;
@@ -26,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -47,6 +49,7 @@ public class AdminController {
     private final GiftRepository giftRepository;
     private final QnARepository qnARepository;
     private final FAQRepository fAQRepository;
+    private final OrderRepository orderRepository;
 //    @GetMapping("/userlist")
 //    public List<User> getUserList() {}
 
@@ -218,6 +221,28 @@ public class AdminController {
         if (max_result == null) {max_result = 0; }
         Pageable pageable = PageRequest.of(page, Math.max(10, max_result));
         return fAQRepository.findFAQByTitle(search, pageable);
+    }
+
+    @Operation(summary = "admin page order search ", description = "관리자페이지 order search")
+    @GetMapping("/ordersearch/{email}")
+    public Page<Order> getOrderSearch(@RequestParam(value = "page", required = false) Integer page,
+                                  @RequestParam(value = "max_result", required = false) Integer max_result,
+                                  @PathVariable String email) {
+        if (page == null) { page = 0; }
+        if (max_result == null) {max_result = 0; }
+        Pageable pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("createdTime").ascending());
+
+        return orderRepository.findByUserEmail(email, pageable);
+    }
+
+    @Operation(summary = "admin page order", description = "관리자페이지 order")
+    @GetMapping("/order")
+    public Page<Order> getOrderSearch(@RequestParam(value = "page", required = false) Integer page,
+                                      @RequestParam(value = "max_result", required = false) Integer max_result) {
+        if (page == null) { page = 0; }
+        if (max_result == null) {max_result = 0; }
+        Pageable pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("createdTime").ascending());
+        return orderRepository.findAll(pageable);
     }
 }
 
