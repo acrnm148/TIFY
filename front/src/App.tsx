@@ -58,6 +58,7 @@ import Products from './components/AdminPage/Products';
 import Qna from './components/AdminPage/Qna';
 import Faq from './components/AdminPage/Faq';
 import Gifts from './components/AdminPage/Gifts';
+import Order from './components/AdminPage/Order';
 // const initialState = {
 //   authenticated: false,
 //   token: null,
@@ -163,6 +164,7 @@ function App() {
         <Route path="/admin/qna" element={<Qna />} />
         <Route path="/admin/faq" element={<Faq />} />
         <Route path="/admin/gifts" element={<Gifts />} />
+        <Route path="/admin/order" element={<Order />} />
       </Routes>
       <Footer />
     </BrowserRouter>
