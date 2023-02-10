@@ -120,8 +120,7 @@
 }
 
 .gift-info img{
-    width: 70%;
-    height: auto;
+    width: fit-content;
 }
 
 .name_and_price{
