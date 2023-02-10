@@ -117,6 +117,8 @@ export function MakeWishPage() {
   const [ userZipCode, setUserZipCode ] = useState<number>()
   const [ userName, setUserName ] = useState<string>()
 
+  const[userOptions, setUserOptions] = useState<string>()
+
   const [callMyAddr, setCallMyAddr] = useState<boolean>()
 
   // address
@@ -134,16 +136,15 @@ export function MakeWishPage() {
   // gift cart
   const [cartList, setCartList] = useState<Gift[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  // 카드 아이템(product) 컬럼과 위시생성시 만드는 기프트(gift)컬럼명이 달라서 conList와 totalProduct 두개 사용
-  const [totalProduct, setTotalProduct] = useState<{
-    productId:number
-    purePrice:number, 
-    userOption:any, 
-    giftImgUrl:string, 
-    giftName: string,
-    maxAmount:number,
-    quantity: number
-  }[]>([]);
+  // const [totalProduct, setTotalProduct] = useState<{
+  //   productId:number
+  //   purePrice:number, 
+  //   userOption:any, 
+  //   giftImgUrl:string, 
+  //   giftName: string,
+  //   maxAmount:number,
+  //   quantity: number
+  // }[]>([]);
 
   // 유저 폼 유효성 검사
   const [wishValidated, setWishValidated] = useState<boolean>()
@@ -169,10 +170,21 @@ export function MakeWishPage() {
       })
         .then((con) => {
           const lst = con.data.content;
-          const conlst: Gift[] = [];
+          const conlst:Gift[] = [];
 
           lst.map((d: any) => {
-            conlst.push(d.product);
+            conlst.push({
+                giftId: 0, 
+                id : d.product.id,
+                name : d.product.name,
+                price : d.product.price,
+                repImg : d.product.repImg,
+                optionTitle : d.product.options[0]? d.product.options[0].title: '',
+                // options : [],
+                options : d.product.options[0]? d.product.options[0].details.map((opt: {content:string, value:number })=>{
+                  return opt.content+'-'+opt.value 
+                }) :[]
+            });
           });
           setCartList(conlst);
           console.log('카트 리스트불러오기 성공',conlst);
@@ -218,22 +230,22 @@ export function MakeWishPage() {
           return
         }
         setWishCart([...wishCart,cartList[i]])
-        setTotalProduct([...totalProduct,{"productId" : cartList[i].id,
-                                          'purePrice': cartList[i].price, 
-                                          'userOption':cartList[i].options[0], 
-                                          'giftImgUrl':cartList[i].repImg, 
-                                          'giftName' : cartList[i].name,
-                                          "maxAmount": cartList[i].price+Math.round(cartList[i].price*0.05),
-                                          "quantity" : 1 }])
+        // setTotalProduct([...totalProduct,{"productId" : cartList[i].id,
+        //                                   'purePrice': cartList[i].price, 
+        //                                   'userOption':cartList[i].options[0], 
+        //                                   'giftImgUrl':cartList[i].repImg, 
+        //                                   'giftName' : cartList[i].name,
+        //                                   "maxAmount": cartList[i].price+Math.round(cartList[i].price*0.05),
+        //                                   "quantity" : 1 }])
       } else {
         setWishCart([cartList[i]])
-        setTotalProduct([{"productId" : cartList[i].id,
-                        'purePrice': cartList[i].price, 
-                        'userOption':cartList[i].options[0], 
-                        'giftImgUrl':cartList[i].repImg, 
-                        'giftName' : cartList[i].name,
-                        "maxAmount": cartList[i].price+Math.round(cartList[i].price*0.05),
-                        "quantity" : 1 }])
+        // setTotalProduct([{"productId" : cartList[i].id,
+        //                 'purePrice': cartList[i].price, 
+        //                 'userOption':cartList[i].options[0], 
+        //                 'giftImgUrl':cartList[i].repImg, 
+        //                 'giftName' : cartList[i].name,
+        //                 "maxAmount": cartList[i].price+Math.round(cartList[i].price*0.05),
+        //                 "quantity" : 1 }])
       }
       setTotalPrice(totalPrice+cartList[i].price)
 
@@ -304,37 +316,33 @@ export function MakeWishPage() {
   const [finished, setFinished] = useState(false);
   const MakeWish = () => {
     const makeWish = async () => {
-      const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';
+      const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';      
       const gift: {
         productId: number;
         purePrice: number;
         userOption: string;
         giftImgUrl: string;
-        giftName: string;
+        giftname: string;
         maxAmount: number;
         quantity: number;
+        giftOptionList:[]
     }[]  = wishCart.map((item)=>{
         return (
           {
             "productId" : item.id,
             'purePrice': item.price, 
-            'userOption':item.options[0], 
+            'userOption':userOptions,
             'giftImgUrl':item.repImg, 
-            'giftName' : item.name,
+            'giftname' : item.name,
             "maxAmount": item.price+Math.round(item.price*0.05),
-            "quantity" : 1
+            "quantity" : 1,
+            "giftOptionList":[]
           }
         )
       })
-      console.log(typeof(gift), 'gift')
-      console.log(typeof(wishCart), 'wishCart')
-      alert(`위시생성할거임?? + ${gift.length}`)
-      axios({
-        url: API_URL,
-        method: 'POST',
-        data: {
-          userId: userId,
-          giftItems: [...totalProduct],
+      const data={
+        userId: userId,
+          giftItems:gift,
           finishYN: 'N',
           totalPrice: totalPrice,
           wishTitle: title,
@@ -343,9 +351,16 @@ export function MakeWishPage() {
           startDate: startDate,
           endDate: endDate,
           wishCard: imgUrlS3,
-          addr1: enroll_company.address,
+          zipCode: callMyAddr? userZipCode :enroll_company.zonecode,
+          addr1:callMyAddr? userAddr1 :enroll_company.address,
           addr2: addr2,
-        },
+      }
+      console.log('data', data)
+      alert(`위시생성할거임?? + ${gift.length}`)
+      axios({
+        url: API_URL,
+        method: 'POST',
+        data: data,
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-type': 'application/json',
@@ -354,7 +369,6 @@ export function MakeWishPage() {
         .then((con) => {
           console.log('위시생성 성공', con, userId);
           setFinished(true);
-          console.log('totalProduct', totalProduct);
         })
         .catch((err) => {
           console.log('위시생성 실패', err);
@@ -375,7 +389,7 @@ export function MakeWishPage() {
   const delWishGift = (id: number, i:number) => {
     if(wishCart?.length===1){
       setWishCart([])
-      setTotalProduct([])
+      // setTotalProduct([])
       setTotalPrice(0)
       return
     }
@@ -394,12 +408,12 @@ export function MakeWishPage() {
     console.log('wishCart', wishCart)
 
     setTotalPrice(totalPrice-cartList[i].price)
-    totalProduct.forEach(prod =>{
-      if(prod.productId === id){
-        totalProduct.splice(i,1)
-        return
-      }
-    })
+    // totalProduct.forEach(prod =>{
+    //   if(prod.productId === id){
+    //     totalProduct.splice(i,1)
+    //     return
+    //   }
+    // })
   };
   const scrollToTop = () => {
     window.scrollTo({
@@ -479,10 +493,10 @@ export function MakeWishPage() {
     }
   }
   useEffect(()=>{
-    if(totalProduct && title && content && category && startDate && endDate && imgUrlS3 && addr1 && addr2){
+    if(wishCart && title && content && category && startDate && endDate && imgUrlS3 && addr1 && addr2){
       setWishValidated(true)
     }
-  }, [totalProduct,title, content, category, startDate, endDate, imgUrlS3, addr1, addr2])
+  }, [wishCart,title, content, category, startDate, endDate, imgUrlS3, addr1, addr2])
 
   const notValid = () => {
     category?setGoCategory(true):setGoCategory(false)
@@ -493,7 +507,10 @@ export function MakeWishPage() {
     addr1?setGoAddr1(true):setGoAddr1(false)
     addr2?setGoAddr2(true):setGoAddr2(false)
   }
-  
+  const GetOption = (e)=>{
+    console.log(e.target.value, '선택한 옵션이 뭐죠?')
+    setUserOptions(e.target.value)
+  }
   return (
     <>
       <div className="page-name-block">
@@ -627,13 +644,25 @@ export function MakeWishPage() {
                     </div>
                     {wishCart?.map((e, i: number) => {
                       return (
-                        <div
-                          className="wish-card-gift"
-                          onClick={() => delWishGift(e.id, i)}
-                        >
+                        <div className="wish-card-gift">
+                          <div onClick={() => delWishGift(e.id, i)}>
+                            삭제
+                          </div>
                           <div className='disp-flex align-center'>
                             <img src={e.repImg}></img>
                             <p className='padding-10 '>{e.name}</p>
+                          </div>
+                          <div>
+                            <select name={e.optionTitle} id="" onChange={(e)=>GetOption(e)}>
+                              <option value='' selected>{e.optionTitle}</option>
+                              {
+                                e.options.map(opt=>{
+                                  return(
+                                    <option value={opt}>{opt}</option>
+                                  )
+                                })
+                              }
+                            </select>
                           </div>
                           <p className='font-lrg font-bold'>{e.price.toLocaleString('ko-KR')}</p>
                         </div>
