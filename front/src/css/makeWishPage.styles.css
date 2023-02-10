@@ -440,7 +440,7 @@
 .finish-wish-con{
     display: flex;
     justify-content: space-evenly;
-    position: absolute;
+    position: relative;
     height: 100%;
 }
 .finish-congrats{
@@ -449,11 +449,13 @@
     border-radius: 20px;
     padding-top: 50px;
     padding-bottom: 50px;
-    position: fixed;
+    position: sticky;
     right: 5%;
     max-width: 30vw;
-    bottom: 10%;
+    bottom: 5%;
+    top:5%;
     height: fit-content;
+    min-width: 500px;
 }
 .fin-wcd{
     display: flex;
@@ -633,4 +635,14 @@
 }
 .align-center{
     align-items: center;
+}
+.font-bold{
+    font-size: medium;
+    font-weight: bold;
+}
+.flex-end{
+    justify-content: flex-end;
+}
+.padding-r-20{
+    padding-right: 20px;
 }
