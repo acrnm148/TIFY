@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import '../css/congratsPage.styles.css';
 
@@ -15,16 +15,7 @@ export function CongratsPage() {
   const [card, setCard] = useState('');
 
   const [clickedGift, setClickedGift] = useState<number>();
-  const [wishGiftList, setWishGiftList] = useState([
-    {
-      id: 1,
-      img: 'https://user-images.githubusercontent.com/87971876/216546104-5294c903-7f29-4483-b58a-855cc2fe4715.png',
-      name: '임시선물1',
-      achieved81: 81 * 0.2,
-      achieved: 20,
-      price: '400,000',
-    },
-  ]);
+  const [wishGiftList, setWishGiftList] = useState<{id:number, img:string, name:string, achieved81:number, achieved:number, price:number}[]>();
 
   useEffect(() => {
     const API_URL = 'https://i8e208.p.ssafy.io/api/wish/detail/';
@@ -34,7 +25,9 @@ export function CongratsPage() {
           wishId: wishId,
         },
       })
-      .then((res) => {
+      .then((res: { data: {
+        giftItems: any; user: { username: SetStateAction<string>; }; category: SetStateAction<string>; title: SetStateAction<string>; content: SetStateAction<string>; cardImageCode: SetStateAction<string>; 
+}; }) => {
         console.log('위시 상세 정보', res.data);
         setUserName(res.data.user.username);
         setCategory(res.data.category);
@@ -46,34 +39,38 @@ export function CongratsPage() {
           res.data.giftItems.map(
             (
               item: {
+                successYN: string;
                 giftname: string;
                 giftImgUrl: any;
                 productNum: number;
                 gathered: number;
                 purePrice: number;
                 id: number;
+                finished : boolean;
               },
               i: number,
             ) => {
               const pricevat =
                 Number(item.purePrice) + Number(item.purePrice) * 0.05;
               const achieved = (Number(item.gathered) / pricevat) * 100;
-              // console.log((Number(item.gathered) / pricevat)*100)
+              // successYN 이 Y이면 종료
+              let fin = item.successYN==='Y'? true: false
               return {
                 id: i,
                 img: item.giftImgUrl,
                 productNum: item.productNum,
-                name: item.giftname, // 추가해야함
+                name: item.giftname,
                 achieved: Math.round(achieved),
                 achieved81: Math.round(achieved * 0.81),
                 price: Math.round(pricevat),
                 giftId: item.id,
+                finished: fin,
               };
             },
           ),
         );
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.log('위시 상세정보 어디감', err);
       });
   }, []);
@@ -95,15 +92,17 @@ export function CongratsPage() {
     );
   };
   const giftClicked = (i: number) => {
-    setSelectGift({ ...selectGift, ...wishGiftList[i] });
-    setClickedGift(i);
-    console.log(clickedGift + 'clicked');
+    if(wishGiftList){
+      setSelectGift({ ...selectGift, ...wishGiftList[i] });
+      setClickedGift(i);
+      console.log(clickedGift + 'clicked');
+    }
   };
 
   const WishGiftListCompo = () => {
     return (
       <div className="wish-gift-list">
-        {wishGiftList.map((wishGift, i: number) => (
+        {wishGiftList?.map((wishGift, i: number) => (
           <div
             className={`wish-gift ${clickedGift === i ? 'selected' : ''}`}
             id={String(i)}

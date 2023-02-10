@@ -133,7 +133,7 @@ export function GiftHubDetailPage(){
     const GiftRecommend = (props:{giftList: any;}) =>{
             return(
                 <div className="gift-recommend-list" style={{"width": "90%"}}>
-                        <p>{CATEGORY_DATA[data.category].name} 카테고리에서 가장 많이 주고받은 선물</p>
+                        <p>{CATEGORY_DATA[data.category]?.name} 카테고리에서 가장 많이 주고받은 선물</p>
                         <div className="gift-only-list" style={{'display' : 'flex'}}>
                             {props.giftList.slice(0, 4).map((gift: any, i:number) => (
                                 <GiftItem key={i} gift={gift} />
@@ -161,7 +161,7 @@ export function GiftHubDetailPage(){
                             
                         </div>
                         <div className="product-price-option">
-                            <p className="product-price">₩ {data.price}.toLocaleString('ko-KR') </p>
+                            <p className="product-price">₩ {data.price.toLocaleString('ko-KR') }</p>
                         </div>
                         <div>
                         {data.options.length > 0 && 

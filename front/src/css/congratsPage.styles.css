@@ -55,7 +55,7 @@
 }
 .wish-card{
     /* width: 523px; */
-    height: 312px;
+    max-height: 312px;
     /* border: 1px solid #FE3360; */
     border-radius: 8px;
 }
@@ -99,7 +99,7 @@
     background: white;
     display: flex;
     border-radius: 8px;
-    flex-direction: column;
+    flex-directionW: column;
     align-items: center;
 }
 .wish-congrats-btns{
@@ -110,7 +110,7 @@
     flex-wrap: wrap;
 }
 .wish-congrats-btns .button {
-    width: 523px;
+    width: 100%;
     border: 1px solid #FE3360;
     border-radius: 8px;
     padding: 3px;
