@@ -117,7 +117,7 @@ export function MakeWishPage() {
   const [ userZipCode, setUserZipCode ] = useState<number>()
   const [ userName, setUserName ] = useState<string>()
 
-  const[userOptions, setUserOptions] = useState<string>()
+  const[userOptions, setUserOptions] = useState<string>('')
 
   const [callMyAddr, setCallMyAddr] = useState<boolean>()
 
@@ -317,7 +317,7 @@ export function MakeWishPage() {
   const MakeWish = () => {
     const makeWish = async () => {
       const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';      
-      const gift: {
+      const gift:{
         productId: number;
         purePrice: number;
         userOption: string;
@@ -507,7 +507,7 @@ export function MakeWishPage() {
     addr1?setGoAddr1(true):setGoAddr1(false)
     addr2?setGoAddr2(true):setGoAddr2(false)
   }
-  const GetOption = (e)=>{
+  const GetOption = (e:any)=>{
     console.log(e.target.value, '선택한 옵션이 뭐죠?')
     setUserOptions(e.target.value)
   }
@@ -700,7 +700,6 @@ export function MakeWishPage() {
                   <Postcode
                     company={enroll_company}
                     setcompany={setEnroll_company}
-                    setNewAddr={setCallMyAddr}
                   />
                   {goAddr1===false&&
                     <span className='warning'>주소지를 작성해주세요</span>
