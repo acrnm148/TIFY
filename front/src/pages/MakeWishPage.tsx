@@ -1,5 +1,6 @@
-import '../css/makeWishPage.styles.css';
+import '../css/congratsPage.styles.css';
 import '../css/giftHubList.styles.css';
+import '../css/makeWishPage.styles.css';
 import '../css/styles.css';
 import addHeart from '../assets/addHeart.svg';
 import React, {
@@ -31,22 +32,28 @@ import { Gift } from '../interface/interface';
 import { CongratsPage } from './CongratsPage';
 import BlueLogoTify from '../assets/BlueLogoTify.svg';
 
-import '../css/congratsPage.styles.css';
 
 // user
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
 import { NavLink } from 'react-router-dom';
+import ConfirmationDialog from '../components/WishCategoryOption';
+import CarouselComponent from '../components/ResponsiveCarousel';
+import { async } from '@firebase/util';
+import { positions } from '@mui/system';
+
+
 
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
+  minHeight: '400px',
+  width:'auto',
   p: 4,
 };
 // [TODO] 카테고리 선택 mui..
@@ -60,29 +67,15 @@ export function MakeWishPage() {
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
-  const wishOption = [
-    '생일',
-    '결혼',
-    '입학',
-    '졸업',
-    '출산',
-    '독립',
-    '비혼',
-    '건강',
-  ];
-  const cardList = [
-    'https://user-images.githubusercontent.com/87971876/216435039-6eb5b4ba-24b6-4305-9274-2b9766fa68a2.jpg',
-    'https://user-images.githubusercontent.com/87971876/216435043-77c5fa12-a4ce-4b5a-b767-5e3c012efb9e.jpg',
-    'https://user-images.githubusercontent.com/87971876/216435045-ef976fc6-09db-4de6-9f89-c412196b609a.jpg',
-    'https://user-images.githubusercontent.com/87971876/216435046-1ef30270-a505-4f79-8f5e-d41eedaeb3ba.jpg',
-  ];
-  const [category, setCategory] = useState();
-  const [title, setTitle] = useState<string>();
-  const [content, setContent] = useState<string>();
-  const [selectCard, setSelectCard] = useState('-1');
-  const [selectCardUrl, setSelectCardUrl] = useState('');
-  const [addr2, setAddr2] = useState<string>();
-  const [tooMany, setToomany] = useState<boolean>();
+
+  const [category, setCategory] = useState<string>()
+  const [title, setTitle] = useState<string>()
+  const [content, setContent] = useState<string>()
+  const [addr1, setAddr1] = useState<string>()
+  const [addr2, setAddr2] = useState<string>()
+  const [zipCode, setZipCode] = useState<number>()
+  const [tooMany, setToomany] = useState<boolean>()
+  const [cateForm,setCateForm] = useState<boolean>(false)
   // calendar
   const [range, setRange] = useState<any[]>([
     {
@@ -116,6 +109,18 @@ export function MakeWishPage() {
   // photo
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  const [cateKorean, setCateKorean] = useState<string>()
+
+  // 가져온 유저정보
+  const [ userAddr1, setUserAddr1] = useState<string>()
+  const [ userAddr2, setUserAddr2]= useState<string>()
+  const [ userZipCode, setUserZipCode ] = useState<number>()
+  const [ userName, setUserName ] = useState<string>()
+
+  const[userOptions, setUserOptions] = useState<string>()
+
+  const [callMyAddr, setCallMyAddr] = useState<boolean>()
+
   // address
   const [enroll_company, setEnroll_company] = useState({
     address: '',
@@ -131,33 +136,55 @@ export function MakeWishPage() {
   // gift cart
   const [cartList, setCartList] = useState<Gift[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [totalProduct, setTotalProduct] = useState<{
-    productId:number
-    purePrice:number, 
-    userOption:any, 
-    giftImgUrl:string, 
-    giftName: string,
-    maxAmount:number,
-    quantity: number
-  }[]>([]);
+  // const [totalProduct, setTotalProduct] = useState<{
+  //   productId:number
+  //   purePrice:number, 
+  //   userOption:any, 
+  //   giftImgUrl:string, 
+  //   giftName: string,
+  //   maxAmount:number,
+  //   quantity: number
+  // }[]>([]);
 
+  // 유저 폼 유효성 검사
+  const [wishValidated, setWishValidated] = useState<boolean>()
   const wishData = { title: '', content: '', wishCard: '', giftItem: [] };
+  const [goCategory, setGoCategory] = useState<boolean>()
+  const [goTitle, setGoTitle] = useState<boolean>()
+  const [goContent, setGoContent] = useState<boolean>()
+  const [goImgUrl, setGoImgUrl] = useState<boolean>()
+  const [goAddr1, setGoAddr1] = useState<boolean>()
+  const [goAddr2, setGoAddr2] = useState<boolean>()
 
   // 위시생성페이지 mount시 유저의 id를 담아서 cart정보 요청
   useEffect(() => {
     const putCart = async () => {
-      const API_URL = `https://i8e208.p.ssafy.io/api/cart/forwish/${userId}`;
+      const API_URL = `https://i8e208.p.ssafy.io/api/cart/list/${userId}`;
       axios({
         method: 'get',
         url: API_URL,
         headers: { Authorization: `Bearer ${accessToken}` },
+        params:{
+          'max_result' : 100
+        }
       })
         .then((con) => {
-          const lst = con.data;
-          const conlst: Gift[] = [];
+          const lst = con.data.content;
+          const conlst:Gift[] = [];
 
           lst.map((d: any) => {
-            conlst.push(d.product);
+            conlst.push({
+                giftId: 0, 
+                id : d.product.id,
+                name : d.product.name,
+                price : d.product.price,
+                repImg : d.product.repImg,
+                optionTitle : d.product.options[0]? d.product.options[0].title: '',
+                // options : [],
+                options : d.product.options[0]? d.product.options[0].details.map((opt: {content:string, value:number })=>{
+                  return opt.content+'-'+opt.value 
+                }) :[]
+            });
           });
           setCartList(conlst);
           console.log('카트 리스트불러오기 성공',conlst);
@@ -167,6 +194,26 @@ export function MakeWishPage() {
         });
     };
     putCart();
+
+    const getUser = async () =>{
+      const API_URL = `https://i8e208.p.ssafy.io/api/account/userInfo`
+      axios({
+        method: 'get',
+        url: API_URL,
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+        .then((con) => {
+          console.log('유저정보 불러오기 성공',con.data);
+          setUserAddr1(con.data.addr1)
+          setUserAddr2(con.data.addr2)
+          setUserZipCode(con.data.zipcode)
+          setUserName(con.data.username)
+        })
+        .catch((err) => {
+          console.log('유저정보 불러오기 실패', err);
+        });
+    }
+    getUser();
   }, []);
 
   const [open, setOpen] = React.useState(false);
@@ -174,7 +221,8 @@ export function MakeWishPage() {
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
-  const [wishCart, setWishCart] = useState<Gift[]>()
+  const [wishCart, setWishCart] = useState<Gift[]>([])
+
   const pushItem = (i:number) =>{
       if (wishCart){
         if (wishCart.length == 6){
@@ -182,41 +230,51 @@ export function MakeWishPage() {
           return
         }
         setWishCart([...wishCart,cartList[i]])
+        // setTotalProduct([...totalProduct,{"productId" : cartList[i].id,
+        //                                   'purePrice': cartList[i].price, 
+        //                                   'userOption':cartList[i].options[0], 
+        //                                   'giftImgUrl':cartList[i].repImg, 
+        //                                   'giftName' : cartList[i].name,
+        //                                   "maxAmount": cartList[i].price+Math.round(cartList[i].price*0.05),
+        //                                   "quantity" : 1 }])
       } else {
         setWishCart([cartList[i]])
+        // setTotalProduct([{"productId" : cartList[i].id,
+        //                 'purePrice': cartList[i].price, 
+        //                 'userOption':cartList[i].options[0], 
+        //                 'giftImgUrl':cartList[i].repImg, 
+        //                 'giftName' : cartList[i].name,
+        //                 "maxAmount": cartList[i].price+Math.round(cartList[i].price*0.05),
+        //                 "quantity" : 1 }])
       }
       setTotalPrice(totalPrice+cartList[i].price)
-      setTotalProduct([...totalProduct,{"productId" : cartList[i].id,
-                                        'purePrice': cartList[i].price, 
-                                        'userOption':cartList[i].options[0], 
-                                        'giftImgUrl':cartList[i].repImg, 
-                                        'giftName' : cartList[i].name,
-                                        "maxAmount": cartList[i].price+Math.round(cartList[i].price*0.05),
-                                        "quantity" : 1 }])
-      console.log(totalPrice, totalProduct)
+
   }
+
   function checkItemAmount(i:number){
     //cartList[i]가 wishList에 몇개 담겼는지 확인
     let num=0;
-    totalProduct.map((item)=>{
-      if(item.productId === i){
-        num+=1
-      }
-    })
+    if(wishCart){
+      wishCart.map((item)=>{
+        if(item.id === i){
+          num+=1
+        }
+      })
+    }
     return num
   }
   const CartList = () => {
     return (
       <>
+        <div>
+          <h1 className='cart-list'>카트상품목록</h1>
+          {/* <button>카트관리</button> */}
+        </div>
+        <hr></hr>
+        {tooMany && <span>선물은 최대 6개까지 선택 가능합니다!</span>}
         {cartList.length > 0 ? (
           <div>
             <div className="like-list">
-              <div>
-                <h1>카트상품목록</h1>
-                <button>카트관리</button>
-              </div>
-              <hr></hr>
-              {tooMany && <span>선물은 최대 6개까지 선택 가능합니다!</span>}
               {cartList.map((gift, i: number) => (
                 <div
                   className="like-item-card-container"
@@ -250,23 +308,41 @@ export function MakeWishPage() {
           <p>카드에 상품이 없습니다.</p>
         )}
         <div>
-          <h1>총가격 : {}</h1>
+          <h1>총가격 : {totalPrice}</h1>
         </div>
       </>
     );
   };
   const [finished, setFinished] = useState(false);
   const MakeWish = () => {
-    const selectedWishCard =
-      Number(selectCard) >= 0 ? cardList[Number(selectCard)] :imgUrlS3;
     const makeWish = async () => {
-      const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';
-      axios({
-        url: API_URL,
-        method: 'POST',
-        data: {
-          userId: userId,
-          giftItems: [...totalProduct],
+      const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';      
+      const gift: {
+        productId: number;
+        purePrice: number;
+        userOption: string;
+        giftImgUrl: string;
+        giftname: string;
+        maxAmount: number;
+        quantity: number;
+        giftOptionList:[]
+    }[]  = wishCart.map((item)=>{
+        return (
+          {
+            "productId" : item.id,
+            'purePrice': item.price, 
+            'userOption':userOptions,
+            'giftImgUrl':item.repImg, 
+            'giftname' : item.name,
+            "maxAmount": item.price+Math.round(item.price*0.05),
+            "quantity" : 1,
+            "giftOptionList":[]
+          }
+        )
+      })
+      const data={
+        userId: userId,
+          giftItems:gift,
           finishYN: 'N',
           totalPrice: totalPrice,
           wishTitle: title,
@@ -274,10 +350,17 @@ export function MakeWishPage() {
           category: category,
           startDate: startDate,
           endDate: endDate,
-          wishCard: selectedWishCard,
-          addr1: enroll_company.address,
+          wishCard: imgUrlS3,
+          zipCode: callMyAddr? userZipCode :enroll_company.zonecode,
+          addr1:callMyAddr? userAddr1 :enroll_company.address,
           addr2: addr2,
-        },
+      }
+      console.log('data', data)
+      alert(`위시생성할거임?? + ${gift.length}`)
+      axios({
+        url: API_URL,
+        method: 'POST',
+        data: data,
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-type': 'application/json',
@@ -286,7 +369,6 @@ export function MakeWishPage() {
         .then((con) => {
           console.log('위시생성 성공', con, userId);
           setFinished(true);
-          console.log('wishCart', wishCart);
         })
         .catch((err) => {
           console.log('위시생성 실패', err);
@@ -298,315 +380,368 @@ export function MakeWishPage() {
     makeWish();
   };
 
-  const handleCategory = (e: any) => {
-    setCategory(e.target.value);
-  };
 
-  // 사진 등록
-  const handleChangeFile = (event: any) => {
-    const formData = new FormData();
-    const sizeLimit = 300*10000
-    // 300만 byte 넘으면 경고문구 출력
-    if (event.target.files[0].size > sizeLimit){
-      alert('사진 크기가 3MB를 넘을 수 없습니다.')
-    } else{
-      if (event.target.files[0]) {
-        formData.append('file', event.target.files[0] ); // 파일 상태 업데이트
-      }
-      // imgFile 을 보내서 S3에 저장된 url받기
-      const getImgUrl = async () => {
-        const API_URL = `https://i8e208.p.ssafy.io/api/files/upload/`;
-        await axios
-          .post(API_URL, formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-          })
-          .then((con) => {
-            console.log('이미지주소불러오기 성공', con.data);
-            setImgUrlS3(con.data);
-          })
-          .catch((err) => {
-            console.log('이미지주소불러오기 실패', err);
-          });
-      };
-      getImgUrl();
-    }
-  };
-  const onUploadImageButtonClick = useCallback(() => {
-    inputRef.current?.click();
-  }, []);
-
-  function CardClicked(e: any) {
-    const id = Number(e.target.id);
-    setSelectCard(e.target.id);
-    if (id >= 0) {
-      setSelectCardUrl(cardList[id]);
-      console.log(selectCardUrl);
-    } else {
-      setSelectCardUrl(imgUrlS3);
-    }
+  const CardClicked=(e: string)=> {
+    // console.log('자식 컴포넌트에서 선택한 카드의 url', e)
+    setImgUrlS3(e)
   }
-  const CardList = (): JSX.Element[] => {
-    const filteredTitles = cardList.map((c, i: number) => {
-      return (
-        <div
-          className={`wish-card-item ${
-            selectCard === String(i) ? 'selectedCard' : ''
-          }`}
-          onClick={CardClicked}
-          id={String(i)}
-          style={{ backgroundImage: `url(${c})` }}
-        />
-      );
-    });
-    return filteredTitles;
-  };
-  const delWishGift = (id: number, wishIdx:number) => {
-    // wishCart에 담긴 상품의 id가 i 인 것을 삭제
+
+  const delWishGift = (id: number, i:number) => {
+    if(wishCart?.length===1){
+      setWishCart([])
+      // setTotalProduct([])
+      setTotalPrice(0)
+      return
+    }
     if(wishCart){
-      let copy = wishCart
-      for (let i=0; i<copy?.length;i++){
-        if(copy[i].id === id){
-          copy.splice(i,1)
+      wishCart.forEach(prod=>{
+        if(prod.id === id){
+          wishCart.splice(i,1)
           return
         }
-      }
-      setWishCart(copy)
+      })
       if(wishCart.length<7){
             setToomany(false)
           }
     }
-    if(totalProduct.length>0){
-      let copy = totalProduct
-      for (let i=0; i<copy?.length;i++){
-        console.log(totalProduct)
-        if(copy[i].productId === id){
-          copy.splice(i,1)
-          return
-        }
-      }
-      setTotalProduct(copy)
-    }
+  
+    console.log('wishCart', wishCart)
+
+    setTotalPrice(totalPrice-cartList[i].price)
+    // totalProduct.forEach(prod =>{
+    //   if(prod.productId === id){
+    //     totalProduct.splice(i,1)
+    //     return
+    //   }
+    // })
   };
+  const scrollToTop = () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    })
+  }
+  const pannel = useRef<HTMLDivElement>(null)
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const handleScroll = () => {
+      const position = window.pageYOffset;
+      setScrollPosition(position);
+  };
+
+  useEffect(() => {
+      window.addEventListener('scroll', handleScroll, { passive: true });
+
+      return () => {
+          window.removeEventListener('scroll', handleScroll);
+      };
+  }, []);
+  function followPannel(){
+
+    };
+
   const FinishedWishComponent = () => {
     return (
       <div className="finish-wish-con">
-        <div className="finish-congrats congrats-page-container">
+        <div className="finish-congrats congrats-page-container" ref={pannel} style={{"top":`${positions}`}}>
           <div className="wish-components">
             <div className="wish-components-title">
-              <h1>{category}축하해주세요!</h1>
+              <h1>{category && userName ? userName+'의 '+category+cateKorean+' ':''}축하해주세요!</h1>
             </div>
             <div className="wish-card-box">
               <div
                 className="wish-card fin-wcd wish-card-cover"
-                style={{ backgroundImage: `url(${selectCardUrl})` }}
+                style={{ backgroundImage: `url(${imgUrlS3?imgUrlS3:''})` }}
               />
               <div className="wish-card fin-wcd wish-card-content">
                 <h1>{title}</h1>
-                <p>{content}</p>
+                <pre>{content?.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n')}</pre>
               </div>
-              <div className="wish-congrats-btns">
+              <div className="wish-congrats-btns" style={{"justifyContent":"center"}}>
                 <div className="button color">선택한 선물로 축하하기 →</div>
                 <div className="button gray">축하금으로 보내기 →</div>
               </div>
             </div>
           </div>
         </div>
-          <div className="finish-wish-comment">
+          {/* <div className="finish-wish-comment">
             <h1>위시 생성이 완료되었습니다!</h1>
             <NavLink to={'/checkwish'}>
               <p>위시목록으로 고고고</p>
             </NavLink>
-          </div>
+          </div> */}
       </div>
     );
   };
+  const getCategory = (e:string) =>{
+    if(e==='직접입력'){
+      setCateForm(true)
+      setCateKorean('')
+    } else{
+      setCategory(e)
+      setCateForm(false)
+      setCateKorean('을')
+    }
+  }
+  const CallMyAddr = () =>{
+    if(!userAddr1 && !userAddr2){
+      alert('저장된 주소가 없습니다')
+    } else{
+      setCallMyAddr(true)
+      setAddr1(userAddr1)
+      setAddr2(userAddr2)
+      setZipCode(userZipCode)
+    }
+  }
+  useEffect(()=>{
+    if(wishCart && title && content && category && startDate && endDate && imgUrlS3 && addr1 && addr2){
+      setWishValidated(true)
+    }
+  }, [wishCart,title, content, category, startDate, endDate, imgUrlS3, addr1, addr2])
+
+  const notValid = () => {
+    category?setGoCategory(true):setGoCategory(false)
+    title?setGoTitle(true):setGoTitle(false)
+    content?setGoContent(true):setGoContent(false)
+    // !startDate?setGoContent(true):setGocontent(false)
+    imgUrlS3?setGoImgUrl(true):setGoImgUrl(false)
+    addr1?setGoAddr1(true):setGoAddr1(false)
+    addr2?setGoAddr2(true):setGoAddr2(false)
+  }
+  const GetOption = (e)=>{
+    console.log(e.target.value, '선택한 옵션이 뭐죠?')
+    setUserOptions(e.target.value)
+  }
   return (
     <>
+      <div className="page-name-block">
+        <div className="page-name" />
+      </div>
       {finished ? (
-        <FinishedWishComponent />
+        <div className='wish-page-container'>
+        <div className='make-wish-container wid-50'>
+          <div>
+            <div className="finish-wish-comment">
+              <h1>위시 생성이 완료되었습니다!</h1>
+              <NavLink to={'/checkwish'}>
+                <p>위시목록으로 고고고</p>
+              </NavLink>
+            </div>
+          </div>
+          </div>
+          <div className='wid-50'>
+            <FinishedWishComponent />
+          </div>
+        </div>
       ) : (
-        <div className="page-name-block">
-          <div className="page-name" />
-          <div className="make-wish-form">
-            <div className="input-form input-select">
-              <label htmlFor="카테고리">카테고리</label>
-              <select onChange={handleCategory} name="" id="">
-                {wishOption.map((op) => (
-                  <option value={op}>{op}</option>
-                ))}
-              </select>
-            </div>
-            <div className="input-form">
-              <label htmlFor="태그">제목</label>
-              <input
-                type="text"
-                name="태그"
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-            <div className="input-form input-wide">
-              <label htmlFor="태그">내용</label>
-              <textarea
-              name="태그"
-              onChange={(e) => setContent(e.target.value.replaceAll(/(\n|\r\n)/g,'<br>'))}
-              >
+        <div className='wish-page-container'>
+          <div className='make-wish-container wid-50'>
 
-              </textarea>
-            </div>
-
-            <div className="duration-container">
-              <label htmlFor="">기간</label>
-              <h1>
-                위시 진행 기간 <span>{duration}일</span>
-              </h1>
-
-              <div className="duration-from calendar-container">
-                <DateRange
-                  editableDateInputs={false}
-                  onChange={(item) => setRange([item.selection])}
-                  moveRangeOnFirstSelection={false}
-                  retainEndDateOnFirstSelection={true}
-                  ranges={range}
-                  months={2}
-                  direction="horizontal"
-                  minDate={moment().add(1, 'days').toDate()}
-                  maxDate={disableDates}
-                  locale={ko}
-                  dateDisplayFormat="yyyy년 MM월 dd일"
-                />
-              </div>
-            </div>
-            <div>
-              <label htmlFor="">카드</label>
-              <div className="wish-card-container">
-                <div className="m-wish-card">
-                  <div
-                    className="wish-card-item"
-                    onClick={onUploadImageButtonClick}
-                    style={{ border: 'none' }}
-                    id="-1"
-                  >
-                    <input
-                      type="file"
-                      name="imgFile"
-                      accept="image/*"
-                      ref={inputRef}
-                      id="imgFile"
-                      onChange={handleChangeFile}
-                      style={{ display: 'none' }}
-                    />
-                    <img src={addHeart} alt="직접추가하기" />
+            <div className="make-wish-form">
+              <div className='wid-100 flex-between'>
+                <ConfirmationDialog propFunction={getCategory}/>
+                {cateForm&&
+                  <div  className='wid-50 start-bottom'>
+                    {
+                      !goCategory&&
+                      <span className='warning'>축하 카테고리를 입력해주세요!</span>
+                    }
+                    <input onChange={(e)=>setCategory(e.target.value)} className='wid-100 cate-input' placeholder='축하 카테고리를 입력해주세요!' />
                   </div>
-                  {imgUrlS3 && (
-                    <div
-                      className={`wish-card-item ${
-                        selectCard === '-1' ? 'selectedCard' : ''
-                      }`}
-                      onClick={CardClicked}
-                      id="-1"
-                    >
-                      <img src={imgUrlS3} alt="등록한사진" id="-1" />
-                    </div>
-                  )}
-                  {CardList()}
-                </div>
+                }
               </div>
-            </div>
-            <div>
-              <label htmlFor="">선물</label>
-              <div className="wish-card-container">
-                <div className="modal-con">
-                  <Modal
-                    className="modal-modal"
-                    aria-labelledby="transition-modal-title"
-                    aria-describedby="transition-modal-description"
-                    open={open}
-                    onClose={handleClose}
-                    closeAfterTransition
-                    BackdropComponent={Backdrop}
-                    BackdropProps={{
-                      timeout: 500,
-                    }}
-                  >
-                    <Fade in={open}>
-                      <Box sx={style}>
-                        <CartList />
-                      </Box>
-                    </Fade>
-                  </Modal>
-                </div>
-                <div className="m-wish-card">
-                  <div className="add-gift-icon-con" onClick={handleOpen}>
-                    <img className="add-gift-icon" src={addHeart} alt="" />
-                  </div>
-                  {wishCart?.map((e, i: number) => {
-                    return (
-                      <div
-                        className="wish-card-gift"
-                        onClick={() => delWishGift(e.id, i)}
-                      >
-                        <img src={e.repImg}></img>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div>
-                {/* {
-                  totalProduct.map(item=>{
-                    return(
-                      <div>
-                        <p>{item.giftName}</p>
-                        <p>{item.purePrice}</p>
-                      </div>
-                    )
-                  })
-                } */}
-                <p>총 위시금액 : {totalPrice}원</p>
-                
-                
-                </div>
-            </div>
-            <div className="address-form-container">
-              <label htmlFor="태그">주소</label>
-              <input
-                className="address-form postcode"
-                type="text"
-                value={enroll_company.zonecode}
-                placeholder="우편번호"
-                disabled
-              />
-              <div className="address-form">
-                <input
-                  type="text"
-                  placeholder="주소"
-                  required={true}
-                  name="address"
-                  onChange={handleInput}
-                  value={enroll_company.address}
-                  disabled
-                />
-                <Postcode
-                  company={enroll_company}
-                  setcompany={setEnroll_company}
-                />
-              </div>
-            </div>
-            <div>
-              <label htmlFor="상세주소">상세주소</label>
+              <div className="padd"></div>
               <div className="input-form">
+                <label htmlFor="태그">제목</label>
                 <input
                   type="text"
-                  name="상세주소"
-                  onChange={(e) => setAddr2(e.target.value)}
+                  name="태그"
+                  onChange={(e) => setTitle(e.target.value)}
                 />
+                {
+                    goTitle===false&&
+                    <span className='warning'>제목을 입력해주세요!</span>
+                  }
               </div>
-            </div>
-            <div className="make-wish-btn-con">
-              <div className="make-wish-btn" onClick={MakeWish}>
-                위시만들기
+            
+              <div className="input-form input-wide">
+                <label htmlFor="태그">내용</label>
+                <textarea
+                name="태그"
+                onChange={(e) => setContent(e.target.value.replaceAll(/(\n|\r\n)/g,'<br>'))}
+                >
+
+                </textarea>
+                {
+                    goContent===false&&
+                    <span className='warning'>내용을 입력해주세요!</span>
+                  }
               </div>
+              <div className="brbr padd"></div>
+              <div className="duration-container wid-100">
+                <label htmlFor="">기간</label>
+                <div className='wid-100 padding-10 disp-flex just-btwn bg-gray align-center'>
+                  <p className='font-lrg'>총<span>{duration.toFixed(0)}</span>일</p>
+                  <p>위시 진행 기간 <span className='padding-10'>{startDate}</span><span>00시</span>-<span className='padding-10'>{endDate}</span><span>밤 12시</span></p>
+                </div>
+
+
+                <div className="duration-from calendar-container">
+                  <DateRange
+                    editableDateInputs={false}
+                    onChange={(item) => setRange([item.selection])}
+                    moveRangeOnFirstSelection={false}
+                    retainEndDateOnFirstSelection={true}
+                    ranges={range}
+                    months={2}
+                    direction="horizontal"
+                    minDate={moment().add(1, 'days').toDate()}
+                    maxDate={disableDates}
+                    locale={ko}
+                    dateDisplayFormat="yyyy년 MM월 dd일"
+                  />
+                </div>
+                {/* {
+                    !go&&
+                    <span className='warning'>기간을 선택해주세요</span>
+                  } */}
+              </div>
+              <div className="brbr padd"></div>
+              <div className="card-container wid-100">
+                <label htmlFor="">카드</label>
+                <CarouselComponent  propFunction={CardClicked}/>
+                {
+                    goImgUrl===false&&
+                    <span className='warning'>카드를 선택해주세요</span>
+                  }
+              </div>
+              <div className="brbr padd"></div>
+              <div className='wid-100'>
+                <label htmlFor="">선물</label>
+                <div className="wish-card-container gift-container w-100">
+                  <div className="modal-con">
+                    <Modal
+                      className="modal-modal"
+                      aria-labelledby="transition-modal-title"
+                      aria-describedby="transition-modal-description"
+                      open={open}
+                      onClose={handleClose}
+                      closeAfterTransition
+                      BackdropComponent={Backdrop}
+                      BackdropProps={{
+                        timeout: 500,
+                      }}
+                    >
+                      <Fade in={open}>
+                        <Box sx={style}>
+                          <CartList />
+                        </Box>
+                      </Fade>
+                    </Modal>
+                  </div>
+                  <div className="wid-100">
+                    <div className="add-gift-icon-con" onClick={handleOpen}>
+                      <img className="add-gift-icon" src={addHeart} alt="" />
+                    </div>
+                    {wishCart?.map((e, i: number) => {
+                      return (
+                        <div className="wish-card-gift">
+                          <div onClick={() => delWishGift(e.id, i)}>
+                            삭제
+                          </div>
+                          <div className='disp-flex align-center'>
+                            <img src={e.repImg}></img>
+                            <p className='padding-10 '>{e.name}</p>
+                          </div>
+                          <div>
+                            <select name={e.optionTitle} id="" onChange={(e)=>GetOption(e)}>
+                              <option value='' selected>{e.optionTitle}</option>
+                              {
+                                e.options.map(opt=>{
+                                  return(
+                                    <option value={opt}>{opt}</option>
+                                  )
+                                })
+                              }
+                            </select>
+                          </div>
+                          <p className='font-lrg font-bold'>{e.price.toLocaleString('ko-KR')}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                <div className='font-bold padding-10 font-lrg  tot-price'>
+                  <p>총 위시금액 : {totalPrice.toLocaleString('ko-KR')}원</p>
+                  </div>
+                </div>
+              </div>
+              <div className="brbr padd"></div>
+              <div className="address-form-container wid-100">
+                <label htmlFor="태그">주소</label>
+                <div className='postcode-myaddr'>
+                  <input
+                    className="address-form postcode wid-50"
+                    type="text"
+                    value={callMyAddr? userZipCode : enroll_company.zonecode}
+                    placeholder="우편번호"
+                    disabled
+                  />
+                    <div className='wid-20 my-addr' onClick={CallMyAddr}>내 주소 불러오기</div>
+                </div>
+                <div className="address-form wid-100">
+                  <input
+                    type="text"
+                    placeholder="주소"
+                    required={true}
+                    name="address"
+                    onChange={handleInput}
+                    value={callMyAddr? userAddr1 :enroll_company.address}
+                    disabled
+                  />
+                  <Postcode
+                    company={enroll_company}
+                    setcompany={setEnroll_company}
+                    setNewAddr={setCallMyAddr}
+                  />
+                  {goAddr1===false&&
+                    <span className='warning'>주소지를 작성해주세요</span>
+                  }
+                </div>
+              </div>
+              <div className='wid-100'>
+                <label htmlFor="상세주소">상세주소</label>
+                <div className="input-form">
+                  <input
+                    type="text"
+                    name="상세주소"
+                    onChange={(e) => setAddr2(e.target.value)}
+                    value={callMyAddr? userAddr2:addr2}
+                  />
+                </div>
+                {goAddr2===false&&
+                    <span className='warning'>상세주소지를 작성해주세요</span>
+                  }
+              </div>
+              <div className="brbr padd"></div>
+              {/* 위시 폼 유효하면 위시만들기 버튼 활성화 */}
+              {wishValidated?
+                <div className="make-wish-btn-con wid-100">
+                  <div className="make-wish-btn grd-btn" onClick={MakeWish} >
+                    위시만들기
+                  </div>
+                </div>
+                :
+                <div className="make-wish-btn-con-mw wid-100">
+                  <div className="make-wish-btn wid-100 disable-btn" onClick={notValid}>
+                    위시만들기
+                  </div>
+                </div>
+            }
+
             </div>
+            
+          </div>
+          <div className='wid-50'>
+            <FinishedWishComponent />
           </div>
         </div>
       )}

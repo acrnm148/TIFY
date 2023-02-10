@@ -2,7 +2,7 @@ import { useState } from 'react';
 import DaumPostcodeEmbed from './DaumPostcodeEmbed';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 
-const Postcode = (props: { setcompany: (arg0: any) => void; company: any }) => {
+const Postcode = (props: { setcompany: (arg0: any) => void; company: any , setNewAddr: (arg0:boolean)=>void}) => {
   const scriptUrl =
     'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
   const open = useDaumPostcodePopup(scriptUrl);
@@ -16,6 +16,7 @@ const Postcode = (props: { setcompany: (arg0: any) => void; company: any }) => {
       address: fullAddress,
       zonecode: zonecode,
     });
+    props.setNewAddr(false)
   };
 
   const handleClick = () => {

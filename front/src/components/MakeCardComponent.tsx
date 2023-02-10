@@ -82,10 +82,8 @@ const MakeCardComponent = (props:{phone: string,payId:string|undefined, userId:n
       "phoneNumber":iphone,
       "content":contents,
       "imagURL":image,
-      "pay":{
-        "pay_id":Number(props.payId),
-        "user_id":Number(props.userId)
-      }
+      "userId":Number(props.userId),
+      "payId":Number(props.payId)
     }
     axios.post(API_URL, data
       ).then((res) =>{
