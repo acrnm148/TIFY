@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PhonebookRepository extends JpaRepository<Phonebook, Long> {
-	List<Phonebook> findByUserId(Long userId);
+	List<Phonebook> findByMyId(Long myId);
 }
