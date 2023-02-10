@@ -10,8 +10,8 @@
     line-height: 14px;
     margin-bottom: 10px;
 }
-.input-form input{
-    width: 80vw;
+.input-form >input, .input-form >textarea{
+    width: 100%;
     max-width: 882px;
     min-height: 52px;
     border: solid 1px #C1C1C1;
@@ -20,6 +20,12 @@
     padding-right: 10px;
     margin-top: 10px;
     
+}
+.input-form >textarea{
+    min-height: 110px;
+    padding: 7px;
+    line-height: 18px;
+    font-size: 14px;
 }
 .input-wide input{
     min-height: 110px;
@@ -323,21 +329,36 @@
 }
 .like-item-card-container{
     width: 100%;
-    cursor: pointer;
 }
 .gift-text{
     font-size: small;
     color: gray;
+    padding-left: 20px;
+    padding-right: 20px;
     display: flex;
+    width: 100%;
     flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+.pm-btn{
+    width: 20%;
+    display: flex;
     align-items: center;
     justify-content: center;
+}
+.pm-btn button{
+    min-width: 30px;
+}
+.gift-price{
+    font-size: 16px;
+    font-weight: 600;
 }
 .like-item-card{
     display: flex;
 }
 .like-gift-image{
-    width: 100%;
+    width:230px;
 }
 
 .finish-wish-con{
@@ -371,4 +392,7 @@
     width: 94px;
     font-size: x-small;
     color: white;
+}
+.css-1wnsr1i{
+    width: auto;
 }

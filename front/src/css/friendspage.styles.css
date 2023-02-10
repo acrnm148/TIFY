@@ -81,11 +81,13 @@
   }
   
   .searchbar{
-    border: #000000 1px solid;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
+    margin-top: 20px;
+    width: 60vw;
+    height: 52px;
+    border: 1px solid #C1C1C1;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
     background-color:transparent;
   }
 
@@ -96,3 +98,23 @@
     border: none;
     background: url( "https://tifyimage.s3.ap-northeast-2.amazonaws.com/e0a94402-6583-4557-9508-307e5778dd20.png" ) no-repeat;
   }
+
+.friend-list{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.rectangle-2-7 {
+  border-radius: 10px;
+  height: 16px;
+  width: 56px;
+  background-color: #ffc0ce;
+}
+
+.rectangle-2-5 {
+  border-radius: 10px;
+  height: 16px;
+  width: 56px;
+  background-color: #fe3360;
+}

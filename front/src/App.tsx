@@ -25,7 +25,7 @@ import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 
 import { MyWish } from './pages/mypage/Mywish';
 import { Joined } from './components/Joined';
-import { Friend } from './components/Friend';
+import { Friend } from './pages/mypage/MyFriend';
 import { MyInfo } from './pages/mypage/MyInfo';
 import { PhoneBook } from './components/PhoneBook';
 import OrderList from './components/OrderList';
@@ -126,10 +126,10 @@ function App() {
         </Route>
 
         {/* 테스트용 */}
-        <Route path="/join2" element={<JoinSecondPage />} />
+        {/* <Route path="/join2" element={<JoinSecondPage />} /> */}
         <Route element={<PublicRoute />}>
           <Route path="/join1" element={<JoinFirstPage />} />
-          {/* <Route path="/join2" element={<JoinSecondPage />} /> */}
+          <Route path="/join2" element={<JoinSecondPage />} />
           <Route path="/reset" element={<ForgotPasswordPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />}>

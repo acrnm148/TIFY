@@ -15,9 +15,19 @@ import '../css/orderList.styles.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
 
+interface orders {
+  state: number;
+  wishFinishDate: string;
+  giftImgUrl: string;
+  wishName: string;
+  giftName: string;
+  orderPrice: number;
+  gatheredPrice: number;
+}
+
 const OrderInfo = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState<orders[]>(null);
+  const [orders, setOrders] = useState<orders[] | null>(null); //([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const maxResults = 10;
@@ -33,7 +43,7 @@ const OrderInfo = () => {
       headers: { Authorization: `Bearer ${accessToken}` },
     })
       .then((response) => {
-        setSearchResults([...response.data]);
+        setOrders([...response.data]);
         // setTotalPages(response.data.totalPages);
         console.log(response.data);
         return response.data;
@@ -42,14 +52,14 @@ const OrderInfo = () => {
         console.error(error);
       });
   };
-  if (searchResults === null) {
+  if (orders === null) {
     getData(0);
   }
   return (
     <div className="order-div">
-      {searchResults && (
+      {orders && (
         <>
-          <OrderCardActive searchResults={searchResults}></OrderCardActive>
+          <OrderCardActive orders={orders}></OrderCardActive>
           {/* <OrderCardActive searchResults={searchResults}></OrderCardActive> */}
           {/* <OrderCardActive searchResults={searchResults}></OrderCardActive> */}
           {/* <OrderCardActive searchResults={searchResults}></OrderCardActive> */}
@@ -59,45 +69,74 @@ const OrderInfo = () => {
   );
 };
 
-const OrderCardActive = (props: { searchResults: orders[] }) => {
+const OrderCardActive = (props: { orders: orders[] }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
 
+  /*
+  function getOrderState(state) {
+    switch (state) {
+      case 0:
+        return <p className="p-order-state">축하부족</p>;
+      case 1:
+        return <p className="p-order-state">배송중</p>;
+      case 2:
+        return <p className="p-order-state">배송완료</p>;
+      case 3:
+        return <p className="p-order-state">환불완료</p>;
+      case 4:
+        return <p className="p-order-state">재고부족</p>;
+      default:
+        return <p className="p-order-state">상태없음</p>;
+    }
+  }
+  */
+
   return (
     // jsx요소로 쓸 때 리턴값이 <div></div> 나 <></> 하나로 묶여있어야함
-    <div>
-      {props.searchResults.map((order: orders, idx: any) => (
+    <div className="order-div">
+      {props.orders.map((order: orders, idx: any) => (
         <div className="order-box shadow-xl">
-          <p className="p-order-state">배송완료{order.state}</p>
+          <div className="order-box-top">
+            <p className="p-order-state">
+              {order.state === 1 ? '배송완료' : ''}
+            </p>
+            <p className="p-finished-date">{order.wishFinishDate} 위시 종료</p>
+          </div>
           <div className="gift-info-div">
-            <img src={order.gift.giftImgUrl} alt=" " className="gift-img" />
+            <img
+              src={
+                order.giftImgUrl === null
+                  ? 'https://tifyimage.s3.ap-northeast-2.amazonaws.com/63ba5e95-1e5d-4579-9c67-f1f0ebc6c694.png'
+                  : order.giftImgUrl
+              }
+              alt=" "
+              className="gift-img"
+            />
             <div className="gift-info-detail-div">
               <div className="detail-top-div">
-                <p className="p-finished-date">
-                  {order.gift.finishDate} 기프트 종료&nbsp;
-                </p>
-                <p className="p-wish-name">({order.gift.giftname})</p>
+                <p className="p-wish-name">{order.wishName}</p>
               </div>
               <div className="wrap-detail-div">
                 <div className="detail-left-div">
-                  <p className="p-gift-name">
-                    플레이스테이션 5{order.gift.giftname}
+                  <p className="p-gift-name">{order.giftName}</p>
+                  <p className="p-gift-price">
+                    결제금액 : {order.orderPrice}원
                   </p>
-                  <p className="p-gift-price">{order.gift.purePrice}원</p>
                 </div>
                 <div className="detail-right-div">
-                  <p className="p-gift-option">옵션 : 듀얼쇼크/512gb</p>
+                  <p className="p-gift-option">옵션 : 없음</p>
                   <p className="p-gift-gathered-price">
-                    축하금액 : {order.gift.gathered}원
+                    축하금액 : {order.gatheredPrice}원
                   </p>
                 </div>
+                <p className="p-delilvery" onClick={handleOpen}>
+                  배송조회
+                </p>
               </div>
-              <p className="p-delilvery" onClick={handleOpen}>
-                배송조회
-              </p>
               <div className="modal-con">
                 <Modal
                   className="modal-modal"

@@ -18,6 +18,18 @@ public class PhonebookController {
         this.phonebookService = phonebookService;
     }
 
+    @GetMapping("/search/{userId}")
+    public ResponseEntity<List<PhonebookDto>> searchPhonebookEntriesByUserId(@PathVariable Long userId) {
+        List<PhonebookDto> phonebookEntries = phonebookService.getPhonebookEntriesByUserId(userId);
+        return ResponseEntity.ok(phonebookEntries);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PhonebookDto> updatePhonebookEntry(@PathVariable Long id, @RequestBody PhonebookDto phonebookDto) {
+        PhonebookDto updatedEntry = phonebookService.updatePhonebookEntry(id, phonebookDto);
+        return ResponseEntity.ok(updatedEntry);
+    }
+
     @GetMapping
     public ResponseEntity<List<PhonebookDto>> getAllPhonebookEntries() {
         List<PhonebookDto> phonebookEntries = phonebookService.getAllPhonebookEntries();
