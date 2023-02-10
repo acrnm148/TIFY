@@ -15,7 +15,6 @@ import { RootState } from '../../store/Auth';
 import { CheckWish } from '../../interface/interface';
 
 export function MyWish() {
-  const userId = 133;
   const [isWish, setIsWish] = useState<Boolean>(false);
   const [wishGoing, setWishGoing] = useState<Boolean>(true);
   const [conList, setConList] = useState<Array<CheckWish>>([]);
@@ -25,6 +24,8 @@ export function MyWish() {
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
+  const userId = useSelector((state: RootState) => state.authToken.userId);
+
   const navigate = useNavigate();
   useEffect(() => {
     const API_URL = `https://i8e208.p.ssafy.io/api/wish/wish/${userId}`;
