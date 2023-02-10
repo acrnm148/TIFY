@@ -12,15 +12,12 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { RootState } from '../../store/Auth';
-import { CheckWish } from '../../interface/interface';
+import { MyWishType } from '../../interface/interface';
 
 export function MyWish() {
   const [isWish, setIsWish] = useState<Boolean>(false);
   const [wishGoing, setWishGoing] = useState<Boolean>(true);
-  const [conList, setConList] = useState<Array<CheckWish>>([]);
-  const [goOpenList, setGoOpenList] = useState<Array<CheckWish>>([]);
-  const [setLsts, setSetLsts] = useState<Boolean>(false);
-  const [showIng, setShowIng] = useState<Boolean>(false);
+  const [conList, setConList] = useState<Array<MyWishType>>([]);
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
@@ -51,17 +48,31 @@ export function MyWish() {
               if (wish.finishYN !== 'y' && !result) {
                 let diff =
                   new Date(wish.endDate).getTime() - new Date().getTime();
+                // console.log(wish, '하나의 위시 입니다.');
+                const payImgs: string[] = [];
                 const froms = wish.giftItems.map(
                   (
-                    gift: { payList: { pay_id: any; celeb_from: string }[] },
+                    gift: {
+                      payList: {
+                        pay_id: any;
+                        celeb_from: string;
+                        celeb_img_url: string;
+                      }[];
+                    },
                     i: number,
                   ) => {
                     if (gift) {
                       let payids = gift.payList.map(
-                        (p: { pay_id: any; celeb_from: string }) => {
+                        (p: {
+                          pay_id: any;
+                          celeb_from: string;
+                          celeb_img_url: string;
+                        }) => {
+                          payImgs.push(p.celeb_img_url);
                           return { id: p.pay_id, from: p.celeb_from };
                         },
                       );
+
                       return { data: payids };
                     }
                   },
@@ -75,68 +86,15 @@ export function MyWish() {
                   percent: (wish.nowPrice / wish.totPrice) * 100,
                   fromList: froms[0].data,
                   cardOpen: wish.cardopen,
+                  payImgs,
                 };
                 res.push(data);
               }
-              return res;
-            }, []),
-          );
-
-          setGoOpenList(
-            res.data.reduce(function (res: Array<any>, wish: any) {
-              const result = goOpenList.some(
-                (go: { wishId: any }) => go.wishId === wish.id,
-              );
-              if (wish.finishYN === 'y') {
-                let diff =
-                  new Date(wish.endDate).getTime() - new Date().getTime();
-                const froms = wish.giftItems.map(
-                  (
-                    gift: { payList: { pay_id: any; celeb_from: string }[] },
-                    i: number,
-                  ) => {
-                    if (gift) {
-                      let payids = gift.payList.map(
-                        (p: { pay_id: any; celeb_from: string }) => {
-                          return { id: p.pay_id, from: p.celeb_from };
-                        },
-                      );
-                      return { data: payids };
-                    }
-                  },
-                );
-                const data = {
-                  wishId: wish.id,
-                  userName: wish.user.username,
-                  title: wish.title,
-                  category: wish.category,
-                  restDay: String(Math.floor(diff / (1000 * 60 * 60 * 24))),
-                  percent: (wish.nowPrice / wish.totPrice) * 100,
-                  fromList: froms[0].data,
-                  cardOpen: wish.cardopen,
-                };
-                res.push(data);
-              }
+              // console.log(payImgs, 'payImgs 여기 있습니다!!!!');
               return res;
             }, []),
           );
         }
-        // }).then(()=>{
-        //   return new Promise (function myo(){
-        //     console.log(conList, 'here is myo')
-        //     // 리스트 restDay가 적은 순서로 정렬
-        //     let newArr = [...conList]
-        //     newArr.sort(function (comp1, comp2){
-        //       return Number(comp1.restDay) - Number(comp2.restDay)
-        //     })
-        //     setConList(newArr)
-
-        //     // let newArr2 = [...goOpenList]
-        //     // newArr2.sort(function (comp1, comp2){
-        //     //   return Number(comp1.restDay) - Number(comp2.restDay)
-        //     // })
-        //     // setGoOpenList(newArr2)
-        //   })
       })
       .catch((err) => {
         console.log('유저의 위시정보 불러오지못함');
@@ -144,7 +102,6 @@ export function MyWish() {
   }, []);
 
   const GoToWish = (wishId: string): any => {
-    console.log('클릭클릭클릭클릭클릭클릭클릭클릭');
     console.log(wishId);
     navigate(`/congrats/${wishId}`);
   };
@@ -167,11 +124,13 @@ export function MyWish() {
       return <img src={iconCategory7Etc} alt="" />;
     }
   }
-  const WishCard = ({ conList }: { conList: CheckWish[] }) => {
-    // 알맞는 카드 골라주는 함수
+  const WishCard = ({ conList }: { conList: MyWishType[] }) => {
+    // 축하해준 사람 수
+    const conCount = conList.length;
+    console.log(conList, 'conList가 요것입니다.');
     return (
       <>
-        {conList.map((con: CheckWish) => {
+        {conList.map((con: MyWishType) => {
           // 완료된 위시
           if (Number(con.restDay) < 1) {
             return (
@@ -185,7 +144,11 @@ export function MyWish() {
                   <Categorize category={con.category}></Categorize>
                   <p className="wish-title">"{con.title}"</p>
                 </div>
-                <Donator />
+                {conCount > 0 ? (
+                  <Donator payImgs={conList.payImgs} />
+                ) : (
+                  <button>공유해보세요.</button>
+                )}
               </div>
             );
           } else {
@@ -200,7 +163,11 @@ export function MyWish() {
                   <Categorize category={con.category}></Categorize>
                   <p className="wish-title">"{con.title}"</p>
                 </div>
-                <Donator />
+                {conCount > 0 ? (
+                  <Donator payImgs={conList.payImgs} />
+                ) : (
+                  <button>공유해보세요.</button>
+                )}{' '}
               </div>
             );
           }
@@ -216,7 +183,8 @@ export function MyWish() {
   );
 }
 
-function Donator() {
+function Donator(payImgs: string[]) {
+  console.log(payImgs, 'Donater에서 나오는 pay');
   return (
     <div className="donator-div">
       <div className="flex items-center space-x-2 text-base">
