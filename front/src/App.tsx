@@ -24,10 +24,10 @@ import { JoinThirdPage } from './pages/JoinThirdPage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 
 import { MyWish } from './pages/mypage/Mywish';
-import { Joined } from './components/Joined';
+import { Joined } from './pages/mypage/JoinedWish';
 import { Friend } from './pages/mypage/MyFriend';
 import { MyInfo } from './pages/mypage/MyInfo';
-import { PhoneBook } from './components/PhoneBook';
+import { PhoneBook } from './pages/mypage/PhoneBook';
 import OrderList from './components/OrderList';
 import { CongratsPage } from './pages/CongratsPage';
 import { CongratsPayPage } from './pages/CongratsPayPage';

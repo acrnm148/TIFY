@@ -127,16 +127,31 @@
 }
 
 .friend-nickname {
-  margin-right: 10vw;
+  margin-right: 50px;
   font-weight: bold;
+  width: 120px;
 }
 
 .friend-username {
-  margin-right: 25vw;
+  margin-right: 100px;
   font-weight: bold;
+  width: 120px;
 }
 
 .friend-delete-button {
+  background-color: #c1c1c1;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+}
+.friend-agree-button {
+  background-color: #0084ff;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  margin-right: 5px;
+}
+.friend-deny-button {
   background-color: #c1c1c1;
   color: white;
   border-radius: 5px;
