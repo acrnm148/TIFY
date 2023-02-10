@@ -24,8 +24,7 @@ import { RootState } from '../store/Auth';
 import { CheckWish } from '../interface/interface';
 
 export function CheckWishPage() {
-  // const [userId, setUserId] = useState(useSelector((state: RootState) => state.authToken.userId))
-  const userId = 133;
+  const [userId, setUserId] = useState(useSelector((state: RootState) => state.authToken.userId))
   const [isWish, setIsWish] = useState<Boolean>(false);
   const [wishGoing, setWishGoing] = useState<Boolean>(true);
   const [conList, setConList] = useState<Array<CheckWish>>([]);
@@ -81,7 +80,7 @@ export function CheckWishPage() {
                   category: wish.category,
                   restDay: String(Math.floor(diff / (1000 * 60 * 60 * 24))), // 오늘 날짜랑 계산해서 몇일남았는지
                   percent: (wish.nowPrice / wish.totPrice) * 100,
-                  fromList: froms[0].data,
+                  fromList: froms[0]?.data,
                   cardOpen: wish.cardopen,
                 };
                 res.push(data);

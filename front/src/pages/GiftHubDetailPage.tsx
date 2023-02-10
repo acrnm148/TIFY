@@ -140,7 +140,7 @@ export function GiftHubDetailPage(){
                             ))}
                         </div>
                     </div>
-            )
+            ) 
         }
     return(
         <div className="concon">
@@ -161,7 +161,7 @@ export function GiftHubDetailPage(){
                             
                         </div>
                         <div className="product-price-option">
-                            <p className="product-price">₩ {data.price} </p>
+                            <p className="product-price">₩ {data.price}.toLocaleString('ko-KR') </p>
                         </div>
                         <div>
                         {data.options.length > 0 && 
