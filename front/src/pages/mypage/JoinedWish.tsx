@@ -1,11 +1,11 @@
-import iconCategory1Birthday from '../assets/category/iconCategory1Birthday.svg';
-import iconCategory2Marry from '../assets/category/iconCategory2Marry.svg';
-import iconCategory3Employed from '../assets/category/iconCategory3Employed.svg';
-import iconCategory4Health from '../assets/category/iconCategory4Health.svg';
-import iconCategory5Childbirth from '../assets/category/iconCategory5Childbirth.svg';
-import iconCategory6Unmarried from '../assets/category/iconCategory6Unmarried.svg';
-import iconCategory7Etc from '../assets/category/iconCategory7Etc.svg';
-import '../css/Joined.styles.css';
+import iconCategory1Birthday from '../../assets/category/iconCategory1Birthday.svg';
+import iconCategory2Marry from '../../assets/category/iconCategory2Marry.svg';
+import iconCategory3Employed from '../../assets/category/iconCategory3Employed.svg';
+import iconCategory4Health from '../../assets/category/iconCategory4Health.svg';
+import iconCategory5Childbirth from '../../assets/category/iconCategory5Childbirth.svg';
+import iconCategory6Unmarried from '../../assets/category/iconCategory6Unmarried.svg';
+import iconCategory7Etc from '../../assets/category/iconCategory7Etc.svg';
+import '../../css/Joined.styles.css';
 
 export function Joined() {
   return (
