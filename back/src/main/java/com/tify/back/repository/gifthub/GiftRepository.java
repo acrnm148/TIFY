@@ -21,4 +21,6 @@ public interface GiftRepository extends JpaRepository<Gift, Long> {
     Page<Gift> findAll(Pageable pageable);
     Page<Gift> findByWish(Pageable pageable, Wish wish);
 
+    Page<Gift> findByGiftnameContaining(String email, Pageable pageable);
+
 }
