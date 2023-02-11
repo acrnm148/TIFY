@@ -11,4 +11,5 @@ import java.util.Optional;
 
 public interface PayCustomRepository {
     List<Pay> findMyPayListByGiftId(Gift gift, Long userId);
+    List<Pay> findMyPayListByWishId(Long wishId, Long userId);
 }

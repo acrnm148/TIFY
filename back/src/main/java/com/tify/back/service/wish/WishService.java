@@ -135,8 +135,10 @@ public class WishService {
             List<CelebCardDto> celebCardDtoList = new ArrayList<> ();
             List<MyCelebDto> myCelebDtoList = new ArrayList<> ();
 
-            List<Pay> payListByGiftIdAndUserId = payCustomRepository.findMyPayListByGiftId(gift, userId);
-            for (Pay payItem : payListByGiftIdAndUserId) {
+            //List<Pay> payListByGiftIdAndUserId = payCustomRepository.findMyPayListByGiftId(gift, userId);
+            List<Pay> payListByWishIdAndUserId = payCustomRepository.findMyPayListByWishId(wish.getId(), userId);
+            for (Pay payItem : payListByWishIdAndUserId) {
+                System.out.println("payList들:"+payItem);
                 CelebCardDto celebCardDto = CelebCardDto.builder()
                         .payId(payItem.getPay_id())
                         .celebFrom(payItem.getCeleb_from())

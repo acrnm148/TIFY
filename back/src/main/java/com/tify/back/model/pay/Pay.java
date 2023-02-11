@@ -36,6 +36,7 @@ public class Pay {
     private String celeb_tel;
     private String celeb_content;
     private Long userId;
+    private Long wishId;
     private LocalDateTime createTime;
 
     @Column(length = 3000)

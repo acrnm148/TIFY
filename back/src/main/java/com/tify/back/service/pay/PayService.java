@@ -58,6 +58,7 @@ public class PayService {
         //pay 생성
         Pay pay = payRepository.save(
                 Pay.builder()
+                        .wishId(wish.getId())
                         .gift(gift)
                         .amount(payRequestDto.getAmount())
                         .celeb_from(payRequestDto.getCelebFrom())
