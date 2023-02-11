@@ -49,7 +49,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -407,12 +410,14 @@ public class UserApiController {
     /**
      * 유저 토큰으로 orderList 불러오기
      */
-    @GetMapping("/account/getOrder")
-    public ResponseEntity<?> getOrder(@RequestHeader("Authorization") String token) { //@RequestHeader(value = "Authorization") String token) {
+    @GetMapping("/account/getOrder") // api/account/getOrder?page=2&size=5
+    public ResponseEntity<?> getOrder(@RequestHeader("Authorization") String token, @PageableDefault(size=5)  Pageable pageable) { //@RequestHeader(value = "Authorization") String token) {
         token = token.substring(7);
         User user = userRepository.findById(userService.getUser(token).getId()).get();
 
-        List<Order> orderList = orderRepository.findAllByUser(user);
+        //List<Order> orderList = orderRepository.findAllByUser(user);
+        Page<Order> orderList = orderRepository.findAllByUser(user, pageable);
+
         System.out.println(user.getUsername()+"님의 주문목록:"+orderList);
 
         return ResponseEntity.ok().body(orderList);
