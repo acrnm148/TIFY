@@ -55,7 +55,7 @@
 }
 .wish-card{
     /* width: 523px; */
-    height: 312px;
+    max-height: 312px;
     /* border: 1px solid #FE3360; */
     border-radius: 8px;
 }
@@ -91,16 +91,15 @@
     padding-bottom: 15px;
 }
 .wish-gift{
-    word-break: break-all;
-    width: 132px;
-    min-height: 149px;
+    width: 266px;
+    /* min-height: 266px; */
     font-size: x-small;
     color: white;
     background: white;
     display: flex;
     border-radius: 8px;
-    flex-direction: column;
     align-items: center;
+    /* border: 1px solid black; */
 }
 .wish-congrats-btns{
     width: 100%;
@@ -110,7 +109,7 @@
     flex-wrap: wrap;
 }
 .wish-congrats-btns .button {
-    width: 523px;
+    width: 100%;
     border: 1px solid #FE3360;
     border-radius: 8px;
     padding: 3px;
@@ -130,13 +129,35 @@
     border-radius: 10px;
     color: #828483;
 }
-.wish-gift>div{
-    width: 112px;
-    height: 112px;
+/* .wish-gift>div{
+    width: 200px;
+    height: 169px;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    position: relative;
+} */
+.wish-gift-going{
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    align-items: center;
+}
+.gift-img-box{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.gift-img-box p{
+    color: #3f3f3f;
 }
 .wish-gift>p{
     color: #828483;
@@ -145,6 +166,13 @@
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+}
+.gift-img{
+    height: 129px;
+    background-position: center;
+    background-size: contain;
+    width: 90%;
+
 }
 .gift-bar-gray{
     width: 81px;
@@ -173,4 +201,20 @@
     font-size: 1.5em;
     font-weight: 300;
     -webkit-text-fill-color: #ff5e7a;
+}
+.finished-product{
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background-color: #828483;
+    opacity: 70%;
+    border-radius: 5px;
+    position: absolute;
+    font-weight: 900;
+    font-size: 16px;
+    padding: 10px;
+    word-break: break-all;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -25,6 +25,20 @@ public class PhonebookService {
                 .collect(Collectors.toList());
     }
 
+    public List<PhonebookDto> getPhonebookEntriesByUserId(Long userId) {
+        List<Phonebook> phonebookEntries = phonebookRepository.findByUserId(userId);
+        return phonebookEntries.stream()
+            .map(this::convertToDto)
+            .collect(Collectors.toList());
+    }
+
+    public PhonebookDto updatePhonebookEntry(Long id, PhonebookDto phonebookDto) {
+        Phonebook phonebook = convertToEntity(phonebookDto);
+        phonebook.setId(id);
+        Phonebook savedPhonebook = phonebookRepository.save(phonebook);
+        return convertToDto(savedPhonebook);
+    }
+
     public PhonebookDto addPhonebookEntry(PhonebookDto phonebookDto) {
         Phonebook phonebook = convertToEntity(phonebookDto);
         Phonebook savedPhonebook = phonebookRepository.save(phonebook);

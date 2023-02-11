@@ -58,7 +58,7 @@ public class FriendController {
         }
         for (Friend receivedRequest : receivedRequests) {
             receivedRequest.setStatus(FriendStatus.RECEIVED);
-            receivedRequest.setUser(userRepository.findById(receivedRequest.getFriendId()));
+            receivedRequest.setUser(userRepository.findById(receivedRequest.getUserId()));
         }
 
         FriendList friendsList = new FriendList();

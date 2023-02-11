@@ -2,19 +2,18 @@ package com.tify.back.model.gifthub;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tify.back.common.BaseEntity;
 import com.tify.back.model.users.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @RequiredArgsConstructor
 @Entity
 @Table(name = "order_table")
-public class Order extends BaseEntity {
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
@@ -30,9 +29,12 @@ public class Order extends BaseEntity {
     private String wishFinishDate;
     private String giftName;
     private int purePrice;
+
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY) // 노비 파트는 fetch 타입 영향 안받음.
+    @JoinColumn(name = "gift_id")
     private Gift gift;
+
     private String tel;
     private int gatheredPrice;
     private int orderPrice;

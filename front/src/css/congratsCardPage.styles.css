@@ -35,12 +35,6 @@
 .gift-img{
     cursor: pointer;
 }
-.gift-img-box{
-    margin-top: 20px;
-    width: 100%;
-    /* min-width: 450px;
-    min-height: 250px; */
-}
 .congrats-form-btn{
     display: flex;
     flex-direction: column;
@@ -120,8 +114,7 @@
 }
 
 .gift-info img{
-    width: 70%;
-    height: auto;
+    width: fit-content;
 }
 
 .name_and_price{

@@ -25,11 +25,17 @@ public class ProductDto {
     private int likeCount;
     private List<ImgDto> imgList;
     private List<ProductOptionDto> options;
-    private List<String> categories = Arrays.asList("뷰티", "전자제품", "키친", "의류", "음식", "출산유아", "홈인테리어", "반려동물용품");
+    public List<String> categories = Arrays.asList("뷰티", "전자제품", "키친", "의류", "음식", "출산유아", "홈인테리어", "반려동물용품");
     public Product toEntity() {
         Product product = new Product();
         product.setName(this.name);
-        product.setRepImg(this.repImg);
+
+        if (this.repImg != null) {
+            String[] temp = this.repImg.split(".");
+            if (Arrays.stream(temp).count() > 1) {
+                product.setRepImg(this.repImg);
+            }
+        }
         product.setQuantity(this.quantity);
         String herePrice = this.price.replaceAll(",", "");
         herePrice = herePrice.replace("원","");
@@ -48,7 +54,7 @@ public class ProductDto {
             product.setCategory(code);
         }
         else {
-            product.setCategory(this.categoryId);
+            product.setCategory(99999);
         }
         product.setLikeCount(this.likeCount);
         return product;

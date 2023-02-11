@@ -117,7 +117,7 @@ export function MakeWishPage() {
   const [ userZipCode, setUserZipCode ] = useState<number>()
   const [ userName, setUserName ] = useState<string>()
 
-  const[userOptions, setUserOptions] = useState<string>('')
+  const[userOptions, setUserOptions] = useState<any>()
 
   const [callMyAddr, setCallMyAddr] = useState<boolean>()
 
@@ -168,7 +168,7 @@ export function MakeWishPage() {
           'max_result' : 100
         }
       })
-        .then((con) => {
+        .then((con: { data: { content: any; }; }) => {
           const lst = con.data.content;
           const conlst:Gift[] = [];
 
@@ -202,14 +202,14 @@ export function MakeWishPage() {
         url: API_URL,
         headers: { Authorization: `Bearer ${accessToken}` },
       })
-        .then((con) => {
+        .then((con: { data: { addr1: React.SetStateAction<string | undefined>; addr2: React.SetStateAction<string | undefined>; zipcode: React.SetStateAction<number | undefined>; username: React.SetStateAction<string | undefined>; }; }) => {
           console.log('유저정보 불러오기 성공',con.data);
           setUserAddr1(con.data.addr1)
           setUserAddr2(con.data.addr2)
           setUserZipCode(con.data.zipcode)
           setUserName(con.data.username)
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.log('유저정보 불러오기 실패', err);
         });
     }
@@ -331,7 +331,7 @@ export function MakeWishPage() {
           {
             "productId" : item.id,
             'purePrice': item.price, 
-            'userOption':userOptions,
+            'userOption': item.optionTitle+'-'+userOptions,
             'giftImgUrl':item.repImg, 
             'giftname' : item.name,
             "maxAmount": item.price+Math.round(item.price*0.05),
@@ -366,14 +366,14 @@ export function MakeWishPage() {
           'Content-type': 'application/json',
         },
       })
-        .then((con) => {
+        .then((con: any) => {
           console.log('위시생성 성공', con, userId);
           setFinished(true);
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.log('위시생성 실패', err);
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.log('위시생성 실패', err);
         });
     };
@@ -387,13 +387,31 @@ export function MakeWishPage() {
   }
 
   const delWishGift = (id: number, i:number) => {
+    // id : 상품 id
+    // i : 위시카트의 인덱스번호
+
+    // 1개 남았을 떄 다지워
     if(wishCart?.length===1){
       setWishCart([])
       // setTotalProduct([])
       setTotalPrice(0)
+      setUserOptions(null)
       return
     }
+
+    // option정보 지우기
+    let delOp;
+    if(userOptions && i in userOptions){
+      let delo:string = userOptions[i]
+      delOp = delo.split('-')[1]
+      console.log('delOp',delOp)
+      // 최종 가격에서 option정보 빼기
+    }
+    // [i] // 'optionname-optionvalue'
+    // console.log('delOp',delOp, 'typeof(delOp)', typeof(delOp) )
+
     if(wishCart){
+      setTotalPrice(totalPrice-wishCart[i].price-Number(delOp))
       wishCart.forEach(prod=>{
         if(prod.id === id){
           wishCart.splice(i,1)
@@ -407,7 +425,8 @@ export function MakeWishPage() {
   
     console.log('wishCart', wishCart)
 
-    setTotalPrice(totalPrice-cartList[i].price)
+    
+
     // totalProduct.forEach(prod =>{
     //   if(prod.productId === id){
     //     totalProduct.splice(i,1)
@@ -507,9 +526,13 @@ export function MakeWishPage() {
     addr1?setGoAddr1(true):setGoAddr1(false)
     addr2?setGoAddr2(true):setGoAddr2(false)
   }
-  const GetOption = (e:any)=>{
-    console.log(e.target.value, '선택한 옵션이 뭐죠?')
-    setUserOptions(e.target.value)
+  const ChangeOption = (e:any, i:number)=>{ 
+    setUserOptions({...userOptions,[i]:e.target.value})
+    const val = e.target.value.split('-')
+    setTotalPrice(totalPrice+Number(val[1]))
+    
+    // console.log('userOptions',userOptions)
+    // console.log(e.target.value, '선택한 옵션이 뭐죠?')
   }
   return (
     <>
@@ -644,27 +667,35 @@ export function MakeWishPage() {
                     </div>
                     {wishCart?.map((e, i: number) => {
                       return (
-                        <div className="wish-card-gift">
-                          <div onClick={() => delWishGift(e.id, i)}>
-                            삭제
+                        <div className="wish-card-gift wid-100">
+                          <div className='wid-50 disp-flex align-center'>
+                            <div onClick={() => delWishGift(e.id, i)}>
+                              삭제
+                            </div>
+                            <div className='disp-flex align-center'>
+                              <img src={e.repImg}></img>
+                              <p className='padding-10 '>{e.name}</p>
+                            </div>
                           </div>
-                          <div className='disp-flex align-center'>
-                            <img src={e.repImg}></img>
-                            <p className='padding-10 '>{e.name}</p>
+                          <div className="wid-50 disp-flex flex-end">
+                            {e.optionTitle &&
+                              <div className='padding-r-20'>
+                                <select name={e.optionTitle} onChange={(e)=>ChangeOption(e, i)}>
+                       
+                                  <option value='' selected>{e.optionTitle}</option>
+                                  {
+                                    e.options.map(opt=>{
+                                      let res = opt.split('-')
+                                      return(
+                                        <option value={opt}><span className='font-bold'>{res[0]}</span> + {res[1]}원</option>
+                                      )
+                                    })
+                                  }
+                                </select>
+                              </div>
+                            }
+                            <p className='font-lrg font-bold'>{e.price.toLocaleString('ko-KR')}</p>
                           </div>
-                          <div>
-                            <select name={e.optionTitle} id="" onChange={(e)=>GetOption(e)}>
-                              <option value='' selected>{e.optionTitle}</option>
-                              {
-                                e.options.map(opt=>{
-                                  return(
-                                    <option value={opt}>{opt}</option>
-                                  )
-                                })
-                              }
-                            </select>
-                          </div>
-                          <p className='font-lrg font-bold'>{e.price.toLocaleString('ko-KR')}</p>
                         </div>
                       );
                     })}

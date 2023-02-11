@@ -109,6 +109,9 @@
     justify-content: left;
     margin-top: 10px;
     width: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 .thanks-input textarea{
     min-height: 200px;
@@ -189,4 +192,10 @@
 .arrow{
     height: inherit;
     width: 50px;
+}
+.disp-flex{
+    display: flex;
+}
+.align-center{
+    align-items: center;
 }

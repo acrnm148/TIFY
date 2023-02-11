@@ -27,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 @Service
@@ -94,16 +95,18 @@ public class ProductService {
     public Product pyProduct(ProductDto dto) {
         Product product = dto.toEntity();
         productRepository.save(product);
-        System.out.println("----------------------------------------------------------------");
-        List<Img> imgList = product.getImgList();
-        for (ImgDto imgDto : dto.getImgList()) {
-            Img img = imgDto.toEntity();
-            img.setProduct(product);
-            imgService.saveImg(img);
-            imgList.add(img);
+
+        if (dto.getImgList().size() > 0) {
+            List<Img> imgList = new ArrayList<>();
+            for (ImgDto imgDto : dto.getImgList()) {
+                Img img = imgDto.toEntity();
+                img.setProduct(product);
+                imgService.saveImg(img);
+                imgList.add(img);
+            }
+            product.setImgList(imgList);
         }
-        System.out.println("----------------------------------------------------------------");
-        System.out.println(product.getOptions());
+
         List<ProductOption> options = new ArrayList<>();
         for (ProductOptionDto optionDto : dto.getOptions()) {
             ProductOption productOption = optionDto.toEntity();
@@ -122,7 +125,6 @@ public class ProductService {
             options.add(productOption);
         }
         product.setOptions(options);
-        product.setImgList(imgList);
         return productRepository.save(product);
     }
     @Transactional
@@ -131,23 +133,32 @@ public class ProductService {
         Product product = productRepository.findById(dto.getId()).orElse(null);
         product.setName(pdto.getName());
         product.setDescription(pdto.getDescription());
-        product.setRepImg(pdto.getRepImg());
+        System.out.println(product.getRepImg());
+        System.out.println("--------------------------------900432432");
+        if (pdto.getRepImg() != null) {
+            String[] temp = pdto.getRepImg().split(".");
+            if (Arrays.stream(temp).count() > 1) {
+                product.setRepImg(pdto.getRepImg());
+            }
+        }
         product.setPrice(pdto.getPrice());
         product.setCategory(pdto.getCategory());
         product.setQuantity(pdto.getQuantity());
         //기존 이미지 삭제
-        for (Img img:product.getImgList()) {
-            imgRepository.deleteById(img.getId());
+        if (pdto.getImgList().size() > 0) {
+            for (Img img:product.getImgList()) {
+                imgRepository.deleteById(img.getId());
+            }
+            List<Img> imgList = new ArrayList<>();
+            for (ImgDto imgDto : dto.getImgList()) {
+                Img img = imgDto.toEntity();
+                img.setProduct(product);
+                imgService.saveImg(img);
+                imgList.add(img);
+            }
+            product.setImgList(imgList);
         }
-        List<Img> imgList = new ArrayList<>();
-        for (ImgDto imgDto : dto.getImgList()) {
-            Img img = imgDto.toEntity();
-            img.setProduct(product);
-            imgService.saveImg(img);
-            imgList.add(img);
-        }
-        System.out.println("----------------------------------------------------------------");
-        System.out.println(dto.getOptions());
+
         for (ProductOption option : product.getOptions()) {
             productOptionRepository.deleteById(option.getId());
         }
@@ -170,7 +181,6 @@ public class ProductService {
             options.add(productOption);
         }
         product.setOptions(options);
-        product.setImgList(imgList);
         return productRepository.save(product);
     }
     @Transactional

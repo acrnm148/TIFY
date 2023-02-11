@@ -164,7 +164,6 @@ public class GiftDto {
         gift.setSuccessYN(this.successYN);
         gift.setIdx(this.idx);
         gift.setPayList(this.payList);
-        gift.setGiftOptionList(this.giftOptionList);
         return gift;
     }
 

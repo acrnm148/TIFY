@@ -27,8 +27,8 @@ export function CheckWishPage() {
   const [userId, setUserId] = useState(useSelector((state: RootState) => state.authToken.userId))
   const [isWish, setIsWish] = useState<Boolean>(false);
   const [wishGoing, setWishGoing] = useState<Boolean>(true);
-  const [conList, setConList] = useState<Array<CheckWish>>([]);
-  const [goOpenList, setGoOpenList] = useState<Array<CheckWish>>([]);
+  const [conList, setConList] = useState<Array<CheckWish>>();
+  const [goOpenList, setGoOpenList] = useState<Array<CheckWish>>();
   const [setLsts, setSetLsts] = useState<Boolean>(false);
   const [showIng, setShowIng] = useState<Boolean>(false);
   const accessToken = useSelector(
@@ -37,25 +37,20 @@ export function CheckWishPage() {
   useEffect(() => {
     const API_URL = `https://i8e208.p.ssafy.io/api/wish/wish/${userId}`;
     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-    // axios.defaults.headers.common['withCredentials'] = true;
     axios
       .get(API_URL)
-      .then((res) => {
-        // console.log('유저의 위시정보 get', res.data)
-        // nList = res.data.finishYN이 ㅛ위시리스트
-        // 1. nList가 빈값일 때 진행중인 위시가 없습니다
-        // 2. nList를 checkWishPage 에 표출
-        // 2-1. nList 진행중인 위시
-        // 2-2. nList 완료되었고 축하카드를 확인하지 않은 위시
+      .then((res: { data: any[]; }) => {
+        console.log('유저의 위시정보 get', res.data)
         if (res.data.length > 0) {
           setIsWish(true);
           // =-====================reduce방식으로 시도===================
           setConList(
             res.data.reduce(function (res: Array<any>, wish: any) {
-              const result = conList.some(
+              console.log('here',wish)
+              const result = conList?.some(
                 (con: { wishId: any }) => con.wishId === wish.id,
               );
-              if (wish.finishYN !== 'y' && !result) {
+              if (wish.finishYN !== 'Y' && !result) {
                 let diff =
                   new Date(wish.endDate).getTime() - new Date().getTime();
                 const froms = wish.giftItems.map(
@@ -85,16 +80,20 @@ export function CheckWishPage() {
                 };
                 res.push(data);
               }
+              res = res.sort(function (comp1, comp2){
+                console.log('리스트 정렬')
+                return Number(comp1.restDay) - Number(comp2.restDay)
+              })
               return res;
             }, []),
           );
 
           setGoOpenList(
             res.data.reduce(function (res: Array<any>, wish: any) {
-              const result = goOpenList.some(
+              const result = conList?.some(
                 (go: { wishId: any }) => go.wishId === wish.id,
               );
-              if (wish.finishYN === 'y') {
+              if (wish.finishYN === 'Y' && !result) {
                 let diff =
                   new Date(wish.endDate).getTime() - new Date().getTime();
                 const froms = wish.giftItems.map(
@@ -148,25 +147,26 @@ export function CheckWishPage() {
             }, []),
           );
         }
-        // }).then(()=>{
-        // console.log(goOpenList, 'goOpenList')
-        //   return new Promise (function myo(){
-        //     console.log(conList, 'here is myo')
-        //     // 리스트 restDay가 적은 순서로 정렬
-        //     let newArr = [...conList]
-        //     newArr.sort(function (comp1, comp2){
-        //       return Number(comp1.restDay) - Number(comp2.restDay)
-        //     })
-        //     setConList(newArr)
+        }).then(()=>{
+          return new Promise (function myo(){
+            if(conList){
+              console.log('리스트 정렬')
+              // 리스트 restDay가 적은 순서로 정렬
+              let newArr = [...conList]
+              newArr.sort(function (comp1, comp2){
+                return Number(comp2.restDay) - Number(comp2.restDay)
+              })
+              setConList(newArr)
+            }
 
         //     // let newArr2 = [...goOpenList]
         //     // newArr2.sort(function (comp1, comp2){
         //     //   return Number(comp1.restDay) - Number(comp2.restDay)
         //     // })
         //     // setGoOpenList(newArr2)
-        //   })
+          })
       })
-      .catch((err) => {
+      .catch((err:any) => {
         console.log('유저의 위시정보 불러오지못함', err);
       });
   }, []);
@@ -205,10 +205,10 @@ export function CheckWishPage() {
       </div>
     );
   };
-  const WishOpened = ({ goOpenList }: { goOpenList: CheckWish[] }) => {
+  const WishOpened = ({ goOpenList }: { goOpenList: CheckWish[] | undefined}) => {
     return (
       <>
-        {goOpenList.map((lst: CheckWish, i: number) => {
+        {goOpenList?.map((lst: CheckWish, i: number) => {
           return (
             <div className="wish-container">
               <CongratsCards
@@ -232,19 +232,13 @@ export function CheckWishPage() {
       </>
     );
   };
-  const CheckConList = () => {
-    console.log(conList, 'conListconListconList');
-    console.log(
-      goOpenList,
-      'goOpenListgoOpenListgoOpenListgoOpenListgoOpenList',
-    );
-  };
-  const WishOnGoing = ({ conList }: { conList: CheckWish[] }) => {
+  const WishOnGoing = ({ conList }: { conList: CheckWish[] | undefined}) => {
     return (
       <>
         {/* <button onClick={CheckConList}>list확인용</button> */}
         {conList &&
           conList.map((lst: CheckWish, i: number) => {
+            // console.log('이게뭐야 왜 두개나와',conList)
             return (
               <div className="wish-container">
                 <CongratsCards
@@ -308,9 +302,9 @@ export function CheckWishPage() {
           </button>
         </div>
         {showIng ? (
-          <WishOnGoing conList={[...conList]} />
+          <WishOnGoing conList={conList && [...conList]} />
         ) : (
-          <WishOpened goOpenList={[...goOpenList]} />
+          <WishOpened goOpenList={goOpenList && [...goOpenList]} />
         )}
       </div>
     );

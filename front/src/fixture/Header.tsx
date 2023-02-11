@@ -191,6 +191,9 @@ export function Header() {
           <NavLink to="/admin/faq" className="nav-cate-item">
             FAQ관리
           </NavLink>
+          <NavLink to="/admin/order" className="nav-cate-item">
+            오더관리
+          </NavLink>
         </div>
       </>
     );

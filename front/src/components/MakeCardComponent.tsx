@@ -11,7 +11,7 @@ const MakeCardComponent = (props:{phone: string,payId:string|undefined, userId:n
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [title, setTitle] = useState<string>()
   const [contents, setContents] = useState<string>()
-  const [iphone, setPhone] = useState<string>()
+  const [iphone, setPhone] = useState<string>(props.phone)
   const [image, setImage] = useState<string>()
 
   const onUploadImageButtonClick = useCallback(() => {
@@ -81,7 +81,7 @@ const MakeCardComponent = (props:{phone: string,payId:string|undefined, userId:n
       "title":title,
       "phoneNumber":iphone,
       "content":contents,
-      "imagURL":image,
+      "imageURL":image,
       "userId":Number(props.userId),
       "payId":Number(props.payId)
     }
