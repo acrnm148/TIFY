@@ -50,10 +50,11 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   bgcolor: 'background.paper',
-  border: '2px solid #000',
   boxShadow: 24,
-  minHeight: '400px',
+  minHeight: '200px',
   width:'auto',
+  minWidth: '400px',
+  borderRadius : '8px',
   p: 4,
 };
 // [TODO] 카테고리 선택 mui..
@@ -270,7 +271,6 @@ export function MakeWishPage() {
           <h1 className='cart-list'>카트상품목록</h1>
           {/* <button>카트관리</button> */}
         </div>
-        <hr></hr>
         {tooMany && <span>선물은 최대 6개까지 선택 가능합니다!</span>}
         {cartList.length > 0 ? (
           <div>
