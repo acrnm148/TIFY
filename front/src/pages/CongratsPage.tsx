@@ -80,7 +80,7 @@ export function CongratsPage() {
     return (
       <div
         className="wish-card wish-card-cover"
-        style={{ backgroundImage: `url(${card})`, marginBottom: '10px' }}
+        style={{ "backgroundImage": `url(${card})`, "marginBottom": '10px', "backgroundSize":"cover" }}
       />
     );
   };
@@ -99,13 +99,12 @@ export function CongratsPage() {
       console.log(clickedGift + 'clicked');
     }
   };
-
   const WishGiftListCompo = () => {
     return (
       <div className="wish-gift-list">
         {wishGiftList?.map((wishGift, i: number) => (
           <div
-            className={`wish-gift`}
+            className={`wish-gift ${clickedGift === i ? 'selected' : ''}`}
             id={String(i)}
             onClick={() => {!wishGift.finished&&
               giftClicked(i);
@@ -124,7 +123,6 @@ export function CongratsPage() {
                       }}
                     ></div>
                   </div>
-                    wishGift.finished &&
                   <p>{wishGift.name}</p>
                 </div>
                   {

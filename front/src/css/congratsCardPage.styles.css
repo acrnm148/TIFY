@@ -8,7 +8,7 @@
 }
 .congrats-card-page-containger-border{
     width: 85vw;
-    height: 970px;
+    /* height: 970px; */
     left: 70px;
     border: 3px solid rgba(136, 136, 136, 0.31);
     border-radius: 10px;
@@ -16,8 +16,6 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding-top: 135px;
-    padding-bottom: 135px;
 }
 
 .congrats-card-page-right, .congrats-card-page-left{
@@ -26,14 +24,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-top: 10%;
+    padding-top: 3%;
     width: 40%;
 }
 .selected{
     border: 2px solid #fe3360;
-}
-.gift-img{
-    cursor: pointer;
 }
 .congrats-form-btn{
     display: flex;
@@ -80,7 +75,7 @@
 
 .middle-line-vertical{
     width: 0px;
-    height: 733px;
+    height: 80%;
     border: 1px dashed #FE3360;
     /* background-color: #fe335f; */
 }

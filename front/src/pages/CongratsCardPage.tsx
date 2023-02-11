@@ -109,18 +109,22 @@ export function CongratsCardPage() {
   };
   const getAmount = (e: any) => {
     e.preventDefault();
-    console.log(e.target.value);
-    const neww = e.target.value;
+    const neww = e.target.value.replace(/[^0-9]/g,'');
     setAmount(neww);
   };
 
   function checkValidate(e: any) {
     // e.preventDefault()
 
-    // amount 숫자이고 공백아닌지 확인
-    if (Number.isNaN(amount)) {
+    // amount 공백아닌지 확인
+    if (!amount) {
       e.preventDefault();
-      alert('축하금액에 숫자를 입력하세요!');
+      alert('축하금액을 입력하세요!');
+      return;
+    }
+    // amount 상품가격보다 높은지 확인
+    if(amount > state.selectGift.price){
+      alert('상품가격을 초과하여 축하할 수 없습니다!')
       return;
     }
     // card from 입력 확인 =>>> 자동완성에 카드문구들어가도록
@@ -153,7 +157,7 @@ export function CongratsCardPage() {
     setCardFrom(e.target.value);
   };
   const onChangePhone = (e: any) => {
-    setCardPhone(e.target.value);
+    setCardPhone(e.target.value.replace(/[^0-9]/g,''));
   };
   const onChangeContents = (e: any) => {
     setCardContents(e.target.value);
