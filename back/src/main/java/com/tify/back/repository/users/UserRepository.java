@@ -30,6 +30,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u ORDER BY u.username ASC")
     Page<UserListMap> findAllUsers(Pageable pageable);
 
+    @Query("SELECT u FROM User u WHERE u.email LIKE %:email% ORDER BY u.username ASC")
+    Page<UserListMap> findAllUsersByEmail(Pageable pageable,@Param("email") String email);
 
+    @Query("SELECT u FROM User u WHERE u.email LIKE %:email% ORDER BY u.username ASC")
+    List<User> findUserListByEmail(@Param("email") String email);
 
 }

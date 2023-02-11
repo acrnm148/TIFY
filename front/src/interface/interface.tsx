@@ -28,7 +28,7 @@ export interface Paying {
   celebTel: string;
   celebContent: string;
   celebImgUrl: string;
-  giftId: number | undefined;
+  giftId: number;
   userId: number;
 }
 
