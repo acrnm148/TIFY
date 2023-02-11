@@ -16,6 +16,8 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Box from '@mui/material/Box';
 import Backdrop from '@mui/material/Backdrop';
+import Policy from '../components/Policy';
+import { ThanksPage } from './ThanksPage';
 
 export function CongratsCardPage() {
   const userId = useSelector((state: RootState) => state.authToken.userId);
@@ -44,14 +46,15 @@ export function CongratsCardPage() {
   const handleOpen = () => {
     setOpen(true);
   };
+  const [openPayInfo, setOpenPayInfo] = useState(false)
+  const handlePayInfoClose = () => setOpenPayInfo(false);
   const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    minWidth: '400px',
     bgcolor: 'background.paper',
-    border: '2px solid #000',
     boxShadow: 24,
     p: 4,
   };
@@ -127,6 +130,10 @@ export function CongratsCardPage() {
       alert('상품가격을 초과하여 축하할 수 없습니다!')
       return;
     }
+    if(!cardPhone){
+      let res = confirm('연락처를 입력하시면 감사카드를 받을 수 있습니다!')
+      if(res){return}
+    }
     // card from 입력 확인 =>>> 자동완성에 카드문구들어가도록
     // console.log(cardFrom, cardContents, cardPhone)
     //if(cardData.title && cardData.phone && cardData.content)
@@ -136,18 +143,8 @@ export function CongratsCardPage() {
       alert('이용약관에 동의해주세요!');
       return;
     }
-    const congratsInfo: Paying = {
-      amount: amount,
-      payType: '',
-      celebFrom: cardFrom,
-      celebTel: cardPhone,
-      celebContent: cardContents,
-      celebImgUrl: imgUrl,
-      giftId: state.selectGift.giftId,
-      userId: userId,
-    };
-    // Paying 자료형 >> 결제창으로 넘어갈때 결제정보 인자로 넘기기
-    PayingPort.onClickPayment(congratsInfo, state.selectGift.name);
+    setOpenPayInfo(true)
+  
   }
   function ifisChecked() {
     return isChecked ? true : false;
@@ -159,9 +156,6 @@ export function CongratsCardPage() {
   const onChangePhone = (e: any) => {
     setCardPhone(e.target.value.replace(/[^0-9]/g,''));
   };
-  const onChangeContents = (e: any) => {
-    setCardContents(e.target.value);
-  };
 
   function setCheckbox() {
     setIsChecked(!isChecked);
@@ -169,8 +163,44 @@ export function CongratsCardPage() {
   }
 
   const showPolicy=()=>{
-
+    setOpen(true)
   }
+function GogoPay(){
+  const congratsInfo: Paying = {
+    amount: amount,
+    payType: '',
+    celebFrom: cardFrom,
+    celebTel: cardPhone,
+    celebContent: cardContents,
+    celebImgUrl: imgUrl,
+    giftId: state.selectGift.giftId,
+    userId: userId,
+  };
+  // Paying 자료형 >> 결제창으로 넘어갈때 결제정보 인자로 넘기기
+  PayingPort.onClickPayment(congratsInfo, state.selectGift.name);
+}
+
+const PayInfo = () =>{
+  return(
+    <div>
+      <h1>결제정보입니다</h1>
+        <div className='underline'></div>
+          <p>선물 : {state.selectGift.name}</p>
+          <p>축하금액 : {amount}</p>
+          <p>연락처 : {cardPhone}</p>
+        <div className='underline'></div>
+            <div className='disp-flex align-center pb10 pt10'>
+              <div className="con-card">
+                <div className='tofrom'>From {cardFrom} </div>
+                <div className='con-photo' style={{"backgroundImage":`url(${imgUrl})`}}></div>
+                <div className='con-text' style={{"lineHeight":"2"}}><pre>{cardContents?.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n')}</pre></div>
+              </div>
+            </div>
+      
+      <button onClick={()=>(GogoPay(),setOpenPayInfo(false))}>결제하기</button>
+    </div>
+  )
+}
   return (
     <>
       <TapNameKor
@@ -241,8 +271,7 @@ export function CongratsCardPage() {
                   <textarea
                     name="내용"
                     placeholder="카드 내용을 입력하세요"
-                    value={cardContents}
-                    onChange={onChangeContents}
+                    onChange={(e) => setCardContents(e.target.value.replaceAll(/(\n|\r\n)/g,'<br>'))}
                   ></textarea>
                 </div>
                 <div className="thanks-input">
@@ -287,28 +316,46 @@ export function CongratsCardPage() {
                 defaultChecked={false}
                 onChange={setCheckbox}
               />
-              <p onClick={showPolicy}>이용약관동의</p>
+              <a className="txt-underline cursor gray" onClick={showPolicy}>이용약관동의</a>
               <Modal
-                      className="modal-modal"
-                      aria-labelledby="transition-modal-title"
-                      aria-describedby="transition-modal-description"
-                      open={open}
-                      onClose={handleClose}
-                      closeAfterTransition
-                      BackdropComponent={Backdrop}
-                      BackdropProps={{
-                        timeout: 500,
-                      }}
-                    >
-                      <Fade in={open}>
-                        <Box sx={style}>
-                          <div>하이하이</div>
-                        </Box>
-                      </Fade>
-                    </Modal>
+                className="modal-modal"
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={open}
+                onClose={handleClose}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                  timeout: 500,
+                }}
+              >
+                <Fade in={open}>
+                  <Box sx={style} className="concard-policy">
+                    <Policy />
+                  </Box>
+                </Fade>
+              </Modal>
             </div>
 
             <div className="congrats-input">
+            <Modal
+              className="modal-modal"
+              aria-labelledby="transition-modal-title"
+              aria-describedby="transition-modal-description"
+              open={openPayInfo}
+              onClose={handlePayInfoClose}
+              closeAfterTransition
+              BackdropComponent={Backdrop}
+              BackdropProps={{
+                timeout: 500,
+              }}
+            >
+              <Fade in={openPayInfo}>
+                <Box sx={style} className="concard-info">
+                  <PayInfo />
+                </Box>
+              </Fade>
+            </Modal>
               <div onClick={checkValidate} className="congrats-form-btn">
                 축하보내기
               </div>
@@ -467,3 +514,4 @@ const GiftLoadingIcon = memo(function GiftLoadingIcon(props: {
     </div>
   );
 });
+

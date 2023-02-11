@@ -45,6 +45,10 @@
 .nav-cate-item {
   padding: 10px;
 }
+.nav-cate-item.active {
+  color: #ff0000;
+}
+
 .nav-cate a {
   font-weight: 700;
   width: max-content;

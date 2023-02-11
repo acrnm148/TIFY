@@ -83,7 +83,7 @@ export function Header() {
           <NavLink to="/checkwish" className="nav-cate-item">
             마이위시
           </NavLink>
-          <NavLink to="/admin" className="nav-cate-item">
+          <NavLink to="/admin/qna" className="nav-cate-item">
             관리자페이지
           </NavLink>
         </div>
@@ -156,6 +156,7 @@ export function Header() {
   };
 
   const AmdinNavLeft = () => {
+    const path = location.pathname;
     return (
       <>
         <NavLink to="">
@@ -173,7 +174,7 @@ export function Header() {
           }}
         >
           {/* <NavLink to="/qna" className="nav-cate-item">문의하기</NavLink> */}
-          <NavLink to="/admin/users" className="nav-cate-item">
+          <NavLink  to="/admin/users" className={"nav-cate-item"}>
             회원관리
           </NavLink>
           <NavLink to="/admin/wishes" className="nav-cate-item">
