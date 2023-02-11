@@ -42,6 +42,7 @@ public class PayService {
         Gift gift = giftRepository.findById(payRequestDto.getGiftId()).get();
         Wish wish = gift.getWish();
 
+        System.out.println("결제한 유저 정보:"+payRequestDto.getUserId());
         String profImg = "";
         if (payRequestDto.getUserId() != null) {
             User user = userRepository.findById(payRequestDto.getUserId()).get();

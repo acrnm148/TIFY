@@ -70,4 +70,11 @@ public class Order {
         this.createdDt = createdDt;
         this.deliveryNumber= deliveryNumber;
     }
+
+    public void setRefInfo(String refUserName, String refUserBank, String refUserAccount) {
+        this.refState = "Y";
+        this.refUserName = refUserName;
+        this.refUserBank = refUserBank;
+        this.refUserAccount = refUserAccount;
+    }
 }

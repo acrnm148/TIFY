@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ import static net.minidev.json.JSONValue.isValidJson;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class OrderService {
     private final OrderRepository orderRepository;
     private final GiftService giftService;
@@ -136,12 +138,10 @@ public class OrderService {
     /**
      * 환불하기
      */
+    @Transactional
     public Order refund(RefundRequestDto refundDto) {
         Order refOrder = orderRepository.findById(refundDto.getOrderId()).get();
-        refOrder.setRefState("Y");
-        refOrder.setRefUserAccount(refundDto.getAccount());
-        refOrder.setRefUserBank(refundDto.getBank());
-        refOrder.setRefUserName(refundDto.getUserName());
+        refOrder.setRefInfo(refundDto.getAccount(), refundDto.getBank(), refundDto.getUserName());
 
         System.out.println("환불 요청되었습니다.");
         return refOrder;
