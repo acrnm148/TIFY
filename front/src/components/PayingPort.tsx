@@ -16,7 +16,7 @@ let paying = {
             celebTel : "",
             celebContent : "",
             celebImgUrl : "",
-            giftId : 1,
+            giftId : -1,
             userId : -1,
 }
 let tk: string | null = null
@@ -70,10 +70,10 @@ export function onClickPayment(congratsInfo:Paying, giftName:string) {
         const API_URL = "https://i8e208.p.ssafy.io/api/celebrate/"
         // axios.defaults.headers.common['Authorization'] = `Bearer ${tk?tk:null}`;
         axios.post(API_URL, data
-          ).then((res) =>{
+          ).then((res:any) =>{
             console.log('축하 결제 성공!!!', res)
             window.location.href = 'https://i8e208.p.ssafy.io'
-          }).catch((err) => {
+          }).catch((err:any) => {
             console.log('축하 결제 실패', err)
           })
       } else {

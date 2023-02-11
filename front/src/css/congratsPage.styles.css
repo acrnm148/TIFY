@@ -5,7 +5,7 @@
     
     /* border: 1px solid lavender; */
 
-    width: auto;
+    width: 100vw;
     min-height: 800px;
     margin-left: 54px;
     margin-right: 54px;
@@ -17,7 +17,7 @@
 }
 
 .wish-components{
-    width: 80%;
+    width: 70%;
     height: auto;
     /* border: 3px solid pink; */
     
@@ -143,6 +143,7 @@
     flex-direction: column;
     overflow: hidden;
     align-items: center;
+    width: 100%;
 }
 .gift-img-box{
     width: 100%;
@@ -168,11 +169,14 @@
     align-items: center;
 }
 .gift-img{
-    height: 129px;
+    height: 188px;
     background-position: center;
     background-size: contain;
     width: 90%;
-
+    cursor: pointer;
+    width: 100%;
+    background-size: cover;
+    border-radius: 8px;
 }
 .gift-bar-gray{
     width: 81px;
