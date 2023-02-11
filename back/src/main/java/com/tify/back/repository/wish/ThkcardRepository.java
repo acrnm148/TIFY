@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ThkcardRepository extends JpaRepository<Thkcard, Long> {
 	Thkcard findByUserId(Long userId);
 	List<Thkcard> findAllByUserId(Long userId);
+
+	Thkcard findByPay(Pay pay);
 }
-//

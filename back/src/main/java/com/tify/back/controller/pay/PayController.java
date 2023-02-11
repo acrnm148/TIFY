@@ -2,6 +2,8 @@ package com.tify.back.controller.pay;
 
 import com.tify.back.auth.jwt.service.JwtService;
 import com.tify.back.dto.pay.request.PayRequestDto;
+import com.tify.back.dto.pay.request.RefundRequestDto;
+import com.tify.back.dto.users.UserProfileDto;
 import com.tify.back.exception.NoGiftException;
 import com.tify.back.model.gifthub.Gift;
 import com.tify.back.model.gifthub.Order;
@@ -33,6 +35,9 @@ public class PayController {
     private final GiftRepository giftRepository;
     private final UserRepository userRepository;
 
+    /**
+     * 결제하기 (축하하기)
+     */
     @Operation(summary = "celebrate", description = "축하하기")
     @PostMapping("/celebrate")
     public ResponseEntity<?> celebrate(@RequestBody PayRequestDto payRequestDto, @RequestHeader(required = false, value = "Authorization") String token) {
@@ -70,5 +75,19 @@ public class PayController {
         System.out.println("결제 완료 : "+pay);
 
         return ResponseEntity.ok().body("축하가 완료되었습니다.");
+    }
+
+    /**
+     * 환불하기
+     */
+    @Operation(summary = "refund", description = "환불하기")
+    @PostMapping("/refund")
+    public ResponseEntity<?> refund(@RequestBody RefundRequestDto refundDto, @RequestHeader(required = false, value = "Authorization") String token) {
+        UserProfileDto user = userService.getUser(token);
+        refundDto.setUserId(user.getId());
+        System.out.println("환불 요청:"+refundDto);
+        Order refOrder = orderService.refund(refundDto);
+
+        return ResponseEntity.ok().body("환불 요청이 완료되었습니다: "+ refOrder);
     }
 }

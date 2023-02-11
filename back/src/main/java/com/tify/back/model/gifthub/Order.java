@@ -28,7 +28,7 @@ public class Order {
     private String giftImgUrl;
     private String wishFinishDate;
     private String giftName;
-    private int purePrice;
+    private String userOption;
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY) // 노비 파트는 fetch 타입 영향 안받음.
@@ -43,10 +43,20 @@ public class Order {
     private String createdDt;
     private int state; // 주문 상태 코드화
 
+    private String refState; //환불상태
+    private String refUserName; //환불 원하는 유저 이름
+    private String refUserBank; //환불 은행
+    private String refUserAccount; //환불 계좌
+
     @Builder
-    public Order(String giftImgUrl, String wishFinishDate, String wishName, Long wishId, String deliveryNumber, User user, Gift gift, String tel, int gatheredPrice, int orderPrice, int state, LocalDateTime createdTime, String createdDt, String giftName) {
+    public Order(String refState, String refUserName, String refUserBank, String refUserAccount, String userOption, String giftImgUrl, String wishFinishDate, String wishName, Long wishId, String deliveryNumber, User user, Gift gift, String tel, int gatheredPrice, int orderPrice, int state, LocalDateTime createdTime, String createdDt, String giftName) {
+        this.refState = refState;
+        this.refUserName = refUserName;
+        this.refUserBank = refUserBank;
+        this.refUserAccount = refUserAccount;
         this.giftImgUrl = giftImgUrl;
         this.wishFinishDate = wishFinishDate;
+        this.userOption = userOption;
         this.giftName = giftName;
         this.wishName = wishName;
         this.wishId = wishId;

@@ -45,7 +45,7 @@ public class PayService {
         String profImg = "";
         if (payRequestDto.getUserId() != null) {
             User user = userRepository.findById(payRequestDto.getUserId()).get();
-            if (user.getProfileImg() == null) {
+            if (payRequestDto.getUserId() == 0 || user.getProfileImg() == null) {
                 profImg += "https://tifyimage.s3.ap-northeast-2.amazonaws.com/5e1dc3dc-12c3-4363-8e91-8676c44f122b.png";
             } else {
                 profImg += user.getProfileImg(); //테스트!!
@@ -65,13 +65,13 @@ public class PayService {
                         .celeb_tel(payRequestDto.getCelebTel())
                         .celeb_img_url(payRequestDto.getCelebImgUrl())
                         .createTime(LocalDateTime.now())
-                        .userId(payRequestDto.getUserId())
+                        .userId(payRequestDto.getUserId()) //0이면 비회원유저
                         .profImgUrl(profImg)
                         .build()
         );
         gift.setGathered(gift.getGathered()+Integer.parseInt(pay.getAmount())); //모인 펀딩 금액에 추가
         wish.setNowPrice(wish.getNowPrice()+Integer.parseInt(pay.getAmount()));
-        
+
         //결제 시 참여한 위시에 추가
         joinedWishRepository.save(
                 JoinedWish.builder()

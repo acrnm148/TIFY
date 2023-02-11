@@ -119,6 +119,10 @@ public class WishService {
             if (lastWishId == item.getWishId()) continue;
             lastWishId = item.getWishId();
 
+            if (payRepository.findById(item.getPayId()) == null) {
+                System.out.println("pay가 없습니다.");
+                return null;
+            }
             Pay pay = payRepository.findById(item.getPayId()).get();
             Gift gift = pay.getGift();
             Wish wish = wishRepository.findById(item.getWishId()).get();
