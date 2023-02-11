@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -114,12 +115,17 @@ public class WishService {
         List<JoinedWish> joinedWishList = joinedWishRepository.findAllByUserIdOrderByWishId(userId);
         List<JoinedWishDto> list = new ArrayList<> ();
         Long lastWishId = -1L;
+        System.out.println("참여한 위시들:"+joinedWishList);
 
         for (JoinedWish item : joinedWishList) {
-            if (lastWishId == item.getWishId()) continue;
+            System.out.println("이전 위시:["+lastWishId+"] 지금 위시:["+item.getWishId()+"]");
+            if (Objects.equals(lastWishId, item.getWishId())) {
+                continue;
+            }
             lastWishId = item.getWishId();
 
-            if (payRepository.findById(item.getPayId()) == null) {
+            System.out.println("참여한 위시:"+item);
+            if (!payRepository.findById(item.getPayId()).isPresent()) {
                 System.out.println("pay가 없습니다.");
                 return null;
             }
