@@ -71,48 +71,34 @@ export function ThanksPage() {
       }
     }
     useEffect(()=>{
-      const API_URL = `https://i8e208.p.ssafy.io/api/thkcards/${userId}`
+      const API_URL = `https://i8e208.p.ssafy.io/api/thkcards/match/${conId}`
       axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
       // userId로 작성한 감사카드, payid와 같이 조회
       axios.get(API_URL
         ).then((res:any)=>{
-          console.log(`${userId}의 감사카드`, res.data)
-          res.data.length? setIsThanksCard(true):setIsThanksCard(false)
-          setGetImg(res.data[0].img)
-          setTitle(res.data[0].title)
-          setFrom(res.data[0].from)
-          setMessage(res.data[0].content)
-          setPhone(res.data[0].phoneNumber)
+          res.data? setIsThanksCard(true):setIsThanksCard(false)
+          console.log(res.data)
+          setGetImg(res.data.imageUrl)
+          setTitle(res.data.title)
+          // setFrom(res.data.from) 
+          setMessage(res.data.content)
+          setPhone(res.data.phoneNumber)
 
         }).catch((err:any)=>{
           console.log('유저의 감사카드를 불러오지 못함', err)
         })
     },[getEmit])
 
-    // 카드 하나의 정보 useState로 관리
-  const ThanksReply = () => {
-    return(
-      <div>
-        <div className="con-card">
-          <div className='tofrom'>{from}</div>
-          <img className='con-photo' src={getImg?getImg:''} alt="감사카드 이미지" />
-          <div className='con-text'>{message}</div>
-          <div className='userName tofrom'>전송된 연락처 : {phone}</div>
-        </div>
-      </div>
-
-    )
-  }
-  const isThkCard = (i : boolean) => {
-    if(i){
-      // 감사카드 조회 요청보내고 데이터 바꿔주기
-      setIsThanksCard(true)
-      setGetEmit(true)
+    const isThkCard = (i : boolean) => {
+      if(i){
+        // 감사카드 조회 요청보내고 데이터 바꿔주기
+        setIsThanksCard(true)
+        setGetEmit(true)
+      }
     }
-  }
-  const ThanksForm = memo(function ThanksForm(){
-    return(
-      <div className='thanks-card-con-container'>
+    const ThanksForm = memo(function ThanksForm(){
+      return(
+        <div className='thanks-card-con-container'>
         <div className='form-title'>감사카드 보내기</div>
         <MakeCardComponent 
           payId={conId}
@@ -124,15 +110,32 @@ export function ThanksPage() {
       </div>
     )
   })
+    // 카드 하나의 정보 useState로 관리
+  const ThanksReply = () => {
+    return(
+      <div>
+          {/* <h1>보낸 감사카드</h1> */}
+        <div className='con-card-detail'>
+          <div className="con-card">
+            <div className='tofrom'>{from}</div>
+            <img className='con-photo' src={getImg?getImg:''} alt="감사카드 이미지" />
+            <div className='con-text'>{message}</div>
+            <div className='userName tofrom'>전송된 연락처 : {phone}</div>
+          </div>
+        </div>
+      </div>
+    )
+  }
   const ConCardDetail = memo(function ConCardDetail(){
     return(
-      <div className='disp-flex align-center'>
-        받은 축하카드
-        <div className="con-card">
-          <div className='tofrom'>From {conInfo.from} </div>
-          <div className='con-photo' style={{"backgroundImage":`url(${conInfo.img})`}}></div>
-          <div className='con-text'>{conInfo.content}</div>
-          <div className='userName tofrom'>To </div>
+      <div className='disp-flex align-center wid-100'>
+        <div className='disp-flex align-center flex-col wid-100'>
+          {/* <h1>받은 축하카드</h1> */}
+          <div className="con-card">
+            <div className='tofrom'>From {conInfo.from} </div>
+            <div className='con-photo' style={{"backgroundImage":`url(${conInfo.img})`}}></div>
+            <div className='con-text'>{conInfo.content}</div>
+          </div>
         </div>
       </div>
     )
@@ -160,4 +163,3 @@ export function ThanksPage() {
       </div>
     ) 
   }
-  

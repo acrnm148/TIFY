@@ -6,6 +6,7 @@ import drink from "../assets/category/iconFood.svg";
 import baby from "../assets/category/iconBaby.svg";
 import interior from "../assets/category/iconInterior.svg";
 import dogcat from "../assets/category/iconDogcat.svg";
+import fashion from "../assets/category/iconFashion.svg";
 
 import "../css/giftHubCategory.styles.css"
 import { createRef, MouseEventHandler, useEffect, useRef, useState } from "react";
@@ -19,7 +20,7 @@ const CATEGORY_DATA = [
     {id: 5, name : 'birthbaby', ko:'출산유아', src:baby},
     {id: 6, name : 'interior', ko:'인테리어', src:interior},
     {id: 7, name : 'dogcat', ko:'반려동물', src:dogcat},
-
+    {id: 8, name : 'fashion', ko: '의류', src:fashion}
 ]
 const GiftHubCategory = (props:{propFunction: (arg0: number) => void, goCategory:number|null|undefined}) =>{
     const [selectCategory, setSelectCategory] = useState<number|null|undefined>(props.goCategory)
