@@ -121,12 +121,13 @@ public class FriendService {
         List<Friend> friendList = friendRepository.findByUserIdAndStatus(userId, FriendStatus.ACCEPTED);
         List<FriendEmailDto> friendEmailList = new ArrayList<>();
         for (Friend item : friendList) {
-            User user = userRepository.findById(item.getUserId()).get();
-            System.out.println("친구 이메일 함수 진입, 유저 정보:"+user);
+            System.out.println("나의 친구들: "+item);
+            User friendUser = userRepository.findById(item.getFriendId()).get();
+            System.out.println("친구 이메일 함수 진입, 유저 정보:"+friendUser);
             FriendEmailDto dto = FriendEmailDto.builder()
-                    .Id(item.getUserId())
+                    .Id(friendUser.getId())
                     .status(item.getStatus())
-                    .userid(user.getUserid())
+                    .userid(friendUser.getUserid())
                     .build();
             friendEmailList.add(dto);
         }
