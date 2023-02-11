@@ -27,26 +27,28 @@
     /* border: 1px solid rgb(72, 96, 182); */
     min-height: 800px;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     flex-wrap: wrap;
 }
 
 .con-card-detail{
     display: flex;
     align-items: center;
-    width: 50%;
+    width: 45%;
     min-width: 519px;
+    height: auto;
 }
 .con-card{
     background-image: url('../assets/conCard.svg');
-    height: 38em;
-    width: 422px;
+    min-height: 45vw;
+    width: 100%;
     padding: 10px;
     background-size: cover;
-    /* https://user-images.githubusercontent.com/87971876/214236782-7e8171df-a2cc-46ce-9ffc-6ecc2061de33.svg */
+    border-radius: 8px;
 }
 .con-photo{
-    width: inherit - 20px;
+    width: 100%;
+    height: 25vw;
     min-height: 15em;
     background-size: contain;
     background-repeat: no-repeat;
@@ -57,15 +59,14 @@
 .con-text{
     width: inherit - 20px;
     min-height: 17em;
-    /* border: 1px solid aqua; */
     margin-top: 1em;
-
     font-family: 'NanumGothic';
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 200%;
     color: #636564;
+    font-size: 16px;
+    line-height: 2;
+    padding: 10px;
 }
 .userName{
     width: inherit - 20px;
@@ -135,11 +136,13 @@
     border: solid 1px #C1C1C1;
     border-radius: 8px;
     margin-top: 7px;
+    padding: 10px;
 }
 .thanks-input textarea{
     border: solid 1px #C1C1C1;
     border-radius: 8px;
     margin-top: 7px;
+    padding: 10px;
 }
 
 .thanks-photo-btn{
