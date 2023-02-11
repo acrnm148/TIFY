@@ -393,6 +393,7 @@ const Carousel = ({ friendWishList }: any) => {
 
   return (
     <div className="ongoing-wishes">
+      <p className="phone-book-title">| Friends</p>
       <Slider {...settings}>
         {friendWishList &&
           friendWishList.map((friendWish: friendWish) => {

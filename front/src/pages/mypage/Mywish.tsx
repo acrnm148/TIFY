@@ -177,8 +177,11 @@ export function MyWish() {
   };
 
   return (
-    <div className="my-wish-div">
-      <WishCard conList={[...conList]}></WishCard>
+    <div>
+      <p className="phone-book-title">| My Wish</p>
+      <div className="my-wish-div">
+        <WishCard conList={[...conList]}></WishCard>
+      </div>
     </div>
   );
 }
