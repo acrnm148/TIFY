@@ -304,7 +304,7 @@ public class ProductService {
         exproduct.setQuantity(newpr.getQuantity());
         exproduct.setDescription(newpr.getDescription());
         exproduct.setRepImg(newpr.getRepImg());
-        exproduct.setCategory(Integer.parseInt(dto.getCategory()));
+        exproduct.setCategory(dto.getCategory());
         // 새 이미지 들이 올라왔다면.
         if (dto.getImgList().size() > 0) {
             List<Img> imgList = exproduct.getImgList();
