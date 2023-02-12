@@ -46,19 +46,18 @@ public class PhonebookController {
         return phonebookService.getPhonebookByMyId(id);
     }
 
-    @PutMapping("/edit")
-    public String editPhonebook(@RequestBody PhonebookDto dto, Phonebook ddto ) {
-
-        Phonebook phonebook = phonebookRepository.findById(ddto.getId()).orElse(null);
-
-        // Update the wish with the new values
-        phonebook.setMyId(dto.getMyId());
-        phonebook.setPhoneNumber(dto.getPhoneNumber());
-        phonebook.setName(dto.getName());
-        // Save the changes to the database
+    @PutMapping("/edit/{id}")
+    public String editPhonebook(@PathVariable Long id, @RequestBody Phonebook phonebookDto) {
+        Phonebook phonebook = phonebookRepository.findById(id).orElse(null);
+        if (phonebook == null) {
+            return "phonebook not found";
+        }
+        phonebook.setPhoneNumber(phonebookDto.getPhoneNumber());
+        phonebook.setName(phonebookDto.getName());
         phonebookRepository.save(phonebook);
         return "phonebook updated!";
     }
+
     @DeleteMapping("/delete/{id}")
     public String deletePhonebook(@PathVariable("id") Long id) {
         Optional<Phonebook> phonebookOptional = phonebookRepository.findById(id);

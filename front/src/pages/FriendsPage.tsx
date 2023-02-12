@@ -4,6 +4,7 @@ import { RootState } from '../store/Auth';
 import axios from "axios";
 import "../css/friendspage.styles.css"
 import '../css/giftHubPage.styles.css';
+import GiftBoxAnimation from "../components/GiftBoxAnimation";
 
 interface User {
   id: number;
@@ -128,7 +129,9 @@ const FriendsPage: React.FC = () => {
           onChange={(e) => setNickname(e.target.value)}
     />
       </div>
-
+      <React.StrictMode>
+    <GiftBoxAnimation />
+  </React.StrictMode>
   
   
 <div className="friend-list">

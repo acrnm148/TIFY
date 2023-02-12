@@ -1,11 +1,16 @@
 package com.tify.back.service.friend;
 
 import com.tify.back.dto.friend.FriendDTO;
+import com.tify.back.dto.friend.FriendEmailDto;
 import com.tify.back.model.friend.Friend;
 import com.tify.back.model.friend.FriendStatus;
+import com.tify.back.model.users.User;
 import com.tify.back.repository.friend.FriendRepository;
+import com.tify.back.repository.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -13,6 +18,8 @@ public class FriendService {
 
     @Autowired
     private FriendRepository friendRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public List<Friend> getFriends(long userId) {
         return friendRepository.findByUserIdAndStatus(userId, FriendStatus.ACCEPTED);
@@ -108,5 +115,22 @@ public class FriendService {
                 friendRepository.delete(mutualFriend);
             }
         }
+    }
+
+    public List<FriendEmailDto> getFriendsEmail(Long userId) {
+        List<Friend> friendList = friendRepository.findByUserIdAndStatus(userId, FriendStatus.ACCEPTED);
+        List<FriendEmailDto> friendEmailList = new ArrayList<>();
+        for (Friend item : friendList) {
+            System.out.println("나의 친구들: "+item);
+            User friendUser = userRepository.findById(item.getFriendId()).get();
+            System.out.println("친구 이메일 함수 진입, 유저 정보:"+friendUser);
+            FriendEmailDto dto = FriendEmailDto.builder()
+                    .Id(friendUser.getId())
+                    .status(item.getStatus())
+                    .userid(friendUser.getUserid())
+                    .build();
+            friendEmailList.add(dto);
+        }
+        return friendEmailList;
     }
 }

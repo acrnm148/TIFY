@@ -52,7 +52,8 @@ const Gifts = () => {
     const maxResults = 10;
     const baseUrl = "https://i8e208.p.ssafy.io/api/gift";
     // const baseUrl = "http://localhost:8081/api/gift";
-    const sUrl = "http://localhost:8081/api/admin/giftsearch"
+    // const sUrl = "http://localhost:8081/api/admin/giftsearch"
+    const sUrl = "https://i8e208.p.ssafy.io/api/admin/giftsearch"
     const getData = async (page: number) => {
       try {
         let url;

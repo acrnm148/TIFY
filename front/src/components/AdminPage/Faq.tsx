@@ -52,9 +52,10 @@ const Faq = () => {
     // const [newImgs,setNewImgs] = useState<Array<pImg>>([]);
     const [totalPages, setTotalPages] = useState(0);
     const maxResults = 10;
-    // const baseUrl = "https://i8e208.p.ssafy.io/api/faq";
-    const baseUrl = "http://localhost:8081/api/faq";
-    const sUrl = "http://localhost:8081/api/admin/faqsearch"
+    const baseUrl = "https://i8e208.p.ssafy.io/api/faq";
+    const sUrl = "https://i8e208.p.ssafy.io/api/admin/faqsearch"
+    // const baseUrl = "http://localhost:8081/api/faq";
+    // const sUrl = "http://localhost:8081/api/admin/faqsearch"
     const [faqInfo, setFaqInfo] = useState<FaqForm|null> (null);// for 상품정보 edit
 
     const [newShow, setNewShow] = useState(false); // modal
