@@ -41,7 +41,8 @@ const OrderInfo = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const maxResults = 10;
-  const baseUrl = 'https://i8e208.p.ssafy.io/api/account/getOrder';
+  //const baseUrl = 'https://i8e208.p.ssafy.io/api/account/getOrder';
+  const baseUrl = 'http://localhost:8081/api/account/getOrder';
 
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
@@ -53,10 +54,11 @@ const OrderInfo = () => {
       headers: { Authorization: `Bearer ${accessToken}` },
     })
       .then((response) => {
-        setOrders([...response.data]);
+        console.log(response);
+        setOrders([...response.data.content]);
         // setTotalPages(response.data.totalPages);
-        console.log(response.data);
-        return response.data;
+        console.log(response.data.content);
+        return response.data.content;
       })
       .catch((error) => {
         console.error(error);
