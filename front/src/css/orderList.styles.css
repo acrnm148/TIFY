@@ -1,21 +1,26 @@
 .order-div {
   width: 75%;
-  display: flex;
+  display: relative;
   flex-wrap: wrap;
-  justify-content: space-around;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .order-div > .order-box {
+  margin: auto 0;
   width: 100%;
-  height: 42%;
+  height: 49%;
   margin-bottom: 6%;
   border-radius: 10px;
   padding: 3%;
 }
 
 .order-box > .gift-info-div {
+  padding-right: 5%;
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-around;
   margin-bottom: 2%;
 }
 
@@ -44,22 +49,24 @@
 .order-box-top {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 2%;
 }
 
 .gift-info-detail-div > .wrap-detail-div {
   display: flex;
   flex-wrap: wrap;
   font-size: 15px;
+  justify-content: space-between;
 }
 
-.wrap-detail-div > .detail-left-div {
-  margin-right: 200px;
+.wrap-detail-div > .detail-right-div {
+  margin-right: 50%;
 }
 
 .order-box-top > .p-order-state {
   text-align: left;
   font-size: 16px;
-  color: #bbdaf7;
+  color: #9acaf7;
   font-weight: bold;
   margin-bottom: 0.6%;
 }
@@ -98,12 +105,12 @@
   margin-bottom: 0.5%;
 }
 
-.button-div > .button-go-wish {
+.button-div > .button-left {
   border-color: #fe3360;
   color: #fe3360;
 }
 
-.button-div > .button-detail {
+.button-div > .button-right {
   border-color: #c1c1c1;
   color: #c1c1c1;
 }
