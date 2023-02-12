@@ -124,10 +124,15 @@ export function MyWish() {
       return <img src={iconCategory7Etc} alt="" />;
     }
   }
-  const WishCard = ({ conList }: { conList: MyWishType[] }) => {
+
+  type ConProps = {
+    conList: MyWishType[];
+  };
+  const WishCard = ({ conList }: ConProps) => {
     // 축하해준 사람 수
     const conCount = conList.length;
     console.log(conList, 'conList가 요것입니다.');
+    console.log(typeof conList, 'conList의 타입은 요것입니다.');
     return (
       <>
         {conList.map((con: MyWishType) => {
@@ -145,7 +150,7 @@ export function MyWish() {
                   <p className="wish-title">"{con.title}"</p>
                 </div>
                 {conCount > 0 ? (
-                  <Donator payImgs={conList.payImgs} />
+                  <Donator payImgs={con.payImgs} />
                 ) : (
                   <button>공유해보세요.</button>
                 )}
@@ -164,7 +169,7 @@ export function MyWish() {
                   <p className="wish-title">"{con.title}"</p>
                 </div>
                 {conCount > 0 ? (
-                  <Donator payImgs={conList.payImgs} />
+                  <Donator payImgs={con.payImgs} />
                 ) : (
                   <button>공유해보세요.</button>
                 )}{' '}
@@ -186,7 +191,11 @@ export function MyWish() {
   );
 }
 
-function Donator(payImgs: string[]) {
+interface PayImgs {
+  payImgs: string[];
+}
+
+function Donator({ payImgs }: PayImgs) {
   console.log(payImgs, 'Donater에서 나오는 pay');
   return (
     <div className="donator-div">
@@ -236,7 +245,7 @@ function WishCardActive(props: { title: string }) {
         <img src={iconCategory1Birthday} alt="" />
         <p className="wish-title">"{props.title}"</p>
       </div>
-      <Donator />
+      {/* <Donator /> */}
     </div>
   );
 }
@@ -250,7 +259,7 @@ function WishCardDeactive(props: { title: string }) {
         <img src={iconCategory1Birthday} alt="" />
         <p className="wish-title">"{props.title}"</p>
       </div>
-      <Donator />
+      {/* <Donator /> */}
     </div>
   );
 }
