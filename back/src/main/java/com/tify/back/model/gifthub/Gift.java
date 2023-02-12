@@ -44,7 +44,7 @@ public class Gift {
     private int quantity; // 수량
     //state
     @Column(name = "user_option")
-    private String userOption;// json 형태
+    private String userOption;
     private String giftname;
     private String type;
     private String finishYN;

@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -114,19 +115,30 @@ public class WishService {
         List<JoinedWish> joinedWishList = joinedWishRepository.findAllByUserIdOrderByWishId(userId);
         List<JoinedWishDto> list = new ArrayList<> ();
         Long lastWishId = -1L;
+        System.out.println("참여한 위시들:"+joinedWishList);
 
         for (JoinedWish item : joinedWishList) {
-            if (lastWishId == item.getWishId()) continue;
+            System.out.println("이전 위시:["+lastWishId+"] 지금 위시:["+item.getWishId()+"]");
+            if (Objects.equals(lastWishId, item.getWishId())) {
+                continue;
+            }
             lastWishId = item.getWishId();
 
+            System.out.println("참여한 위시:"+item);
+            if (!payRepository.findById(item.getPayId()).isPresent()) {
+                System.out.println("pay가 없습니다.");
+                return null;
+            }
             Pay pay = payRepository.findById(item.getPayId()).get();
             Gift gift = pay.getGift();
             Wish wish = wishRepository.findById(item.getWishId()).get();
             List<CelebCardDto> celebCardDtoList = new ArrayList<> ();
             List<MyCelebDto> myCelebDtoList = new ArrayList<> ();
 
-            List<Pay> payListByGiftIdAndUserId = payCustomRepository.findMyPayListByGiftId(gift, userId);
-            for (Pay payItem : payListByGiftIdAndUserId) {
+            //List<Pay> payListByGiftIdAndUserId = payCustomRepository.findMyPayListByGiftId(gift, userId);
+            List<Pay> payListByWishIdAndUserId = payCustomRepository.findMyPayListByWishId(wish.getId(), userId);
+            for (Pay payItem : payListByWishIdAndUserId) {
+                System.out.println("payList들:"+payItem);
                 CelebCardDto celebCardDto = CelebCardDto.builder()
                         .payId(payItem.getPay_id())
                         .celebFrom(payItem.getCeleb_from())

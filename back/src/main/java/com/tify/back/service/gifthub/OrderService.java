@@ -2,6 +2,7 @@ package com.tify.back.service.gifthub;
 
 
 import com.tify.back.dto.admin.OrderStateDto;
+import com.tify.back.dto.pay.request.RefundRequestDto;
 import com.tify.back.exception.OrderAlreadyExistException;
 import com.tify.back.model.gifthub.Gift;
 import com.tify.back.model.gifthub.Order;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,6 +27,7 @@ import static net.minidev.json.JSONValue.isValidJson;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class OrderService {
     private final OrderRepository orderRepository;
     private final GiftService giftService;
@@ -112,6 +115,7 @@ public class OrderService {
         //주문 생성
         Order order = orderRepository.save(
                 Order.builder()
+                        .userOption(gift.getUserOption())
                         .giftImgUrl(gift.getGiftImgUrl())
                         .giftName(gift.getGiftname())
                         .wishId(wish.getId())
@@ -129,5 +133,17 @@ public class OrderService {
                         .build()
         );
         return order;
+    }
+
+    /**
+     * 환불하기
+     */
+    @Transactional
+    public Order refund(RefundRequestDto refundDto) {
+        Order refOrder = orderRepository.findById(refundDto.getOrderId()).get();
+        refOrder.setRefInfo(refundDto.getAccount(), refundDto.getBank(), refundDto.getUserName());
+
+        System.out.println("환불 요청되었습니다.");
+        return refOrder;
     }
 }

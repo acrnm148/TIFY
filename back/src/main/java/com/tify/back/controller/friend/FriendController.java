@@ -2,6 +2,7 @@ package com.tify.back.controller.friend;
 
 import com.tify.back.dto.friend.FriendAcceptanceDTO;
 import com.tify.back.dto.friend.FriendDTO;
+import com.tify.back.dto.friend.FriendEmailDto;
 import com.tify.back.model.friend.Friend;
 import com.tify.back.model.friend.FriendList;
 import com.tify.back.model.friend.FriendStatus;
@@ -11,6 +12,7 @@ import com.tify.back.repository.users.UserRepository;
 import com.tify.back.service.friend.FriendService;
 import com.tify.back.service.wish.WishService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -39,7 +41,6 @@ public class FriendController {
             data.add(map);
         }
         return data;
-
     }
 
     @GetMapping("/friendsinfo/{userId}")
@@ -112,4 +113,18 @@ public class FriendController {
     public void deleteFriend(@PathVariable long friendId) {
         friendService.deleteFriend(friendId);
     }
+
+    /**
+     * 내 userId(pk)로 friendList
+     */
+    @GetMapping("/friendsEmail/{userId}")
+    public ResponseEntity<?> getFriendsEmail(@PathVariable Long userId) {
+        if (userId == null) {
+            System.out.println("해당되는 유저 정보가 없습니다.");
+            return ResponseEntity.ok().body("userId가 없습니다.");
+        }
+        List<FriendEmailDto> responseDto = friendService.getFriendsEmail(userId);
+        return ResponseEntity.ok().body(responseDto);
+    }
+
 }

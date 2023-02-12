@@ -20,11 +20,12 @@ public class ProductDto {
     private int quantity;
     private String price;
     private String description;
-    private String category;
+    private int category; // code로 구성됩니다,
     private int categoryId;
     private int likeCount;
     private List<ImgDto> imgList;
     private List<ProductOptionDto> options;
+    // 아래로 카테고리 코드 구성 참고.
     public List<String> categories = Arrays.asList("뷰티", "전자제품", "키친", "의류", "음식", "출산유아", "홈인테리어", "반려동물용품");
     public Product toEntity() {
         Product product = new Product();
@@ -42,14 +43,15 @@ public class ProductDto {
         }
         product.setDescription(this.description);
 
-        if (this.category != null) {
-            int code = this.categories.indexOf(this.category);
-            if (code < 0) {code = 99999;}
-            product.setCategory(code);
-        }
-        else {
-            product.setCategory(99999);
-        }
+//        if (this.category != null) {
+//            int code = this.categories.indexOf(this.category);
+//            if (code < 0) {code = 99999;}
+//            product.setCategory(code);
+//        }
+//        else {
+//            product.setCategory(99999);
+//        }
+        product.setCategory(this.category);
         product.setLikeCount(this.likeCount);
         return product;
     }

@@ -21,11 +21,22 @@ public class PayCustomRepositoryImpl implements PayCustomRepository {
     }
 
     public List<Pay> findMyPayListByGiftId(Gift gift, Long userId) {
-        log.info("{},{},{}", gift, userId);
+        log.info("{},{}", gift, userId);
 
         List<Pay> payList = jpaQueryFactory
                 .selectFrom(QPay.pay)
                 .where(QPay.pay.gift.eq(gift),
+                        QPay.pay.userId.eq(userId))
+                .fetch();
+        return payList;
+    }
+
+    public List<Pay> findMyPayListByWishId(Long wishId, Long userId) {
+        log.info("{},{}", wishId, userId);
+
+        List<Pay> payList = jpaQueryFactory
+                .selectFrom(QPay.pay)
+                .where(QPay.pay.wishId.eq(wishId),
                         QPay.pay.userId.eq(userId))
                 .fetch();
         return payList;

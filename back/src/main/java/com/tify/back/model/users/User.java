@@ -29,6 +29,7 @@ public class User {
     private Long id;
 
     private String userid; //일반사용자-입력한 아이디, 카카오 사용자-카카오 고유 id(provider id)
+    @JsonIgnore
     private String password;
     private String roles; //USER,ADMIN 게 넣을것이다.
 

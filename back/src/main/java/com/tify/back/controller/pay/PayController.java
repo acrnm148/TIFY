@@ -2,11 +2,14 @@ package com.tify.back.controller.pay;
 
 import com.tify.back.auth.jwt.service.JwtService;
 import com.tify.back.dto.pay.request.PayRequestDto;
+import com.tify.back.dto.pay.request.RefundRequestDto;
+import com.tify.back.dto.users.UserProfileDto;
 import com.tify.back.exception.NoGiftException;
 import com.tify.back.model.gifthub.Gift;
 import com.tify.back.model.gifthub.Order;
 import com.tify.back.model.pay.Pay;
 import com.tify.back.model.users.User;
+import com.tify.back.model.users.UserProperties;
 import com.tify.back.repository.gifthub.GiftRepository;
 import com.tify.back.repository.users.UserRepository;
 import com.tify.back.service.gifthub.OrderService;
@@ -33,6 +36,9 @@ public class PayController {
     private final GiftRepository giftRepository;
     private final UserRepository userRepository;
 
+    /**
+     * 결제하기 (축하하기)
+     */
     @Operation(summary = "celebrate", description = "축하하기")
     @PostMapping("/celebrate")
     public ResponseEntity<?> celebrate(@RequestBody PayRequestDto payRequestDto, @RequestHeader(required = false, value = "Authorization") String token) {
@@ -70,5 +76,23 @@ public class PayController {
         System.out.println("결제 완료 : "+pay);
 
         return ResponseEntity.ok().body("축하가 완료되었습니다.");
+    }
+
+    /**
+     * 환불하기
+     */
+    @Operation(summary = "refund", description = "환불하기")
+    @PostMapping("/refund")
+    public ResponseEntity<?> refund(@RequestHeader("Authorization") String token, @RequestBody RefundRequestDto refundDto) {
+        System.out.println("환불 함수 진입, token:"+token);
+        token = token.substring(7);
+        UserProfileDto user = userService.getUser(token);
+        if (user == null) System.out.println("환불 불가: 로그인이 필요한 서비스입니다.");
+        refundDto.setUserId(user.getId());
+        System.out.println("환불 요청:"+refundDto);
+        Order refOrder = orderService.refund(refundDto);
+
+        System.out.println("환불 정보:"+refOrder);
+        return ResponseEntity.ok().body("환불 요청이 완료되었습니다.");
     }
 }
