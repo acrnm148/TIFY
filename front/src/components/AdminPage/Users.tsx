@@ -73,8 +73,8 @@ const Users = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [selectUser,setSelectUser] = useState<UserDetailInfo|null> (null);
     const maxResults = 10;
-    // const baseUrl = "https://i8e208.p.ssafy.io/api/admin";
-    const baseUrl = "http://localhost:8081/api/admin";
+    const baseUrl = "https://i8e208.p.ssafy.io/api/admin";
+    // const baseUrl = "http://localhost:8081/api/admin";
     // Pagination
     const [nowPage, setNowPage] = useState<number>();
     const pamount = 10
