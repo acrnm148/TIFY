@@ -60,7 +60,6 @@
   width: 1000px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
 }
 
 .my-wish-div > .wish-box {
@@ -70,6 +69,7 @@
   margin-bottom: 20px;
   cursor: pointer;
   transition: 0.5s;
+  margin-right: 20px;
 }
 
 .my-wish-div > .wish-box:hover {
@@ -114,6 +114,15 @@
 
 .donator-div {
   margin-top: 50px;
+}
+
+.no-donate {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin-top: 66px;
+  text-align: center;
+  font-size: 14px;
 }
 
 .img-div {

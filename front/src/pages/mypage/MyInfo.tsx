@@ -318,7 +318,7 @@ export function MyInfo() {
   return (
     <div className="info-page">
       <div className="emailBox">
-        <p className="infopage-title">| 개인정보 관리</p>
+        <p className="infopage-title">| Manage Account</p>
         <p className="m-1">이메일</p>
         <form className="emailForm">
           <input

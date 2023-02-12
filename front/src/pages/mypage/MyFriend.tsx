@@ -8,6 +8,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Auth';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 // slider
 import ReactSlider from 'react-slider';
@@ -271,7 +272,7 @@ const FriendsList = () => {
   // 친구 항목 하나
   const SingleFriend = ({ friend }: any) => {
     return (
-      <li className="list-group-item">
+      <li className="list-group-item" key={friend.id}>
         <img src={friend.profileImg} className="friend-profile"></img>
         <p className="friend-nickname">{friend.nickname}</p>
         <p className="friend-username">{friend.username}</p>
@@ -378,11 +379,24 @@ const Carousel = ({ friendWishList }: any) => {
     ],
   };
 
+  interface friendWish {
+    wishId: string;
+    totPrice: number;
+    nowPrice: number;
+    endDate: string;
+    title: string;
+    percent: number;
+    userName: string;
+    nickName: string;
+    userImg: string;
+  }
+
   return (
     <div className="ongoing-wishes">
+      <p className="phone-book-title">| Friends</p>
       <Slider {...settings}>
         {friendWishList &&
-          friendWishList.map((friendWish: object) => {
+          friendWishList.map((friendWish: friendWish) => {
             return <WishCard friendWish={friendWish}></WishCard>;
           })}
         {/* {items.map((item: any) => {
@@ -419,9 +433,26 @@ const Carousel = ({ friendWishList }: any) => {
 
 // 진행 중인 위시 부분
 function WishCard({ friendWish }: any) {
+  const navigate = useNavigate();
   // console.log(friendWish);
+
+  const GoToFriendWish = (event: React.MouseEvent, wishId: string) => {
+    console.log(event.type);
+    if (event.type === 'dragstart') {
+      event.preventDefault();
+      return;
+    } else {
+      navigate(`/congrats/${wishId}`);
+    }
+  };
+
+  console.log(friendWish.percent);
   return (
-    <div className="ongoing-wish">
+    <div
+      className="ongoing-wish"
+      onClick={(e) => GoToFriendWish(e, friendWish.wishId)}
+      onDragStart={(e) => GoToFriendWish(e, friendWish.wishId)}
+    >
       <div className="wish-profile-div">
         <img src={friendWish.userImg} alt="" className="wish-profile-img" />
         <div className="name-div">
@@ -431,9 +462,19 @@ function WishCard({ friendWish }: any) {
       </div>
       <p className="friend-wish-title">"{friendWish.title}"</p>
       <div className="wish-slider-and-label-container">
-        <div className="slider-and-label">
-          <span>진행도</span>
-          <ReactSlider
+        <div className="wish-slider-and-label">
+          <span className="progress-span">진행도</span>
+          <div className="gift-bar-gray" style={{ width: 'auto' }}>
+            <div
+              style={{
+                width: friendWish.percent,
+                backgroundColor: '#FE3360',
+                height: 'inherit',
+                borderRadius: '5px',
+              }}
+            ></div>
+          </div>
+          {/* <ReactSlider
             className="horizontal-slider-myfriend"
             defaultValue={[friendWish.percent]}
             disabled={true}
@@ -445,7 +486,7 @@ function WishCard({ friendWish }: any) {
                 HTMLAttributes<HTMLDivElement>,
               state: any,
             ) => <div {...props} />} //custom track
-          />
+          /> */}
         </div>
       </div>
     </div>
