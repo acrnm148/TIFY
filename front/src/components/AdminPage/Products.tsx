@@ -88,8 +88,8 @@ const Products = () => {
   const [newImgs, setNewImgs] = useState<Array<pImg>>([]);
   const [totalPages, setTotalPages] = useState(0);
   const maxResults = 10;
-  // const baseUrl = "https://i8e208.p.ssafy.io/api/gifthub";
-  const baseUrl = 'http://localhost:8081/api/gifthub';
+  const baseUrl = "https://i8e208.p.ssafy.io/api/gifthub";
+  // const baseUrl = 'http://localhost:8081/api/gifthub';
   const [productInfo, setProductInfo] = useState<productDetail | null>(null); // for 상품정보 edit
 
   const [name, setName] = useState<string>('');
@@ -142,9 +142,10 @@ const Products = () => {
     // if(target)
     setNowPage(target)
     getData(target-1)
+    console.log(nowStartNum, pamount, "---------------")
     setNowStartNum(target)
-    if (totalPages > (nowLastNum+pamount) ) { setNowLastNum(nowLastNum+pamount) }
-    else { setNowLastNum(totalPages) }
+    if (nowLastNum + pamount > totalPages) { setNowLastNum(totalPages) }
+    else {setNowLastNum(nowLastNum+pamount) }
    }
    const GoToBeforePage = () =>{
     let target = nowStartNum-pamount
@@ -179,7 +180,6 @@ const Products = () => {
     setNewDescription('');
     setNewShow(true)
   };
-
   const createProduct = async (e: any) => {
     e.preventDefault();
     await getImgUrl_one();
@@ -239,7 +239,9 @@ const Products = () => {
 
   const getData = async (page: number) => {
     try {
-      const response = await axios.get(`${baseUrl}/products`, {
+      let url;
+      searchTerm=='' ? url=`${baseUrl}/products`:url=`${baseUrl}/search/${searchTerm}`
+      const response = await axios.get(`${url}`, {
         params: {
           page,
           max_result: 20,
@@ -248,7 +250,7 @@ const Products = () => {
         console.log(res,"페이지 찐정보"); 
         setSearchResults(res.data.content);
         setTotalPages(res.data.totalPages);
-        totalPages > 10 ? setNowLastNum(10):setNowLastNum(res.data.totalPages)
+        (page<=pamount && res.data.totalPages <= pamount) ? setNowLastNum(res.data.totalPages) : setNowLastNum(10*(page/10+1)) 
         console.log(totalPages,nowLastNum,"페이지 정보")
         return res});
       return response.data.content;
@@ -260,31 +262,31 @@ const Products = () => {
     getData(0);
   }
 
-  const searchDataByName = async (page: number) => {
-    let urls;
-    if (searchTerm.trim() == "" || searchTerm==null) {
-      urls = `${baseUrl}/products`
-    }
-    else {
-      urls = `${baseUrl}/search/${searchTerm}`
-    }
-    try {
-      const response = await axios.get(urls, {
-        params: {
-          page,
-          max_result: 20,
-        },
-      }
-      );
-      setSearchResults(response.data.content);
-      setTotalPages(response.data.totalPages);
-      console.log(response.data);
-      console.log("----------- page info")
-      return response.data.content;
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const searchDataByName = async (page: number) => {
+  //   let urls;
+  //   if (searchTerm.trim() == "" || searchTerm==null) {
+  //     urls = `${baseUrl}/products`
+  //   }
+  //   else {
+  //     urls = `${baseUrl}/search/${searchTerm}`
+  //   }
+  //   try {
+  //     const response = await axios.get(urls, {
+  //       params: {
+  //         page,
+  //         max_result: 20,
+  //       },
+  //     }
+  //     );
+  //     setSearchResults(response.data.content);
+  //     setTotalPages(response.data.totalPages);
+  //     console.log(response.data);
+  //     console.log("----------- page info")
+  //     return response.data.content;
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const PageButtons = ({ totalPages }: { totalPages: number }) => {
     let buttons = [];
@@ -299,9 +301,6 @@ const Products = () => {
               if (searchTerm.trim() == "" || searchTerm==null) {
                 getData(i - 1);
               }
-              else {
-                searchDataByName(i-1);
-              }
             }}
           >
             {i}
@@ -311,6 +310,7 @@ const Products = () => {
     }
     return <>{buttons}</>;
   };
+
 
   const handleEdit = async (id: number) => {
     console.log(id);
@@ -519,10 +519,8 @@ const Products = () => {
   return (
     <div className="m-12">
       <div className="input-group mb-3">
-        <Form.Control type="text" placeholder="상품명으로 검색" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
-        <button className="input-group-text" onClick={(e) => {e.preventDefault(); searchDataByName(0)}}>
-          <Search size={24} style={{ margin: '0 auto' }} />
-        </button>
+          <Form.Control type="text" placeholder="상품명으로 검색하세요." value={searchTerm} onKeyUp={(e) => { if (e.key=="Enter") {getData(0)} }}  onChange={(e) => { e.preventDefault(); setSearchTerm(e.target.value)}}/>
+          <button className="input-group-text"><Search size={24} style={{ margin: "0 auto" }} onClick={()=>getData(0)}/></button>
       </div>
       <button
                   className="btn"
@@ -867,7 +865,7 @@ const Products = () => {
           <li className="page-item">
             { 
               
-              (nowLastNum > totalPages) &&
+              (nowLastNum < totalPages) &&
               <a className="page-link" onClick={(e)=>{e.preventDefault(); GoToNextPage()}}>
                 Next
               </a>

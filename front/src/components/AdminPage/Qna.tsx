@@ -80,9 +80,10 @@ const Qna = () => {
     // const [newImgs,setNewImgs] = useState<Array<pImg>>([]);
     const [totalPages, setTotalPages] = useState(0);
     const maxResults = 10;
-    // const baseUrl = "https://i8e208.p.ssafy.io/api/qna";
-    const baseUrl = "http://localhost:8081/api/qna";
-    const sUrl = "http://localhost:8081/api/admin/qnasearch"
+    const baseUrl = "https://i8e208.p.ssafy.io/api/qna";
+    const sUrl = "https://i8e208.p.ssafy.io/api/admin/qnasearch"
+    // const baseUrl = "http://localhost:8081/api/qna";
+    // const sUrl = "http://localhost:8081/api/admin/qnasearch"
     const [qnaInfo, setQnaInfo] = useState<QnaForm|null> (null);// for 상품정보 edit
     // Pagination
     const [nowPage, setNowPage] = useState<number>();

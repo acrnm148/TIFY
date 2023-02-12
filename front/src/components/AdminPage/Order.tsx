@@ -62,10 +62,12 @@ const Order = () => {
     // const [newImgs,setNewImgs] = useState<Array<pImg>>([]);
     const [totalPages, setTotalPages] = useState(0);
     const maxResults = 10;
-    // const baseUrl = "https://i8e208.p.ssafy.io/api/faq";
-    const baseUrl = "http://localhost:8081/api/order";
-    const sUrl = "http://localhost:8081/api/admin/ordersearch"
-    const bUrl = "http://localhost:8081/api/admin/order"
+    const baseUrl = "https://i8e208.p.ssafy.io/api/faq";
+    const sUrl = "https://i8e208.p.ssafy.io/api/admin/ordersearch"
+    const bUrl = "https://i8e208.p.ssafy.io/api/admin/order"
+    // const baseUrl = "http://localhost:8081/api/order";
+    // const sUrl = "http://localhost:8081/api/admin/ordersearch"
+    // const bUrl = "http://localhost:8081/api/admin/order"
     const [orderInfo, setOrderInfo] = useState<OrderForm> ({});// for 상품정보 edit
 
     const [newShow, setNewShow] = useState(false); // modal
