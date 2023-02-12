@@ -25,6 +25,10 @@ export function PhoneBook() {
   const [tel3, setTel3] = useState<string>('');
   const [contactList, setContectList] = useState<Array<phonebook>>();
 
+  // 업데이트 시도 부분
+  const [tryUpdate, setTryUpdate] = useState<boolean>(false);
+  const [updateId, setUpdateId] = useState<string>('');
+
   useEffect(() => {
     GetPhoneBook();
   }, []);
@@ -45,7 +49,9 @@ export function PhoneBook() {
       });
   };
 
-  const handleInfoSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleInfoSubmit = async (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     event.preventDefault();
     const tel = tel1 + '-' + tel2 + '-' + tel3;
 
@@ -98,8 +104,37 @@ export function PhoneBook() {
     return true;
   }
 
+  // 수정된 내용으로 수정 요청함.
+  const handleUpdate = (contact: phonebook) => {
+    const API_URL = `https://i8e208.p.ssafy.io/api/phonebook/edit/${contact.id}`;
+    const tel = tel1 + '-' + tel2 + '-' + tel3;
+
+    axios
+      .put(API_URL, {
+        phoneNumber: tel,
+        name: username,
+      })
+      .then((res: any) => {
+        console.log(res, '연락처 수정 시도 성공');
+        GetPhoneBook();
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
+
   const SingleContact = (contact: phonebook) => {
     console.log(contact, '아래에서 받은 거 ');
+
+    // 업데이트할 연락처를 받아옴
+    const UpdateContact = (id: string) => {
+      setTryUpdate(true);
+      setUsername(contact.name);
+      const tels = contact.phoneNumber.split('-');
+      setTel1(tels[0]);
+      setTel2(tels[1]);
+      setTel3(tels[2]);
+    };
 
     const DeleteContact = (id: string) => {
       const API_URL = `https://i8e208.p.ssafy.io/api/phonebook/delete/${id}`;
@@ -121,7 +156,7 @@ export function PhoneBook() {
         <div className="">
           <button
             className="friend-agree-button"
-            // onClick={() => FriendAccept(request.id)}
+            onClick={() => UpdateContact(contact.id)}
           >
             수정
           </button>
@@ -139,7 +174,7 @@ export function PhoneBook() {
   return (
     <div>
       <p className="phone-book-title">| Contacts</p>
-      <form className="add-contact-form" onSubmit={handleInfoSubmit}>
+      <form className="add-contact-form">
         <input
           placeholder="이름"
           className="phone-name-input"
@@ -174,7 +209,16 @@ export function PhoneBook() {
           />
         </div>
 
-        <button className="add-contact-button">연락처 추가</button>
+        {tryUpdate ? (
+          <>
+            <button className="update-contact-button">연락처 수정</button>
+            <button className="cancel-update-contact-button">취소</button>
+          </>
+        ) : (
+          <button className="add-contact-button" onClick={handleInfoSubmit}>
+            연락처 추가
+          </button>
+        )}
       </form>
       <div className="friends-div">
         <ul className="list-group list-group-flush">
@@ -193,59 +237,3 @@ export function PhoneBook() {
     </div>
   );
 }
-
-const RequestFriend = ({ request }: any) => {
-  const FriendAccept = (id: string) => {
-    console.log(id);
-    const API_URL = `https://i8e208.p.ssafy.io/api/friends/accept`;
-    axios
-      .post(API_URL, {
-        friendId: id,
-        accepted: true,
-      })
-      .then((res: any) => {
-        console.log(res, '친구 요구 승락 성공');
-        // GetFriendData();
-      })
-      .catch((err: any) => {
-        console.log(err);
-      });
-  };
-
-  const FriendDeny = (id: string) => {
-    console.log(id);
-    const API_URL = `https://i8e208.p.ssafy.io/api/friend/reqdelete/${id}`;
-    axios
-      .delete(API_URL)
-      .then((res: any) => {
-        console.log(res, '친구 요청 거부 성공');
-        // GetPhoneBook();
-        // GetFriendData();
-      })
-      .catch((err: any) => {
-        console.log(err);
-      });
-  };
-
-  return (
-    <li className="list-group-item">
-      <img src={request.profileImg} className="friend-profile"></img>
-      <p className="friend-nickname">{request.nickname}</p>
-      <p className="friend-username">{request.username}</p>
-      <div className="">
-        <button
-          className="friend-agree-button"
-          // onClick={() => FriendAccept(request.id)}
-        >
-          승락
-        </button>
-        <button
-          className="friend-deny-button"
-          onClick={() => FriendDeny(request.id)}
-        >
-          거부
-        </button>
-      </div>
-    </li>
-  );
-};
