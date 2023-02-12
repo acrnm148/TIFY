@@ -130,13 +130,14 @@ export function MyWish() {
   };
   const WishCard = ({ conList }: ConProps) => {
     // 축하해준 사람 수
-    const conCount = conList.length;
     console.log(conList, 'conList가 요것입니다.');
     console.log(typeof conList, 'conList의 타입은 요것입니다.');
     return (
       <>
         {conList.map((con: MyWishType) => {
           // 완료된 위시
+          const conCount = con.payImgs.length;
+
           if (Number(con.restDay) < 1) {
             return (
               <div
@@ -171,7 +172,13 @@ export function MyWish() {
                 {conCount > 0 ? (
                   <Donator payImgs={con.payImgs} />
                 ) : (
-                  <button>공유해보세요.</button>
+                  <div className="donator-div">
+                    <p className="no-donate">
+                      아직 축하해주신 분이 없어요😢
+                      <br></br>
+                      당신의 위시를 공유해보세요.
+                    </p>
+                  </div>
                 )}{' '}
               </div>
             );
@@ -197,41 +204,33 @@ interface PayImgs {
 
 function Donator({ payImgs }: PayImgs) {
   console.log(payImgs, 'Donater에서 나오는 pay');
+  console.log(payImgs.slice(-5), 'Donater에서 나오는 pay를 슬라이스 한 것');
+  const imgCount = payImgs.length;
+
   return (
     <div className="donator-div">
       <div className="flex items-center space-x-2 text-base">
         <p className="text-xs ">축하해주신 분</p>
       </div>
       <div className="mt-1 flex -space-x-2 overflow-hidden">
-        <img
-          className="inline-block h-10 w-10 rounded-full ring-1 ring-white"
-          src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-          alt=""
-        />
-        <img
-          className="inline-block h-10 w-10 rounded-full ring-1 ring-white"
-          src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-          alt=""
-        />
-        <img
-          className="inline-block h-10 w-10 rounded-full ring-1 ring-white"
-          src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-          alt=""
-        />
-        <img
-          className="inline-block h-10 w-10 rounded-full ring-1 ring-white"
-          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-          alt=""
-        />
-        <img
-          className="inline-block h-10 w-10 rounded-full ring-1 ring-white"
-          src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-          alt=""
-        />
+        {payImgs &&
+          payImgs.slice(-5).map((payImg) => {
+            return (
+              <img
+                className="inline-block h-10 w-10 rounded-full ring-1 ring-white"
+                src={payImg}
+                alt=""
+              />
+            );
+          })}
       </div>
-      <div className="mt-1 text-xs">
-        <a className="text-blue-500">+ 198 others</a>
-      </div>
+      {imgCount > 5 ? (
+        <div className="mt-1 text-xs">
+          <a className="text-blue-500">+ 198 others</a>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
