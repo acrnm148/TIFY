@@ -118,6 +118,12 @@ public class UserApiController {
             return ResponseEntity.status(HttpStatus.MULTI_STATUS).body("이메일 인증이 필요합니다.");
         }
         //login(new LoginRequestDto(responseDto.getUserid(), responseDto.getPassword()));
+        Long pk = userRepository.findByUserid(joinRequestDto.getUserid()).getId();
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://tify-noti-default-rtdb.firebaseio.com/");
+        DatabaseReference reference = database.getReference("test/tify");
+        String uid = pk.toString();
+        reference.child(uid).setValueAsync("");
+
         return ResponseEntity.ok().body(responseDto);
    }
 
@@ -161,12 +167,6 @@ public class UserApiController {
         if (emailAuths.size() == 0 || emailAuths.get(emailAuths.size()-1).getExpired() ==false) {
             return ResponseEntity.ok().body("N");
         }
-
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://tify-noti-default-rtdb.firebaseio.com/");
-        DatabaseReference reference = database.getReference("test/tify");
-        String uid = email.replace("@","-").replace(".","-");
-        reference.child(uid).setValueAsync("");
 
         return ResponseEntity.ok().body("Y");
 
