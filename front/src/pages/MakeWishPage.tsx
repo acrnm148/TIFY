@@ -41,8 +41,11 @@ import ConfirmationDialog from '../components/WishCategoryOption';
 import CarouselComponent from '../components/ResponsiveCarousel';
 import { async } from '@firebase/util';
 import { positions } from '@mui/system';
+import { RootStateFriends } from '../store/Friends';
 
-
+// alarm
+import { push, ref } from "firebase/database";
+import { db } from '../components/firebase';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -57,7 +60,6 @@ const style = {
   borderRadius : '8px',
   p: 4,
 };
-// [TODO] 카테고리 선택 mui..
 
 export function MakeWishPage() {
   // const [userId , setUserId] = useState(104);
@@ -113,6 +115,7 @@ export function MakeWishPage() {
   const [cateKorean, setCateKorean] = useState<string>()
 
   // 가져온 유저정보
+  const [ userProfile, setUserProfile ] = useState<string>()
   const [ userAddr1, setUserAddr1] = useState<string>()
   const [ userAddr2, setUserAddr2]= useState<string>()
   const [ userZipCode, setUserZipCode ] = useState<number>()
@@ -137,15 +140,6 @@ export function MakeWishPage() {
   // gift cart
   const [cartList, setCartList] = useState<Gift[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  // const [totalProduct, setTotalProduct] = useState<{
-  //   productId:number
-  //   purePrice:number, 
-  //   userOption:any, 
-  //   giftImgUrl:string, 
-  //   giftName: string,
-  //   maxAmount:number,
-  //   quantity: number
-  // }[]>([]);
 
   // 유저 폼 유효성 검사
   const [wishValidated, setWishValidated] = useState<boolean>()
@@ -156,6 +150,9 @@ export function MakeWishPage() {
   const [goImgUrl, setGoImgUrl] = useState<boolean>()
   const [goAddr1, setGoAddr1] = useState<boolean>()
   const [goAddr2, setGoAddr2] = useState<boolean>()
+
+  // 유저 친구정보
+  const user_friends = useSelector((state: RootStateFriends)=>state.friendsIds)
 
   // 위시생성페이지 mount시 유저의 id를 담아서 cart정보 요청
   useEffect(() => {
@@ -203,8 +200,9 @@ export function MakeWishPage() {
         url: API_URL,
         headers: { Authorization: `Bearer ${accessToken}` },
       })
-        .then((con: { data: { addr1: React.SetStateAction<string | undefined>; addr2: React.SetStateAction<string | undefined>; zipcode: React.SetStateAction<number | undefined>; username: React.SetStateAction<string | undefined>; }; }) => {
+        .then((con: { data: { profileImg: React.SetStateAction<string | undefined>; addr1: React.SetStateAction<string | undefined>; addr2: React.SetStateAction<string | undefined>; zipcode: React.SetStateAction<number | undefined>; username: React.SetStateAction<string | undefined>; }; }) => {
           console.log('유저정보 불러오기 성공',con.data);
+          setUserProfile(con.data.profileImg)
           setUserAddr1(con.data.addr1)
           setUserAddr2(con.data.addr2)
           setUserZipCode(con.data.zipcode)
@@ -231,22 +229,8 @@ export function MakeWishPage() {
           return
         }
         setWishCart([...wishCart,cartList[i]])
-        // setTotalProduct([...totalProduct,{"productId" : cartList[i].id,
-        //                                   'purePrice': cartList[i].price, 
-        //                                   'userOption':cartList[i].options[0], 
-        //                                   'giftImgUrl':cartList[i].repImg, 
-        //                                   'giftName' : cartList[i].name,
-        //                                   "maxAmount": cartList[i].price+Math.round(cartList[i].price*0.05),
-        //                                   "quantity" : 1 }])
       } else {
         setWishCart([cartList[i]])
-        // setTotalProduct([{"productId" : cartList[i].id,
-        //                 'purePrice': cartList[i].price, 
-        //                 'userOption':cartList[i].options[0], 
-        //                 'giftImgUrl':cartList[i].repImg, 
-        //                 'giftName' : cartList[i].name,
-        //                 "maxAmount": cartList[i].price+Math.round(cartList[i].price*0.05),
-        //                 "quantity" : 1 }])
       }
       setTotalPrice(totalPrice+cartList[i].price)
 
@@ -313,6 +297,16 @@ export function MakeWishPage() {
       </>
     );
   };
+  const pushData = (friendsId:number) => {
+		let base = "/test/tify/"; // 우리 db 기본 주소입니다.
+		// email에서 사용가능한 특수문자로 변경한형태로 유저 개인 db table 이름이 설정되어 있습니다.
+		// let userCollection = friendsId.replace("@","-").replace(".","-") // ex) rkdrlgks321-naver-com
+    push(ref(db, base + friendsId), {
+      text: userName+'님의 위시가 생성되었습니다!', // 필드는 자유롭게 추가 하셔도 됩니다.
+      profile : userProfile,
+      interval: "Daily", // nonSql db라서 확장/수정이 자유롭습니다.
+    });
+  };
   const [finished, setFinished] = useState(false);
   const MakeWish = () => {
     const makeWish = async () => {
@@ -356,7 +350,6 @@ export function MakeWishPage() {
           addr2: addr2,
       }
       console.log('data', data)
-      alert(`위시생성할거임?? + ${gift.length}`)
       axios({
         url: API_URL,
         method: 'POST',
@@ -369,6 +362,10 @@ export function MakeWishPage() {
         .then((con: any) => {
           console.log('위시생성 성공', con, userId);
           setFinished(true);
+          // user_friends에 알림보내기
+          user_friends.forEach((fri:number) =>{
+            pushData(fri)
+          })
         })
         .catch((err: any) => {
           console.log('위시생성 실패', err);
@@ -422,17 +419,6 @@ export function MakeWishPage() {
             setToomany(false)
           }
     }
-  
-    console.log('wishCart', wishCart)
-
-    
-
-    // totalProduct.forEach(prod =>{
-    //   if(prod.productId === id){
-    //     totalProduct.splice(i,1)
-    //     return
-    //   }
-    // })
   };
   const scrollToTop = () => {
     window.scrollTo({
@@ -482,12 +468,6 @@ export function MakeWishPage() {
             </div>
           </div>
         </div>
-          {/* <div className="finish-wish-comment">
-            <h1>위시 생성이 완료되었습니다!</h1>
-            <NavLink to={'/checkwish'}>
-              <p>위시목록으로 고고고</p>
-            </NavLink>
-          </div> */}
       </div>
     );
   };
@@ -531,8 +511,6 @@ export function MakeWishPage() {
     const val = e.target.value.split('-')
     setTotalPrice(totalPrice+Number(val[1]))
     
-    // console.log('userOptions',userOptions)
-    // console.log(e.target.value, '선택한 옵션이 뭐죠?')
   }
   return (
     <>
