@@ -3,7 +3,7 @@ import '../css/delivery.styles.css';
 
 export function Delivery() {
   return (
-    <div>
+    <div className="div-delivery-box">
       test
       <div className="delivery-mod">
         <div className="modalBody" onClick={(e) => e.stopPropagation()}>
