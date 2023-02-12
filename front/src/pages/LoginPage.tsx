@@ -34,6 +34,7 @@ export function LoginPage() {
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
+  const userId = useSelector((state: RootState) => state.authToken.userId);
   // console.log(accessToken);
   // console.log('요것이 accessToken');
 
@@ -50,14 +51,14 @@ export function LoginPage() {
           dispatch(SET_TOKEN(response.access_token));
           dispatch(SET_USERID(response.user_id));
           dispatch(SET_USEREMAIL(response.user_email));
-
+            
           console.log('로그인 성공!!');
 
           //로그인 성공시 백으로 firebase customized token 요청
           //받아오면 알아서 쿠키에 refresh_token 으로 저장됨.
           axios
             .post('https://i8e208.p.ssafy.io/fcm', {
-              email: userEmail,
+              pk: userId,
             })
             .then((res) => {
               console.log(res.data);
