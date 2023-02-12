@@ -56,7 +56,7 @@ export function LoginPage() {
           //로그인 성공시 백으로 firebase customized token 요청
           //받아오면 알아서 쿠키에 refresh_token 으로 저장됨.
           axios
-            .post('http://localhost:8081/fcm', {
+            .post('https://i8e208.p.ssafy.io/fcm', {
               email: userEmail,
             })
             .then((res) => {

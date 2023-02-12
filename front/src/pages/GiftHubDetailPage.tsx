@@ -18,7 +18,7 @@ const CATEGORY_DATA = [
     {id: 5, name : '출산유아'},
     {id: 6, name : '인테리어'},
     {id: 7, name : '반려동물'},
-  
+    {id: 8, name : '의류'}
   ]
 type Gift = {
     name: string
