@@ -20,6 +20,7 @@ import { RootState } from '../store/Auth';
 
 import axios from 'axios';
 import FirebaseAuth from '../components/FirebaseAuth';
+import { RootStateFriends, SET_FRIENDS_IDS } from '../store/Friends';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -27,7 +28,6 @@ export function LoginPage() {
 
   const [userEmail, setUserEmail] = useState<any>();
   const [password, setPassword] = useState<any>();
-
   // const userId = useSelector((state: RootState) => state.authToken.userId);
   // console.log(userId);
   // console.log('요것이 userId');
@@ -45,7 +45,7 @@ export function LoginPage() {
           alert('미등록 회원이거나 잘못된 아이디/비밀번호를 입력하셨습니다.');
         } else {
           console.log(response);
-          console.log('리프레쉬토큰 가자');
+          console.log('리프레쉬토큰 가자', response);
           setRefreshToken(response.refresh_token);
           dispatch(SET_TOKEN(response.access_token));
           dispatch(SET_USERID(response.user_id));
@@ -68,9 +68,16 @@ export function LoginPage() {
               console.log;
             });
 
+            axios.get(`https://i8e208.p.ssafy.io/api/friendsEmail/${response.user_id}`,
+            { responseType: 'json' }
+          ).then((re) => {
+            const friends = re.data.map((data: { id: []; }) =>{return data.id})
+            dispatch(SET_FRIENDS_IDS(friends))
+            }).catch((er) => {
+              console.log('친구목록 불러오기 실패', er)
+            })
           return navigate('/');
-        }
-      })
+      }})
       .catch((err) => {
         console.log(err);
       });
