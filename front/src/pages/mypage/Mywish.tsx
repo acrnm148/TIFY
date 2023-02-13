@@ -56,7 +56,7 @@ export function MyWish() {
                       payList: {
                         pay_id: any;
                         celeb_from: string;
-                        celeb_img_url: string;
+                        profImgUrl: string;
                       }[];
                     },
                     i: number,
@@ -66,9 +66,9 @@ export function MyWish() {
                         (p: {
                           pay_id: any;
                           celeb_from: string;
-                          celeb_img_url: string;
+                          profImgUrl: string;
                         }) => {
-                          payImgs.push(p.celeb_img_url);
+                          payImgs.push(p.profImgUrl);
                           return { id: p.pay_id, from: p.celeb_from };
                         },
                       );
@@ -226,7 +226,7 @@ function Donator({ payImgs }: PayImgs) {
       </div>
       {imgCount > 5 ? (
         <div className="mt-1 text-xs">
-          <a className="text-blue-500">+ 198 others</a>
+          <a className="text-blue-500">+ {imgCount - 5} others</a>
         </div>
       ) : (
         <></>
