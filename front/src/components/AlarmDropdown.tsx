@@ -70,7 +70,7 @@ const AlarmDropdown = () => {
         console.log(snapshot.val());
       } else {
         console.log("No data available");
-      }
+      }``
     })
       .catch(error => {
       console.error(error);

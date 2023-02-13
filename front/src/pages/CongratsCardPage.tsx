@@ -40,6 +40,8 @@ export function CongratsCardPage() {
   //이용약관동의 선택여부
   const [isChecked, setIsChecked] = useState(false);
 
+  // 가격이 상품가격보다 넘었는지 확인
+  const [priceOver, setPriceOver] = useState(false);
   // modal
   const handleClose = () => setOpen(false);
   const [open, setOpen] = useState(false);
@@ -109,11 +111,18 @@ export function CongratsCardPage() {
   const amountSelected = (i: any) => {
     console.log(payAmount[i]);
     setAmount(payAmountNum[i]);
+    setPriceOver(false)
   };
   const getAmount = (e: any) => {
     e.preventDefault();
     const neww = e.target.value.replace(/[^0-9]/g,'');
-    setAmount(neww);
+    if (neww > state.selectGift.price){
+      setAmount(state.selectGift.price)
+      setPriceOver(true)
+    } else{
+      setAmount(neww);
+      setPriceOver(false)
+    }
   };
 
   function checkValidate(e: any) {
@@ -230,10 +239,11 @@ const PayInfo = () =>{
                 <div className="pay-amount-selection-btns">
                   {payAmount.map((amt, i: number) => (
                     <button
+                      className={`${payAmountNum[i] >  state.selectGift.price?"diable-btn":''}`}
                       onClick={() => {
                         amountSelected(i);
                       }}
-                    >
+                      disabled={payAmountNum[i] >  state.selectGift.price?true:false}>
                       {amt}
                     </button>
                   ))}
@@ -248,6 +258,9 @@ const PayInfo = () =>{
                   value={amount}
                   onChange={getAmount}
                 />
+                {priceOver&&
+                  <p className='font-sm font-red'>축하금액은 상품가격을 초과할 수 없습니다.</p>
+                }
               </div>
             </div>
           </div>

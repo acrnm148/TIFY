@@ -79,6 +79,7 @@
 .backcolor {
   background-color: #fff1ef;
   width: 100vw;
+  min-height: 30vw;
 }
 
 .탭-이-름 {

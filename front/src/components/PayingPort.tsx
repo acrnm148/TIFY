@@ -72,7 +72,8 @@ export function onClickPayment(congratsInfo:Paying, giftName:string) {
         axios.post(API_URL, data
           ).then((res:any) =>{
             console.log('축하 결제 성공!!!', res)
-            window.location.href = 'https://i8e208.p.ssafy.io'
+            // window.location.href = 'https://i8e208.p.ssafy.io'
+            history.go(-2)
           }).catch((err:any) => {
             console.log('축하 결제 실패', err)
           })
