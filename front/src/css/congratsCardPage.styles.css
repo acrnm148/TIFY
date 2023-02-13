@@ -271,7 +271,7 @@
     font-size: 18px;
     font-weight: bold;
 }
-.concard-policy  * , .concard-info *{
+  * , .concard-info *{
     line-height: 1.66;
 }
 .concard-info h1{
@@ -293,12 +293,6 @@
     background-color: #FE3360;
     color: white;
 }
-.concard-info{
-    /* display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center; */
-}
 .css-1qh5tm1{
     border-radius: 8px;
 }
@@ -317,4 +311,13 @@
 }
 .pt10{
     padding-top: 10px;
+}
+.diable-btn{
+    color: rgb(204, 204, 204);
+}
+.font-sm{
+    font-size: 16px;
+}
+.font-red{
+    color: #FE3360;
 }
