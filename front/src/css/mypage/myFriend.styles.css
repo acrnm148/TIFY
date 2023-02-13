@@ -23,6 +23,7 @@
   margin-right: 10px;
   /* box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1); */
   box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 /* border-radius: 50%; */
 
@@ -75,6 +76,21 @@
 }
 
 .wish-slider-and-label-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  font-family: 'Nanum Gothic';
+}
+
+.progress-span {
+  color: #fe3360;
+  font-size: 12px;
+  font-weight: 300;
+  margin-top: 8px;
+}
+
+.wish-slider-and-label {
   display: flex;
   justify-content: center;
   flex-direction: column;

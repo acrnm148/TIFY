@@ -9,10 +9,13 @@ import '../../css/Joined.styles.css';
 
 export function Joined() {
   return (
-    <div className="joined-wish-div">
-      <JoinedWishCardActive title="hello"></JoinedWishCardActive>
-      <JoinedWishCardActive title="hello"></JoinedWishCardActive>
-      <JoinedWishCardDeactive title="hello"></JoinedWishCardDeactive>
+    <div>
+      <p className="phone-book-title">| Joined Wish</p>
+      <div className="joined-wish-div">
+        <JoinedWishCardActive title="hello"></JoinedWishCardActive>
+        <JoinedWishCardActive title="hello"></JoinedWishCardActive>
+        <JoinedWishCardDeactive title="hello"></JoinedWishCardDeactive>
+      </div>
     </div>
   );
 }
