@@ -71,10 +71,14 @@ export function Joined() {
     <div>
       <p className="phone-book-title">| Joined Wish</p>
       <div className="joined-wish-div">
-        {/* {joinedWishList &&
+        {joinedWishList &&
           joinedWishList.map((joinedWish: JoinedWish) => {
-            return <JoinedWishCardActive a={joinedWish}></JoinedWishCardActive>;
-          })} */}
+            return (
+              <JoinedWishCardActive
+                joinedWish={joinedWish}
+              ></JoinedWishCardActive>
+            );
+          })}
         {/* 
         <JoinedWishCardActive title="hello"></JoinedWishCardActive>
         <JoinedWishCardActive title="hello"></JoinedWishCardActive>
@@ -84,14 +88,26 @@ export function Joined() {
   );
 }
 
-function JoinedWishCardActive(a: JoinedWish) {
+function JoinedWishCardActive(props: { joinedWish: JoinedWish }) {
+  const joinedWish = props.joinedWish;
+  console.log(joinedWish, '조인드위시 내용');
+
   return (
     <div className="joined-wish-box shadow-xl">
-      <p className="p-date">완료까지 7일</p>
-      <p className="p-proceed">진행중</p>
+      {joinedWish.wishFinishYN == 'Y' ? (
+        <>
+          <p className="p-date">완료 후 n일</p>
+          <p className="p-done">완료</p>
+        </>
+      ) : (
+        <>
+          <p className="p-date">완료까지 n일</p>
+          <p className="p-proceed">진행중</p>
+        </>
+      )}
       <div className="category-div">
-        <img src={iconCategory1Birthday} alt="" />
-        <p className="joined-wish-title">"{title}"</p>
+        <Categorize category={joinedWish.wishCategory}></Categorize>
+        <p className="joined-wish-title">"a"</p>
       </div>
       <div className="button-div">
         <button className="button-gift">보낸 선물</button>
@@ -99,6 +115,24 @@ function JoinedWishCardActive(a: JoinedWish) {
       </div>
     </div>
   );
+}
+
+function Categorize({ category }: { category: any }) {
+  if (category == '생일') {
+    return <img src={iconCategory1Birthday} alt="" />;
+  } else if (category == '결혼') {
+    return <img src={iconCategory2Marry} alt="" />;
+  } else if (category == '취업') {
+    return <img src={iconCategory3Employed} alt="" />;
+  } else if (category == '건강') {
+    return <img src={iconCategory4Health} alt="" />;
+  } else if (category == '출산') {
+    return <img src={iconCategory5Childbirth} alt="" />;
+  } else if (category == '비혼') {
+    return <img src={iconCategory6Unmarried} alt="" />;
+  } else {
+    return <img src={iconCategory7Etc} alt="" />;
+  }
 }
 
 function JoinedWishCardDeactive(props: { title: string }) {

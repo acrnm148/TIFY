@@ -2,6 +2,7 @@
   margin-left: 90px;
   margin-top: 80px;
   display: flex;
+  min-height: 1000px;
 }
 
 .side-div {
@@ -57,7 +58,7 @@
 }
 
 .my-wish-div {
-  width: 1000px;
+  width: 65vw;
   display: flex;
   flex-wrap: wrap;
 }

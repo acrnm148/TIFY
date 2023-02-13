@@ -1,6 +1,7 @@
 .info-page {
   width: 838px;
   height: 1400px;
+  margin-bottom: 100px;
 
   box-shadow: 30px 30px 20px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
