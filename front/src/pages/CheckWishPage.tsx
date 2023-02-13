@@ -53,21 +53,29 @@ export function CheckWishPage() {
               if (wish.finishYN !== 'Y' && !result) {
                 let diff =
                   new Date(wish.endDate).getTime() - new Date().getTime();
-                const froms = wish.giftItems.map(
+                let froms: ({ id: any; from: string; } | undefined)[]=[];
+                wish.giftItems.map(
+                  
                   (
                     gift: { payList: { pay_id: any; celeb_from: string }[] },
                     i: number,
                   ) => {
                     if (gift) {
-                      let payids = gift.payList.map(
+                       gift.payList.map(
                         (p: { pay_id: any; celeb_from: string }) => {
-                          return { id: p.pay_id, from: p.celeb_from };
+                          if(p.pay_id){
+                            froms.push({ id: p.pay_id, from: p.celeb_from })
+                          }
                         },
                       );
-                      return { data: payids };
                     }
                   },
                 );
+                if(froms){
+
+                }
+                console.log('froms다~~~~~~~~~~~~~~~~~', froms)
+
                 const data = {
                   wishId: wish.id,
                   userName: wish.user.username,
@@ -75,7 +83,7 @@ export function CheckWishPage() {
                   category: wish.category,
                   restDay: String(Math.floor(diff / (1000 * 60 * 60 * 24))), // 오늘 날짜랑 계산해서 몇일남았는지
                   percent: (wish.nowPrice / wish.totPrice) * 100,
-                  fromList: froms[0]?.data,
+                  fromList: froms?froms:'',
                   cardOpen: wish.cardopen,
                 };
                 res.push(data);
@@ -158,12 +166,6 @@ export function CheckWishPage() {
               })
               setConList(newArr)
             }
-
-        //     // let newArr2 = [...goOpenList]
-        //     // newArr2.sort(function (comp1, comp2){
-        //     //   return Number(comp1.restDay) - Number(comp2.restDay)
-        //     // })
-        //     // setGoOpenList(newArr2)
           })
       })
       .catch((err:any) => {

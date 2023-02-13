@@ -3,6 +3,7 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import '../css/congratsPage.styles.css';
 
+const WISH_CATEGORY_DATA = ['생일', '취업', '결혼', '건강', '출산', '비혼']
 type Gift = {id:number, img:string, name:string, achieved81:number, achieved:number, price:number, finished:boolean}
 export function CongratsPage() {
   let { wishId } = useParams();
@@ -165,11 +166,20 @@ export function CongratsPage() {
     <div className="congrats-page-container">
       <div className="wish-components">
         <div className="wish-components-title" style={{ padding: '0 10px' }}>
-          {category ? (
-            <h1>
-              {userName}님의 {category}를 축하해주세요!
-            </h1>
-          ) : (
+          {category ? 
+              WISH_CATEGORY_DATA.indexOf(category) !== -1?
+              (<div>
+                <h1>
+                  {userName}님의 {category}을 축하해주세요!
+                </h1>
+                </div>)
+                :
+              (<div>
+                <h1>
+                  {userName}님의 {category} 축하해주세요!
+                </h1>
+              </div>)
+          : (
             <h1>{userName}님을 축하해주세요!</h1>
           )}
         </div>
