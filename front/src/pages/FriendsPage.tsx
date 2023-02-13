@@ -141,9 +141,9 @@ const FriendsPage: React.FC = () => {
             onChange={(e) => setNickname(e.target.value)}
           />
         </div>
-        <React.StrictMode>
-          <GiftBoxAnimation />
-        </React.StrictMode>
+        // <React.StrictMode>
+        //   <GiftBoxAnimation />
+        // </React.StrictMode>
 
         <div className="friend-list">
           {users.map((user) => (
