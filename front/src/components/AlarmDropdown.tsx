@@ -14,20 +14,20 @@ interface Alarm {
     id: string;
   }
 
-const updateData = (dataid:string,data:Alarm,userEmail:string) => {
+const updateData = (dataid:string,data:Alarm,userId:string) => {
     //data는 email 기준 조회합니다.
     data.state = true;
     console.log(data);
-    console.log("/test/tify/"+userEmail+"/"+dataid);
+    console.log("/test/tify/"+userId+"/"+dataid);
     return update(
-        ref(db, "/test/tify/"+userEmail+"/"+dataid),
+        ref(db, "/test/tify/"+userId+"/"+dataid),
         data
     );
 };
 
 const AlarmDropdown = () => {
-  var userEmail = useSelector((state: RootState) => state.authToken.userEmail);
-  if(userEmail) {userEmail = userEmail.replace("@","-").replace(".","-");}
+  var userId = useSelector((state: RootState) => state.authToken.userId);
+  // if(userEmail) {userEmail = userEmail.replace("@","-").replace(".","-");}
 
   const [showDropdown, setShowDropdown] = useState(false);
   const toggleDropdown = () => {
@@ -35,7 +35,7 @@ const AlarmDropdown = () => {
     if (showDropdown){
       alarmsArray.map((val,idx) => {
         if ( alarmsArray[idx].state === false ){
-            updateData(alarmsArray[idx].id,alarmsArray[idx],userEmail);
+            updateData(alarmsArray[idx].id,alarmsArray[idx],userId);
         }
       })
     }
@@ -43,7 +43,7 @@ const AlarmDropdown = () => {
     console.log(alarmsArray);
     };
 
-  const mb = ref(db, "/test/tify/"+userEmail);
+  const mb = ref(db, "/test/tify/"+userId);
   // const mb = ref(db, "/test/tify/");
 
   var alarmsArray: Alarm[] = [];
