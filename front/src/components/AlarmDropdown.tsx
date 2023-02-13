@@ -51,7 +51,7 @@ const AlarmDropdown = () => {
   var isNew:string = alert;
   onValue(mb, (snapshot) => {
         const data = snapshot.val();
-        alarmsArray = Object.keys(data).map(key => {
+        alarmsArray = Object?.keys(data)?.map(key => {
             if (data[key].state === false) {
                 console.log("새 알람 발생");
                 isNew = bell;
@@ -129,7 +129,7 @@ const AlarmDropdown = () => {
                     position: 'relative',
                     flexDirection : 'row'}}>
                     <div style={{padding:"5px"}}>
-                      <img style={{borderRadius: '50%', width: '40px', height: '40px',}} src={anony} alt="img"/>
+                      <img style={{borderRadius: '50%', width: '40px', height: '40px',}} src={item.profile? item.profile:anony} alt="img"/>
                     </div>
                     {/* <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '5px', }}> */}
                     {/* </div> */}

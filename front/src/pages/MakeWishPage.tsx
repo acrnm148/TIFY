@@ -131,16 +131,10 @@ export function MakeWishPage() {
     zonecode: '',
   });
   const [popup, setPopup] = useState(false);
-  const handleInput = (e: any) => {
-    setEnroll_company({
-      ...enroll_company,
-      [e.target.name]: e.target.value,
-    });
-  };
   // gift cart
   const [cartList, setCartList] = useState<Gift[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
-
+  
   // 유저 폼 유효성 검사
   const [wishValidated, setWishValidated] = useState<boolean>()
   const wishData = { title: '', content: '', wishCard: '', giftItem: [] };
@@ -150,7 +144,17 @@ export function MakeWishPage() {
   const [goImgUrl, setGoImgUrl] = useState<boolean>()
   const [goAddr1, setGoAddr1] = useState<boolean>()
   const [goAddr2, setGoAddr2] = useState<boolean>()
-
+  
+  const handleInput = (e: any) => {
+    if(e.target.value){
+      setGoAddr1(true)
+      setGoAddr2(true)
+    }
+    setEnroll_company({
+      ...enroll_company,
+      [e.target.name]: e.target.value,
+    })
+  }
   // 유저 친구정보
   const user_friends = useSelector((state: RootStateFriends)=>state.friendsIds)
 
@@ -496,6 +500,9 @@ export function MakeWishPage() {
       setWishValidated(true)
     }
   }, [wishCart,title, content, category, startDate, endDate, imgUrlS3, addr1, addr2])
+  useEffect(()=>{
+    setCallMyAddr(false)
+  }, [enroll_company])
 
   const notValid = () => {
     category?setGoCategory(true):setGoCategory(false)
@@ -507,10 +514,12 @@ export function MakeWishPage() {
     addr2?setGoAddr2(true):setGoAddr2(false)
   }
   const ChangeOption = (e:any, i:number)=>{ 
-    setUserOptions({...userOptions,[i]:e.target.value})
-    const val = e.target.value.split('-')
-    setTotalPrice(totalPrice+Number(val[1]))
-    
+    if(e.target.value){
+      console.log('ininini', e.target.value)
+      setUserOptions({...userOptions,[i]:e.target.value})
+      const val = e.target.value.split('-')
+      setTotalPrice(totalPrice+Number(val[1]))
+    }
   }
   return (
     <>
