@@ -49,7 +49,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -118,6 +121,12 @@ public class UserApiController {
             return ResponseEntity.status(HttpStatus.MULTI_STATUS).body("이메일 인증이 필요합니다.");
         }
         //login(new LoginRequestDto(responseDto.getUserid(), responseDto.getPassword()));
+        Long pk = userRepository.findByUserid(joinRequestDto.getUserid()).getId();
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://tify-noti-default-rtdb.firebaseio.com/");
+        DatabaseReference reference = database.getReference("test/tify");
+        String uid = pk.toString();
+        reference.child(uid).setValueAsync("");
+
         return ResponseEntity.ok().body(responseDto);
    }
 
@@ -161,12 +170,6 @@ public class UserApiController {
         if (emailAuths.size() == 0 || emailAuths.get(emailAuths.size()-1).getExpired() ==false) {
             return ResponseEntity.ok().body("N");
         }
-
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://tify-noti-default-rtdb.firebaseio.com/");
-        DatabaseReference reference = database.getReference("test/tify");
-        String uid = email.replace("@","-").replace(".","-");
-        reference.child(uid).setValueAsync("");
 
         return ResponseEntity.ok().body("Y");
 
@@ -407,12 +410,14 @@ public class UserApiController {
     /**
      * 유저 토큰으로 orderList 불러오기
      */
-    @GetMapping("/account/getOrder")
-    public ResponseEntity<?> getOrder(@RequestHeader("Authorization") String token) { //@RequestHeader(value = "Authorization") String token) {
+    @GetMapping("/account/getOrder") // api/account/getOrder?page=2&size=5
+    public ResponseEntity<?> getOrder(@RequestHeader("Authorization") String token, @PageableDefault(size=5)  Pageable pageable) { //@RequestHeader(value = "Authorization") String token) {
         token = token.substring(7);
         User user = userRepository.findById(userService.getUser(token).getId()).get();
 
-        List<Order> orderList = orderRepository.findAllByUser(user);
+        //List<Order> orderList = orderRepository.findAllByUser(user);
+        Page<Order> orderList = orderRepository.findAllByUser(user, pageable);
+
         System.out.println(user.getUsername()+"님의 주문목록:"+orderList);
 
         return ResponseEntity.ok().body(orderList);

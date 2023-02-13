@@ -18,12 +18,12 @@ public class fcmController {
     private final FirebaseConfig firebase;
 
     @PostMapping
-    public String fcmTest(@RequestBody String email) throws FirebaseAuthException {
+    public String fcmTest(@RequestBody String pk) throws FirebaseAuthException {
 
-        String uid = email.replace("@","-").replace(".","-");
-        System.out.println(uid);
+//        String uid = email.replace("@","-").replace(".","-");
+//        System.out.println(uid);
 //        String uid = "rkdrlgks321-naver-com";
-        String customToken = FirebaseAuth.getInstance().createCustomToken(uid);
+        String customToken = FirebaseAuth.getInstance().createCustomToken(pk);
         return customToken;
     }
 
