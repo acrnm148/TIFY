@@ -2,7 +2,7 @@ import '../css/styles.css';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 // import XMLParser from 'react-xml-parser';
-
+import { NavLink, useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 // import { NavLink } from 'react-router-dom';
@@ -49,8 +49,27 @@ const DELIVERY_STATE = [
   { id: 4, name: '재고부족' },
   { id: 5, name: '축하부족' },
 ];
+const getOrderState = (state: any) => {
+  switch (state) {
+    case 0:
+      return <p className="p-order-state">배송대기중</p>;
+    case 1:
+      return <p className="p-order-state">배송중</p>;
+    case 2:
+      return <p className="p-order-state">배송완료</p>;
+    case 3:
+      return <p className="p-order-state">환불완료</p>;
+    case 4:
+      return <p className="p-order-state">재고부족</p>;
+    case 5:
+      return <p className="p-order-state">축하부족</p>;
+    default:
+      return <p className="p-order-state">상태없음</p>;
+  }
+};
+const Refund = () => {
+  let { orderId } = useParams();
 
-const OrderInfo = () => {
   const [open, setOpen] = React.useState(false);
 
   // Pagination
@@ -96,101 +115,44 @@ const OrderInfo = () => {
       </div>
     );
   };
-  const getOrderState = (state: any) => {
-    switch (state) {
-      case 0:
-        return <p className="p-order-state">배송대기중</p>;
-      case 1:
-        return <p className="p-order-state">배송중</p>;
-      case 2:
-        return <p className="p-order-state">배송완료</p>;
-      case 3:
-        return <p className="p-order-state">환불완료</p>;
-      case 4:
-        return <p className="p-order-state">재고부족</p>;
-      case 5:
-        return <p className="p-order-state">축하부족</p>;
-      default:
-        return <p className="p-order-state">상태없음</p>;
-    }
-  };
-  const getBtnType = (
-    btnState: any,
-    productId: any,
-    orderId: any,
-    wishId: any,
-    giftId: any,
-  ) => {
-    switch (btnState) {
-      case 0: //배송대기중
-      case 1: //배송중
-      case 2: //배송완료
-      case 3: //환불완료
-        return (
-          <div className="button-div">
-            <button
-              className="button-left"
-              onClick={() => GoToWishPage(wishId)}
-            >
-              내 위시로 가기
-            </button>
-            <button
-              className="button-right"
-              onClick={() => GoProductPage(productId)}
-            >
-              상품 상세
-            </button>
-          </div>
-        );
-      case 4: //재고부족
-        return (
-          <div className="button-div">
-            <button className="button-left">입고 대기</button>
-            <button
-              className="button-right"
-              onClick={() => GoRefundPage(orderId)}
-            >
-              환불 요청
-            </button>
-          </div>
-        );
-      case 5: //축하부족
-        return (
-          <div className="button-div">
-            <button
-              className="button-left"
-              onClick={() => GoCongratsPage(giftId)}
-            >
-              축하 보태기
-            </button>
-            <button
-              className="button-right"
-              onClick={() => GoRefundPage(orderId)}
-            >
-              환불 요청
-            </button>
-          </div>
-        );
-      default: //상태없음
-        return (
-          <div className="button-div">
-            <button
-              className="button-left"
-              onClick={() => GoToWishPage(wishId)}
-            >
-              내 위시로 가기
-            </button>
-            <button
-              className="button-right"
-              onClick={() => GoProductPage(productId)}
-            >
-              상품 상세
-            </button>
-          </div>
-        );
-    }
-  };
+  // 환불 요청 데이터
+  const [userId, setUserId] = useState(
+    useSelector((state: RootState) => state.authToken.userId),
+  );
+  //const [orderId, setOrderId] = useState<number>();
+  const [userName, setUserName] = useState<string>('');
+  const [bank, setBank] = useState<string>('');
+  const [account, setAccount] = useState<string>('');
 
+  // 유저 폼 유효성 검사
+  const [refValidated, setRefValidated] = useState<boolean>();
+  const [goUserName, setGoUserName] = useState<boolean>();
+  const [goAccount, setGoAccount] = useState<boolean>();
+  const [goBank, setGoBank] = useState<boolean>();
+  const notValid = () => {
+    userName ? setGoUserName(true) : setGoUserName(false);
+    bank ? setGoBank(true) : setGoBank(false);
+    account ? setGoAccount(true) : setGoAccount(false);
+  };
+  const requestRefundData = async (userId: number) => {
+    try {
+      const response = await axios.post(
+        `https://i8e208.p.ssafy.io/api/refund`,
+        {
+          userId: userId,
+          orderId: orderId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-type': 'application/json',
+          },
+        },
+      );
+      console.log(response.data);
+      //setUserName();
+    } catch (error) {}
+  };
   const getData = async (page: number) => {
     axios({
       method: 'get',
@@ -200,7 +162,6 @@ const OrderInfo = () => {
       .then((response) => {
         console.log(response);
         setOrders([...response.data.content]);
-        // setTotalPages(response.data.totalPages);
         console.log(response.data.content);
         return response.data.content;
       })
@@ -208,81 +169,47 @@ const OrderInfo = () => {
         console.error(error);
       });
   };
-
   if (orders === null) {
     getData(0);
   }
-
-  const PageButtons = ({ totalPages }: { totalPages: number }) => {
-    // let buttons = [];
-    // if (nowLastNum > totalPages) {
-    //   setNowLastNum(totalPages);
-    // }
-    // for (let i = nowStartNum; i <= nowLastNum; i++) {
-    //   buttons.push(
-    //     <li className={`page-item ${nowPage == i && 'isNowPage'}`} key={i}>
-    //       <button
-    //         className="page-link"
-    //         onClick={() => {
-    //           getData(i), setNowPage(i);
-    //         }}
-    //       >
-    //         {i}
-    //       </button>
-    //     </li>,
-    //   );
-    // }
-    // return <>{buttons}</>;
-  };
-  const GoToNextPage = () => {
-    // let target = nowLastNum + 1;
-    // // if(target)
-    // //setNowPage(target);
-    // getData(target);
-    // setNowStartNum(target);
-    // setNowLastNum(nowLastNum + pamount);
-  };
-  const GoToBeforePage = () => {
-    // let target = nowStartNum - pamount;
-    // if (target < 1) {
-    //   return;
-    // }
-    // //setNowPage(target);
-    // getData(target);
-    // setNowStartNum(target);
-    // setNowLastNum(nowStartNum - 1);
-  };
-
-  const navigate = useNavigate();
-
-  const GoToWishPage = (wishId: any) => {
-    //나의 위시
-    navigate(`/congrats/${wishId}`);
-  };
-  const GoProductPage = (productId: any) => {
-    //상품 상세
-    navigate(`/gifthub/${productId}`);
-  };
-  const GoRefundPage = (orderId: any) => {
+  const refund = (orderId: any) => {
     //환불 요청
-    navigate(`/mypage/refund/${orderId}`);
+    const API_URL = 'https://i8e208.p.ssafy.io/api/refund';
+    const data = {
+      userId: userId,
+      userName: userName,
+      orderId: orderId,
+      account: account,
+      bank: bank,
+    };
+    console.log('data', data);
+    axios({
+      url: API_URL,
+      method: 'POST',
+      data: data,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-type': 'application/json',
+      },
+    })
+      .then((con: any) => {
+        console.log('환불 요청 성공', con, userId);
+
+        alert('환불 요청이 완료되었습니다.');
+        window.location.href = '/mypage/order';
+      })
+      .catch((err: any) => {
+        console.log('환불 요청 실패', err);
+      });
+    //refund(orderId);
   };
-  const GoCongratsPage = (giftId: any) => {
-    //축하보태기 wishId??
-    navigate(`/congrats/${giftId}/giftcard`);
-  };
+
   return (
     <div className="order-div">
       {orders ? (
         <>
           {orders.map((order: orders, idx: any) => (
-            <div
-              className={
-                order.state == 3
-                  ? 'order-refund-box shadow-xl'
-                  : 'order-box shadow-xl'
-              }
-            >
+            <div className="order-refund-input-box shadow-xl">
               <div className="order-box-top">
                 <p className="p-order-state">{getOrderState(order.state)}</p>
                 <p className="p-finished-date">
@@ -330,45 +257,75 @@ const OrderInfo = () => {
                     )}
                   </div>
                 </div>
-                {order.state == 3 ? (
-                  <div className="refund-info-box">
-                    <hr />
-                    <div className="refund-info-con">
-                      <table>
-                        <tr>
-                          <td className="td-head">성명</td>
-                          <td className="td-con">{order.refUserName}</td>
-                        </tr>
-                        <tr>
-                          <td className="td-head">은행</td>
-                          <td className="td-con">{order.refUserBank}</td>
-                        </tr>
-                        <tr>
-                          <td className="td-head">계좌번호</td>
-                          <td className="td-con">{order.refUserAccount}</td>
-                        </tr>
-                        <tr>
-                          <td className="td-head">환불일자</td>
-                          <td className="td-con">{order.refDate}</td>
-                        </tr>
-                        <tr>
-                          <td className="td-head">환불금액</td>
-                          <td className="td-con">{order.orderPrice}</td>
-                        </tr>
-                      </table>
+                <div className="refund-info-box">
+                  <p className="refund-info-head">환불 계좌 정보</p>
+                  <hr />
+                  <div className="refund-info-con">
+                    <div className="refund-input">
+                      <label htmlFor="성명">성명</label>
+                      <input
+                        className="input-small"
+                        type="text"
+                        name="성명"
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
+                        placeholder="성명"
+                      />
+                      {goUserName === false && (
+                        <span className="warning">
+                          환불 받으실 분의 성명을 입력해주세요.
+                        </span>
+                      )}
+                    </div>
+                    <div className="refund-input">
+                      <label htmlFor="은행">은행</label>
+                      <select
+                        name="refund-bank"
+                        className="refund-bank-select"
+                        onChange={(e) => setBank(e.target.value)}
+                      >
+                        <option disabled selected>
+                          은행 선택
+                        </option>
+                        <option value="부산은행">부산은행</option>
+                        <option value="우리은행">우리은행</option>
+                        <option value="KB국민은행">KB국민은행</option>
+                        <option value="경남은행">경남은행</option>
+                        <option value="NH농협">NH농협</option>
+                        <option value="하나은행">하나은행</option>
+                        <option value="카카오뱅크">카카오뱅크</option>
+                      </select>
+                      {goBank === false && (
+                        <span className="warning">은행을 선택해주세요.</span>
+                      )}
+                    </div>
+                    <div className="refund-input">
+                      <label htmlFor="계좌번호">계좌번호</label>
+                      <input
+                        className="input-small"
+                        type="text"
+                        name="계좌번호"
+                        value={account}
+                        onChange={(e) => setAccount(e.target.value)}
+                        placeholder="계좌번호"
+                      />
+                      {goAccount === false && (
+                        <span className="warning">
+                          환불 받을 계좌를 입력해주세요.
+                        </span>
+                      )}
                     </div>
                   </div>
-                ) : (
-                  ''
-                )}
+                  <div className="button-div">
+                    <button
+                      className="button-refund"
+                      onClick={() => refund(orderId)}
+                    >
+                      환불 요청
+                    </button>
+                  </div>
+                </div>
               </div>
-              {getBtnType(
-                order.state,
-                order.gift_product_id,
-                order.id,
-                order.wishId,
-                order.gift_gift_id,
-              )}
             </div>
           ))}
         </>
@@ -385,4 +342,4 @@ const OrderInfo = () => {
     </div>
   );
 };
-export default OrderInfo;
+export default Refund;
