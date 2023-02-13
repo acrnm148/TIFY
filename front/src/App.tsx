@@ -29,10 +29,10 @@ import { Friend } from './pages/mypage/MyFriend';
 import { MyInfo } from './pages/mypage/MyInfo';
 import { PhoneBook } from './pages/mypage/PhoneBook';
 import OrderList from './components/OrderList';
+import Refund from './components/Refund';
 import { CongratsPage } from './pages/CongratsPage';
 import { CongratsPayPage } from './pages/CongratsPayPage';
 import { CongratsCardPage } from './pages/CongratsCardPage';
-import { Delivery } from './components/Delivery';
 
 import { Footer } from './fixture/Footer';
 import { MainPage } from './pages/MainPage';
@@ -113,9 +113,8 @@ function App() {
             <Route path="friend" element={<Friend />} />
             <Route path="info" element={<MyInfo />} />
             <Route path="phone" element={<PhoneBook />} />
-            <Route path="order" element={<OrderList />}>
-              <Route path="delivery" element={<Delivery />} />
-            </Route>
+            <Route path="order" element={<OrderList />} />
+            <Route path="refund/:orderId" element={<Refund />} />
           </Route>
           <Route path="/checkwish" element={<CheckWishPage />} />
           <Route path="/thanks/:wishId/:conId" element={<ThanksPage />} />
