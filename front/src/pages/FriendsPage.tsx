@@ -22,6 +22,17 @@ const FriendsPage: React.FC = () => {
   const [users, setUsers] = useState<Array<User>>([]);
   const [selectedUserId, setSelectedUserId] = useState<number>(0);
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handleNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+  
+  
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
@@ -119,6 +130,7 @@ const FriendsPage: React.FC = () => {
       setRefresh(!refresh);
     } catch (error) {}
   };
+  
 
   return (
     <div className="backcolor">
@@ -143,15 +155,15 @@ const FriendsPage: React.FC = () => {
         </div>
 
         <div className="friend-list">
-          {users.map((user) => (
+          {users.slice((currentPage - 1) * 8, currentPage * 8).map((user) => (
             <div
-              className="w-1/5 p-6 mx-6 my-2 items-center justify-center flex flex-col cardcolor cardsize"
+              className="w-1/5 p-6 mx-3 my-2 items-center justify-center flex flex-col cardcolor cardsize"
               key={user.id}
             >
               <img className="img-4" src={user.profileImg} />
-              <p className="w-96 text-lg text-center">{user.name}</p>
-              <p className="w-96 text-center">{user.nickname}</p>
-              <p className="w-96 text-xs text-center">
+              <b><p className="w-96 text-xl text-center text-1">{user.name}</p></b>
+              <p className="w-96 text-center text-2">{user.nickname}</p>
+              <p className="w-96 text-xs text-center text 2">
                 {user.id === userPk ? (
                   <p>본인</p>
                 ) : user.state === 'ACCEPTED' ? (
@@ -204,8 +216,28 @@ const FriendsPage: React.FC = () => {
           ))}
         </div>
       </div>
+      {users.length > 0 &&
+      <div className="pagination-container">
+        <button
+          className="pagination-btn bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+          onClick={handlePrevPage}
+          disabled={currentPage === 1}
+        >
+          Prev
+        </button>
+        <span className="pagination-text bg-gray-500 font-bold py-2 px-3 rounded-full">
+          {currentPage} / {Math.ceil(users.length / 8)}
+        </span>
+        <button
+          className="pagination-btn bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+          onClick={handleNextPage}
+          disabled={currentPage === Math.ceil(users.length / 8)}
+        >
+          Next
+        </button>
+      </div>}
     </div>
-  );
+    );
 };
 
 interface UserSearchBarProps {

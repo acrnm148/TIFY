@@ -24,6 +24,8 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
     private Long wishId;
+    private Long gift_gift_id;
+    private Long gift_product_id;
     private String wishName;
     private String giftImgUrl;
     private String wishFinishDate;
@@ -49,7 +51,9 @@ public class Order {
     private String refUserAccount; //환불 계좌
 
     @Builder
-    public Order(String refState, String refUserName, String refUserBank, String refUserAccount, String userOption, String giftImgUrl, String wishFinishDate, String wishName, Long wishId, String deliveryNumber, User user, Gift gift, String tel, int gatheredPrice, int orderPrice, int state, LocalDateTime createdTime, String createdDt, String giftName) {
+    public Order(Long gift_gift_id, Long gift_product_id, String refState, String refUserName, String refUserBank, String refUserAccount, String userOption, String giftImgUrl, String wishFinishDate, String wishName, Long wishId, String deliveryNumber, User user, Gift gift, String tel, int gatheredPrice, int orderPrice, int state, LocalDateTime createdTime, String createdDt, String giftName) {
+        this.gift_gift_id= gift_gift_id;
+        this.gift_product_id = gift_product_id;
         this.refState = refState;
         this.refUserName = refUserName;
         this.refUserBank = refUserBank;

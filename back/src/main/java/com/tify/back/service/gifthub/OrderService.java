@@ -115,6 +115,8 @@ public class OrderService {
         //주문 생성
         Order order = orderRepository.save(
                 Order.builder()
+                        .gift_gift_id(gift.getId())
+                        .gift_product_id(gift.getProductId())
                         .userOption(gift.getUserOption())
                         .giftImgUrl(gift.getGiftImgUrl())
                         .giftName(gift.getGiftname())

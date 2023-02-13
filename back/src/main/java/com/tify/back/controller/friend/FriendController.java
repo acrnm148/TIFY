@@ -126,5 +126,4 @@ public class FriendController {
         List<FriendEmailDto> responseDto = friendService.getFriendsEmail(userId);
         return ResponseEntity.ok().body(responseDto);
     }
-
 }
