@@ -7,7 +7,7 @@
 
 .joined-wish-div > .joined-wish-box {
   width: 500px;
-  height: 250px;
+  /* height: 250px; */
   padding: 30px;
   margin-bottom: 20px;
 }
@@ -22,12 +22,14 @@
   text-align: right;
   font-size: 14px;
   color: #fe3360;
+  font-weight: bold;
 }
 
 .joined-wish-box > .p-done {
   text-align: right;
   font-size: 14px;
-  color: #a1a3a2;
+  /* color: #a1a3a2; */
+  font-weight: bold;
 }
 
 .joined-wish-box > .category-div {
@@ -66,4 +68,32 @@
 .button-div > .button-card {
   border-color: #c1c1c1;
   color: #c1c1c1;
+}
+
+.opened-detail-div {
+  margin-top: 20px;
+}
+
+.opend-detail-gift-container {
+  width: 100%;
+  display: flex;
+}
+
+.opend-detail-gift-div {
+}
+
+.opened-detail-gift {
+  width: 130px;
+  height: 130px;
+  filter: brightness(50%);
+  border-radius: 10px;
+  margin-right: 5px;
+  border: 1px solid black;
+}
+
+.gift-name-div {
+  position: absolute;
+  /* top: 50%; */
+  text-align: center;
+  background-color: yellow;
 }

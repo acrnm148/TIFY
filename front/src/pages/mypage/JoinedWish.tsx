@@ -47,6 +47,9 @@ export function Joined() {
     (state: RootState) => state.authToken.accessToken,
   );
   const [joinedWishList, setJoinedWishList] = useState<Array<JoinedWish>>();
+  // 어떤 카드의 보낸 선물/ 축하카드를 보고 있는지
+  const [opened, setOpened] = useState('');
+  const [giftOrCard, setGiftOrCard] = useState('');
 
   useEffect(() => {
     getData();
@@ -66,6 +69,90 @@ export function Joined() {
       console.error(error);
     }
   };
+
+  function JoinedWishCardActive(props: { joinedWish: JoinedWish }) {
+    const joinedWish = props.joinedWish;
+
+    let diff =
+      new Date(joinedWish.wishEndDate).getTime() - new Date().getTime();
+    const restDay = Math.floor(diff / (1000 * 60 * 60 * 24)); // 오늘 날짜랑 계산해서 몇일남았는지
+
+    console.log(joinedWish, '조인드위시 내용');
+
+    const OpenCard = (
+      event: React.MouseEvent<HTMLButtonElement>,
+      wishId: string,
+    ) => {
+      event.preventDefault();
+      setOpened(wishId);
+      setGiftOrCard('card');
+    };
+
+    const OpenGift = (
+      event: React.MouseEvent<HTMLButtonElement>,
+      wishId: string,
+    ) => {
+      event.preventDefault();
+      setOpened(wishId);
+      setGiftOrCard('gift');
+    };
+
+    return (
+      <div className="joined-wish-box shadow-xl">
+        {joinedWish.wishFinishYN == 'Y' ? (
+          <>
+            <p className="p-date">
+              완료 후{' '}
+              <span style={{ fontWeight: 'bold', color: 'black' }}>
+                {-restDay}
+              </span>
+              일
+            </p>
+            <p className="p-done">완료</p>
+          </>
+        ) : (
+          <>
+            <p className="p-date">
+              완료까지
+              <span style={{ fontWeight: 'bold', color: '#fe3360' }}>
+                {' '}
+                {restDay}
+              </span>
+              일
+            </p>
+            <p className="p-proceed">진행중</p>
+          </>
+        )}
+        <div className="category-div">
+          <Categorize category={joinedWish.wishCategory}></Categorize>
+          <p className="joined-wish-title">{joinedWish.wishName}</p>
+        </div>
+        <div className="button-div">
+          <button
+            className="button-gift"
+            onClick={(e) => OpenGift(e, joinedWish.wishId)}
+          >
+            보낸 선물
+          </button>
+          <button
+            className="button-card"
+            onClick={(e) => OpenCard(e, joinedWish.wishId)}
+          >
+            보낸 축하 카드
+          </button>
+        </div>
+        {/* <div style={{ backgroundColor: 'black', height: '200px' }}></div> */}
+        {joinedWish.wishId == opened ? (
+          <OpenedDetails
+            giftOrCard={giftOrCard}
+            joinedWish={joinedWish}
+          ></OpenedDetails>
+        ) : (
+          <></>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -88,36 +175,38 @@ export function Joined() {
   );
 }
 
-function JoinedWishCardActive(props: { joinedWish: JoinedWish }) {
+function OpenedDetails(props: { joinedWish: JoinedWish; giftOrCard: string }) {
   const joinedWish = props.joinedWish;
-  console.log(joinedWish, '조인드위시 내용');
+  const giftOrCard = props.giftOrCard;
 
-  return (
-    <div className="joined-wish-box shadow-xl">
-      {joinedWish.wishFinishYN == 'Y' ? (
-        <>
-          <p className="p-date">완료 후 n일</p>
-          <p className="p-done">완료</p>
-        </>
-      ) : (
-        <>
-          <p className="p-date">완료까지 n일</p>
-          <p className="p-proceed">진행중</p>
-        </>
-      )}
-      <div className="category-div">
-        <Categorize category={joinedWish.wishCategory}></Categorize>
-        <p className="joined-wish-title">"a"</p>
+  console.log(joinedWish);
+  if (giftOrCard == 'gift') {
+    return (
+      <div className="opened-detail-div">
+        {/* 슬라이드바 넣을 부분 */}
+        <div className="opend-detail-gift-container">
+          {joinedWish.myCelebDtoList.map((gift: CelebPayData) => {
+            return (
+              <div className="opend-detail-gift-div">
+                <img className="opened-detail-gift" src={gift.giftImgUrl}></img>
+                <div className="gift-name-div">
+                  <p className="gift-name-p">{gift.giftName}</p>
+                </div>
+              </div>
+            );
+          })}
+          {giftOrCard}
+        </div>
       </div>
-      <div className="button-div">
-        <button className="button-gift">보낸 선물</button>
-        <button className="button-card">보낸 축하 카드</button>
-      </div>
-    </div>
-  );
+    );
+  } else if (giftOrCard == 'card') {
+    return <div className="opened-detail-div">{giftOrCard}</div>;
+  } else {
+    return <></>;
+  }
 }
 
-function Categorize({ category }: { category: any }) {
+function Categorize({ category }: { category: string }) {
   if (category == '생일') {
     return <img src={iconCategory1Birthday} alt="" />;
   } else if (category == '결혼') {
@@ -133,21 +222,4 @@ function Categorize({ category }: { category: any }) {
   } else {
     return <img src={iconCategory7Etc} alt="" />;
   }
-}
-
-function JoinedWishCardDeactive(props: { title: string }) {
-  return (
-    <div className="joined-wish-box shadow-xl">
-      <p className="p-date">22.01.02 ~ 22.01.26</p>
-      <p className="p-done">완료</p>
-      <div className="category-div">
-        <img src={iconCategory1Birthday} alt="" />
-        <p className="joined-wish-title">"{props.title}"</p>
-      </div>
-      <div className="button-div">
-        <button className="button-gift">보낸 선물</button>
-        <button className="button-card">보낸 축하 카드</button>
-      </div>
-    </div>
-  );
 }
