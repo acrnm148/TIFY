@@ -79,7 +79,6 @@
 .backcolor {
   background-color: #fff1ef;
   width: 100vw;
-  height: 23vw;
 }
 
 .탭-이-름 {
@@ -87,20 +86,11 @@
   width: 306px;
 }
 .text-1 {
-  text-align: left;
-  vertical-align: top;
-  font-size: 32px;
-  font-family: NanumGothic;
-  line-height: auto;
-  color: #fe3360;
+  margin-top: 20px;
 }
 .text-2 {
-  text-align: left;
-  vertical-align: top;
-  font-size: 14px;
-  font-family: NanumGothic;
-  line-height: auto;
-  color: #fe3360;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
 .line-3 {
   transform: rotate(-90deg);
@@ -162,5 +152,30 @@
 }
 
 .cardsize {
+  width: 15vw;
+  height: 15vw;
   border-radius: 8px;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination-btn {
+  border: 1px solid #c1c1c1;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin: 0 10px;
+  background-color: #fff1ef;
+}
+
+.pagination-text {
+  font-size: 14px;
+  margin: 0 10px;
+}
+
+.pagination-btn[disabled] {
+  opacity: 0.5;
 }
