@@ -23,6 +23,8 @@ const FriendsPage: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState<number>(0);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchPerformed, setSearchPerformed] = useState(false);
+  const [totalSearched, setTotalSearched] = useState(0);
 
   const handleNextPage = () => {
     setCurrentPage(currentPage + 1);
@@ -40,7 +42,13 @@ const FriendsPage: React.FC = () => {
   useEffect(() => {
     handleSubmit();
   }, [refresh]);
+
+
   const handleSubmit = async () => {
+    if (!nickname.trim().length) {
+      return;
+    }
+    setSearchPerformed(true);
     try {
       const response = await axios.get(
         `https://i8e208.p.ssafy.io/api/searchuser/${nickname}`,
@@ -53,6 +61,7 @@ const FriendsPage: React.FC = () => {
       );
       const friends = response.data;
 
+      setTotalSearched(friends.length);
       setUsers([...friends]);
     } catch (error) {}
   };
@@ -130,6 +139,8 @@ const FriendsPage: React.FC = () => {
       setRefresh(!refresh);
     } catch (error) {}
   };
+
+  
   
 
   return (
@@ -154,6 +165,13 @@ const FriendsPage: React.FC = () => {
           />
         </div>
 
+      {searchPerformed && !users.length && (
+        <p className="text-center text-xl text-2">일치하는 사용자가 없습니다 다시 검색해주세요</p>
+      )}
+      {searchPerformed && users.length > 0 && (
+  <b><p className="text-center text-xl text-2">일치하는 사용자: {totalSearched}명</p></b>
+      )}
+      {users.length > 0 &&
         <div className="friend-list">
           {users.slice((currentPage - 1) * 8, currentPage * 8).map((user) => (
             <div
@@ -214,7 +232,7 @@ const FriendsPage: React.FC = () => {
               </p>
             </div>
           ))}
-        </div>
+        </div>}
       </div>
       {users.length > 0 &&
       <div className="pagination-container">
