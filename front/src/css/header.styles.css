@@ -16,7 +16,7 @@
   display: fixed;
   padding: 20px;
   width: 100vw;
-  font-family: 'Nanum Gothic', sans-serif;
+  /* font-family: 'Nanum Gothic', sans-serif; */
   left: 0;
   top: 0;
   display: flex;
@@ -33,7 +33,7 @@
 .nav-cate {
   all: unset;
   /* position: absolute; */
-  font-family: 'NanumGothic';
+  /* font-family: 'NanumGothic'; */
   font-style: normal;
   font-size: 16px;
   line-height: 22px;
