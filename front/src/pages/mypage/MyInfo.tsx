@@ -548,7 +548,7 @@ export function MyInfo() {
               (enroll_company?.zonecode?.length > 0) &&
               (telCehck().length < 1) && 
               nickDubCheck && 
-              (username.length > 0) ) ? 'loginButton font-bold secondary' : 'loginButton-d font-bold'}`} 
+              (username.length > 0) ) ? 'loginButton font-bold' : 'loginButton-d font-bold'}`} 
             disabled={
                 !( (enroll_company?.address?.length > 0) &&
                 (enroll_company?.zonecode?.length > 0) &&
@@ -614,7 +614,7 @@ export function MyInfo() {
           <button type="submit" 
             className={`${ ( 
               (password2 == confirmPassword2) && 
-              (pwCheck5().length < 1) ) ? 'loginButton font-bold secondary' : 'loginButton-d font-bold'}`}
+              (pwCheck5().length < 1) ) ? 'loginButton font-bold' : 'loginButton-d font-bold'}`}
             disabled={
               !(
                 password2 === confirmPassword2 &&
