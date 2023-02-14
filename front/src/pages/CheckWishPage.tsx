@@ -22,6 +22,7 @@ import '../css/styles.css';
 import '../css/checkWishPage.styles.css';
 import gift from '../assets/iconGift.svg';
 import { Bool, List } from 'reselect/es/types';
+import GiftBoxAnimation from '../components/GiftBoxAnimation';
 
 
 export function CheckWishPage() {
@@ -257,6 +258,7 @@ const CongratsCards = (props: {
     <div className="ongoing-wishes">
       <Slider {...settings} className="congrat-card-list">
       {props.fromList &&
+        // 캐러셀 한 페이지에 8개씩 담기도록 반복문 수정..!
           props.fromList.map((from: { id: any; from: string }, i: number) => (
             <NavLink
               to={`/thanks/${props.wishId}/${from.id}`}
@@ -293,10 +295,12 @@ const CongratsCards = (props: {
                 </h1>
                 <h1>"{lst.title}"</h1>
               </NavLink> */}
-              {/* <div className="wish-open wish-on-going-background">
-                  
-                  위시 오픈 애니메이션
-                </div> */}
+              <div className="wish-open wish-on-going-background">
+                클릭하세요!
+                <GiftBoxAnimation />
+                  {/* <iframe style={{height: "200%",width: "500px"}} src="https://embed.lottiefiles.com/animation/64058"></iframe> */}
+                  {/* 위시 오픈 애니메이션 */}
+                </div>
             </div>
           );
         })}
