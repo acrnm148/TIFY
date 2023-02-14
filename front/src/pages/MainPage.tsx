@@ -9,7 +9,6 @@ import '../css/styles.css';
 
 // scroll animation
 import { Animator, ScrollContainer, ScrollPage, batch, Fade, FadeIn, FadeOut, Move, MoveIn, MoveOut, Sticky, StickyIn, StickyOut, Zoom, ZoomIn, ZoomOut } from "react-scroll-motion";
-import thisIsForYou from '../assets/main/thisIsForYou.svg'
 import TIFYphone from "../assets/main/TIFYphone.svg"
 import 마음을모아 from "../assets/main/마음을모아.svg"
 import { Footer } from '../fixture/Footer';
@@ -108,7 +107,7 @@ export function MainPage() {
           <Animator animation={batch(MoveOut(-500, 0), FadeOut())}>Good bye ✋🏻</Animator>
         </div>
         <div>
-          <Animator animation={batch(FadeIn(0, -200), Sticky())}><img src={thisIsForYou} alt="" /></Animator>
+          {/* <Animator animation={batch(FadeIn(0, -200), Sticky())}><img src={} alt="" /></Animator> */}
         </div>
       
       </Animator>
