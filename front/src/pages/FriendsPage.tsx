@@ -7,6 +7,10 @@ import '../css/giftHubPage.styles.css';
 import GiftBoxAnimation from '../components/GiftBoxAnimation';
 import TapNameEng from '../components/TapNameEng';
 
+// alarm
+import { push, ref } from "firebase/database";
+import { db } from '../components/firebase';
+
 interface User {
   id: number;
   name: string;
@@ -25,6 +29,46 @@ const FriendsPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [totalSearched, setTotalSearched] = useState(0);
+
+
+     
+  // 친구요청알림부분
+  // 알림보낼 유저정보 받아오는부분
+  const [userProfile, setUserProfile] = useState<string>()
+  const [username ,setUserName] = useState<string>()
+  const pushData = (friendId:number, userId:number) => {
+		let base = "/test/tify/"; 
+    push(ref(db, base + friendId), {
+      text: username+'님이 친구요청을 보냈습니다.',
+      profile : userProfile,
+      interval: "Daily",
+      friend: 'req',
+      friendName : username,
+      friendId : userId,
+    });
+    console.log('친구요청보냄')
+  };
+// 알림보낼 때 필요한 프로필 사진 받는 부분
+ useEffect(()=>{
+    const getUser = async () =>{
+      const API_URL = `https://i8e208.p.ssafy.io/api/account/userInfo`
+      axios({
+        method: 'get',
+        url: API_URL,
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+        .then((con: { data: { profileImg: React.SetStateAction<string | undefined>; addr1: React.SetStateAction<string | undefined>; addr2: React.SetStateAction<string | undefined>; zipcode: React.SetStateAction<number | undefined>; username: React.SetStateAction<string | undefined>; }; }) => {
+          console.log('유저프로필 불러오기 성공',con.data);
+          setUserProfile(con.data.profileImg)
+          setUserName(con.data.username)
+        })
+        .catch((err: any) => {
+          console.log('유저프로필 불러오기 실패', err);
+        });
+    }
+    getUser();
+ },[])
+
 
   const handleNextPage = () => {
     setCurrentPage(currentPage + 1);
@@ -84,9 +128,11 @@ const FriendsPage: React.FC = () => {
       console.log(response.data);
       setUsers([...users]);
       setRefresh(!refresh);
+      // 친구수락 받는 사람한테 알림
+      pushData(userId, userPk)
     } catch (error) {}
   };
-
+ 
   const handleAcceptFriend = async (friendId: number) => {
     try {
       const response = await axios.post(
@@ -104,6 +150,9 @@ const FriendsPage: React.FC = () => {
       );
       console.log(response.data);
       setRefresh(!refresh);
+
+      // 친구요청 받는 사람한테 알림
+      pushData(friendId, userPk)
     } catch (error) {
       console.log(error);
     }

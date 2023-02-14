@@ -29,7 +29,7 @@ export function CongratsPage() {
         },
       })
       .then((res: { data: {
-        giftItems: any; user: { username: SetStateAction<string>; }; category: SetStateAction<string>; title: SetStateAction<string>; content: SetStateAction<string>; cardImageCode: SetStateAction<string>, userId:number; 
+        giftItems: any; user: { username: SetStateAction<string>, id:number }; category: SetStateAction<string>; title: SetStateAction<string>; content: SetStateAction<string>; cardImageCode: SetStateAction<string>, userId:number; 
 }; }) => {
         console.log('위시 상세 정보', res.data);
         setUserName(res.data.user.username);
@@ -37,7 +37,7 @@ export function CongratsPage() {
         setTitle(res.data.title);
         setContent(res.data.content);
         setCard(res.data.cardImageCode);
-        setWishUserId(res.data.userId)
+        setWishUserId(res.data.user.id)
 
         setWishGiftList(
           res.data.giftItems.map(
