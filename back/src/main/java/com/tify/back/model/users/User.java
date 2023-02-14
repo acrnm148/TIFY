@@ -54,7 +54,7 @@ public class User {
     private RefreshToken jwtRefreshToken;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Cart cart;
 
 
@@ -86,7 +86,4 @@ public class User {
     }
 
     public void emailVerifiedSuccess() {this.emailAuth = true;}
-
-
-
 }

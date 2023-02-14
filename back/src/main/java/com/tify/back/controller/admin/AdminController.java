@@ -1,5 +1,8 @@
 package com.tify.back.controller.admin;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import com.tify.back.dto.admin.EditWishDto;
 import com.tify.back.dto.admin.OrderStateDto;
 import com.tify.back.dto.admin.UserListMap;
@@ -9,7 +12,6 @@ import com.tify.back.model.customerservice.QnA;
 import com.tify.back.model.gifthub.Cart;
 import com.tify.back.model.gifthub.Gift;
 import com.tify.back.model.gifthub.Order;
-import com.tify.back.model.gifthub.Product;
 import com.tify.back.model.users.User;
 import com.tify.back.model.wish.Wish;
 import com.tify.back.repository.customerservice.FAQRepository;
@@ -24,17 +26,19 @@ import com.tify.back.service.users.UserService;
 import com.tify.back.service.wish.WishService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostAuthorize;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -244,5 +248,31 @@ public class AdminController {
         Pageable pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("createdTime").ascending());
         return orderRepository.findAll(pageable);
     }
+
+    @GetMapping("/coupang")
+    public String getResponseFromUrl() throws IOException {
+        String url = "https://www.coupang.com/vp/products/6750315320?vendorItemId=82998649313&sourceType=HOME_PERSONALIZED_ADS&searchId=feed-98f09a63b90a41be901f9334da17a552-personalized_ads&clickEventId=3531b3cc-d3c8-4c35-b016-81f11f3b51cd&isAddedCart=";
+
+        // Get product page HTML using OkHttp
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        Response response = client.newCall(request).execute();
+        String html = response.body().string();
+
+        // Parse HTML using Jsoup
+        Document doc = Jsoup.parse(html);
+        Element priceElement = doc.selectFirst("div.prod-price > span.origin-price, div.prod-price > span.total-price");
+        String price = priceElement.text().replaceAll("[^\\d]", "");
+        Element imageElement = doc.selectFirst("#repImageContainer > img");
+        String imageSrc = imageElement.attr("src");
+
+        // Add data to model and return view
+        System.out.println(price);
+        System.out.println(imageSrc);
+        return "product";
+    }
+
 }
 
