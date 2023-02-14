@@ -41,12 +41,13 @@ const CATEGORY_DATA = [
 ];
 
 export function GiftHubPage() {
+  const [filterState, setFilterState] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [category, setCategory] = useState<number | null>();
   let [giftList, setGiftList] = useState<Array<any>>([]);
   const [sortingCode, setSortingCode] = useState<string | number | null>();
   // Slider 설정
-  const [min, max] = [0, 10000000];
+  const [min, max] = [0, 2000000];
   const [priceRange, setPriceRange] = useState([min, max]);
   const step = 1000;
   const [value, setValue] = useState<number[]>([min, max]);
@@ -199,17 +200,44 @@ export function GiftHubPage() {
     setNowLastNum(nowStartNum - 1);
     setNowStartNum(target);
   };
+  const [toggleBtn, setToggleBtn] = useState(true);
+  const handleScroll = () => {
+    const { scrollY } = window;
+
+    scrollY > 200 ? setToggleBtn(true) : setToggleBtn(false);
+  };
+
+  // scroll 이벤트 발생 시 이를 감지하고 handleScroll 함수를 실행
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+  const MoveToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  const TO_TOP_IMG =
+    'https://tifyimage.s3.ap-northeast-2.amazonaws.com/31163872-7117-4801-b62a-4d4dffa3097e.png';
+  const X_IMG =
+    'https://tifyimage.s3.ap-northeast-2.amazonaws.com/c3753f08-9751-457b-be37-cd7ff1e73a2d.png';
+  const FILTER_IMG =
+    'https://tifyimage.s3.ap-northeast-2.amazonaws.com/8969870e-4294-4e69-85c4-b915eab2025a.png';
+  const LEFT_IMG =
+    'https://tifyimage.s3.ap-northeast-2.amazonaws.com/c24b625a-30cd-4b39-ad0a-0d7ffddf64c3.png';
+  const RIGHT_IMG =
+    'https://tifyimage.s3.ap-northeast-2.amazonaws.com/a213c7ad-2bc9-489c-87f1-3be671f007f4.png';
   return (
     <div className="gifthub-page-con-continer">
       <div className="gifthub-page-continer">
-        <GiftHubCategory propFunction={getCategory} goCategory={category} />
         <SearchBar propFunction={getQuery} initailQuery={searchQuery} />
         <div className="filter-bar-container">
           <div className="filter-bar">
             <div className="slider-container">
               <div className="slider-numbers">
                 <div className="slider-con-numbers-range">
-                  <p>가격범위설정</p>
+                  <p className="p-slider-con-price">가격</p>
                   <div className="slider">
                     <Slider
                       getAriaLabel={() => 'Temperature range'}
@@ -240,18 +268,25 @@ export function GiftHubPage() {
                   </div>
                 </div>
                 <div className="slider-filter">
-                  <img
+                  <div
                     onClick={() => {
                       setSearchPrice([priceRange[0], priceRange[1]]);
                       setPage(0);
+                      setFilterState(true);
+                      console.log(filterState);
                     }}
-                    src={iconFilter}
-                    alt=""
-                  />
+                  >
+                    <img
+                      className={filterState === true ? 'selectedFilter' : ''}
+                      src={FILTER_IMG}
+                      alt=""
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          <GiftHubCategory propFunction={getCategory} goCategory={category} />
         </div>
 
         <div className="gift-sortig">
@@ -260,7 +295,9 @@ export function GiftHubPage() {
               {giftList.length > 0 && searchQuery && (
                 <div className="filter-show">
                   {searchQuery}
-                  <span onClick={() => setSearchQuery('')}>x</span>
+                  <span onClick={() => setSearchQuery('')}>
+                    <img src={X_IMG} className="xImg" />
+                  </span>
                 </div>
               )}
               {giftList.length > 0 && searchPrice[0] !== 0 && (
@@ -275,13 +312,14 @@ export function GiftHubPage() {
                       setComval([String(min), v[1].toLocaleString('ko-KR')]);
                     }}
                   >
-                    x
+                    원
+                    <img src={X_IMG} className="xImg" />
                   </span>
                 </div>
               )}
               {giftList.length > 0 && searchPrice[1] !== max && (
                 <div className="filter-show">
-                  최대가격{searchPrice[1]}
+                  최대 {searchPrice[1]}
                   <span
                     onClick={() => {
                       const v = [priceRange[0], max];
@@ -291,14 +329,17 @@ export function GiftHubPage() {
                       setComval([v[0].toLocaleString('ko-kr'), String(max)]);
                     }}
                   >
-                    x
+                    원
+                    <img src={X_IMG} className="xImg" />
                   </span>
                 </div>
               )}
               {giftList.length > 0 && category && (
                 <div className="filter-show">
                   {CATEGORY_DATA[category].name}
-                  <span onClick={() => setCategory(null)}>x</span>
+                  <span onClick={() => setCategory(null)}>
+                    <img src={X_IMG} className="xImg" />
+                  </span>
                 </div>
               )}
             </div>
@@ -313,6 +354,7 @@ export function GiftHubPage() {
                   // value={sortingCode}
                   onChange={handleFilterChange}
                   label="인기순"
+                  className="gift-select-sort"
                 >
                   <MenuItem value="">
                     <em>선택안함</em>
@@ -328,7 +370,7 @@ export function GiftHubPage() {
         <div className="gift-sortig"></div>
         <div></div>
 
-        <div>
+        <div className="gift-wrap-box">
           {giftList.length > 0 ? (
             <div className="gift-list-con-container">
               <div className="gift-list-container">
@@ -350,14 +392,20 @@ export function GiftHubPage() {
           )}
           {giftList.length > 0 && (
             <ul className="page-btns">
-              <div onClick={() => GoToBeforePage()}>좌</div>
+              <div onClick={() => GoToBeforePage()}>
+                <img src={LEFT_IMG} className="leftPage" />
+              </div>
               <PageButtons totalPages={totalPages} />
-              <button onClick={() => GoToNextPage()}>우</button>
+              <button onClick={() => GoToNextPage()}>
+                <img src={RIGHT_IMG} className="rightPage" />
+              </button>
             </ul>
           )}
         </div>
       </div>
-      <div className="to-top">TOP</div>
+      <div className="to-top">
+        <img src={TO_TOP_IMG} onClick={MoveToTop} />
+      </div>
     </div>
   );
 }
