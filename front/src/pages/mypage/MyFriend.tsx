@@ -538,7 +538,7 @@ function WishCard({ friendWish }: any) {
           <div className="gift-bar-gray" style={{ width: 'auto' }}>
             <div
               style={{
-                width: friendWish.percent,
+                width: `${friendWish.percent}%`,
                 backgroundColor: '#FE3360',
                 height: 'inherit',
                 borderRadius: '5px',

@@ -7,9 +7,13 @@ import iconCategory6Unmarried from '../../assets/category/iconCategory6Unmarried
 import iconCategory7Etc from '../../assets/category/iconCategory7Etc.svg';
 import '../../css/Joined.styles.css';
 
+import circleArrowL from '../../assets/iconArrowLeft.svg';
+import circleArrowR from '../../assets/iconArrowRight.svg';
+
 import { useEffect, useState, memo } from 'react';
 import axios from 'axios';
 import { RootState } from '../../store/Auth';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 interface CelebData {
@@ -72,6 +76,7 @@ export function Joined() {
 
   function JoinedWishCardActive(props: { joinedWish: JoinedWish }) {
     const joinedWish = props.joinedWish;
+    const navigate = useNavigate();
 
     let diff =
       new Date(joinedWish.wishEndDate).getTime() - new Date().getTime();
@@ -105,13 +110,17 @@ export function Joined() {
       setGiftOrCard('gift');
     };
 
+    const GoToDetailCongrat = () => {
+      navigate(`/congrats/${joinedWish.wishId}`);
+    };
+
     return (
       <div
         className={`joined-wish-box
       shadow-xl`}
-        style={{
-          height: joinedWish.wishId === opened ? '400px' : '250px',
-        }}
+        // style={{
+        //   height: joinedWish.wishId === opened ? '400px' : '250px',
+        // }}
       >
         {joinedWish.wishFinishYN == 'Y' ? (
           <>
@@ -132,17 +141,27 @@ export function Joined() {
         )}
         <div className="category-div">
           <Categorize category={joinedWish.wishCategory}></Categorize>
-          <p className="joined-wish-title">{joinedWish.wishName}</p>
+          <p className="joined-wish-title" onClick={() => GoToDetailCongrat()}>
+            {joinedWish.wishName}
+          </p>
         </div>
         <div className="button-div">
           <button
-            className="button-gift"
+            className={
+              giftOrCard == 'gift' && joinedWish.wishId == opened
+                ? 'active-button-gift'
+                : 'button-gift'
+            }
             onClick={(e) => OpenGift(e, joinedWish.wishId)}
           >
             보낸 선물
           </button>
           <button
-            className="button-card"
+            className={
+              giftOrCard == 'card' && joinedWish.wishId == opened
+                ? 'active-button-card'
+                : 'button-card'
+            }
             onClick={(e) => OpenCard(e, joinedWish.wishId)}
           >
             보낸 축하 카드
@@ -171,10 +190,6 @@ export function Joined() {
               ></JoinedWishCardActive>
             );
           })}
-        {/* 
-        <JoinedWishCardActive title="hello"></JoinedWishCardActive>
-        <JoinedWishCardActive title="hello"></JoinedWishCardActive>
-        <JoinedWishCardDeactive title="hello"></JoinedWishCardDeactive> */}
       </div>
     </div>
   );
@@ -190,20 +205,29 @@ function OpenedDetails(props: { joinedWish: JoinedWish; giftOrCard: string }) {
   console.log(cards, '얘네가 들어갈 듯');
   const [cardIndex, setCardIndex] = useState<number>(0);
   const card = cards[cardIndex];
+  const maxLength = cards.length;
+
+  const MinusIndex = () => {
+    setCardIndex(cardIndex - 1);
+  };
+
+  const PlusIndex = () => {
+    setCardIndex(cardIndex + 1);
+  };
 
   const ThanksReply = () => {
     return (
       <div>
         {/* <h1>보낸 감사카드</h1> */}
-        <div className="con-card-detail">
-          <div className="con-card">
-            <div className="tofrom">{card.celebFrom}</div>
+        <div className="joined-con-card-detail">
+          <div className="joined-con-card">
+            <div className="joined-tofrom">{card.celebFrom}</div>
             <img
-              className="con-photo"
+              className="joined-con-photo"
               src={card.celebImg ? card.celebImg : ''}
-              alt="감사카드 이미지"
+              alt="축하카드 이미지"
             />
-            <div className="con-text">{card.celebContent}</div>
+            <div className="joined-con-text">{card.celebContent}</div>
             {/* <div className='userName tofrom'>전송된 연락처 : {card.}</div> */}
           </div>
         </div>
@@ -239,8 +263,39 @@ function OpenedDetails(props: { joinedWish: JoinedWish; giftOrCard: string }) {
   } else if (giftOrCard == 'card') {
     return (
       <div className="opened-detail-div">
-        {giftOrCard}
+        {/* <div className="arrow" onClick={() => setGetEmit(!getEmit)}>
+          {left !== null && (
+            <NavLink to={`/thanks/${wishId}/${left}`} state={[...state]}>
+              <img src={circleArrowL} alt="원형 화살표 좌" />
+              </NavLink>
+              )}
+            </div> */}
+        <div className="joined-arrow">
+          {cardIndex !== 0 && (
+            <img
+              src={circleArrowL}
+              alt="원형 화살표 좌"
+              onClick={() => MinusIndex()}
+            />
+          )}
+        </div>
         <ThanksReply />
+        <div className="joined-arrow">
+          {cardIndex < maxLength - 1 && (
+            <img
+              src={circleArrowR}
+              alt="원형 화살표 우"
+              onClick={() => PlusIndex()}
+            />
+          )}
+        </div>
+        {/* <div className="arrow" onClick={() => setGetEmit(!getEmit)}>
+          {right !== null && (
+            <NavLink to={`/thanks/${wishId}/${right}`} state={[...state]}>
+              <img src={circleArrowR} alt="원형 화살표 우" />
+            </NavLink>
+          )}
+        </div> */}
       </div>
     );
   } else {
