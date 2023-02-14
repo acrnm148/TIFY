@@ -137,7 +137,7 @@ export function MakeWishPage() {
   // gift cart
   const [cartList, setCartList] = useState<Gift[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  
+
   // 유저 폼 유효성 검사
   const [wishValidated, setWishValidated] = useState<boolean>()
   const wishData = { title: '', content: '', wishCard: '', giftItem: [] };
@@ -174,7 +174,7 @@ export function MakeWishPage() {
                 optionTitle : d.product.options[0]? d.product.options[0].title: '',
                 // options : [],
                 options : d.product.options[0]? d.product.options[0].details.map((opt: {content:string, value:number })=>{
-                  return opt.content+'-'+opt.value 
+                  return opt.content+'-'+opt.value
                 }) :[]
             });
           });
@@ -304,8 +304,9 @@ export function MakeWishPage() {
   const [finished, setFinished] = useState(false);
   const MakeWish = () => {
     const makeWish = async () => {
-      const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';      
+      const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';
       const gift:{
+        giftUrl: string; // test를 위해 추가했습니다.
         productId: number;
         purePrice: number;
         userOption: string;
@@ -313,10 +314,11 @@ export function MakeWishPage() {
         giftname: string;
         maxAmount: number;
         quantity: number;
-        giftOptionList:[]
+        giftOptionList:never[];
     }[]  = wishCart.map((item)=>{
         return (
           {
+            "giftUrl":"", // test를 위해 추가했습니다.
             "productId" : item.id,
             'purePrice': item.price, 
             'userOption': item.optionTitle+'-'+userOptions,
@@ -327,7 +329,17 @@ export function MakeWishPage() {
             "giftOptionList":[]
           }
         )
-      })
+      }).concat([          {
+        "giftUrl":"https://www.coupang.com/vp/products/309324420?vendorItemId=5388443106&sourceType=HOME_TRENDING_ADS&searchId=feed-b7b4e845864b4a99b2aaca3563d44b17-trending_ads-63747&clickEventId=4d232fd3-9ff1-4801-b055-8820aa5541f7&isAddedCart=", 
+        "productId" : 0,
+        'purePrice': 0,
+        'userOption': "",
+        'giftImgUrl': "",
+        'giftname' : "",
+        "maxAmount": 0,
+        "quantity" : 1,
+        "giftOptionList":[]
+      }]) // test용 데이터 입니다.
       const data={
         userId: userId,
           giftItems:gift,

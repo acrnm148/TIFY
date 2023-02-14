@@ -80,7 +80,8 @@ const Gifts = () => {
             setTotalPages(res.data.totalPages);
             setPageRange( getPageRanges(res.data.totalPages) ); 
             let pageSelect:{ [index: number]: boolean } = {};
-            for (let i=1; i<=res.data.totalPages; i++) {
+            pageSelect[1]=true;
+            for (let i=2; i<=res.data.totalPages; i++) {
               pageSelect[i]=false;
             }
             setPageStates(pageSelect);
@@ -351,13 +352,13 @@ const Gifts = () => {
                     <Form.Label style={formTitleStyle}>FinishDate</Form.Label>
                     <Form.Control type="text" placeholder="FinishDate" value={finishDate} onChange={(e) => {setFinishDate(e.target.value)}}/>
                   </Form.Group><br/>
+                  <Form.Group controlId="formBasicGU">
+                    <Form.Label style={formTitleStyle}>giftUrl</Form.Label>
+                    <Form.Control type="text" placeholder="CIC" value={giftUrl} onChange={(e) => {setGiftUrl(e.target.value)}}/>
+                  </Form.Group><br/>
                   <Form.Group controlId="formBasicIU">
                     <Form.Label style={formTitleStyle}>giftImgUrl</Form.Label>
                     <Form.Control type="text" placeholder="IU" value={giftImgUrl} onChange={(e) => {setGiftImgUrl(e.target.value)}}/>
-                  </Form.Group><br/>
-                  <Form.Group controlId="formBasicCC">
-                    <Form.Label style={formTitleStyle}>CartImg Code</Form.Label>
-                    <Form.Control type="text" placeholder="CIC" value={giftUrl} onChange={(e) => {setGiftUrl(e.target.value)}}/>
                   </Form.Group><br/>
                   <Form.Group controlId="formBasicType">
                     <Form.Label style={formTitleStyle}>Type</Form.Label>
