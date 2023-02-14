@@ -1,5 +1,5 @@
 .mypage-div {
-  margin-left: 90px;
+  margin-left: 10%;
   margin-top: 80px;
   display: flex;
   min-height: 1000px;
@@ -123,11 +123,13 @@
 
 .no-donate {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-content: center;
   margin-top: 66px;
   text-align: center;
   font-size: 14px;
+  font-weight: bold;
 }
 
 .img-div {
@@ -150,4 +152,13 @@
   width: 20%;
   height: 20%;
   /* float: right; */
+}
+
+.ring-profile {
+  margin: 0.5px;
+}
+
+.others-number {
+  color: rgb(59 130 246 / 0.8);
+  margin-left: 5px;
 }

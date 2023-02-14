@@ -311,14 +311,6 @@ const FriendsList = () => {
         <img src={lastRequestData.requestImg} className="friend-profile"></img>
         <p className="friend-nickname">일촌 신청</p>
         <p className="friend-username">{lastRequestData.requestUsername}</p>
-
-        <button
-          onClick={() =>
-            setrequestListBool((requestListBool: boolean) => !requestListBool)
-          }
-        >
-          현재 / 요청
-        </button>
       </li>
     );
   };
@@ -327,9 +319,11 @@ const FriendsList = () => {
     return (
       <li className="list-group-item">
         <button
+          style={{ marginLeft: '15px' }}
           onClick={() =>
             setrequestListBool((requestListBool: boolean) => !requestListBool)
           }
+          className="friend-request-switch-buttom"
         >
           ←
         </button>
@@ -364,6 +358,7 @@ const FriendsList = () => {
           onClick={() =>
             setrequestListBool((requestListBool: boolean) => !requestListBool)
           }
+          style={{ marginLeft: '47px' }}
         >
           →
         </button>
@@ -372,7 +367,7 @@ const FriendsList = () => {
   };
 
   return (
-    <div>
+    <div className="lower-side-friends-div">
       <div className="friends-div">
         <ul className="list-group list-group-flush">
           {requestListBool ? (
@@ -398,13 +393,6 @@ const FriendsList = () => {
               })}
         </ul>
       </div>
-      <button
-        onClick={() =>
-          setrequestListBool((requestListBool: boolean) => !requestListBool)
-        }
-      >
-        현재 / 요청
-      </button>
     </div>
   );
 };
@@ -422,7 +410,7 @@ const Carousel = ({ friendWishList }: any) => {
     initialSlide: 0,
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 2000,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
@@ -432,7 +420,7 @@ const Carousel = ({ friendWishList }: any) => {
         },
       },
       {
-        breakpoint: 600,
+        breakpoint: 1400,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
@@ -440,7 +428,7 @@ const Carousel = ({ friendWishList }: any) => {
         },
       },
       {
-        breakpoint: 480,
+        breakpoint: 800,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,

@@ -96,6 +96,7 @@ export function Joined() {
       event: React.MouseEvent<HTMLButtonElement>,
       wishId: string,
     ) => {
+      event.stopPropagation();
       event.preventDefault();
       setOpened(wishId);
       setGiftOrCard('card');
@@ -105,6 +106,8 @@ export function Joined() {
       event: React.MouseEvent<HTMLButtonElement>,
       wishId: string,
     ) => {
+      event.stopPropagation();
+
       event.preventDefault();
       setOpened(wishId);
       setGiftOrCard('gift');
@@ -178,10 +181,15 @@ export function Joined() {
     );
   }
 
+  const CloseDetail = () => {
+    setOpened('');
+    setGiftOrCard('');
+  };
+
   return (
     <div>
       <p className="phone-book-title">| Joined Wish</p>
-      <div className="joined-wish-div">
+      <div className="joined-wish-div" onClick={() => CloseDetail()}>
         {joinedWishList &&
           joinedWishList.map((joinedWish: JoinedWish) => {
             return (
