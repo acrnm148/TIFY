@@ -18,6 +18,7 @@ export function CongratsPage() {
 
   const [clickedGift, setClickedGift] = useState<number>();
   const [wishGiftList, setWishGiftList] = useState<Gift[]>();
+  const [wishUserId, setWishUserId] = useState<number>()
 
   useEffect(() => {
     const API_URL = 'https://i8e208.p.ssafy.io/api/wish/detail/';
@@ -28,7 +29,7 @@ export function CongratsPage() {
         },
       })
       .then((res: { data: {
-        giftItems: any; user: { username: SetStateAction<string>; }; category: SetStateAction<string>; title: SetStateAction<string>; content: SetStateAction<string>; cardImageCode: SetStateAction<string>; 
+        giftItems: any; user: { username: SetStateAction<string>; }; category: SetStateAction<string>; title: SetStateAction<string>; content: SetStateAction<string>; cardImageCode: SetStateAction<string>, userId:number; 
 }; }) => {
         console.log('위시 상세 정보', res.data);
         setUserName(res.data.user.username);
@@ -36,6 +37,7 @@ export function CongratsPage() {
         setTitle(res.data.title);
         setContent(res.data.content);
         setCard(res.data.cardImageCode);
+        setWishUserId(res.data.userId)
 
         setWishGiftList(
           res.data.giftItems.map(
@@ -148,7 +150,7 @@ export function CongratsPage() {
           <NavLink
             className="button color"
             to={`/congrats/${wishId}/giftcard`}
-            state={{ selectGift: selectGift }}
+            state={{ selectGift: selectGift, wishUserId: wishUserId}}
           >
             선택한 선물로 축하하기 →
           </NavLink>

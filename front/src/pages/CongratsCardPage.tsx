@@ -31,6 +31,7 @@ export function CongratsCardPage() {
   const location = useLocation();
   const { state } = location;
   const [wishDetail, setWishDetail] = useState();
+  
 
   // makeCard form 데이터
   const [cardFrom, setCardFrom] = useState<string>('');
@@ -183,10 +184,10 @@ function GogoPay(){
     celebContent: cardContents,
     celebImgUrl: imgUrl,
     giftId: state.selectGift.giftId,
-    userId: userId,
+    userId: userId?userId:0,
   };
   // Paying 자료형 >> 결제창으로 넘어갈때 결제정보 인자로 넘기기
-  PayingPort.onClickPayment(congratsInfo, state.selectGift.name);
+  PayingPort.onClickPayment(congratsInfo, state.selectGift.name, state.wishUserId);
 }
 
 const PayInfo = () =>{

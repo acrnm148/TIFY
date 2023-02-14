@@ -173,3 +173,9 @@
   border-radius: 5px;
   padding: 5px;
 }
+.slick-prev:before, .slick-next:before{
+  font-size: 25px;
+  line-height: 1;
+  opacity: .75;
+  color: #808080;
+}

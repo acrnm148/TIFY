@@ -1,10 +1,19 @@
+// slider
+import ReactSlider from 'react-slider';
+import 'rc-slider/assets/index.css';
+import axios from 'axios';
+// user
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/Auth';
+import { CheckWish } from '../interface/interface';
+//carousel
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 import {
   ClassAttributes,
   HTMLAttributes,
-  JSXElementConstructor,
-  ReactElement,
-  ReactFragment,
-  ReactPortal,
   useEffect,
   useState,
 } from 'react';
@@ -14,14 +23,6 @@ import '../css/checkWishPage.styles.css';
 import gift from '../assets/iconGift.svg';
 import { Bool, List } from 'reselect/es/types';
 
-// slider
-import ReactSlider from 'react-slider';
-import 'rc-slider/assets/index.css';
-import axios from 'axios';
-// user
-import { useSelector } from 'react-redux';
-import { RootState } from '../store/Auth';
-import { CheckWish } from '../interface/interface';
 
 export function CheckWishPage() {
   const [userId, setUserId] = useState(useSelector((state: RootState) => state.authToken.userId))
@@ -187,15 +188,75 @@ export function CheckWishPage() {
       </div>
     );
   };
-  const CongratsCards = (props: {
-    fromList: any[];
-    wishId: string;
-    userName: string;
-  }) => {
-    console.log(props.fromList, 'props.fromList');
-    return (
-      <div className="congrat-card-list">
-        {props.fromList &&
+  // const CongratsCards = (props: {
+  //   fromList: any[];
+  //   wishId: string;
+  //   userName: string;
+  // }) => {
+  //   console.log(props.fromList, 'props.fromList');
+  //   return (
+  //     <div className="congrat-card-list">
+  //       {props.fromList &&
+  //         props.fromList.map((from: { id: any; from: string }, i: number) => (
+  //           <NavLink
+  //             to={`/thanks/${props.wishId}/${from.id}`}
+  //             state={props.fromList}
+  //           >
+  //             <CongratCard key={i} from={from.from} to={props.userName} />
+  //           </NavLink>
+  //         ))}
+  //     </div>
+  //   );
+  // };
+
+// 캐러셀 부분
+const CongratsCards = (props: {
+  fromList: any[];
+  wishId: string;
+  userName: string;
+}) => {
+  // 옵션
+  // console.log(friendWishList);
+  var settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+          arrows: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+  return (
+    <div className="ongoing-wishes">
+      <Slider {...settings} className="congrat-card-list">
+      {props.fromList &&
           props.fromList.map((from: { id: any; from: string }, i: number) => (
             <NavLink
               to={`/thanks/${props.wishId}/${from.id}`}
@@ -204,9 +265,17 @@ export function CheckWishPage() {
               <CongratCard key={i} from={from.from} to={props.userName} />
             </NavLink>
           ))}
-      </div>
-    );
-  };
+      </Slider>
+    </div>
+  );
+};
+
+
+
+
+
+
+
   const WishOpened = ({ goOpenList }: { goOpenList: CheckWish[] | undefined}) => {
     return (
       <>
@@ -218,12 +287,12 @@ export function CheckWishPage() {
                 wishId={lst.wishId}
                 userName={lst.userName}
               />
-              <NavLink to={`/congrats/${lst.wishId}`}>
+              {/* <NavLink to={`/congrats/${lst.wishId}`}>
                 <h1>
                   {lst.userName}님의 {lst.category}위시
                 </h1>
                 <h1>"{lst.title}"</h1>
-              </NavLink>
+              </NavLink> */}
               {/* <div className="wish-open wish-on-going-background">
                   
                   위시 오픈 애니메이션
@@ -336,3 +405,52 @@ export function CheckWishPage() {
     </>
   );
 }
+// 캐러셀 부분
+const Carousel = ({ friendWishList }: any) => {
+  // 옵션
+  // console.log(friendWishList);
+  var settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+          arrows: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+  return (
+    <div className="ongoing-wishes">
+      <p className="phone-book-title">| Friends</p>
+      <Slider {...settings}>
+        
+      </Slider>
+    </div>
+  );
+};
