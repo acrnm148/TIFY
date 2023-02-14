@@ -33,8 +33,7 @@ const FriendsPage: React.FC = () => {
   const handlePrevPage = () => {
     setCurrentPage(currentPage - 1);
   };
-  
-  
+
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
@@ -42,7 +41,6 @@ const FriendsPage: React.FC = () => {
   useEffect(() => {
     handleSubmit();
   }, [refresh]);
-
 
   const handleSubmit = async () => {
     if (!nickname.trim().length) {
@@ -140,122 +138,138 @@ const FriendsPage: React.FC = () => {
     } catch (error) {}
   };
 
-  
-  
-
   return (
     <div className="backcolor">
       <div className="items-center justify-center">
-        <TapNameEng
-          title="Find Friends"
-          content="닉네임을 검색하여 당신의 친구를 찾아보세요."
-        ></TapNameEng>
-        <div className="search-bar-container">
-          <input
-            className="search-bar"
-            type="text"
-            placeholder="닉네임을 입력해 주세요"
-            value={nickname}
-            onKeyUp={(e) => {
-              if (e.key == 'Enter') {
-                handleSubmit();
-              }
-            }}
-            onChange={(e) => setNickname(e.target.value)}
-          />
+        <div className="find-friends">
+          <TapNameEng
+            title="Find Friends"
+            content="닉네임을 검색하여 당신의 친구를 찾아보세요."
+          ></TapNameEng>
+          <div className="friends-nickname-box">
+            <input
+              className="friends-nickname-input"
+              type="text"
+              placeholder="닉네임을 입력해 주세요"
+              value={nickname}
+              onKeyUp={(e) => {
+                if (e.key == 'Enter') {
+                  handleSubmit();
+                }
+              }}
+              onChange={(e) => setNickname(e.target.value)}
+            />
+          </div>
         </div>
-
-      {searchPerformed && !users.length && (
-        <p className="text-center text-xl text-2">일치하는 사용자가 없습니다 다시 검색해주세요</p>
-      )}
-      {searchPerformed && users.length > 0 && (
-  <b><p className="text-center text-xl text-2">일치하는 사용자: {totalSearched}명</p></b>
-      )}
-      {users.length > 0 &&
-        <div className="friend-list">
-          {users.slice((currentPage - 1) * 8, currentPage * 8).map((user) => (
-            <div
-              className="w-1/5 p-6 mx-3 my-2 items-center justify-center flex flex-col cardcolor cardsize"
-              key={user.id}
-            >
-              <img className="img-4" src={user.profileImg} />
-              <b><p className="w-96 text-xl text-center text-1">{user.name}</p></b>
-              <p className="w-96 text-center text-2">{user.nickname}</p>
-              <p className="w-96 text-xs text-center text 2">
-                {user.id === userPk ? (
-                  <p>본인</p>
-                ) : user.state === 'ACCEPTED' ? (
-                  <button
-                    className="rectangle-2-5"
-                    onClick={() => {
-                      handleDeleteFriend(user.friendshipId);
-                    }}
+        <div className="friends-wrap-con">
+          {searchPerformed && !users.length && (
+            <p className="text-center text-xl text-2">
+              일치하는 사용자가 없습니다 다시 검색해주세요
+            </p>
+          )}
+          {searchPerformed && users.length > 0 && (
+            <b>
+              <p className="userCount">일치하는 사용자: {totalSearched}명</p>
+            </b>
+          )}
+          {users.length > 0 && (
+            <div className="friend-list">
+              {users
+                .slice((currentPage - 1) * 8, currentPage * 8)
+                .map((user) => (
+                  <div
+                    className="w-1/5 p-6 mx-3 my-2 items-center justify-center flex flex-col cardcolor cardsize"
+                    key={user.id}
                   >
-                    친구삭제
-                  </button>
-                ) : user.state === 'RECEIVED' ? (
-                  <div>
-                    <button
-                      className="rectangle-2-7"
-                      onClick={() => {
-                        handleAcceptFriend(user.friendshipId);
-                      }}
-                    >
-                      친구수락
-                    </button>
-                    <button
-                      className="rectangle-2-7"
-                      onClick={() => handleCancelFriend(user.friendshipId)}
-                    >
-                      친구거절
-                    </button>
+                    <img className="img-4" src={user.profileImg} />
+                    <b>
+                      <p className="w-96 text-xl text-center text-1">
+                        {user.name}
+                      </p>
+                    </b>
+                    <p className="w-96 text-center text-2">{user.nickname}</p>
+                    <p className="w-96 text-xs text-center text 2">
+                      {user.id === userPk ? (
+                        <p>본인</p>
+                      ) : user.state === 'ACCEPTED' ? (
+                        <button
+                          className="rectangle-2-5"
+                          onClick={() => {
+                            handleDeleteFriend(user.friendshipId);
+                          }}
+                        >
+                          친구삭제
+                        </button>
+                      ) : user.state === 'RECEIVED' ? (
+                        <div>
+                          <button
+                            className="rectangle-2-7"
+                            onClick={() => {
+                              handleAcceptFriend(user.friendshipId);
+                            }}
+                          >
+                            친구수락
+                          </button>
+                          <button
+                            className="rectangle-2-7"
+                            onClick={() =>
+                              handleCancelFriend(user.friendshipId)
+                            }
+                          >
+                            친구거절
+                          </button>
+                        </div>
+                      ) : user.state === 'REQUESTED' ? (
+                        <button
+                          className="rectangle-2-7"
+                          onClick={() => {
+                            handleCancelFriend(user.friendshipId);
+                          }}
+                        >
+                          요청취소
+                        </button>
+                      ) : user.state === 'NONE' ? (
+                        <button
+                          className="rectangle-2-6"
+                          onClick={() => {
+                            handleRequestFriend(user.id);
+                          }}
+                        >
+                          친구요청
+                        </button>
+                      ) : null}
+                    </p>
                   </div>
-                ) : user.state === 'REQUESTED' ? (
-                  <button
-                    className="rectangle-2-7"
-                    onClick={() => {
-                      handleCancelFriend(user.friendshipId);
-                    }}
-                  >
-                    요청취소
-                  </button>
-                ) : user.state === 'NONE' ? (
-                  <button
-                    className="rectangle-2-6"
-                    onClick={() => {
-                      handleRequestFriend(user.id);
-                    }}
-                  >
-                    친구요청
-                  </button>
-                ) : null}
-              </p>
+                ))}
             </div>
-          ))}
-        </div>}
+          )}
+          <div>
+            {users.length > 0 && (
+              <div className="pagination-container-friends">
+                <button
+                  className="pagination-btn bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+                  onClick={handlePrevPage}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+                <span className="pagination-text bg-gray-500 font-bold py-2 px-3 rounded-full">
+                  {currentPage} / {Math.ceil(users.length / 8)}
+                </span>
+                <button
+                  className="pagination-btn bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+                  onClick={handleNextPage}
+                  disabled={currentPage === Math.ceil(users.length / 8)}
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
-      {users.length > 0 &&
-      <div className="pagination-container">
-        <button
-          className="pagination-btn bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
-          onClick={handlePrevPage}
-          disabled={currentPage === 1}
-        >
-          Prev
-        </button>
-        <span className="pagination-text bg-gray-500 font-bold py-2 px-3 rounded-full">
-          {currentPage} / {Math.ceil(users.length / 8)}
-        </span>
-        <button
-          className="pagination-btn bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
-          onClick={handleNextPage}
-          disabled={currentPage === Math.ceil(users.length / 8)}
-        >
-          Next
-        </button>
-      </div>}
     </div>
-    );
+  );
 };
 
 interface UserSearchBarProps {
