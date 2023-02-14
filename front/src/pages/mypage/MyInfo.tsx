@@ -602,6 +602,7 @@ export function MyInfo() {
               type="password"
               className={`${(password2 == confirmPassword2) ? 'inputBox checkedNickname' : 'inputBox'}`}
               maxLength={12}
+              placeholder={'영어, 숫자, 특수문자를 포함한 8~12자리'}
               onChange={(e) => setConfirmPassword2(e.target.value)}
             />
               <div style={{position:"relative", left:"10%", marginBottom:"5%"}}>

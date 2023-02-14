@@ -12,29 +12,61 @@
   display: flex;
   margin-bottom: 20px;
   justify-content: space-between;
-  width: 600px;
+  width: 700px;
 }
 
 .phone-name-input {
   padding: 10px;
-  width: 30%;
+  width: 180px;
   border: 1px solid #c1c1c1;
   border-radius: 8px;
 }
 
 .phone-number-input {
   padding: 10px;
-  width: 40%;
+  width: 250px;
   border: 1px solid #c1c1c1;
   border-radius: 8px;
 }
 
 .add-contact-button {
-  width: 20%;
+  width: 120px;
   text-align: center;
   border: 1px solid #fe3360;
   border-radius: 8px;
   color: #fe3360;
   background-color: white;
   font-weight: bold;
+  margin-right: 80px;
+}
+
+.update-contact-div {
+  width: 200px;
+  display: flex;
+}
+
+.update-contact-button {
+  width: 120px;
+  text-align: center;
+  border: 1px solid #0084ff;
+  border-radius: 8px;
+  color: #0084ff;
+  background-color: white;
+  font-weight: bold;
+  margin-right: 20px;
+}
+
+.cancel-update-contact-button {
+  width: 60px;
+  text-align: center;
+  border: 1px solid #c1c1c1;
+  border-radius: 8px;
+  color: #c1c1c1;
+  background-color: white;
+  font-weight: bold;
+}
+
+.try-update-li {
+  background-color: #e4f2ff !important;
+  /* background-color: #f7bbbb; */
 }
