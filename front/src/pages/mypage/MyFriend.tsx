@@ -103,6 +103,12 @@ export function Friend() {
   );
 }
 
+interface RequestData {
+  requestImg: string;
+  requestCount: number;
+  requestUsername: string;
+}
+
 // 일촌 관리 부분
 const FriendsList = () => {
   const userId = useSelector((state: RootState) => state.authToken.userId);
@@ -110,11 +116,11 @@ const FriendsList = () => {
   const [requestsList, setRequestsList] = useState<Array<any>>();
   const [requestListBool, setrequestListBool] = useState<boolean>(false);
   // const [lastRequestImg, setLastRequestImg] = useState<string>();
-  const lastRequestData = {
+  const [lastRequestData, setLastRequestData] = useState<RequestData>({
     requestImg: '',
     requestCount: 0,
     requestUsername: '',
-  };
+  });
   // var requestImg = '';
   // var requestCount = 0;
 
@@ -160,11 +166,16 @@ const FriendsList = () => {
 
         // 친구 요청 받은 목록을 받아옴.
         if (res.data.receivedRequests.length > 0) {
-          // console.log(res.data.receivedRequests);
+          console.log(
+            res.data.receivedRequests.length,
+            '렝쓰는 이정도 입니다~~~~~',
+          );
           // console.log(typeof res.data.receivedRequests);
-          const requestsList = Object.values(res.data.receivedRequests);
+          // let copy = { ...lastRequestData };
+          // copy.requestCount = res.data.receivedRequests.length;
+          // setLastRequestData(copy);
 
-          lastRequestData.requestCount = requestsList.length;
+          const requestsList = Object.values(res.data.receivedRequests);
 
           for (let key in requestsList) {
             const value: any = requestsList[key];
@@ -179,9 +190,16 @@ const FriendsList = () => {
             };
             console.log(value.user.profileImg, '요청한 유저들 프로필 사진');
             requetsResult.push(data);
+
             // setLastRequestImg(value.user.profileImg);
-            lastRequestData.requestImg = value.user.profileImg;
-            lastRequestData.requestUsername = value.user.username;
+            // lastRequestData.requestImg = value.user.profileImg;
+            // lastRequestData.requestUsername = value.user.username;
+
+            let copy = { ...lastRequestData };
+            copy.requestImg = value.user.profileImg;
+            copy.requestUsername = value.user.username;
+            copy.requestCount = res.data.receivedRequests.length;
+            setLastRequestData(copy);
           }
         }
         const sortedRequestsResult: any = requetsResult.sort(function (a, b) {
@@ -248,7 +266,7 @@ const FriendsList = () => {
 
     return (
       <li className="list-group-item">
-        <img src={request.profileImg} className="friend-profile"></img>
+        <img src={request.profileImg} className="friend-profile "></img>
         <p className="friend-nickname">{request.nickname}</p>
         <p className="friend-username">{request.username}</p>
         <div className="">
@@ -273,7 +291,7 @@ const FriendsList = () => {
   const SingleFriend = ({ friend }: any) => {
     return (
       <li className="list-group-item" key={friend.id}>
-        <img src={friend.profileImg} className="friend-profile"></img>
+        <img src={friend.profileImg} className="friend-profile "></img>
         <p className="friend-nickname">{friend.nickname}</p>
         <p className="friend-username">{friend.username}</p>
         <button
@@ -305,21 +323,73 @@ const FriendsList = () => {
     );
   };
 
+  const GoToFriend = () => {
+    return (
+      <li className="list-group-item">
+        <button
+          onClick={() =>
+            setrequestListBool((requestListBool: boolean) => !requestListBool)
+          }
+        >
+          ←
+        </button>
+      </li>
+    );
+  };
+
+  const GoToRequest = () => {
+    let followCount = '';
+    if (lastRequestData.requestCount > 1) {
+      followCount = ` 외 ${lastRequestData.requestCount - 1}명`;
+    }
+
+    return (
+      <li className="list-group-item">
+        <img
+          src={lastRequestData.requestImg}
+          className="friend-profile blur-profile"
+        ></img>
+        <p
+          className="friend-nickname "
+          style={{ color: '#0084ff', fontWeight: 'normal' }}
+        >
+          팔로우 요청
+        </p>
+        <p className="friend-username" style={{ fontWeight: 'normal' }}>
+          {lastRequestData.requestUsername}
+          {followCount}
+        </p>
+        <button
+          className="friend-request-switch-buttom"
+          onClick={() =>
+            setrequestListBool((requestListBool: boolean) => !requestListBool)
+          }
+        >
+          →
+        </button>
+      </li>
+    );
+  };
+
   return (
     <div>
       <div className="friends-div">
         <ul className="list-group list-group-flush">
-          <li className="list-group-item">An item</li>
-          <li className="list-group-item">A second item</li>
-          <li className="list-group-item">A third item</li>
-          <li className="list-group-item">A fourth item</li>
-          <li className="list-group-item">And a fifth test</li>
+          {requestListBool ? (
+            <GoToFriend></GoToFriend>
+          ) : (
+            <GoToRequest></GoToRequest>
+          )}
 
           {requestListBool === false
             ? friendList &&
               friendList.map((friend: object) => {
                 // console.log(friend);
-                return <SingleFriend friend={friend}></SingleFriend>;
+                return (
+                  <>
+                    <SingleFriend friend={friend}></SingleFriend>
+                  </>
+                );
               })
             : requestsList &&
               requestsList.map((request: object) => {
