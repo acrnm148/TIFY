@@ -1,6 +1,5 @@
 // import type { WishProps } from '../interface/interface';
 import { ClassAttributes, HTMLAttributes, useState, useEffect } from 'react';
-import '../../css/mypage/myFriend.styles.css';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -16,6 +15,7 @@ import 'rc-slider/assets/index.css';
 
 // scrollBar
 import { Scrollbar } from 'react-scrollbars-custom';
+import '../../css/mypage/myFriend.styles.css';
 
 // 일촌 위시들 보기
 export function Friend() {
@@ -472,7 +472,8 @@ const Carousel = ({ friendWishList }: any) => {
         {/* {items.map((item: any) => {
           return <WishCard item={item}></WishCard>;
         })} */}
-        <div className="ongoing-wish">
+        {/* 더미데이터 주석처리하면 그림자사라짐! */}
+        {/* <div className="ongoing-wish">
           <h3>1</h3>
         </div>
         <div className="ongoing-wish">
@@ -495,7 +496,7 @@ const Carousel = ({ friendWishList }: any) => {
         </div>
         <div className="ongoing-wish">
           <h3>8</h3>
-        </div>
+        </div> */}
       </Slider>
     </div>
   );

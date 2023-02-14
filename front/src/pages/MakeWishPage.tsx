@@ -66,6 +66,9 @@ export function MakeWishPage() {
   const [userId, setUserId] = useState(
     useSelector((state: RootState) => state.authToken.userId),
   );
+    
+  // 유저 친구정보
+  const user_friends = useSelector((state: RootState)=>state.friendsIds.friendsIds)
 
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
@@ -118,7 +121,7 @@ export function MakeWishPage() {
   const [ userProfile, setUserProfile ] = useState<string>()
   const [ userAddr1, setUserAddr1] = useState<string>()
   const [ userAddr2, setUserAddr2]= useState<string>()
-  const [ userZipCode, setUserZipCode ] = useState<number>()
+  const [ userZipCode, setUserZipCode ] = useState<any>()
   const [ userName, setUserName ] = useState<string>()
 
   const[userOptions, setUserOptions] = useState<any>()
@@ -131,16 +134,10 @@ export function MakeWishPage() {
     zonecode: '',
   });
   const [popup, setPopup] = useState(false);
-  const handleInput = (e: any) => {
-    setEnroll_company({
-      ...enroll_company,
-      [e.target.name]: e.target.value,
-    });
-  };
   // gift cart
   const [cartList, setCartList] = useState<Gift[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
-
+  
   // 유저 폼 유효성 검사
   const [wishValidated, setWishValidated] = useState<boolean>()
   const wishData = { title: '', content: '', wishCard: '', giftItem: [] };
@@ -150,9 +147,6 @@ export function MakeWishPage() {
   const [goImgUrl, setGoImgUrl] = useState<boolean>()
   const [goAddr1, setGoAddr1] = useState<boolean>()
   const [goAddr2, setGoAddr2] = useState<boolean>()
-
-  // 유저 친구정보
-  const user_friends = useSelector((state: RootStateFriends)=>state.friendsIds)
 
   // 위시생성페이지 mount시 유저의 id를 담아서 cart정보 요청
   useEffect(() => {
@@ -345,8 +339,8 @@ export function MakeWishPage() {
           startDate: startDate,
           endDate: endDate,
           wishCard: imgUrlS3,
-          zipCode: callMyAddr? userZipCode :enroll_company.zonecode,
-          addr1:callMyAddr? userAddr1 :enroll_company.address,
+          zipCode: userZipCode? userZipCode :enroll_company.zonecode,
+          addr1:userAddr1? userAddr1 :enroll_company.address,
           addr2: addr2,
       }
       console.log('data', data)
@@ -365,6 +359,7 @@ export function MakeWishPage() {
           // user_friends에 알림보내기
           user_friends.forEach((fri:number) =>{
             pushData(fri)
+            console.log('친구에게 위시생성 알림보냄'+fri)
           })
         })
         .catch((err: any) => {
@@ -420,12 +415,7 @@ export function MakeWishPage() {
           }
     }
   };
-  const scrollToTop = () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    })
-  }
+
   const pannel = useRef<HTMLDivElement>(null)
   const [scrollPosition, setScrollPosition] = useState(0);
   const handleScroll = () => {
@@ -440,9 +430,6 @@ export function MakeWishPage() {
           window.removeEventListener('scroll', handleScroll);
       };
   }, []);
-  function followPannel(){
-
-    };
 
   const FinishedWishComponent = () => {
     return (
@@ -484,6 +471,7 @@ export function MakeWishPage() {
   const CallMyAddr = () =>{
     if(!userAddr1 && !userAddr2){
       alert('저장된 주소가 없습니다')
+      setCallMyAddr(false)
     } else{
       setCallMyAddr(true)
       setAddr1(userAddr1)
@@ -496,6 +484,13 @@ export function MakeWishPage() {
       setWishValidated(true)
     }
   }, [wishCart,title, content, category, startDate, endDate, imgUrlS3, addr1, addr2])
+  useEffect(()=>{
+    setCallMyAddr(false)
+    setGoAddr1(true)
+    setGoAddr2(true)
+    setAddr1(enroll_company.address)
+    console.log('주소지 찾기로 입력한 주소', enroll_company.address)
+  }, [enroll_company])
 
   const notValid = () => {
     category?setGoCategory(true):setGoCategory(false)
@@ -507,10 +502,12 @@ export function MakeWishPage() {
     addr2?setGoAddr2(true):setGoAddr2(false)
   }
   const ChangeOption = (e:any, i:number)=>{ 
-    setUserOptions({...userOptions,[i]:e.target.value})
-    const val = e.target.value.split('-')
-    setTotalPrice(totalPrice+Number(val[1]))
-    
+    if(e.target.value){
+      console.log('ininini', e.target.value)
+      setUserOptions({...userOptions,[i]:e.target.value})
+      const val = e.target.value.split('-')
+      setTotalPrice(totalPrice+Number(val[1]))
+    }
   }
   return (
     <>
@@ -690,7 +687,7 @@ export function MakeWishPage() {
                   <input
                     className="address-form postcode wid-50"
                     type="text"
-                    value={callMyAddr? userZipCode : enroll_company.zonecode}
+                    value={userZipCode? userZipCode : enroll_company.zonecode}
                     placeholder="우편번호"
                     disabled
                   />
@@ -702,16 +699,16 @@ export function MakeWishPage() {
                     placeholder="주소"
                     required={true}
                     name="address"
-                    onChange={handleInput}
-                    value={callMyAddr? userAddr1 :enroll_company.address}
+                    value={callMyAddr? userAddr1 : enroll_company.address}
                     disabled
                   />
                   <Postcode
                     company={enroll_company}
                     setcompany={setEnroll_company}
                   />
-                  {goAddr1===false&&
+                  {!addr1?
                     <span className='warning'>주소지를 작성해주세요</span>
+                    :''
                   }
                 </div>
               </div>

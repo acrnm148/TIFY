@@ -28,6 +28,7 @@ import { Joined } from './pages/mypage/JoinedWish';
 import { Friend } from './pages/mypage/MyFriend';
 import { MyInfo } from './pages/mypage/MyInfo';
 import { PhoneBook } from './pages/mypage/PhoneBook';
+import Archive from './pages/mypage/Archive';
 import OrderList from './components/OrderList';
 import Refund from './components/Refund';
 import { CongratsPage } from './pages/CongratsPage';
@@ -115,6 +116,7 @@ function App() {
             <Route path="phone" element={<PhoneBook />} />
             <Route path="order" element={<OrderList />} />
             <Route path="refund/:orderId" element={<Refund />} />
+            <Route path="archive" element={<Archive />} />
           </Route>
           <Route path="/checkwish" element={<CheckWishPage />} />
           <Route path="/thanks/:wishId/:conId" element={<ThanksPage />} />
