@@ -10,6 +10,7 @@ import { Login } from '../modules/Auth/LogIn';
 import { setRefreshToken } from '../modules/Auth/RefreshtokenLocal';
 import { SET_TOKEN, SET_USERID, SET_USEREMAIL } from '../store/Auth';
 import { useDispatch } from 'react-redux';
+import { TypeH1 } from 'react-bootstrap-icons';
 
 export function JoinSecondPage() {
   // const [userid, setUserid] = useState('');
@@ -25,6 +26,7 @@ export function JoinSecondPage() {
   // const [nickname, setNickname] = useState('수나캉');
 
   const [password, setPassword] = useState<string>('');
+  const [passVal, setPassVal] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [addr1, setAddr1] = useState<string>('');
   const [addr2, setAddr2] = useState<string>('');
@@ -66,6 +68,72 @@ export function JoinSecondPage() {
         username: username,
       },
     });
+  }
+
+  function telCehck() {
+    let htel = /^(?=.*[0-9]{2,3})/;
+    let mtel = /^(?=.*[0-9]{3,4})/;
+    let etel = /^(?=.*[0-9]{4,4})/;
+    
+    if (htel.test(tel1) && mtel.test(tel2) && etel.test(tel3)) {
+      return "";
+    }
+    return "유효하지 않은 연락처입니다."
+  }
+
+  function birthCheck() {
+    if (Date.parse(`${birthYear}-${birthMonth}-${birthDay}`) && birthYear && birthMonth && birthDay) {
+      return ""
+    }
+    return "유효하지 않은 날짜입니다.";
+  }
+
+  function pwCheck1(pw:string) {
+    let alpah = /^(?=.*[a-zA-Z])/;
+
+    if (!alpah.test(password)) {
+      return "영어가 포함되어 있지 않습니다.";
+    }
+    return "";
+  }
+
+  function pwCheck2(pw:string) {
+    let nume = /^(?=.*\d)/;
+
+    if (!nume.test(password)) {
+      return "숫자가 포함되어 있지 않습니다.";
+    }
+    return "";
+  }
+
+  function pwCheck3(pw:string) {
+    let special = /^(?=.*[!@#\$%\^&\*])/;
+  
+    if (!special.test(password)) {
+      return "특수문자가 포함되어 있지 않습니다.";
+    }
+    return "";
+  }
+
+  function pwCheck4(pw:string) {
+    let len = /^(?=.{8,12})/;
+
+    if (pw.length < 8 ) {
+      return "길이가 8자 미만입니다."
+    }
+    else if (pw.length > 12) {
+      return "길이가 12자 초과입니다."
+    }
+    return "";
+  }
+
+  function pwCheck5(pw:string) {
+    let pwdCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,12}$/;
+
+    if (!pwdCheck.test(password)) {
+      return "유효하지 않은 비밀번호 입니다."
+   }
+   return "";
   }
 
   function CheckValid() {
@@ -401,9 +469,9 @@ export function JoinSecondPage() {
             <p className="m-1">이름</p>
             <input
               type="text"
-              className="inputBox"
               onChange={(e) => setUsername(e.target.value)}
               maxLength={6}
+              className={`${username ? 'inputBox checkedNickname' : 'inputBox'}`}
             />
             <p className="m-1">닉네임</p>
             <div
@@ -421,8 +489,6 @@ export function JoinSecondPage() {
                     setNickname(e.target.value);
                     setNickDubCheck(false);
                   }}
-                  className={`${nickDubCheck ? 'checkedNickname' : ''}
-                  `}
                 />
                 <button className="formSideButton" onClick={CheckNickname}>
                   중복확인
@@ -433,24 +499,37 @@ export function JoinSecondPage() {
             <form className="emailForm">
               <input
                 type="password"
-                className="inputBox"
                 maxLength={12}
                 placeholder={'영어, 숫자, 특수문자를 포함한 8~12자리'}
                 onChange={(e) => setPassword(e.target.value)}
+                className={`${!pwCheck5(password) ? 'inputBox checkedNickname' : 'inputBox'}`}
               />
+              <div style={{position:"relative", left:"10%", marginBottom:"5%"}}>
+                <h1 style={{color:"red"}}>{pwCheck1(password)}</h1>
+                <h1 style={{color:"red"}}>{pwCheck2(password)}</h1>
+                <h1 style={{color:"red"}}>{pwCheck3(password)}</h1>
+                <h1 style={{color:"red"}}>{pwCheck4(password)}</h1>
+                <h1 style={{color:"red"}}>{pwCheck5(password)}</h1>
+              </div>
             </form>
             <span className="m-1">비밀번호 확인</span>
             <form className="emailForm">
               <input
                 type="password"
-                className="inputBox"
+                className={`${(password == confirmPassword) ? 'inputBox checkedNickname' : 'inputBox'}`}
                 maxLength={12}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
+              <div style={{position:"relative", left:"10%", marginBottom:"5%"}}>
+                { (password != confirmPassword) ? 
+                  (<h1 style={{color:"red"}}>비밀번호가 일치하지 않습니다.</h1>) :
+                   null
+                }
+              </div>
             </form>
             <p className="m-1">생년월일</p>
             <form className="emailForm">
-              <div className="mini-input-container">
+              <div className={`${ birthCheck().length < 1 ? 'mini-input-container checkedNickname' : 'mini-input-container'}`}>
                 <input
                   type="number"
                   className="mini-input-box"
@@ -477,10 +556,20 @@ export function JoinSecondPage() {
                 />
                 <span>일</span>
               </div>
+              {/* { (Date.parse(`${birthYear}-${birthMonth}-${birthDay}`) 
+                  && birthYear && birthMonth && birthDay) ? 
+                  null :
+                  (<h1 style={{color:"red"}}>유효하지 않은 날짜입니다.</h1>)
+                } */}
+            <div style={{position:"relative", left:"10%", marginBottom:"5%"}}>
+              <h1 style={{color:"red"}}>{birthCheck()}</h1>
+            </div>
+
+
             </form>
             <p className="m-1">연락처</p>
             <form className="emailForm">
-              <div className="mini-input-container">
+              <div className={`${ telCehck().length < 1 ? 'mini-input-container checkedNickname' : 'mini-input-container'}`}>
                 <input
                   type="number"
                   className="mini-input-box"
@@ -505,10 +594,29 @@ export function JoinSecondPage() {
                   onChange={(e) => setTel3(e.target.value)}
                 />
               </div>
+              <div style={{position:"relative", left:"10%", marginBottom:"5%"}}>
+                <h1 style={{color:"red"}}>{telCehck()}</h1>
+              </div>
             </form>
 
-            <form className="emailForm" onSubmit={handleSubmit} method="get">
-              <button type="submit" className="loginButton font-bold">
+            <form className="emailForm" onSubmit={handleSubmit} method="get"> 
+              <button type="submit"
+              className={`${ ( (telCehck().length < 1) &&
+                (birthCheck().length < 1) &&
+                (password == confirmPassword) && 
+                (pwCheck5(password).length < 1) && 
+                nickDubCheck && 
+                (username.length > 0) ) ? 'loginButton font-bold secondary' : 'loginButton-d font-bold'}`} 
+                disabled={
+                  !(
+                    telCehck().length < 1 &&
+                    birthCheck().length < 1 &&
+                    password === confirmPassword &&
+                    pwCheck5(password).length < 1 &&
+                    nickDubCheck &&
+                    username.length > 0
+                  )
+                }>
                 가입하기
               </button>
             </form>
