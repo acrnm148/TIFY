@@ -7,7 +7,7 @@ import iconCategory6Unmarried from '../../assets/category/iconCategory6Unmarried
 import iconCategory7Etc from '../../assets/category/iconCategory7Etc.svg';
 import '../../css/Joined.styles.css';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import axios from 'axios';
 import { RootState } from '../../store/Auth';
 import { useSelector } from 'react-redux';
@@ -108,8 +108,10 @@ export function Joined() {
     return (
       <div
         className={`joined-wish-box
-      ${joinedWish.wishId === opened && 'clicked-gift'}       
       shadow-xl`}
+        style={{
+          height: joinedWish.wishId === opened ? '400px' : '250px',
+        }}
       >
         {joinedWish.wishFinishYN == 'Y' ? (
           <>
@@ -181,6 +183,33 @@ export function Joined() {
 function OpenedDetails(props: { joinedWish: JoinedWish; giftOrCard: string }) {
   const joinedWish = props.joinedWish;
   const giftOrCard = props.giftOrCard;
+  const cards = joinedWish.celebCardDtoList;
+  console.log(cards);
+
+  console.log(joinedWish, '감사카드에는 어떤 게 들어가야 할까??');
+  console.log(cards, '얘네가 들어갈 듯');
+  const [cardIndex, setCardIndex] = useState<number>(0);
+  const card = cards[cardIndex];
+
+  const ThanksReply = () => {
+    return (
+      <div>
+        {/* <h1>보낸 감사카드</h1> */}
+        <div className="con-card-detail">
+          <div className="con-card">
+            <div className="tofrom">{card.celebFrom}</div>
+            <img
+              className="con-photo"
+              src={card.celebImg ? card.celebImg : ''}
+              alt="감사카드 이미지"
+            />
+            <div className="con-text">{card.celebContent}</div>
+            {/* <div className='userName tofrom'>전송된 연락처 : {card.}</div> */}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   console.log(joinedWish);
   if (giftOrCard == 'gift') {
@@ -208,7 +237,12 @@ function OpenedDetails(props: { joinedWish: JoinedWish; giftOrCard: string }) {
       </div>
     );
   } else if (giftOrCard == 'card') {
-    return <div className="opened-detail-div">{giftOrCard}</div>;
+    return (
+      <div className="opened-detail-div">
+        {giftOrCard}
+        <ThanksReply />
+      </div>
+    );
   } else {
     return <></>;
   }

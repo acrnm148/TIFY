@@ -107,6 +107,9 @@
   font-weight: bold;
   width: 100%;
   font-size: 18px;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .wish-box > .profile-div {

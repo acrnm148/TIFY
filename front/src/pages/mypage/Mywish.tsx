@@ -234,6 +234,7 @@ function Donator({ payImgs }: PayImgs) {
                 className="inline-block h-10 w-10 rounded-full ring-1 ring-white"
                 src={payImg}
                 alt=""
+                style={{ border: '1px solid white' }}
               />
             );
           })}
@@ -245,34 +246,6 @@ function Donator({ payImgs }: PayImgs) {
       ) : (
         <></>
       )}
-    </div>
-  );
-}
-
-function WishCardActive(props: { title: string }) {
-  return (
-    <div className="wish-box shadow-xl">
-      <p className="p-date">완료까지 7일</p>
-      <p className="p-proceed">진행중</p>
-      <div className="category-div">
-        <img src={iconCategory1Birthday} alt="" />
-        <p className="wish-title">"{props.title}"</p>
-      </div>
-      {/* <Donator /> */}
-    </div>
-  );
-}
-
-function WishCardDeactive(props: { title: string }) {
-  return (
-    <div className="wish-box shadow-xl">
-      <p className="p-date">완료까지 7일</p>
-      <p className="p-done">진행중</p>
-      <div className="category-div">
-        <img src={iconCategory1Birthday} alt="" />
-        <p className="wish-title">"{props.title}"</p>
-      </div>
-      {/* <Donator /> */}
     </div>
   );
 }
