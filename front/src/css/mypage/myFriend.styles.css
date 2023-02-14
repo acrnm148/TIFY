@@ -142,6 +142,10 @@
   margin-right: 20px;
 }
 
+.blur-profile {
+  filter: brightness(50%);
+}
+
 .friend-nickname {
   margin-right: 50px;
   font-weight: bold;
@@ -164,14 +168,26 @@
   background-color: #0084ff;
   color: white;
   border-radius: 5px;
-  padding: 5px;
+  padding: 8px;
   margin-right: 5px;
 }
 .friend-deny-button {
   background-color: #c1c1c1;
   color: white;
   border-radius: 5px;
+  padding: 8px;
+}
+
+.change-delete-button-div {
+  margin-left: 60px;
+}
+
+.friend-request-switch-buttom {
+  background-color: #0084ff;
+  color: white;
+  border-radius: 5px;
   padding: 5px;
+  width: 40px;
 }
 .slick-prev:before, .slick-next:before{
   font-size: 25px;
