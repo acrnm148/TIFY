@@ -1,6 +1,6 @@
 import axios, { AxiosPromise } from 'axios';
 import { useEffect, useState } from 'react';
-import phone from '../assets/phone.svg';
+import phone from '../assets/main/티피폰.svg';
 import GiftHubCategory from '../components/GiftHubCategory';
 import { GiftRecommend, GiftRecommendList } from '../components/GiftRecommendList';
 import  SearchBar  from '../components/SearchBar';
@@ -58,33 +58,31 @@ export function MainPage() {
     <div>
 
   <ScrollContainer>
-  <ScrollPage>
+  <ScrollPage style={{height : "auto"}}>
       <Animator animation={FadeUp} >
       <div className="main-components" style={{display: "flex", justifyContent: "center", alignItems: "center" }} >
           {/* <Animator animation={MoveIn(-500, 0)}><CatchPrase /></Animator> */}
-           <div className="phone-video">
-             <img src={phone} className="phone-image" alt="phone image" />
-           </div>
+            <img src={phone} className="phone-image" alt="phone image" />
+            <img src={마음을모아} alt="" />
          </div>
       </Animator>
       <Animator animation={batch( MoveOut(0, -200))} style={{display: "flex",flexDirection:"column", justifyContent: "center", alignItems: "center", width:"100vw"}}>
-           <img src={마음을모아} alt="" />
+          
       </Animator>
     </ScrollPage>
-    <ScrollPage>
+    <ScrollPage style={{display: "flex", flexDirection: "column",justifyContent: "center", alignItems:"center"}}>
       <Animator animation={FadeUp} >
         {/* <span style={{ fontSize: "40px" }}>I'm FadeUp ⛅️</span> */}
         <div >
-           <SearchBar propFunction={getQuery} initailQuery={''}/>
-          <Animator animation={MoveIn(-500, 0)}  style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+          <Animator animation={MoveIn(-100, 0)}  style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
             <GiftRecommend giftList={giftList} wish='' num = {Math.random()  * (giftList.length-3)}/>
           </Animator>
-          <Animator animation={MoveIn(0, 500)}  style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+          {/* <Animator animation={MoveIn(0, 100)}  style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
             <GiftRecommend giftList={giftList} wish='' num = {Math.random()  * (giftList.length-3)}/>
-          </Animator>
-           
+          </Animator> */} 
          </div>
       </Animator>
+        <h1 style={{fontSize:"40px"}}>GiftHub<span style={{ fontSize: "20px" }}>더보기🎁</span></h1>
     </ScrollPage>
     {/* <ScrollPage>
       <Animator animation={FadeUp} >

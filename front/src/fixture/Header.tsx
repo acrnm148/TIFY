@@ -83,9 +83,9 @@ export function Header() {
           <NavLink to="/checkwish" className="nav-cate-item">
             마이위시
           </NavLink>
-          <NavLink to="/admin/qna" className="nav-cate-item">
+          {/* <NavLink to="/admin/qna" className="nav-cate-item">
             관리자페이지
-          </NavLink>
+          </NavLink> */}
         </div>
       </>
     );
