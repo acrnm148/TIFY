@@ -158,7 +158,7 @@ public class GiftDto {
         Gift gift = new Gift();
         gift.setGiftUrl(this.giftUrl);
         // 선물 링크로 담고, 프로덕트 정보가 없다면
-        if (this.giftUrl.length() > 0 && this.productId == null) {
+        if (this.giftUrl.length() > 0) {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(this.giftUrl)

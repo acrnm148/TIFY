@@ -51,7 +51,7 @@ public class WishService {
     }
 
     // gift datas come in shape of JsonArray
-    public boolean saveWish(AddWishDto dto) {
+    public boolean saveWish(AddWishDto dto) throws IOException {
         Wish wish = dto.toEntity(userRepository);
         wish.setNowPrice(0);
         wishRepository.save(wish);
