@@ -72,8 +72,9 @@ export function LoginPage() {
             axios.get(`https://i8e208.p.ssafy.io/api/friendsEmail/${response.user_id}`,
             { responseType: 'json' }
           ).then((re) => {
-            const friends = re.data.map((data: { id: []; }) =>{return data.id})
+            const friends = re.data.map((data: { id: number; }) =>{return data.id})
             dispatch(SET_FRIENDS_IDS(friends))
+            // console.log('친구목록 불러오기 성공, friends:', re)
             }).catch((er) => {
               console.log('친구목록 불러오기 실패', er)
             })

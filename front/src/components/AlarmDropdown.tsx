@@ -8,6 +8,7 @@ import { db } from "./firebase";
 import { List } from "@mui/material";
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
+import logo from '../assets/tifyLogo.svg';
 
 interface Alarm {
     [key: string]: any;
@@ -120,7 +121,8 @@ const AlarmDropdown = () => {
                     overflowY: "auto",
                     left: "-200px",  /* set to a negative value */
             }}>
-            {alarmsArray.map((item) => (
+            { alarmsArray.length > 0 ? 
+              alarmsArray.map((item) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -131,16 +133,33 @@ const AlarmDropdown = () => {
                     <div style={{padding:"5px"}}>
                       <img style={{borderRadius: '50%', width: '40px', height: '40px',}} src={item.profile? item.profile:anony} alt="img"/>
                     </div>
-                    {/* <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '5px', }}> */}
-                    {/* </div> */}
                     <div style={{width:"150px"}}>
                       <div style={{fontWeight:"bold"}}>{item.title}</div>
-                      <div>{item.content} <div style={{ fontSize:'5px', color: item.state ? "lightgray" : "red"}}>{ passedTime(Date.now() - item.time)}</div></div>
+                      <div>{item.text} <div style={{ fontSize:'5px', color: item.state ? "lightgray" : "red"}}>{ passedTime(Date.now() - item.time)}</div></div>
                     </div>
 
                     <div style={{ fontSize:'5px', width:"50px"}}>무언가 들어감.</div>
                 </div>
-            ))}
+            ))
+            :
+            (                 
+              <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: '250px',
+                    width: '250px',
+                    position: 'relative',
+                    justifyContent: 'center',
+                    flexDirection : 'column'}}
+                    >
+                    <div>
+                      <img src={logo} alt="" style={{ filter:"grayscale(100%)"}} />
+                    </div>
+                    <h1 style={{fontSize:"1rem", fontWeight:"bolder", color:"gray"}}>새로운 알림이 없습니다.</h1>
+                    <p style={{fontSize:"0.5rem", color:"#A4A4A4"}}>나와 관련된 중요한 알림을 한꺼번에<br/>모아서 확인할 수 있습니다.</p>
+                </div> )
+          
+          }
             </div>
       )}
     </div>

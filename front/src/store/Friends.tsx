@@ -1,7 +1,7 @@
 import { createSlice, configureStore, PayloadAction } from '@reduxjs/toolkit';
 
 export const friendsSlice = createSlice({
-    name: 'friendsId',
+    name: 'friendsIds',
     initialState: {
         friendsIds: [],
     },
@@ -13,7 +13,9 @@ export const friendsSlice = createSlice({
     }
 })
 let store = configureStore({
-    reducer: friendsSlice.reducer
+    reducer: {
+
+    },
   });
 export type RootStateFriends = ReturnType<typeof store.getState>
 
