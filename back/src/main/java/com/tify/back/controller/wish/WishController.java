@@ -7,6 +7,7 @@ import com.tify.back.service.wish.WishService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +18,7 @@ public class WishController {
     private final WishService wishService;
     private final WishRepository wishRepository;
     @PostMapping("/add")
-    public String addWish(@RequestBody AddWishDto dto){
+    public String addWish(@RequestBody AddWishDto dto) throws IOException {
 
         //유효성 검사
         if(dto.getWishTitle().equals(""))
