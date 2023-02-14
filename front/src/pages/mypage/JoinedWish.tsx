@@ -76,6 +76,14 @@ export function Joined() {
     let diff =
       new Date(joinedWish.wishEndDate).getTime() - new Date().getTime();
     const restDay = Math.floor(diff / (1000 * 60 * 60 * 24)); // 오늘 날짜랑 계산해서 몇일남았는지
+    var RD = '';
+    if (restDay > 0) {
+      var RD = `- ${restDay}`;
+    } else if (restDay == 0) {
+      var RD = '- day';
+    } else {
+      var RD = `+ ${-restDay}`;
+    }
 
     console.log(joinedWish, '조인드위시 내용');
 
@@ -98,27 +106,24 @@ export function Joined() {
     };
 
     return (
-      <div className="joined-wish-box shadow-xl">
+      <div
+        className={`joined-wish-box
+      ${joinedWish.wishId === opened && 'clicked-gift'}       
+      shadow-xl`}
+      >
         {joinedWish.wishFinishYN == 'Y' ? (
           <>
             <p className="p-date">
-              완료 후{' '}
-              <span style={{ fontWeight: 'bold', color: 'black' }}>
-                {-restDay}
-              </span>
-              일
+              <span style={{ fontWeight: 'bold' }}>D {RD}</span>
             </p>
             <p className="p-done">완료</p>
           </>
         ) : (
           <>
             <p className="p-date">
-              완료까지
               <span style={{ fontWeight: 'bold', color: '#fe3360' }}>
-                {' '}
-                {restDay}
+                D {RD}
               </span>
-              일
             </p>
             <p className="p-proceed">진행중</p>
           </>
@@ -142,13 +147,11 @@ export function Joined() {
           </button>
         </div>
         {/* <div style={{ backgroundColor: 'black', height: '200px' }}></div> */}
-        {joinedWish.wishId == opened ? (
+        {joinedWish.wishId == opened && (
           <OpenedDetails
             giftOrCard={giftOrCard}
             joinedWish={joinedWish}
           ></OpenedDetails>
-        ) : (
-          <></>
         )}
       </div>
     );
@@ -190,12 +193,17 @@ function OpenedDetails(props: { joinedWish: JoinedWish; giftOrCard: string }) {
               <div className="opend-detail-gift-div">
                 <img className="opened-detail-gift" src={gift.giftImgUrl}></img>
                 <div className="gift-name-div">
-                  <p className="gift-name-p">{gift.giftName}</p>
+                  <div>
+                    <p className="gift-name-p">{gift.giftName}</p>
+                    <p className="">
+                      {gift.amount.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
+                    </p>
+                    <p className="">({gift.payedDate})</p>
+                  </div>
                 </div>
               </div>
             );
           })}
-          {giftOrCard}
         </div>
       </div>
     );

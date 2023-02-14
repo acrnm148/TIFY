@@ -81,10 +81,12 @@
   text-align: right;
   font-size: 9px;
   color: #a1a3a2;
+  font-weight: bold;
 }
 
 .wish-box > .p-proceed {
   text-align: right;
+  font-weight: bold;
   font-size: 14px;
   color: #fe3360;
 }
@@ -92,7 +94,6 @@
 .wish-box > .p-done {
   text-align: right;
   font-size: 14px;
-  color: #a1a3a2;
 }
 
 .wish-box > .category-div {

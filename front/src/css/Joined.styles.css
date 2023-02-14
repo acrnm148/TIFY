@@ -7,7 +7,7 @@
 
 .joined-wish-div > .joined-wish-box {
   width: 500px;
-  /* height: 250px; */
+  height: 250px;
   padding: 30px;
   margin-bottom: 20px;
 }
@@ -45,6 +45,7 @@
   width: 100%;
   font-size: 18px;
   padding-left: 20px;
+  color: #ff5e7a;
 }
 
 .joined-wish-box > .button-div {
@@ -80,20 +81,28 @@
 }
 
 .opend-detail-gift-div {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  margin-right: 5px;
 }
 
 .opened-detail-gift {
-  width: 130px;
-  height: 130px;
   filter: brightness(50%);
   border-radius: 10px;
-  margin-right: 5px;
   border: 1px solid black;
 }
 
 .gift-name-div {
   position: absolute;
-  /* top: 50%; */
+  width: 100%;
   text-align: center;
-  background-color: yellow;
+  color: white;
+}
+
+.clicked-gift {
+  height: 400px;
+  transition: height 0.5s;
 }

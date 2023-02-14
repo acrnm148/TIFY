@@ -132,11 +132,21 @@ export function MyWish() {
     // 축하해준 사람 수
     console.log(conList, 'conList가 요것입니다.');
     console.log(typeof conList, 'conList의 타입은 요것입니다.');
+
     return (
       <>
         {conList.map((con: MyWishType) => {
           // 완료된 위시
           const conCount = con.payImgs.length;
+          const restDay = con.restDay;
+          var RD = '';
+          if (restDay > 0) {
+            var RD = `- ${restDay}`;
+          } else if (restDay == 0) {
+            var RD = '- day';
+          } else {
+            var RD = `+ ${-restDay}`;
+          }
 
           if (Number(con.restDay) < 1) {
             return (
@@ -144,8 +154,12 @@ export function MyWish() {
                 className="wish-box shadow-xl"
                 onClick={() => GoToWish(con.wishId)}
               >
-                <p className="p-date">완료 후 {-con.restDay}일</p>
-                <p className="p-done">완료됨</p>
+                <p className="p-date" style={{ fontWeight: 'bold' }}>
+                  D {RD}
+                </p>
+                <p className="p-done" style={{ fontWeight: 'bold' }}>
+                  완료
+                </p>
                 <div className="category-div">
                   <Categorize category={con.category}></Categorize>
                   <p className="wish-title">"{con.title}"</p>
@@ -163,7 +177,7 @@ export function MyWish() {
                 className="wish-box shadow-xl"
                 onClick={() => GoToWish(con.wishId)}
               >
-                <p className="p-date">완료까지 {con.restDay}일</p>
+                <p className="p-date"> D {RD}</p>
                 <p className="p-proceed">진행중</p>
                 <div className="category-div">
                   <Categorize category={con.category}></Categorize>

@@ -62,7 +62,7 @@ export interface MyWishType {
   userName: string;
   title: string;
   category: string;
-  restDay: string;
+  restDay: number;
   percent: number;
   fromList: string[];
   fromId: number;
