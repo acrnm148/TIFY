@@ -71,7 +71,7 @@ export function GiftHubPage() {
   // Pagination
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(1);
-  const [nowPage, setNowPage] = useState<number>();
+  const [nowPage, setNowPage] = useState<number>(1);
   const pamount = 5;
   const [nowStartNum, setNowStartNum] = useState<number>(1);
   const [nowLastNum, setNowLastNum] = useState<number>(pamount);
@@ -231,7 +231,7 @@ export function GiftHubPage() {
     'https://tifyimage.s3.ap-northeast-2.amazonaws.com/a213c7ad-2bc9-489c-87f1-3be671f007f4.png';
   return (
     <div className="gifthub-page-con-continer">
-      Scroll
+      {/* Scroll */}
       <div className="gifthub-page-continer">
         <SearchBar propFunction={getQuery} initailQuery={searchQuery} />
         <div className="filter-bar-container">
