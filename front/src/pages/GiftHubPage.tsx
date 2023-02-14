@@ -27,6 +27,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { query } from 'firebase/database';
 import priceFormat from '../modules/comma';
+import ScrollBar from '../components/ScrollBar';
 
 const CATEGORY_DATA = [
   { id: 0, name: '전체' },
@@ -201,6 +202,7 @@ export function GiftHubPage() {
   };
   return (
     <div className="gifthub-page-con-continer">
+      Scroll
       <div className="gifthub-page-continer">
         <GiftHubCategory propFunction={getCategory} goCategory={category} />
         <SearchBar propFunction={getQuery} initailQuery={searchQuery} />

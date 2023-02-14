@@ -160,7 +160,8 @@ const Users = () => {
             setTotalPages(res.data.totalPages);
             setPageRange( getPageRanges(res.data.totalPages) ); 
             let pageSelect:{ [index: number]: boolean } = {};
-            for (let i=1; i<=res.data.totalPages; i++) {
+            pageSelect[1]=true;
+            for (let i=2; i<=res.data.totalPages; i++) {
               pageSelect[i]=false;
             }
             setPageStates(pageSelect);

@@ -606,7 +606,7 @@ export function JoinSecondPage() {
                 (password == confirmPassword) && 
                 (pwCheck5(password).length < 1) && 
                 nickDubCheck && 
-                (username.length > 0) ) ? 'loginButton font-bold secondary' : 'loginButton-d font-bold'}`} 
+                (username.length > 0) ) ? 'loginButton font-bold' : 'loginButton-d font-bold'}`} 
                 disabled={
                   !(
                     telCehck().length < 1 &&
