@@ -56,7 +56,7 @@ export function MyWish() {
                       payList: {
                         pay_id: any;
                         celeb_from: string;
-                        celeb_img_url: string;
+                        profImgUrl: string;
                       }[];
                     },
                     i: number,
@@ -66,9 +66,9 @@ export function MyWish() {
                         (p: {
                           pay_id: any;
                           celeb_from: string;
-                          celeb_img_url: string;
+                          profImgUrl: string;
                         }) => {
-                          payImgs.push(p.celeb_img_url);
+                          payImgs.push(p.profImgUrl);
                           return { id: p.pay_id, from: p.celeb_from };
                         },
                       );
@@ -132,11 +132,21 @@ export function MyWish() {
     // 축하해준 사람 수
     console.log(conList, 'conList가 요것입니다.');
     console.log(typeof conList, 'conList의 타입은 요것입니다.');
+
     return (
       <>
         {conList.map((con: MyWishType) => {
           // 완료된 위시
           const conCount = con.payImgs.length;
+          const restDay = con.restDay;
+          var RD = '';
+          if (restDay > 0) {
+            var RD = `- ${restDay}`;
+          } else if (restDay == 0) {
+            var RD = '- day';
+          } else {
+            var RD = `+ ${-restDay}`;
+          }
 
           if (Number(con.restDay) < 1) {
             return (
@@ -144,8 +154,12 @@ export function MyWish() {
                 className="wish-box shadow-xl"
                 onClick={() => GoToWish(con.wishId)}
               >
-                <p className="p-date">완료 후 {-con.restDay}일</p>
-                <p className="p-done">완료됨</p>
+                <p className="p-date" style={{ fontWeight: 'bold' }}>
+                  D {RD}
+                </p>
+                <p className="p-done" style={{ fontWeight: 'bold' }}>
+                  완료
+                </p>
                 <div className="category-div">
                   <Categorize category={con.category}></Categorize>
                   <p className="wish-title">"{con.title}"</p>
@@ -163,7 +177,7 @@ export function MyWish() {
                 className="wish-box shadow-xl"
                 onClick={() => GoToWish(con.wishId)}
               >
-                <p className="p-date">완료까지 {con.restDay}일</p>
+                <p className="p-date"> D {RD}</p>
                 <p className="p-proceed">진행중</p>
                 <div className="category-div">
                   <Categorize category={con.category}></Categorize>
@@ -220,45 +234,18 @@ function Donator({ payImgs }: PayImgs) {
                 className="inline-block h-10 w-10 rounded-full ring-1 ring-white"
                 src={payImg}
                 alt=""
+                style={{ border: '1px solid white' }}
               />
             );
           })}
       </div>
       {imgCount > 5 ? (
         <div className="mt-1 text-xs">
-          <a className="text-blue-500">+ 198 others</a>
+          <a className="text-blue-500">+ {imgCount - 5} others</a>
         </div>
       ) : (
         <></>
       )}
-    </div>
-  );
-}
-
-function WishCardActive(props: { title: string }) {
-  return (
-    <div className="wish-box shadow-xl">
-      <p className="p-date">완료까지 7일</p>
-      <p className="p-proceed">진행중</p>
-      <div className="category-div">
-        <img src={iconCategory1Birthday} alt="" />
-        <p className="wish-title">"{props.title}"</p>
-      </div>
-      {/* <Donator /> */}
-    </div>
-  );
-}
-
-function WishCardDeactive(props: { title: string }) {
-  return (
-    <div className="wish-box shadow-xl">
-      <p className="p-date">완료까지 7일</p>
-      <p className="p-done">진행중</p>
-      <div className="category-div">
-        <img src={iconCategory1Birthday} alt="" />
-        <p className="wish-title">"{props.title}"</p>
-      </div>
-      {/* <Donator /> */}
     </div>
   );
 }

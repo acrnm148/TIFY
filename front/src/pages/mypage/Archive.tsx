@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import clicked1 from '../../assets/category/iconCategory1Birthday copy.svg'
+import clicked1 from '../../assets/category/iconCategory1Birthday copy.svg';
 import clicked2 from '../../assets/category/iconCategory2Marry copy.svg';
 import clicked3 from '../../assets/category/iconCategory3Employed copy.svg';
 import clicked4 from '../../assets/category/iconCategory4Health copy.svg';
@@ -16,28 +16,19 @@ import iconCategory5Childbirth from '../../assets/category/iconCategory5Childbir
 import iconCategory6Unmarried from '../../assets/category/iconCategory6Unmarried.svg';
 import iconCategory7Etc from '../../assets/category/iconCategory7Etc.svg';
 import { RootState } from '../../store/Auth';
-import "../../css/mypage/archive.styles.css"
-
-interface Wish {
-  category: string;
-  enddate: string;
-  title: string;
-}
-
-interface Gift {
-  giftname: string | string[];
-}
-
-interface Pay {
-  celeb_from: string | string[][];
-}
+import '../../css/mypage/archive.styles.css';
 
 interface User {
   id: number;
-  nickname: string;
-  wishes: Wish[];
-  gifts: Gift[];
-  pays: Pay[];
+  title: string;
+  category: string;
+  endDate: string;
+  giftItems: {
+    giftname: string;
+    payList: {
+      celeb_from: string;
+    }[];
+  }[];
 }
 
 interface Category {
@@ -47,137 +38,126 @@ interface Category {
 }
 
 const categories: Category[] = [
-  { name: 'birthday', icon: iconCategory1Birthday, clickedIcon: clicked1 },
-  { name: 'marriage', icon: iconCategory2Marry, clickedIcon: clicked2 },
-  { name: 'employment', icon: iconCategory3Employed, clickedIcon: clicked3 },
-  { name: 'health', icon: iconCategory4Health, clickedIcon: clicked4 },
-  { name: 'childbirth', icon: iconCategory5Childbirth, clickedIcon: clicked5 },
-  { name: 'non-marriage', icon: iconCategory6Unmarried, clickedIcon: clicked6 },
-  { name: 'others', icon: iconCategory7Etc, clickedIcon: clicked7 },
+  { name: '생일', icon: iconCategory1Birthday, clickedIcon: clicked1 },
+  { name: '결혼', icon: iconCategory2Marry, clickedIcon: clicked2 },
+  { name: '취업', icon: iconCategory3Employed, clickedIcon: clicked3 },
+  { name: '건강', icon: iconCategory4Health, clickedIcon: clicked4 },
+  { name: '출산', icon: iconCategory5Childbirth, clickedIcon: clicked5 },
+  { name: '비혼', icon: iconCategory6Unmarried, clickedIcon: clicked6 },
+  { name: '기타', icon: iconCategory7Etc, clickedIcon: clicked7 },
 ];
 
 const Archive: React.FC = () => {
-  const [nickname, setNickname] = useState('');
-  const [users, setUsers] = useState<Array<User>>([]);
-  const [selectedUserId, setSelectedUserId] = useState<number>(0);
-  const [refresh, setRefresh] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchPerformed, setSearchPerformed] = useState(false);
-  const [totalSearched, setTotalSearched] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [users, setUsers] = useState<User[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [categoryUsers, setCategoryUsers] = useState<User[]>([]);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedGift, setSelectedGift] = useState<string>('');
+
+  const accessToken = useSelector((state: RootState) => state.authToken.accessToken);
+  const userPk = useSelector((state: RootState) => state.authToken.userId);
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
   };
-  const [data, setData] = useState(null);
-  const accessToken = useSelector(
-    (state: RootState) => state.authToken.accessToken
-  );
-  
-  const userPk = useSelector((state: RootState) => state.authToken.userId);
+
+  const handleUserClick = (user: User) => {
+    setSelectedUser(user);
+    setSelectedGift('');
+  };
+
+  const handleGiftClick = (giftName: string) => {
+    setSelectedGift(giftName);
+  };
 
   useEffect(() => {
-    handleSubmit();
-  }, [refresh]);
-
-  const mapWishes = (data: any): Wish[] =>
-    data.map((wish: any) => ({
-      category: wish.category,
-      enddate: wish.endDate,
-      title: wish.title,
-    }));
-
     const fetchData = async () => {
       try {
         const response = await axios.get(`https://i8e208.p.ssafy.io/api/wish/wish/${userPk}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            'Content-type': 'application/json'
-          }
-        });
-        setData(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-  
-    useEffect(() => {
-      fetchData();
-    }, []);
-
-  const mapGifts = (data: any): Gift[] =>
-    data.map((wish: any) => ({
-      giftname: wish.giftItems.map((gift: any) => gift.giftname),
-    }));
-
-  const mapPays = (data: any): Pay[] =>
-    data.map((wish: any) => ({
-      celeb_from: wish.giftItems.map((gift: any) =>
-        gift.payList.map((pay: any) => pay.celeb_from)
-      ),
-    }));
-
-  const handleSubmit = async () => {
-    if (!nickname.trim().length) {
-      return;
-    }
-    setSearchPerformed(true);
-    try {
-      const response = await axios.get(
-        `https://i8e208.p.ssafy.io/api/wish/wish/${userPk}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
             'Content-type': 'application/json',
           },
-        }
-      );
-      const data = response.data;
-      const users: User[] = data.map((item: any) => ({
-        id: item.id,
-        nickname: item.nickname,
-        wishes: mapWishes(item.wishList),
-        gifts: mapGifts(item.wishList),
-        pays: mapPays(item.wishList),
-      }));
-      setTotalSearched(users.length);
-      setUsers([...users]);
-    } catch (error) {}
-  };
-  const sortWishes = (wishes: Wish[]) =>
-  wishes.sort((a, b) => {
-    if (a.enddate < b.enddate) {
-      return -1;
-    } else if (a.enddate > b.enddate) {
-      return 1;
-    } else {
-      if (a.title < b.title) {
-        return -1;
-      } else if (a.title > b.title) {
-        return 1;
-      } else {
-        return 0;
+        });
+        const data = response.data;
+        setUsers(data);
+        setCategoryUsers(data);
+      } catch (error) {
+        console.error(error);
       }
-    }
-  });
+    };
+    fetchData();
+  }, [accessToken, userPk]);
 
-  
+  useEffect(() => {
+    const filteredUsers = selectedCategory 
+      ? users.filter(user => user.category === selectedCategory)
+      : users;
+    setCategoryUsers(filteredUsers);
+    setSelectedUser(null);
+    setSelectedGift('');
+  }, [users, selectedCategory]);
 
   return (
-    <div>
-      {categories.map((category) => (
-        <button
-  key={category.name}
-  onClick={() => handleCategoryClick(category.name)}
->
-  <img
-    src={selectedCategory === category.name ? category.clickedIcon : category.icon}
-    alt={category.name}
-    className="category-icon"
-  />
-</button>
-      ))}
+    <div className="flex flex-col">
+      <div className="flex justify-center mt-4">
+        {categories.map((category) => (
+          <button
+            key={category.name}
+            onClick={() => handleCategoryClick(category.name)}
+            className="p-2 focus:outline-none"
+          >
+            <img
+              src={selectedCategory === category.name ? category.clickedIcon : category.icon}
+              alt={category.name}
+              className="category-icon"
+            />
+          </button>
+        ))}
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+        {categoryUsers.map((user) => (
+          <div key={user.id}>
+            <button onClick={() => handleUserClick(user)} className="bg-white rounded-md shadow-md w-full h-full p-4 flex flex-col">
+              <p className="text-gray-500 text-sm mb-2">{user.endDate}</p>
+              <p className="text-gray-800 text-lg">{user.title}</p>
+            </button>
+          </div>
+        ))}
+      </div>
+      {selectedUser && (
+        <div className="mt-4">
+          <div className="bg-white rounded-md shadow-md p-4">
+            <h2 className="text-lg font-bold text-gray-800 mb-4">{selectedUser.title}</h2>
+            {selectedUser.giftItems.map((gift) => (
+              <div key={gift.giftname} className="mb-4">
+                <button
+                  className={`w-full p-4 text-left font-medium ${
+                    selectedGift === gift.giftname
+                      ? 'bg-gray-200 text-gray-700'
+                      : 'text-gray-500 hover:bg-gray-100'
+                  }`}
+                  onClick={() => handleGiftClick(gift.giftname)}
+                >
+                  {gift.giftname}
+                </button>
+                {selectedGift === gift.giftname && (
+                  <div className="pl-4 mt-2">
+                    {gift.payList.map((pay) => (
+                      <p key={pay.celeb_from} className="text-gray-500 mb-1">
+                        {pay.celeb_from}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
-  );
+  );  
 };
+
 export default Archive;
+

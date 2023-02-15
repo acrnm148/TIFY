@@ -9,6 +9,9 @@ import { List } from "@mui/material";
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
 import logo from '../assets/tifyLogo.svg';
+import axios from "axios";
+
+import "../css/AlaramDropdown.styles.css"
 
 interface Alarm {
     [key: string]: any;
@@ -29,6 +32,9 @@ const updateData = (dataid:string,data:Alarm,userId:string) => {
 const AlarmDropdown = () => {
   var userId = useSelector((state: RootState) => state.authToken.userId);
   // if(userEmail) {userEmail = userEmail.replace("@","-").replace(".","-");}
+  const accessToken = useSelector(
+    (state: RootState) => state.authToken.accessToken,
+  );
 
   const [showDropdown, setShowDropdown] = useState(false);
   const toggleDropdown = () => {
@@ -113,12 +119,12 @@ const AlarmDropdown = () => {
                   style={{
                     backgroundColor:"#FAFAFA",
                     display: 'flex',
-                    alignItems: 'center',
                     height: '500px',
-                    // width: '200px',
+                    width: '20vw',
                     position: 'absolute',
+                    zIndex: '100',
                     flexDirection : 'column',
-                    overflowY: "auto",
+                    // overflowY: "auto",
                     left: "-200px",  /* set to a negative value */
             }}>
             { alarmsArray.length > 0 ? 
@@ -126,19 +132,25 @@ const AlarmDropdown = () => {
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    height: '65px',
-                    width: '250px',
+                    height: '6em',
+                    width: '100%',
                     position: 'relative',
-                    flexDirection : 'row'}}>
+                    flexDirection : 'row',
+                    justifyContent: 'spaceBetween'}}>
                     <div style={{padding:"5px"}}>
                       <img style={{borderRadius: '50%', width: '40px', height: '40px',}} src={item.profile? item.profile:anony} alt="img"/>
                     </div>
-                    <div style={{width:"150px"}}>
+                    <div style={{}}>
                       <div style={{fontWeight:"bold"}}>{item.title}</div>
                       <div>{item.text} <div style={{ fontSize:'5px', color: item.state ? "lightgray" : "red"}}>{ passedTime(Date.now() - item.time)}</div></div>
                     </div>
-
-                    <div style={{ fontSize:'5px', width:"50px"}}>무언가 들어감.</div>
+                    <div style={{minWidth:"100px", display:"felx"}}>
+                      {item.friend&&
+                        item.friend == 'req' &&
+                          // <div style={{ fontSize:'5px', width:"50px"}}>.</div>
+                          <button className="accept-btn" onClick={()=>handleAcceptFriend(item.friendName, item.friendId, accessToken)}>수락</button>
+                      }
+                    </div>
                 </div>
             ))
             :
@@ -167,3 +179,32 @@ const AlarmDropdown = () => {
 };
 
 export default AlarmDropdown;
+const pushData = (friendName:string, friendId:number) => {
+  let base = "/test/tify/"; 
+  push(ref(db, base + friendId), {
+    text: friendName+'님이 친구요청을 수락했습니다.',
+    interval: "Daily",
+  });
+  console.log('친구요청수락함')
+};
+const handleAcceptFriend = async (friendName:string,friendId: number, accessToken:any) => {
+  try {
+    const response = await axios.post(
+      `https://i8e208.p.ssafy.io/api/friends/accept`,
+      {
+        friendId: friendId,
+        accepted: true,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-type': 'application/json',
+        },
+      },
+    );
+    // 친구수락 받는 사람한테 알림
+    pushData(friendName, friendId)
+  } catch (error) {
+    console.log(error);
+  }
+};
