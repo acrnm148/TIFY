@@ -2,25 +2,28 @@
   /* margin: 2px; */
   padding: 5px;
 }
+.gift-item-card-container:hover {
+  border-radius: 10px;
+  background-color: #bbdaf74b;
+}
 
 .gift-item-card {
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 20px;
+  border-radius: 10px;
 }
 .gift-image > img {
-  height: 18vw;
+  height: 17vw;
   width: 20vw;
 }
 /* .gift-item-card-container :hover {
   background-color: rgb(238, 238, 238);
 } */
-@media (min-width: 1025px) {
+/* @media (min-width: 1025px) {
   .gift-item-card-container {
     width: 20vw;
     height: 30vw;
   }
   .gift-image {
-    /* height:18.3vw; */
   }
 }
 @media (max-width: 1024px) {
@@ -40,7 +43,7 @@
   .gift-image {
     height: 28.3vw;
   }
-}
+} */
 .gift-con-wrap {
   margin: 8px;
 }

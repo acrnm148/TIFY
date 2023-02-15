@@ -176,7 +176,7 @@ export function GiftHubDetailPage() {
     );
   };
   const HEART_IMG =
-    'https://tifyimage.s3.ap-northeast-2.amazonaws.com/7fca4889-273f-4ec1-8b51-c9a1407bbc6d.png';
+    'https://tifyimage.s3.ap-northeast-2.amazonaws.com/ebf41667-027a-4c7a-98b9-556c7bdf9d6e.png';
 
   const LAST_PAGE_IMG = '';
 
@@ -230,6 +230,10 @@ export function GiftHubDetailPage() {
         </div>
         <GiftRecommend giftList={giftList} />
         <div className="product-image">
+          <div className="gift-noti">
+            <img src="" />
+            갖고 싶은 선물을 골라보세요!
+          </div>
           {data.imgList.map((img: { url: string }, i: number) => {
             if (i === 0) {
               return <img src={img.url} alt="" />;

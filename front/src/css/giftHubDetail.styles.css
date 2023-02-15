@@ -69,6 +69,7 @@
   height: 42px;
 }
 .make-wish {
+  cursor: pointer;
   background: #fe3360;
   display: flex;
   justify-content: center;
@@ -129,9 +130,11 @@
   justify-content: space-between;
 }
 .product-cate-like > p {
-  background-color: #ff43696e;
-  width: 50px;
-  border-radius: 10px;
+  background-color: #ffaec8;
+  width: wrap;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: 5px;
   text-align: center;
   color: white;
 }
@@ -177,4 +180,11 @@
 .gift-detail-likes {
   font-size: 17px;
   display: flex;
+}
+.gift-noti {
+  display: flex;
+  width: inherit;
+  background-color: #ffaec8;
+  height: 50%;
+  padding: 30px;
 }
