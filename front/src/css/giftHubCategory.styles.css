@@ -34,6 +34,7 @@
   align-items: center;
   border-radius: 100%;
   margin: 8px;
+  cursor: pointer;
 }
 .gh-icon img {
   width: 52%;

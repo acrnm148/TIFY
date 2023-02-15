@@ -45,7 +45,7 @@
   padding: 10px;
 }
 .nav-cate-item.active {
-  color: #ff0000;
+  color: #ff4a6e;
 }
 
 .nav-cate a {
@@ -57,10 +57,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding-right: 20px;
-  
 }
-.nav-cate a:hover{
-  color: #FE3360;
+.nav-cate a:hover {
+  color: #d4d4d4;
 }
 .logo-right {
   height: 1.2em;
@@ -94,7 +93,7 @@
 .wish-detail a:hover {
   color: #828483;
 }
-.header-right{
+.header-right {
   max-width: 30%;
   min-width: 15%;
   display: flex;
@@ -103,11 +102,10 @@
 @media (max-width: 768px) {
   .header-right {
     display: none;
-    
   }
 }
 
-.loginbtn{
+.loginbtn {
   width: 78px;
   height: 28px;
   border-radius: 8px;
@@ -121,14 +119,14 @@
   align-items: center;
   text-align: center;
   letter-spacing: 0.3px;
-  
+
   margin-left: 5px;
 }
 .login {
-  background: #FFF1EF;
-  color: #FE3360;
+  background: #fff1ef;
+  color: #fe3360;
 }
 .join {
-  background: #FE3360;
-  color: #FFEAE7;
+  background: #fe3360;
+  color: #ffeae7;
 }

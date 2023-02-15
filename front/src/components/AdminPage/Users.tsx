@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
-import alert from '../../assets/iconAlert.svg';
-import bell from '../../assets/bell.png';
 import anony from '../../assets/anony.png';
 
-import { ref, set, push, onValue, child, get, update, remove } from "firebase/database";
-import { List } from "@mui/material";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Auth';
+import {useLocation  } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Search } from 'react-bootstrap-icons';
-import UserInfoEdit from "./UserInfoEdit";
-import { NavLink } from 'react-router-dom';
 import {Modal, Form } from 'react-bootstrap';
 interface userInfo {
 	username: string;
@@ -88,6 +84,25 @@ const Users = () => {
     const [pageStates, setPageStates] = useState<{ [index: number]: boolean }>({},); // page 선택 여부.
     const [nowRange,setNowRange] = useState<Array<number>>([]);
     const [rangeIdx, setRangeIdx] = useState<number>(0);
+    //관리자 인증
+    const location = useLocation().pathname;
+    const roleList: string[] = useSelector((state: RootState) => state.authToken.roleList);
+    const isAdmin = roleList.includes('ADMIN');
+    const navigate = useNavigate();
+  
+    useEffect(() => {
+      let toLogin = false;
+      location.split('/').forEach((val) => {
+        if (val === 'admin') {
+          toLogin = true;
+        }
+      });
+  
+      if (isAdmin && toLogin) {
+        alert("관리자 권한이 없습니다.");
+        navigate('../login');
+      }
+    }, [location, navigate]);
 
     useEffect(()=>{
       setNowRange([...pageRange[0]])
@@ -100,7 +115,6 @@ const Users = () => {
     };
     const GoToNextPage = () =>{
       if (rangeIdx < pageRange.length-1) {
-        console.log(rangeIdx)
         setPageRange(getPageRanges(totalPages));
         const range = pageRange.at(rangeIdx + 1);
         if (range) {
@@ -167,7 +181,6 @@ const Users = () => {
             }
             setPageStates(pageSelect);
           }
-          console.log(res)
           return res});
         return response.data;
       } catch (error) {
@@ -180,14 +193,9 @@ const Users = () => {
 
     // 수정하기 위한 단일 정보 받아오기
     const handleEdit = async (pk: number|undefined) => {
-      console.log(pk);
-      console.log("-----------------");
       return await axios.get(`${baseUrl}/user/${pk}`).then((res) => {
-        console.log(res)
         let data = res.data;
         setUserInfo(data);
-        console.log(data);
-        console.log("유저 수정 단일정보 획득");
         return data
       });
     };
@@ -200,7 +208,6 @@ const Users = () => {
     };
 
     const handleDelete = async (userid:number) => {
-        console.log(userid);
         try {
             const response = await axios.delete(`${baseUrl}/user/${userid}`);
             await getData(page-1);
@@ -221,13 +228,8 @@ const Users = () => {
           headers: { 'Content-Type': 'multipart/form-data' },
         })
         .then((con) => {
-          console.log('이미지주소불러오기 성공', con.data);
-          // setImgUrlS3(con.data);
           userInfo.profileImg = con.data
           setUserInfo({ ...userInfo});
-          console.log(con.data);
-          console.log('프로필 이미지 성공');
-          // setNewImgs(newImgs?.concat(temp));
           return con.data;
         })
         .catch((err) => {
@@ -246,9 +248,6 @@ const Users = () => {
       await axios.put(`${baseUrl}/user/${id}`,{...userInfo})
       .then(
         (response) => {
-          console.log("----------",userInfo.roles);
-          console.log(response);
-          console.log("요청 보낸겁니다.");
           setUserInfo(response.data);
         });
       handleClose();

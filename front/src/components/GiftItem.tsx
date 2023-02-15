@@ -12,7 +12,7 @@ interface GiftProps {
   key: number;
 }
 const HEART_IMG =
-  'https://tifyimage.s3.ap-northeast-2.amazonaws.com/7fca4889-273f-4ec1-8b51-c9a1407bbc6d.png';
+  'https://tifyimage.s3.ap-northeast-2.amazonaws.com/ebf41667-027a-4c7a-98b9-556c7bdf9d6e.png';
 const RABBIT_IMG =
   'https://tifyimage.s3.ap-northeast-2.amazonaws.com/386b7d5f-fc70-46df-98ec-de52719efcca.png';
 export function GiftItem({ gift }: GiftProps, key: number) {

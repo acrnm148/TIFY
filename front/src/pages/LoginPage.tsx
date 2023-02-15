@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 import { Login } from '../modules/Auth/LogIn';
 import React, { useState } from 'react';
 import { setRefreshToken } from '../modules/Auth/RefreshtokenLocal';
-import { SET_TOKEN, SET_USERID, SET_USEREMAIL } from '../store/Auth';
+import { SET_TOKEN, SET_USERID, SET_USEREMAIL, SET_ROLELIST } from '../store/Auth';
 import { Outlet } from 'react-router-dom';
 import { LogOut } from '../modules/Auth/LogOut';
 import { SignOut } from '../modules/Auth/SignOut';
@@ -51,7 +51,10 @@ export function LoginPage() {
           dispatch(SET_TOKEN(response.access_token));
           dispatch(SET_USERID(response.user_id));
           dispatch(SET_USEREMAIL(response.user_email));
-            
+          dispatch(SET_ROLELIST(response.user_roles))
+          console.log("------------");
+          console.log(response.user_roles);
+          console.log(response.user_email);
           console.log('로그인 성공!!');
 
           //로그인 성공시 백으로 firebase customized token 요청

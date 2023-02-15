@@ -41,6 +41,8 @@ export function Header() {
   // console.log('요것이 accessToken');
 
   const [checkAdmin, setCheckAdmin] = useState<boolean>(false);
+  const roleList:string[] = useSelector((state: RootState) => state.authToken.roleList);
+  const isAdmin = ( roleList.filter((val) => { if (val == "ADMIN") {return true}; return false; }).length > 0 );
 
   const refreshToken = getCookieToken();
 
@@ -83,9 +85,12 @@ export function Header() {
           <NavLink to="/checkwish" className="nav-cate-item">
             마이위시
           </NavLink>
-          <NavLink to="/admin/qna" className="nav-cate-item">
-            관리자페이지
-          </NavLink>
+          { isAdmin && 
+            <NavLink to="/admin/qna" className="nav-cate-item">
+              관리자페이지
+            </NavLink>
+          }
+
         </div>
       </>
     );
