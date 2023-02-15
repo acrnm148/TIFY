@@ -10,8 +10,10 @@ import com.tify.back.model.gifthub.Order;
 import com.tify.back.model.pay.Pay;
 import com.tify.back.model.users.User;
 import com.tify.back.model.users.UserProperties;
+import com.tify.back.model.wish.Wish;
 import com.tify.back.repository.gifthub.GiftRepository;
 import com.tify.back.repository.users.UserRepository;
+import com.tify.back.repository.wish.WishRepository;
 import com.tify.back.service.gifthub.OrderService;
 import com.tify.back.service.pay.PayService;
 import com.tify.back.service.users.UserService;
@@ -35,6 +37,7 @@ public class PayController {
     private final OrderService orderService;
     private final GiftRepository giftRepository;
     private final UserRepository userRepository;
+    private final WishRepository wishRepository;
 
     /**
      * 결제하기 (축하하기)
@@ -43,6 +46,7 @@ public class PayController {
     @PostMapping("/celebrate")
     public ResponseEntity<?> celebrate(@RequestBody PayRequestDto payRequestDto, @RequestHeader(required = false, value = "Authorization") String token) {
         System.out.println("축하하기 메소드 진입, token:"+token);
+        Long wishId = null;
         if (token == null || token.equals("Bearer") || token.equals("Bearer ") || token.equals("Bearer null")|| token.equals("null")) {
             System.out.println("비로그인 유저, token:"+token);
         }
@@ -77,6 +81,7 @@ public class PayController {
 
         return ResponseEntity.ok().body("축하가 완료되었습니다.");
     }
+
 
     /**
      * 환불하기

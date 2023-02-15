@@ -17,7 +17,7 @@ import '../css/styles.css';
 import '../css/checkWishPage.styles.css';
 import gift from '../assets/iconGift.svg';
 import { Bool, List } from 'reselect/es/types';
-import GiftBoxAnimation from '../components/GiftBoxAnimation';
+import { Player } from '@lottiefiles/react-lottie-player';
 
 export function CheckWishPage() {
   const [userId, setUserId] = useState(
@@ -32,6 +32,9 @@ export function CheckWishPage() {
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  
   useEffect(() => {
     const API_URL = `https://i8e208.p.ssafy.io/api/wish/wish/${userId}`;
     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
@@ -266,6 +269,14 @@ export function CheckWishPage() {
       </div>
     );
   };
+  
+  const handleClick = () => {
+    setIsPlaying(!isPlaying);
+  }
+
+  const handleAnimationComplete = () => {
+    setIsPlaying(false);
+  };
 
   const WishOpened = ({
     goOpenList,
@@ -282,12 +293,23 @@ export function CheckWishPage() {
                 wishId={lst.wishId}
                 userName={lst.userName}
               />
+    <div onClick={handleClick}>
+      <Player
+        src={"https://assets9.lottiefiles.com/packages/lf20_0oco6l9x.json"}
+        autoplay={isPlaying}
+        loop={false}
+        style={{ height:'200%', width: '500px'}}
+        onEvent={event => {
+          if (event === 'complete') handleAnimationComplete(); 
+        }}
+      />
+    </div>
             
-                <iframe
+                {/* <iframe
                   style={{ height: '200%', width: '500px' }}
                   src="https://embed.lottiefiles.com/animation/64058"
                 ></iframe>
-                {/* 위시 오픈 애니메이션 */}
+                위시 오픈 애니메이션 */}
               </div>
           );
         })}
