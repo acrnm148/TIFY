@@ -69,7 +69,7 @@ const Order = () => {
     // const [newImgs,setNewImgs] = useState<Array<pImg>>([]);
     const [totalPages, setTotalPages] = useState(0);
     const maxResults = 10;
-    const baseUrl = "https://i8e208.p.ssafy.io/api/faq";
+    const baseUrl = "https://i8e208.p.ssafy.io/api/order";
     const sUrl = "https://i8e208.p.ssafy.io/api/admin/ordersearch"
     const bUrl = "https://i8e208.p.ssafy.io/api/admin/order"
     // const baseUrl = "http://localhost:8081/api/order";
@@ -115,6 +115,7 @@ const Order = () => {
           if (totalPages != res.data.totalPages) {
             setTotalPages(res.data.totalPages);
             setPageRange( getPageRanges(res.data.totalPages) ); 
+            setNowPage(1);
             let pageSelect:{ [index: number]: boolean } = {};
             pageSelect[1]=true;
             for (let i=2; i<=res.data.totalPages; i++) {

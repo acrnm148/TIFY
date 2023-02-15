@@ -1,9 +1,10 @@
 .joined-wish-div {
-  width: 1040px;
+  width: 80%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-start;
+  margin-left: 5%;
 }
 
 .joined-wish-div > .joined-wish-box {
@@ -11,6 +12,7 @@
   /* height: 250px; */
   padding: 30px;
   margin-bottom: 20px;
+  margin-right: 20px;
 }
 
 .joined-wish-box > .p-date {
@@ -152,7 +154,7 @@
 .joined-con-photo {
   width: 100%;
   /* height: 25vw; */
-  min-height: 15em;
+  height: 20em;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;

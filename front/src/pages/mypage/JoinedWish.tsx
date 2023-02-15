@@ -96,6 +96,7 @@ export function Joined() {
       event: React.MouseEvent<HTMLButtonElement>,
       wishId: string,
     ) => {
+      event.stopPropagation();
       event.preventDefault();
       setOpened(wishId);
       setGiftOrCard('card');
@@ -105,6 +106,8 @@ export function Joined() {
       event: React.MouseEvent<HTMLButtonElement>,
       wishId: string,
     ) => {
+      event.stopPropagation();
+
       event.preventDefault();
       setOpened(wishId);
       setGiftOrCard('gift');
@@ -178,10 +181,15 @@ export function Joined() {
     );
   }
 
+  const CloseDetail = () => {
+    setOpened('');
+    setGiftOrCard('');
+  };
+
   return (
     <div>
       <p className="phone-book-title">| Joined Wish</p>
-      <div className="joined-wish-div">
+      <div className="joined-wish-div" onClick={() => CloseDetail()}>
         {joinedWishList &&
           joinedWishList.map((joinedWish: JoinedWish) => {
             return (
@@ -207,11 +215,13 @@ function OpenedDetails(props: { joinedWish: JoinedWish; giftOrCard: string }) {
   const card = cards[cardIndex];
   const maxLength = cards.length;
 
-  const MinusIndex = () => {
+  const MinusIndex = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     setCardIndex(cardIndex - 1);
   };
 
-  const PlusIndex = () => {
+  const PlusIndex = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     setCardIndex(cardIndex + 1);
   };
 
@@ -272,11 +282,9 @@ function OpenedDetails(props: { joinedWish: JoinedWish; giftOrCard: string }) {
             </div> */}
         <div className="joined-arrow">
           {cardIndex !== 0 && (
-            <img
-              src={circleArrowL}
-              alt="원형 화살표 좌"
-              onClick={() => MinusIndex()}
-            />
+            <button onClick={(e: any) => MinusIndex(e)}>
+              <img src={circleArrowL} alt="원형 화살표 좌" />
+            </button>
           )}
         </div>
         <ThanksReply />
@@ -285,7 +293,7 @@ function OpenedDetails(props: { joinedWish: JoinedWish; giftOrCard: string }) {
             <img
               src={circleArrowR}
               alt="원형 화살표 우"
-              onClick={() => PlusIndex()}
+              onClick={(e: any) => PlusIndex(e)}
             />
           )}
         </div>
