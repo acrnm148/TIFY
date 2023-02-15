@@ -171,15 +171,18 @@
     position: relative;
     z-index: 1;
     height: 69vh;
+    margin-bottom: 5em;
+    background-color: #f1e3d3;
 }
 .wish-container{
-    position: relative;
-    z-index: 1;
-    height: 43vh;
-    /* border: 0.5px solid #828483; */
-    /* display: flex; */
-    padding-top: 5vh;
-    padding-bottom: 5vh;
+  position: relative;
+  z-index: 1;
+  height: 33vh;
+  /* border: 0.5px solid #828483; */
+  /* display: flex; */
+  padding-top: 5vh;
+  padding-bottom: 5vh;
+  background-color: #ffdee8;
 }
 .wish-container:hover{
     background-color: rgba(255, 238, 242, 0.567);
@@ -205,8 +208,12 @@
     color:#828483;
 }
 .show-toggle-selected{
-    color:#efefef;
-    background-color:#FE3360;
+  color: #fe3360;
+  background-color: #f1e3d3;
+}
+.show-toggle-selected-pink{
+  color: #4b4b4b;
+  background-color: #ffdee8;
 }
 .진행도{
     width: fit-content;
@@ -364,7 +371,32 @@
 }
 .ongoing-wishes{
     height: 100%;
+    /* background-color: #ffdee8; */
+}
+.open-wishes{
+  height: 100%;
+  margin-bottom: 40px;
+  background-color: #f1e3d3;
 }
 .slick-list{
     height: 100%;
+}
+.slick-slide> div{
+  height: 100%;
+}
+.slick-slide> div>a{
+  height: 100%;
+}
+.finished-wish-text{
+  /* height: ; */
+  background-color: #f1e3d3;
+  padding: 10px;
+  font-size: 1em;
+  font-weight: 700;
+  color: rgb(255, 255, 255);
+}
+.finished-wish-text span{
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #ffffff;
 }

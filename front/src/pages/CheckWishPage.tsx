@@ -287,10 +287,9 @@ const CongratsCards = (props: {
   };
 
   return (
-    <div className="ongoing-wishes">
+    <div className={showIng?'ongoing-wishes':"open-wishes"}>
       <Slider {...settings} className="congrat-card-list">
       {props.fromList &&
-        // 캐러셀 한 페이지에 8개씩 담기도록 반복문 수정..!
           props.fromList.map((from: { id: any; from: string }, i: number) => (
             <NavLink
               to={`/thanks/${props.wishId}/${from.id}`}
@@ -318,6 +317,7 @@ const CongratsCards = (props: {
         {goOpenList?.map((lst: CheckWish, i: number) => {
           return (
             <div className={showIng?'wish-container':'open-wish-container'}>
+              <p className='finished-wish-text'><h1>{lst.userName}님의 완료된 위시 {i+1} </h1><span>"{lst.title}"</span></p>
               <CongratsCards
                 fromList={lst.fromList}
                 wishId={lst.wishId}
@@ -397,7 +397,7 @@ const CongratsCards = (props: {
           </button>
           <button
             onClick={() => setShowIng(true)}
-            className={`show-toggle-btn ${showIng && 'show-toggle-selected'}`}
+            className={`show-toggle-btn ${showIng && 'show-toggle-selected-pink'}`}
           >
             진행중
           </button>

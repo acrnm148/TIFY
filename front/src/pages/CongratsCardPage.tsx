@@ -270,14 +270,15 @@ const PayInfo = () =>{
             <div className="thanks-card-container">
               <div className="thanks-card">
                 <div className="thanks-input">
-                  <label htmlFor="제목">보내는 사람</label>
+                <label htmlFor="제목">보내는 사람</label>
                   <input
                     className="input-small"
                     type="text"
                     name="제목"
-                    value={cardFrom}
+                    value={state.userName? state.userName : cardFrom}
                     onChange={onChangeFrom}
                     placeholder="받는 사람이 알 수 있도록 이름을 입력해주세요!"
+                    disabled={state.userName?true:false}
                   />
                 </div>
                 <div className="thanks-input">

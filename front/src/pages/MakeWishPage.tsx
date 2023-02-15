@@ -332,16 +332,16 @@ export function MakeWishPage() {
           }
         )
       }).concat([          {
-        "giftUrl":"https://www.coupang.com/vp/products/309324420?vendorItemId=5388443106&sourceType=HOME_TRENDING_ADS&searchId=feed-b7b4e845864b4a99b2aaca3563d44b17-trending_ads-63747&clickEventId=4d232fd3-9ff1-4801-b055-8820aa5541f7&isAddedCart=", 
-        "productId" : 0,
-        'purePrice': 0,
+        "giftUrl":"", 
+        "productId" : -1, // 현금: -1, 링크입력선물 : 0, ,
+        'purePrice': 9999999,
         'userOption': "",
         'giftImgUrl': "",
-        'giftname' : "",
-        "maxAmount": 0,
+        'giftname' : "현금",
+        "maxAmount": 9999999,
         "quantity" : 1,
         "giftOptionList":[]
-      }]) // test용 데이터 입니다.
+      }]) // 현금축하를 위한 gift데이터
       const data={
         userId: userId,
           giftItems:gift,
