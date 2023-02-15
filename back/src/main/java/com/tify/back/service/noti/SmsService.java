@@ -82,10 +82,10 @@ public class SmsService {
         headers.set("x-ncp-apigw-timestamp", time.toString());
         headers.set("x-ncp-iam-access-key", accessKey);
         headers.set("x-ncp-apigw-signature-v2", makeSignature(time));
-        System.out.println(headers.get("content-type"));
-        System.out.println(headers.get("x-ncp-apigw-timestamp"));
-        System.out.println(headers.get("x-ncp-iam-access-key"));
-        System.out.println(headers.get("x-ncp-apigw-signature-v2"));
+//        System.out.println(headers.get("content-type"));
+//        System.out.println(headers.get("x-ncp-apigw-timestamp"));
+//        System.out.println(headers.get("x-ncp-iam-access-key"));
+//        System.out.println(headers.get("x-ncp-apigw-signature-v2"));
         List<MessageDTO> messages = new ArrayList<>();
 //        messages.add(messageDto);
         messages = messageDto.getMessageList();
