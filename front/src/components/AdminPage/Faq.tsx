@@ -101,6 +101,7 @@ const Faq = () => {
           if (totalPages != res.data.totalPages) {
             setTotalPages(res.data.totalPages);
             setPageRange( getPageRanges(res.data.totalPages) ); 
+            setNowPage(1);
             let pageSelect:{ [index: number]: boolean } = {};
             pageSelect[1]=true;
             for (let i=2; i<=res.data.totalPages; i++) {
