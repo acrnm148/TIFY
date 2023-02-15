@@ -24,6 +24,8 @@ public class QQnA extends EntityPathBase<QnA> {
 
     public final com.tify.back.common.QBaseEntity _super = new com.tify.back.common.QBaseEntity(this);
 
+    public final ListPath<Answer, QAnswer> answers = this.<Answer, QAnswer>createList("answers", Answer.class, QAnswer.class, PathInits.DIRECT2);
+
     public final BooleanPath ansYN = createBoolean("ansYN");
 
     public final StringPath content = createString("content");

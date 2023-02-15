@@ -30,10 +30,14 @@ public class QFAQ extends EntityPathBase<FAQ> {
 
     public final NumberPath<Integer> idx = createNumber("idx", Integer.class);
 
+    public final StringPath imgUrl = createString("imgUrl");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
     public final StringPath title = createString("title");
+
+    public final NumberPath<Integer> type = createNumber("type", Integer.class);
 
     public QFAQ(String variable) {
         super(FAQ.class, forVariable(variable));
