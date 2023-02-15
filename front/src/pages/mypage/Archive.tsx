@@ -18,17 +18,22 @@ import iconCategory7Etc from '../../assets/category/iconCategory7Etc.svg';
 import { RootState } from '../../store/Auth';
 import '../../css/mypage/archive.styles.css';
 
+interface Pay {
+  celeb_from: string;
+  pay_id: number;
+}
+
+interface Gift {
+  giftname: string;
+  payList: Pay[];
+}
+
 interface User {
   id: number;
   title: string;
   category: string;
   endDate: string;
-  giftItems: {
-    giftname: string;
-    payList: {
-      celeb_from: string;
-    }[];
-  }[];
+  giftItems: Gift[];
 }
 
 interface Category {
@@ -65,11 +70,35 @@ const Archive: React.FC = () => {
     setSelectedUser(user);
     setSelectedGift('');
   };
-
-  const handleGiftClick = (giftName: string) => {
-    setSelectedGift(giftName);
+  
+  const handleGiftClick = async (gift: Gift, payIndex: number) => {
+    setSelectedGift(gift.giftname);
+    try {
+      const pay = gift.payList[payIndex];
+      const response = await axios.get(`https://i8e208.p.ssafy.io/api/thkcards/match/${pay.pay_id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-type': 'application/json',
+        },
+      });
+      const data = response.data;
+      setThkcard(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
+  
 
+
+  const [thkcard, setThkcard] = useState<{
+    id: number;
+    title: string;
+    phoneNumber: string;
+    content: string;
+    imageUrl: string;
+    userId: number;
+  } | null>(null);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -131,24 +160,39 @@ const Archive: React.FC = () => {
             <h2 className="text-lg font-bold text-gray-800 mb-4">{selectedUser.title}</h2>
             {selectedUser.giftItems.map((gift) => (
               <div key={gift.giftname} className="mb-4">
-                <button
-                  className={`w-full p-4 text-left font-medium ${
-                    selectedGift === gift.giftname
-                      ? 'bg-gray-200 text-gray-700'
-                      : 'text-gray-500 hover:bg-gray-100'
-                  }`}
-                  onClick={() => handleGiftClick(gift.giftname)}
-                >
-                  {gift.giftname}
-                </button>
+<button
+  className={`w-full p-4 text-left font-medium ${
+    selectedGift === gift.giftname
+      ? 'bg-gray-200 text-gray-700'
+      : 'text-gray-500 hover:bg-gray-100'
+  }`}
+  onClick={() => handleGiftClick(gift, 0)}
+>
+  {gift.giftname}
+</button>
+
                 {selectedGift === gift.giftname && (
-                  <div className="pl-4 mt-2">
-                    {gift.payList.map((pay) => (
-                      <p key={pay.celeb_from} className="text-gray-500 mb-1">
-                        {pay.celeb_from}
-                      </p>
-                    ))}
-                  </div>
+<div className="pl-4 mt-2">
+{gift.payList.map((pay, index) => (
+  <button
+    key={pay.pay_id}
+    className="text-gray-500 mb-1 focus:outline-none hover:text-gray-700"
+    onClick={() => handleGiftClick(gift, index)}
+  >
+    {pay.celeb_from}
+  </button>
+))}
+  {thkcard && (
+    <div>
+      <h3 className="text-gray-800 font-medium my-2">THK Card Details:</h3>
+      <p className="text-gray-500">Title: {thkcard.title}</p>
+      <p className="text-gray-500">Phone number: {thkcard.phoneNumber}</p>
+      <p className="text-gray-500">Content: {thkcard.content}</p>
+      <img className="w-32 h-32 my-2" src={thkcard.imageUrl} alt="THK Card" />
+    </div>
+  )}
+</div>
+
                 )}
               </div>
             ))}

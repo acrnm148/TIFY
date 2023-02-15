@@ -1,19 +1,14 @@
-import React, { useState, useEffect, ReactEventHandler, useCallback, ReactHTMLElement } from "react";
-import alert from '../../assets/iconAlert.svg';
-import bell from '../../assets/bell.png';
-import anony from '../../assets/anony.png';
+import { useState, useEffect } from "react";
 
-import { ref, set, push, onValue, child, get, update, remove } from "firebase/database";
-import { List } from "@mui/material";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Auth';
+import {useLocation  } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Justify, Search } from 'react-bootstrap-icons';
-import { NavLink } from 'react-router-dom';
-import {Modal, Form, Collapse, Container, Row, Col} from 'react-bootstrap';
-import { borderRadius } from "@mui/system";
+import { Search } from 'react-bootstrap-icons';
+import {Modal, Form } from 'react-bootstrap';
 
 export interface OrderForm {
   id?: string;
@@ -86,7 +81,25 @@ const Order = () => {
     const [pageStates, setPageStates] = useState<{ [index: number]: boolean }>({},); // page 선택 여부.
     const [nowRange,setNowRange] = useState<Array<number>>([]);
     const [rangeIdx, setRangeIdx] = useState<number>(0);
-
+    //관리자 인증
+    const location = useLocation().pathname;
+    const roleList: string[] = useSelector((state: RootState) => state.authToken.roleList);
+    const isAdmin = roleList.includes('ADMIN');
+    const navigate = useNavigate();
+  
+    useEffect(() => {
+      let toLogin = false;
+      location.split('/').forEach((val) => {
+        if (val === 'admin') {
+          toLogin = true;
+        }
+      });
+  
+      if (isAdmin && toLogin) {
+        alert("관리자 권한이 없습니다.");
+        navigate('../login');
+      }
+    }, [location, navigate]);
     useEffect(() => {
       getData(page)}, [refresh]);
 
@@ -123,7 +136,6 @@ const Order = () => {
             }
             setPageStates(pageSelect);
           }
-          console.log(res)
           return res});
         return response.data.content;
       } catch (error) {
@@ -136,7 +148,6 @@ const Order = () => {
 
     const GoToNextPage = () =>{
       if (rangeIdx < pageRange.length-1) {
-        console.log(rangeIdx)
         setPageRange(getPageRanges(totalPages));
         const range = pageRange.at(rangeIdx + 1);
         if (range) {
@@ -183,18 +194,14 @@ const Order = () => {
     };
 
     const handleEdit = async (id: any) => {
-        console.log(id);
-        console.log("-----------------");
         return await axios.get(`${baseUrl}/${id}`).then((res) => {
           let data = res.data
           setOrderInfo(data);
-          console.log(data);
           return data
         });
     };
   
     const handleDelete = async (id : any) => {
-        console.log(id);
         try {
             const response = await axios.delete(`${baseUrl}/${id}`);
             getData(page-1);
@@ -227,12 +234,9 @@ const Order = () => {
   const submitEdit = async (e:any) => {
     let id = orderInfo?.id;
     e.preventDefault();
-    console.log(id);
-    console.log("-----------------");
     await axios.put(`${baseUrl}/${id}`,{ ...orderInfo })
     .then(
       (response) => {
-        console.log(response);
         setOrderInfo(response.data);
         setRefresh(!refresh)
         handleClose();

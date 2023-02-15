@@ -20,7 +20,7 @@ let paying = {
             celebTel : "",
             celebContent : "",
             celebImgUrl : "",
-            giftId : -1,
+            giftId : 0,
             userId : 0,
 }
 let tk: string | null = null

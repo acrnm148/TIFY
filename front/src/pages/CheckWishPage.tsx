@@ -282,22 +282,13 @@ export function CheckWishPage() {
                 wishId={lst.wishId}
                 userName={lst.userName}
               />
-              {/* <NavLink to={`/congrats/${lst.wishId}`}>
-                <h1>
-                  {lst.userName}님의 {lst.category}위시
-                </h1>
-                <h1>"{lst.title}"</h1>
-              </NavLink> */}
-              <div className="wish-open wish-on-going-background">
-                클릭하세요!
-                {/* <GiftBoxAnimation /> */}
+            
                 <iframe
                   style={{ height: '200%', width: '500px' }}
                   src="https://embed.lottiefiles.com/animation/64058"
                 ></iframe>
                 {/* 위시 오픈 애니메이션 */}
               </div>
-            </div>
           );
         })}
       </>

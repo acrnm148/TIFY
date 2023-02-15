@@ -1,17 +1,15 @@
 import React, { useState,useEffect } from "react";
 
-import { ref, set, push, onValue, child, get, update, remove } from "firebase/database";
-import { List } from "@mui/material";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Auth';
+import {useLocation  } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Search } from 'react-bootstrap-icons';
-import { NavLink } from 'react-router-dom';
-import {Modal, Form, Collapse, Container, Row, Col} from 'react-bootstrap';
-import { GiftItem, GiftOption, Wish, User } from './AdTypes';
-import { borderRadius } from "@mui/system";
+import {Modal, Form } from 'react-bootstrap';
+import { GiftItem, GiftOption } from './AdTypes';
 
 const formTitleStyle = {
   color:"black",
@@ -57,6 +55,25 @@ const Gifts = () => {
     const [pageStates, setPageStates] = useState<{ [index: number]: boolean }>({},); // page 선택 여부.
     const [nowRange,setNowRange] = useState<Array<number>>([]);
     const [rangeIdx, setRangeIdx] = useState<number>(0);
+    //관리자 인증
+    const location = useLocation().pathname;
+    const roleList: string[] = useSelector((state: RootState) => state.authToken.roleList);
+    const isAdmin = roleList.includes('ADMIN');
+    const navigate = useNavigate();
+  
+    useEffect(() => {
+      let toLogin = false;
+      location.split('/').forEach((val) => {
+        if (val === 'admin') {
+          toLogin = true;
+        }
+      });
+  
+      if (isAdmin && toLogin) {
+        alert("관리자 권한이 없습니다.");
+        navigate('../login');
+      }
+    }, [location, navigate]);
 
     const maxResults = 10;
     const baseUrl = "https://i8e208.p.ssafy.io/api/gift";
@@ -87,7 +104,6 @@ const Gifts = () => {
             }
             setPageStates(pageSelect);
           }
-          console.log(res)
           return res});
         return response.data.content;
       } catch (error) {
@@ -100,10 +116,7 @@ const Gifts = () => {
 
     // 수정하기 위한 단일 정보 받아오기
     const handleEdit = async (pk: number|undefined) => {
-      console.log(pk);
-      console.log("-----------------");
       const response = await axios.get(`${baseUrl}/admin/${pk}`).then((res) => {
-        console.log(res)
         let data = res.data;
         setId(data.id || id)
         setProductId(data.productId || productId);
@@ -125,13 +138,11 @@ const Gifts = () => {
         return data
       });
       setGiftItemInfo(response.data);
-      console.log(response);
       return response;
     };
 
     const GoToNextPage = () =>{
       if (rangeIdx < pageRange.length-1) {
-        console.log(rangeIdx)
         setPageRange(getPageRanges(totalPages));
         const range = pageRange.at(rangeIdx + 1);
         if (range) {
@@ -178,7 +189,6 @@ const Gifts = () => {
     };
 
     const handleDelete = async (id: number|undefined) => {
-        console.log(id);
         try {
             const response = await axios.delete(`${baseUrl}/gift/${id}`);
             getData(page);
@@ -213,14 +223,10 @@ const Gifts = () => {
 
     const handleSubmit = async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
-      console.log("-----------------sssssssssss");
       const response = await axios.put(`${baseUrl}/detail/${id}`,
       {...GiftItemInfo,productId,quantity,finishYN,userOption,giftname,type,maxAmount,purePrice,
-      gathered,idx,giftImgUrl,giftUrl}).then((res) => {console.log(res); return res;});
-      console.log("0--=====================")
-      console.log(GiftItemInfo)
+      gathered,idx,giftImgUrl,giftUrl}).then((res) => {return res;});
       setGiftItemInfo(response.data);
-      console.log(response.data);
       setShow(false);
       return response.data;
     };
