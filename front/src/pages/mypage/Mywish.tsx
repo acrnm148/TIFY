@@ -188,9 +188,8 @@ export function MyWish() {
                 ) : (
                   <div className="donator-div">
                     <p className="no-donate">
-                      아직 축하해주신 분이 없어요😢
-                      <br></br>
-                      당신의 위시를 공유해보세요.
+                      <span>아직 축하해주신 분이 없어요😢</span>
+                      <span>당신의 위시를 공유해보세요.</span>
                     </p>
                   </div>
                 )}{' '}
@@ -205,8 +204,10 @@ export function MyWish() {
   return (
     <div>
       <p className="phone-book-title">| My Wish</p>
-      <div className="my-wish-div">
-        <WishCard conList={[...conList]}></WishCard>
+      <div className="under-my-wish-title-div">
+        <div className="my-wish-div">
+          <WishCard conList={[...conList]}></WishCard>
+        </div>
       </div>
     </div>
   );
@@ -224,14 +225,17 @@ function Donator({ payImgs }: PayImgs) {
   return (
     <div className="donator-div">
       <div className="flex items-center space-x-2 text-base">
-        <p className="text-xs ">축하해주신 분</p>
+        <p className="text-xs">- 축하해주신 분 -</p>
       </div>
-      <div className="mt-1 flex -space-x-2 overflow-hidden">
+      <div
+        className="mt-1 flex -space-x-2 overflow-hidden"
+        style={{ height: '42px', alignItems: 'center' }}
+      >
         {payImgs &&
           payImgs.slice(-5).map((payImg) => {
             return (
               <img
-                className="inline-block h-10 w-10 rounded-full ring-1 ring-white"
+                className="inline-block h-10 w-10 rounded-full ring-1 ring-white ring-profile"
                 src={payImg}
                 alt=""
                 style={{ border: '1px solid white' }}
@@ -241,7 +245,7 @@ function Donator({ payImgs }: PayImgs) {
       </div>
       {imgCount > 5 ? (
         <div className="mt-1 text-xs">
-          <a className="text-blue-500">+ {imgCount - 5} others</a>
+          <a className="others-number">+ {imgCount - 5} others</a>
         </div>
       ) : (
         <></>

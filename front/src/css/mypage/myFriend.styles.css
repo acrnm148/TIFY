@@ -1,6 +1,6 @@
 #base-div {
-  width: 1200px;
-  /* width: 70vw; */
+  /* width: 1200px; */
+  width: 70vw;
   height: 1200px;
   /* background-color: #c1c1c1; */
 }
@@ -10,7 +10,7 @@
 
 .ongoing-wishes {
   /* border: 1px solid black; */
-  margin-bottom: 40px;
+  margin-bottom: 80px;
 }
 
 .ongoing-wishes .ongoing-wish {
@@ -98,12 +98,18 @@
   font-family: 'Nanum Gothic';
 }
 
+.lower-side-friends-div {
+  display: flex;
+  justify-content: center;
+}
+
 .friends-div {
   border-radius: 10px;
   border: 1px solid gray;
-  width: 65vw;
+  /* width: 65vw; */
+  width: 630px;
   min-width: 600px;
-  height: 800px;
+  height: 600px;
   overflow-y: scroll;
 }
 
@@ -163,19 +169,20 @@
   color: white;
   border-radius: 5px;
   padding: 5px;
+  margin-left: 47px;
 }
 .friend-agree-button {
   background-color: #0084ff;
   color: white;
   border-radius: 5px;
-  padding: 8px;
+  padding: 5px;
   margin-right: 5px;
 }
 .friend-deny-button {
   background-color: #c1c1c1;
   color: white;
   border-radius: 5px;
-  padding: 8px;
+  padding: 5px;
 }
 
 .change-delete-button-div {
@@ -189,9 +196,10 @@
   padding: 5px;
   width: 40px;
 }
-.slick-prev:before, .slick-next:before{
+.slick-prev:before,
+.slick-next:before {
   font-size: 25px;
   line-height: 1;
-  opacity: .75;
+  opacity: 0.75;
   color: #808080;
 }
