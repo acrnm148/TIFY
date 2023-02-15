@@ -336,34 +336,39 @@ const FriendsList = () => {
     if (lastRequestData.requestCount > 1) {
       followCount = ` 외 ${lastRequestData.requestCount - 1}명`;
     }
+    console.log(friendList);
 
-    return (
-      <li className="list-group-item">
-        <img
-          src={lastRequestData.requestImg}
-          className="friend-profile blur-profile"
-        ></img>
-        <p
-          className="friend-nickname "
-          style={{ color: '#0084ff', fontWeight: 'normal' }}
-        >
-          일촌 요청
-        </p>
-        <p className="friend-username" style={{ fontWeight: 'normal' }}>
-          {lastRequestData.requestUsername}
-          {followCount}
-        </p>
-        <button
-          className="friend-request-switch-buttom"
-          onClick={() =>
-            setrequestListBool((requestListBool: boolean) => !requestListBool)
-          }
-          style={{ marginLeft: '47px' }}
-        >
-          →
-        </button>
-      </li>
-    );
+    if (friendList) {
+      return (
+        <li className="list-group-item">
+          <img
+            src={lastRequestData.requestImg}
+            className="friend-profile blur-profile"
+          ></img>
+          <p
+            className="friend-nickname "
+            style={{ color: '#0084ff', fontWeight: 'normal' }}
+          >
+            일촌 요청
+          </p>
+          <p className="friend-username" style={{ fontWeight: 'normal' }}>
+            {lastRequestData.requestUsername}
+            {followCount}
+          </p>
+          <button
+            className="friend-request-switch-buttom"
+            onClick={() =>
+              setrequestListBool((requestListBool: boolean) => !requestListBool)
+            }
+            style={{ marginLeft: '47px' }}
+          >
+            →
+          </button>
+        </li>
+      );
+    } else {
+      return <></>;
+    }
   };
 
   return (
