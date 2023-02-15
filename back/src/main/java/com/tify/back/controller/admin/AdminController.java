@@ -93,7 +93,6 @@ public class AdminController {
     public User updateUser(@PathVariable Long id, @RequestBody User user) {
         User existedUser = userRepository.findById(id).orElse(null);
         existedUser.setUserid(user.getUserid());
-        existedUser.setPassword(user.getPassword());
         existedUser.setUsername(user.getUsername());
         existedUser.setRoles(user.getRoles());
         existedUser.setNickname(user.getNickname());

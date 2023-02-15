@@ -57,10 +57,10 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Cart cart;
 
-
     /**
      *  refresh 생성자, setter
      */
+
     public void createRefreshToken(RefreshToken refreshToken) {
         this.jwtRefreshToken = refreshToken;
     }
@@ -74,16 +74,12 @@ public class User {
     public void updatePassword(String password) {
         this.password = password;
     }
+    public List<String> getRoleList() {
+        return Arrays.asList(this.roles.split(","));
+    }
 
     /**
      * 사용자가 다양한 권한을 가지고 있을수 있음
      */
-    public List<String> getRoleList() {
-        if(this.roles.length()>0) {
-            return Arrays.asList(this.roles.split(","));
-        }
-        return new ArrayList<>();
-    }
-
     public void emailVerifiedSuccess() {this.emailAuth = true;}
 }
