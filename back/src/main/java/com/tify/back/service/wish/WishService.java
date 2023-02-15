@@ -143,7 +143,7 @@ public class WishService {
                         .payId(payItem.getPay_id())
                         .celebFrom(payItem.getCeleb_from())
                         .celebContent(payItem.getCeleb_content())
-                        .celebContent(payItem.getCeleb_content())
+                        .celebImg(payItem.getCeleb_img_url())
                         .build();
                 String year = String.valueOf(payItem.getCreateTime().getYear());
                 String month = String.valueOf(payItem.getCreateTime().getMonthValue());
