@@ -159,6 +159,7 @@ const Users = () => {
           if (totalPages != res.data.totalPages) {
             setTotalPages(res.data.totalPages);
             setPageRange( getPageRanges(res.data.totalPages) ); 
+            setNowPage(1);
             let pageSelect:{ [index: number]: boolean } = {};
             pageSelect[1]=true;
             for (let i=2; i<=res.data.totalPages; i++) {
@@ -245,6 +246,7 @@ const Users = () => {
       await axios.put(`${baseUrl}/user/${id}`,{...userInfo})
       .then(
         (response) => {
+          console.log("----------",userInfo.roles);
           console.log(response);
           console.log("요청 보낸겁니다.");
           setUserInfo(response.data);
@@ -456,7 +458,7 @@ const Users = () => {
                     <Form.Control type="text" placeholder="0000-00-00 ..." value={userInfo?.createTime} readOnly/>
                   </Form.Group><br/>
                   <Form.Group controlId="formBasicUR">
-                    <Form.Label style={formTitleStyle}>User's Roles</Form.Label>
+                    <Form.Label style={formTitleStyle}>User's Roles (,로 구분)</Form.Label>
                     <Form.Control type="text" placeholder="USER, ADMIN, ... (컴마로 구분)" value={userInfo?.roles} onChange={(e) => { userInfo.roles = e.target.value; setUserInfo({...userInfo})}}/>
                   </Form.Group><br/>
                   <button className="btn" style={{backgroundColor:"blue", color:"white"}} onClick={(e) => submitEdit(e)}>수정</button>

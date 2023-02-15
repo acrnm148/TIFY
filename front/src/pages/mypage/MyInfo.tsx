@@ -404,12 +404,8 @@ export function MyInfo() {
           value={username}
         />
         <p className="m-1">닉네임</p>
-        <div
-          className={`nickname-box
-              ${nickDubCheck ? 'checkedNickname' : ''}
-              `}
-        >
-          <form className="">
+        <div className={`${nickDubCheck ? 'nickname-box checkedNickname' : 'nickname-box'}`}>
+          {/* <form > */}
             <input
               type="text"
               maxLength={10}
@@ -421,10 +417,10 @@ export function MyInfo() {
                 console.log(e.target.value);
               }}
             />
-            <button className="formSideButton" onClick={CheckNickname}>
+            <button className="formSideButton" onClick={CheckNickname} style={{ width: '75px' }}>
               중복확인
             </button>
-          </form>
+          {/* </form> */}
         </div>
 
         <p className="m-1">생년월일</p>

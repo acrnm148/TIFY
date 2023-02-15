@@ -50,7 +50,7 @@ const Wishes = () => {
     const [refresh, setRefresh] = useState<boolean>(false);
     useEffect(() => {
       getData(page)}, [refresh]);
-      useEffect(()=>{
+    useEffect(()=>{
         setNowRange([...pageRange[0]])
       }, [totalPages]) //한 함수안에 related useState를 동시에 넣으면 안된다.!
   
@@ -62,12 +62,13 @@ const Wishes = () => {
         let url;
         searchTerm=='' ? url=`${baseUrl}/wish`:url=`${baseUrl}/wishsearch/${searchTerm}`
         const response = await axios.get(url, {
-          // params: {page,},
+          params: {page,},
         }).then((res) => {
           setSearchResults(res.data.content);
           if (totalPages != res.data.totalPages) {
             setTotalPages(res.data.totalPages);
             setPageRange( getPageRanges(res.data.totalPages) ); 
+            setNowPage(1);
             let pageSelect:{ [index: number]: boolean } = {};
             pageSelect[1]=true;
             for (let i=2; i<=res.data.totalPages; i++) {

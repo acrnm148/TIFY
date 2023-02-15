@@ -79,6 +79,7 @@ const Gifts = () => {
           if (totalPages != res.data.totalPages) {
             setTotalPages(res.data.totalPages);
             setPageRange( getPageRanges(res.data.totalPages) ); 
+            setNowPage(1);
             let pageSelect:{ [index: number]: boolean } = {};
             pageSelect[1]=true;
             for (let i=2; i<=res.data.totalPages; i++) {
@@ -238,11 +239,13 @@ const Gifts = () => {
                 <th scope="col">GiftId</th>
                 <th scope="col">GiftImg</th>
                 <th scope="col">Giftname</th>
-                <th scope="col">totPrice</th>
-                <th scope="col">nowPrice</th>
+                <th scope="col">quantity</th>
+                <th scope="col">maxAmount</th>
+                <th scope="col">purePrice</th>
                 <th scope="col">finishYN</th>
-                <th scope="col">endDate</th>
-                <th scope="col">category</th>
+                <th scope="col">successYN</th>
+                <th scope="col">finishDate</th>
+                <th scope="col">type</th>
                 </tr>
             </thead>
             <tbody>
@@ -264,7 +267,8 @@ const Gifts = () => {
                   <td>{gift?.purePrice}</td>
                   <td>{gift?.finishYN}</td>
                   <td>{gift?.successYN}</td>
-                  <td>{gift?.idx}</td>
+                  <td>{gift?.finishDate}</td>
+                  <td>{gift?.type}</td>
                   <td colSpan={2}>
                     <button className="btn" style={{backgroundColor:"blue", color:"white"}} onClick={() => handleShow(parseInt(gift?.id))}>수정</button>
                     <button className="btn" style={{backgroundColor:"gray", color:"black"}}
@@ -370,8 +374,8 @@ const Gifts = () => {
                   </div>
                   <Form.Group controlId="formBasicUO">
                     <Form.Label style={formTitleStyle}>UserOption</Form.Label>
-                    <textarea placeholder="User Option here" value={type} 
-                    onChange={(e) => {setType(e.target.value)}}
+                    <textarea placeholder="User Option here" value={userOption} 
+                    onChange={(e) => {setUserOption (e.target.value)}}
                     style={{height:"100px", border:"1px lightgray solid", width:"100%", borderRadius:"10px"}}></textarea>
                   </Form.Group><br/>
 
