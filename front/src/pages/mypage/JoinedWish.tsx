@@ -282,7 +282,7 @@ function OpenedDetails(props: { joinedWish: JoinedWish; giftOrCard: string }) {
             </div> */}
         <div className="joined-arrow">
           {cardIndex !== 0 && (
-            <button onClick={(e) => MinusIndex(e)}>
+            <button onClick={(e: any) => MinusIndex(e)}>
               <img src={circleArrowL} alt="원형 화살표 좌" />
             </button>
           )}
@@ -293,7 +293,7 @@ function OpenedDetails(props: { joinedWish: JoinedWish; giftOrCard: string }) {
             <img
               src={circleArrowR}
               alt="원형 화살표 우"
-              onClick={(e) => PlusIndex(e)}
+              onClick={(e: any) => PlusIndex(e)}
             />
           )}
         </div>
