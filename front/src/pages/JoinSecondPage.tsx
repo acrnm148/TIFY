@@ -74,66 +74,70 @@ export function JoinSecondPage() {
     let htel = /^(?=.*[0-9]{2,3})/;
     let mtel = /^(?=.*[0-9]{3,4})/;
     let etel = /^(?=.*[0-9]{4,4})/;
-    
+
     if (htel.test(tel1) && mtel.test(tel2) && etel.test(tel3)) {
-      return "";
+      return '';
     }
-    return "유효하지 않은 연락처입니다."
+    return '유효하지 않은 연락처입니다.';
   }
 
   function birthCheck() {
-    if (Date.parse(`${birthYear}-${birthMonth}-${birthDay}`) && birthYear && birthMonth && birthDay) {
-      return ""
+    if (
+      Date.parse(`${birthYear}-${birthMonth}-${birthDay}`) &&
+      birthYear &&
+      birthMonth &&
+      birthDay
+    ) {
+      return '';
     }
-    return "유효하지 않은 날짜입니다.";
+    return '유효하지 않은 날짜입니다.';
   }
 
-  function pwCheck1(pw:string) {
+  function pwCheck1(pw: string) {
     let alpah = /^(?=.*[a-zA-Z])/;
 
     if (!alpah.test(password)) {
-      return "영어가 포함되어 있지 않습니다.";
+      return '영어가 포함되어 있지 않습니다.';
     }
-    return "";
+    return '';
   }
 
-  function pwCheck2(pw:string) {
+  function pwCheck2(pw: string) {
     let nume = /^(?=.*\d)/;
 
     if (!nume.test(password)) {
-      return "숫자가 포함되어 있지 않습니다.";
+      return '숫자가 포함되어 있지 않습니다.';
     }
-    return "";
+    return '';
   }
 
-  function pwCheck3(pw:string) {
+  function pwCheck3(pw: string) {
     let special = /^(?=.*[!@#\$%\^&\*])/;
-  
+
     if (!special.test(password)) {
-      return "특수문자가 포함되어 있지 않습니다.";
+      return '특수문자가 포함되어 있지 않습니다.';
     }
-    return "";
+    return '';
   }
 
-  function pwCheck4(pw:string) {
+  function pwCheck4(pw: string) {
     let len = /^(?=.{8,12})/;
 
-    if (pw.length < 8 ) {
-      return "길이가 8자 미만입니다."
+    if (pw.length < 8) {
+      return '길이가 8자 미만입니다.';
+    } else if (pw.length > 12) {
+      return '길이가 12자 초과입니다.';
     }
-    else if (pw.length > 12) {
-      return "길이가 12자 초과입니다."
-    }
-    return "";
+    return '';
   }
 
-  function pwCheck5(pw:string) {
+  function pwCheck5(pw: string) {
     let pwdCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,12}$/;
 
     if (!pwdCheck.test(password)) {
-      return "유효하지 않은 비밀번호 입니다."
-   }
-   return "";
+      return '유효하지 않은 비밀번호 입니다.';
+    }
+    return '';
   }
 
   function CheckValid() {
@@ -366,8 +370,14 @@ export function JoinSecondPage() {
         },
       })
       .then((e) => {
+        console.log(e.data);
         console.log('닉네임 확인 완료');
         console.log(e);
+        if (e.data == 'Y') {
+          alert(`이미 존재하는 닉네임입니다. 😅`);
+          setNickDubCheck(false);
+          return;
+        }
         alert('You can do it! 👍');
         setNickDubCheck(true);
       })
@@ -471,15 +481,17 @@ export function JoinSecondPage() {
               type="text"
               onChange={(e) => setUsername(e.target.value)}
               maxLength={6}
-              className={`${username ? 'inputBox checkedNickname' : 'inputBox'}`}
+              className={`${
+                username ? 'inputBox checkedNickname' : 'inputBox'
+              }`}
             />
             <p className="m-1">닉네임</p>
-            <div
-              className={`nickname-box 
+            <div className="nickname-div">
+              <div
+                className={`nickname-box 
                 ${nickDubCheck ? 'checkedNickname' : ''}
                 `}
-            >
-              <form className="">
+              >
                 <input
                   type="text"
                   maxLength={10}
@@ -490,10 +502,10 @@ export function JoinSecondPage() {
                     setNickDubCheck(false);
                   }}
                 />
-                <button className="formSideButton" onClick={CheckNickname}>
-                  중복확인
-                </button>
-              </form>
+              </div>
+              <button className="formSideButton" onClick={CheckNickname}>
+                중복 확인
+              </button>
             </div>
             <span className="m-1">비밀번호</span>
             <form className="emailForm">
@@ -502,34 +514,59 @@ export function JoinSecondPage() {
                 maxLength={12}
                 placeholder={'영어, 숫자, 특수문자를 포함한 8~12자리'}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`${!pwCheck5(password) ? 'inputBox checkedNickname' : 'inputBox'}`}
+                className={`${
+                  !pwCheck5(password) ? 'inputBox checkedNickname' : 'inputBox'
+                }`}
               />
-              <div style={{position:"relative", left:"10%", marginBottom:"5%"}}>
-                <h1 style={{color:"red"}}>{pwCheck1(password)}</h1>
-                <h1 style={{color:"red"}}>{pwCheck2(password)}</h1>
-                <h1 style={{color:"red"}}>{pwCheck3(password)}</h1>
-                <h1 style={{color:"red"}}>{pwCheck4(password)}</h1>
-                <h1 style={{color:"red"}}>{pwCheck5(password)}</h1>
+              <div
+                style={{
+                  position: 'relative',
+                  left: '10%',
+                  marginBottom: '5%',
+                }}
+              >
+                <h1 style={{ color: 'red' }}>{pwCheck1(password)}</h1>
+                <h1 style={{ color: 'red' }}>{pwCheck2(password)}</h1>
+                <h1 style={{ color: 'red' }}>{pwCheck3(password)}</h1>
+                <h1 style={{ color: 'red' }}>{pwCheck4(password)}</h1>
+                <h1 style={{ color: 'red' }}>{pwCheck5(password)}</h1>
               </div>
             </form>
             <span className="m-1">비밀번호 확인</span>
             <form className="emailForm">
               <input
                 type="password"
-                className={`${(password == confirmPassword) ? 'inputBox checkedNickname' : 'inputBox'}`}
+                className={`${
+                  password == confirmPassword && confirmPassword != ''
+                    ? 'inputBox checkedNickname'
+                    : 'inputBox'
+                }`}
                 maxLength={12}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
-              <div style={{position:"relative", left:"10%", marginBottom:"5%"}}>
-                { (password != confirmPassword) ? 
-                  (<h1 style={{color:"red"}}>비밀번호가 일치하지 않습니다.</h1>) :
-                   null
-                }
+              <div
+                style={{
+                  position: 'relative',
+                  left: '10%',
+                  marginBottom: '5%',
+                }}
+              >
+                {password != confirmPassword ? (
+                  <h1 style={{ color: 'red' }}>
+                    비밀번호가 일치하지 않습니다.
+                  </h1>
+                ) : null}
               </div>
             </form>
             <p className="m-1">생년월일</p>
             <form className="emailForm">
-              <div className={`${ birthCheck().length < 1 ? 'mini-input-container checkedNickname' : 'mini-input-container'}`}>
+              <div
+                className={`${
+                  birthCheck().length < 1
+                    ? 'mini-input-container checkedNickname'
+                    : 'mini-input-container'
+                }`}
+              >
                 <input
                   type="number"
                   className="mini-input-box"
@@ -561,15 +598,25 @@ export function JoinSecondPage() {
                   null :
                   (<h1 style={{color:"red"}}>유효하지 않은 날짜입니다.</h1>)
                 } */}
-            <div style={{position:"relative", left:"10%", marginBottom:"5%"}}>
-              <h1 style={{color:"red"}}>{birthCheck()}</h1>
-            </div>
-
-
+              <div
+                style={{
+                  position: 'relative',
+                  left: '10%',
+                  marginBottom: '5%',
+                }}
+              >
+                <h1 style={{ color: 'red' }}>{birthCheck()}</h1>
+              </div>
             </form>
             <p className="m-1">연락처</p>
             <form className="emailForm">
-              <div className={`${ telCehck().length < 1 ? 'mini-input-container checkedNickname' : 'mini-input-container'}`}>
+              <div
+                className={`${
+                  telCehck().length < 1
+                    ? 'mini-input-container checkedNickname'
+                    : 'mini-input-container'
+                }`}
+              >
                 <input
                   type="number"
                   className="mini-input-box"
@@ -594,19 +641,30 @@ export function JoinSecondPage() {
                   onChange={(e) => setTel3(e.target.value)}
                 />
               </div>
-              <div style={{position:"relative", left:"10%", marginBottom:"5%"}}>
-                <h1 style={{color:"red"}}>{telCehck()}</h1>
+              <div
+                style={{
+                  position: 'relative',
+                  left: '10%',
+                  marginBottom: '5%',
+                }}
+              >
+                <h1 style={{ color: 'red' }}>{telCehck()}</h1>
               </div>
             </form>
 
-            <form className="emailForm" onSubmit={handleSubmit} method="get"> 
-              <button type="submit"
-              className={`${ ( (telCehck().length < 1) &&
-                (birthCheck().length < 1) &&
-                (password == confirmPassword) && 
-                (pwCheck5(password).length < 1) && 
-                nickDubCheck && 
-                (username.length > 0) ) ? 'loginButton font-bold' : 'loginButton-d font-bold'}`} 
+            <form className="emailForm" onSubmit={handleSubmit} method="get">
+              <button
+                type="submit"
+                className={`${
+                  telCehck().length < 1 &&
+                  birthCheck().length < 1 &&
+                  password == confirmPassword &&
+                  pwCheck5(password).length < 1 &&
+                  nickDubCheck &&
+                  username.length > 0
+                    ? 'loginButton font-bold'
+                    : 'loginButton-d font-bold'
+                }`}
                 disabled={
                   !(
                     telCehck().length < 1 &&
@@ -616,7 +674,8 @@ export function JoinSecondPage() {
                     nickDubCheck &&
                     username.length > 0
                   )
-                }>
+                }
+              >
                 가입하기
               </button>
             </form>

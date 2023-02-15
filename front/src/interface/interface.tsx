@@ -68,4 +68,5 @@ export interface MyWishType {
   fromId: number;
   cardOpen: string;
   payImgs: string[];
+  finishYn: string;
 }
