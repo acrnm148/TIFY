@@ -204,77 +204,82 @@ export function PhoneBook() {
   };
 
   return (
-    <div>
+    <div className="contacts-div">
       <p className="phone-book-title">| Contacts</p>
-      <form className="add-contact-form">
-        <input
-          placeholder="이름"
-          className="phone-name-input"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        ></input>
-        <div className="mini-input-container">
-          <input
-            type="number"
-            className="mini-input-box"
-            placeholder="010"
-            maxLength={3}
-            value={tel1}
-            onChange={(e) => setTel1(e.target.value)}
-          />
-          <span>-</span>
-          <input
-            type="number"
-            className="mini-input-box"
-            placeholder="8888"
-            maxLength={4}
-            value={tel2}
-            onChange={(e) => setTel2(e.target.value)}
-          />
-          <span>-</span>
-          <input
-            type="number"
-            className="mini-input-box"
-            placeholder="8888"
-            maxLength={4}
-            value={tel3}
-            onChange={(e) => setTel3(e.target.value)}
-          />
-        </div>
-
-        {tryUpdate ? (
-          <>
-            <div className="update-contact-div">
-              <button className="update-contact-button" onClick={handleUpdate}>
-                연락처 수정
-              </button>
-              <button
-                className="cancel-update-contact-button"
-                onClick={handleUpdateCancel}
-              >
-                취소
-              </button>
+      <div className="under-title-div">
+        <div className="phone-book-div">
+          <form className="add-contact-form">
+            <input
+              placeholder="이름"
+              className="phone-name-input"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            ></input>
+            <div className="mini-input-container">
+              <input
+                type="number"
+                className="mini-input-box"
+                placeholder="010"
+                maxLength={3}
+                value={tel1}
+                onChange={(e) => setTel1(e.target.value)}
+              />
+              <span>-</span>
+              <input
+                type="number"
+                className="mini-input-box"
+                placeholder="8888"
+                maxLength={4}
+                value={tel2}
+                onChange={(e) => setTel2(e.target.value)}
+              />
+              <span>-</span>
+              <input
+                type="number"
+                className="mini-input-box"
+                placeholder="8888"
+                maxLength={4}
+                value={tel3}
+                onChange={(e) => setTel3(e.target.value)}
+              />
             </div>
-          </>
-        ) : (
-          <button className="add-contact-button" onClick={handleAddContact}>
-            연락처 추가
-          </button>
-        )}
-      </form>
-      <div className="friends-div" style={{ width: '700px' }}>
-        <ul className="list-group list-group-flush">
-          {contactList &&
-            contactList.map((contact: phonebook) => {
-              console.log(contact, 'map으로 받은 contact');
-              return <SingleContact {...contact}></SingleContact>;
-            })}
-          <li className="list-group-item">An item</li>
-          <li className="list-group-item">A second item</li>
-          <li className="list-group-item">A third item</li>
-          <li className="list-group-item">A fourth item</li>
-          <li className="list-group-item">And a fifth test</li>
-        </ul>
+
+            {tryUpdate ? (
+              <>
+                <div className="update-contact-div">
+                  <button
+                    className="update-contact-button"
+                    onClick={handleUpdate}
+                  >
+                    연락처 수정
+                  </button>
+                  <button
+                    className="cancel-update-contact-button"
+                    onClick={handleUpdateCancel}
+                  >
+                    취소
+                  </button>
+                </div>
+              </>
+            ) : (
+              <button className="add-contact-button" onClick={handleAddContact}>
+                연락처 추가
+              </button>
+            )}
+          </form>
+          <div className="friends-div" style={{ width: '700px' }}>
+            <ul className="list-group list-group-flush">
+              {contactList !== undefined ? (
+                contactList.map((contact: phonebook) => {
+                  console.log(contact, 'map으로 받은 contact');
+                  return <SingleContact {...contact}></SingleContact>;
+                })
+              ) : (
+                <div>저장된 전화번호가 없습니다.</div>
+              )}
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   );
