@@ -297,8 +297,8 @@ const CongratsCards = (props: {
               </NavLink> */}
               <div className="wish-open wish-on-going-background">
                 클릭하세요!
-                <GiftBoxAnimation />
-                  {/* <iframe style={{height: "200%",width: "500px"}} src="https://embed.lottiefiles.com/animation/64058"></iframe> */}
+                {/* <GiftBoxAnimation /> */}
+                  <iframe style={{height: "200%",width: "500px"}} src="https://embed.lottiefiles.com/animation/64058"></iframe>
                   {/* 위시 오픈 애니메이션 */}
                 </div>
             </div>

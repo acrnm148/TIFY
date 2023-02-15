@@ -11,7 +11,7 @@ import { RootState } from '../store/Auth';
 import logo from '../assets/tifyLogo.svg';
 import axios from "axios";
 
-import "../css/AlaramDropdown.styles.css"
+import "../css/AlramDropDown.styles.css"
 
 interface Alarm {
     [key: string]: any;
