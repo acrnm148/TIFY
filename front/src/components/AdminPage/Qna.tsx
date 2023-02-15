@@ -1,19 +1,13 @@
-import React, { useState, useEffect, ReactEventHandler, useCallback, ReactHTMLElement } from "react";
-import alert from '../../assets/iconAlert.svg';
-import bell from '../../assets/bell.png';
-import anony from '../../assets/anony.png';
-
-import { ref, set, push, onValue, child, get, update, remove } from "firebase/database";
-import { List } from "@mui/material";
+import React, { useState, useEffect} from "react";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Auth';
+import {useLocation  } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Justify, Search } from 'react-bootstrap-icons';
-import { NavLink } from 'react-router-dom';
-import {Modal, Form, Collapse, Container, Row, Col} from 'react-bootstrap';
-import { borderRadius } from "@mui/system";
+import { Search } from 'react-bootstrap-icons';
+import {Modal, Form} from 'react-bootstrap';
 
 export interface Answer {
 	createdDate?: any;
@@ -98,6 +92,25 @@ const Qna = () => {
     const [pageStates, setPageStates] = useState<{ [index: number]: boolean }>({},); // page 선택 여부.
     const [nowRange,setNowRange] = useState<Array<number>>([]);
     const [rangeIdx, setRangeIdx] = useState<number>(0);
+    //관리자 인증
+    const location = useLocation().pathname;
+    const roleList: string[] = useSelector((state: RootState) => state.authToken.roleList);
+    const isAdmin = roleList.includes('ADMIN');
+    const navigate = useNavigate();
+  
+    useEffect(() => {
+      let toLogin = false;
+      location.split('/').forEach((val) => {
+        if (val === 'admin') {
+          toLogin = true;
+        }
+      });
+  
+      if (isAdmin && toLogin) {
+        alert("관리자 권한이 없습니다.");
+        navigate('../login');
+      }
+    }, [location, navigate]);
 
     useEffect(()=>{
       setNowRange([...pageRange[0]])
@@ -133,7 +146,6 @@ const Qna = () => {
             }
             setPageStates(pageSelect);
           }
-          console.log(res)
           return res});
         return response.data.content;
       } catch (error) {
@@ -146,7 +158,6 @@ const Qna = () => {
 
     const GoToNextPage = () =>{
       if (rangeIdx < pageRange.length-1) {
-        console.log(rangeIdx)
         setPageRange(getPageRanges(totalPages));
         const range = pageRange.at(rangeIdx + 1);
         if (range) {
@@ -193,8 +204,6 @@ const Qna = () => {
     };
 
     const handleEdit = async (id: number) => {
-        console.log(id);
-        console.log("-----------------");
         const data = await axios.get(`${baseUrl}/${id}`).then((res) => {
           setQnaInfo(res.data);
           return res.data
@@ -203,12 +212,10 @@ const Qna = () => {
         setTitle(data.title)
         setContent(data.content)
         setAnswers(data.answers)
-        console.log(data);
         return data;
     };
   
     const handleDelete = async (id : number) => {
-        console.log(id);
         try {
             const response = await axios.delete(`${baseUrl}/${id}`);
             getData(page-1);
@@ -274,12 +281,7 @@ const Qna = () => {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
       .then((con) => {
-        console.log('이미지주소불러오기 성공', con.data);
-        // setImgUrlS3(con.data);
         setAurl(con.data);
-        console.log(con)
-        console.log("이미지 성공")
-        // setNewImgs(newImgs?.concat(temp));
         return con.data;
       })
       .catch((err) => {
@@ -290,8 +292,6 @@ const Qna = () => {
   const submitEdit = async (e:any) => {
     let id = qnaInfo?.id;
     e.preventDefault();
-    console.log(id);
-    console.log("-----------------");
     if (Rfiles.length > 0) {
       await getImgUrl_one();
     }
@@ -299,7 +299,6 @@ const Qna = () => {
     const response = await axios.post(`https://i8e208.p.ssafy.io/api/answer/${id}`,{ content:acontent,imgUrl:aurl,userPk:user?.id  })
     .then(
       (response) => {
-        console.log(response);
         setQnaInfo(response.data);
         }
       );
