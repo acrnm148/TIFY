@@ -69,7 +69,7 @@ export function MainPage() {
            </Animator>
          </ScrollPage>
         <ScrollPage style={{display: "flex", flexDirection: "column",justifyContent: "center", alignItems:"center", height:"auto"}}>
-          <Animator animation={FadeUp}>
+          {/* <Animator animation={FadeUp}> */}
              <Animator animation={MoveIn(-50, 0)} >
                <GiftRecommend giftList={giftList} wish='' num = {Math.random()  * (giftList.length-3)}/>
              </Animator>
@@ -78,33 +78,37 @@ export function MainPage() {
              </Animator> 
              <NavLink to={'/gifthub'} className="main-navlink"><h1 style={{fontSize:"40px"}}>GiftHub<span style={{ fontSize: "20px" }}>더보기🎁</span></h1></NavLink>
 
-          </Animator>
+          {/* </Animator> */}
         </ScrollPage>
-        <ScrollPage style={{width:"100%", padding:"20%", height:"1218px"}}>
+        <ScrollPage style={{width:"100%", paddingLeft:"20%",paddingRight:"20%", height:"1218px"}}>
           <div className='messages-con' style={{width:"100%" }}>
 
             <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", fontSize: "40px",height: "auto", flexDirection:'column',width:"100%"}} >
                 <Animator className="gomin" animation={MoveIn(-500, 0)}>
                   <div>이번에는 무슨 선물해야 하지?</div>
                 </Animator>
-                <Animator className="gomin" animation={MoveIn(-500, 0)}>
+                <Animator className="gomin" animation={MoveIn(-200, 0)}>
                   <div>뭘 좋아할 지 모르겠네...” 🙋🏻‍♀️</div>
                 </Animator>
 
             </div>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", fontSize: "40px",width:"100%",height: "auto", flexDirection:'column'}} >
-
                 <Animator className="gomin gomin-right" animation={MoveIn(500, 0)}>
                   <div>기프티콘 선물은 이제 그만..</div>
                 </Animator>
-                <Animator className="gomin  gomin-right" animation={MoveIn(500, 0)}>
+                <Animator className="gomin  gomin-right" animation={MoveIn(200, 0)}>
                   <div>내가 갖고싶은걸 어떻게 말하지?</div>
                 </Animator>
             </div>
           </div>
         </ScrollPage>
-        <ScrollPage style={{height:"fit-content"}}>
-            <div className="no-gomin" style={{fontSize: "40px", display: "flex", justifyContent: "center", alignItems: "center", height:"600px" }} >
+        <ScrollPage 
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}>
+            <div className="no-gomin" style={{fontSize: "40px", display: "flex", justifyContent: "center", alignItems: "center" }} >
                 <span style={{ fontSize: "32px" }}>TIFY와 함께하세요</span>
                 <img src={tifyou} alt="" />
               </div>
@@ -112,7 +116,7 @@ export function MainPage() {
         <ScrollPage style={{height:"1000px", display:"flex", alignItems:"center"}}>
           <div className='make-your-wish' style={{height:"1000px", display:"flex", alignItems:"center"}}>
                 <div  className="wish-preview" style={{backgroundImage:`url(${TIFYphone})`}} >
-                  <img src={cardPreview} alt="" />
+                    <img src={cardPreview} alt="" />
                 </div>
               <div className='myw-text'>
                 <h1>Make Your Wish</h1>

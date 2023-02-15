@@ -36,15 +36,16 @@ const FriendsPage: React.FC = () => {
   // 알림보낼 유저정보 받아오는부분
   const [userProfile, setUserProfile] = useState<string>()
   const [username ,setUserName] = useState<string>()
-  const pushData = (friendId:number, userId:number) => {
+  const pushData = (friendId:number, userId:number, friendName:string) => {
 		let base = "/test/tify/"; 
     push(ref(db, base + friendId), {
       text: username+'님이 친구요청을 보냈습니다.',
       profile : userProfile,
       interval: "Daily",
       friend: 'req',
-      friendName : username,
+      friendName : friendName,
       friendId : userId,
+      time : Date.now()
     });
     console.log('친구요청보냄')
   };
@@ -110,7 +111,7 @@ const FriendsPage: React.FC = () => {
     } catch (error) {}
   };
 
-  const handleRequestFriend = async (userId: number) => {
+  const handleRequestFriend = async (userId: number, friendName:string) => {
     try {
       const response = await axios.post(
         `https://i8e208.p.ssafy.io/api/friends`,
@@ -129,11 +130,11 @@ const FriendsPage: React.FC = () => {
       setUsers([...users]);
       setRefresh(!refresh);
       // 친구수락 받는 사람한테 알림
-      pushData(userId, userPk)
+      pushData(userId, userPk, friendName)
     } catch (error) {}
   };
  
-  const handleAcceptFriend = async (friendId: number) => {
+  const handleAcceptFriend = async (friendId: number, userName : string) => {
     try {
       const response = await axios.post(
         `https://i8e208.p.ssafy.io/api/friends/accept`,
@@ -152,7 +153,7 @@ const FriendsPage: React.FC = () => {
       setRefresh(!refresh);
 
       // 친구요청 받는 사람한테 알림
-      pushData(friendId, userPk)
+      pushData(friendId, userPk, userName)
     } catch (error) {
       console.log(error);
     }
@@ -247,7 +248,7 @@ const FriendsPage: React.FC = () => {
                     <button
                       className="rectangle-2-7"
                       onClick={() => {
-                        handleAcceptFriend(user.friendshipId);
+                        handleAcceptFriend(user.friendshipId, user.name);
                       }}
                     >
                       친구수락
@@ -272,7 +273,7 @@ const FriendsPage: React.FC = () => {
                   <button
                     className="rectangle-2-6"
                     onClick={() => {
-                      handleRequestFriend(user.id);
+                      handleRequestFriend(user.id, user.name);
                     }}
                   >
                     친구요청

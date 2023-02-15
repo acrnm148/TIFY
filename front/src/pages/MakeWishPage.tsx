@@ -299,6 +299,7 @@ export function MakeWishPage() {
       text: userName+'님의 위시가 생성되었습니다!', // 필드는 자유롭게 추가 하셔도 됩니다.
       profile : userProfile,
       interval: "Daily", // nonSql db라서 확장/수정이 자유롭습니다.
+      time : Date.now()
     });
   };
   const [finished, setFinished] = useState(false);

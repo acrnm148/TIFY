@@ -17,7 +17,6 @@ interface Alarm {
     [key: string]: any;
     id: string;
   }
-
 const updateData = (dataid:string,data:Alarm,userId:string) => {
     //data는 email 기준 조회합니다.
     data.state = true;
@@ -30,6 +29,7 @@ const updateData = (dataid:string,data:Alarm,userId:string) => {
 };
 
 const AlarmDropdown = () => {
+  const [accept, setAccept] = useState<boolean>(false)
   var userId = useSelector((state: RootState) => state.authToken.userId);
   // if(userEmail) {userEmail = userEmail.replace("@","-").replace(".","-");}
   const accessToken = useSelector(
@@ -38,7 +38,7 @@ const AlarmDropdown = () => {
 
   const [showDropdown, setShowDropdown] = useState(false);
   const toggleDropdown = () => {
-    isNew = alert;
+    setIsNew(alert);
     if (showDropdown){
       alarmsArray.map((val,idx) => {
         if ( alarmsArray[idx].state === false ){
@@ -55,13 +55,13 @@ const AlarmDropdown = () => {
 
   var alarmsArray: Alarm[] = [];
 
-  var isNew:string = alert;
+  const [isNew, setIsNew] = useState<string>(alert);
   onValue(mb, (snapshot) => {
         const data = snapshot.val();
         alarmsArray = Object?.keys(data)?.map(key => {
             if (data[key].state === false) {
                 console.log("새 알람 발생");
-                isNew = bell;
+                setIsNew(bell);
             }
             return { ...data[key], id: key } as Alarm;
             });
@@ -148,7 +148,11 @@ const AlarmDropdown = () => {
                       {item.friend&&
                         item.friend == 'req' &&
                           // <div style={{ fontSize:'5px', width:"50px"}}>.</div>
-                          <button className="accept-btn" onClick={()=>handleAcceptFriend(item.friendName, item.friendId, accessToken)}>수락</button>
+                          <button className="accept-btn" onClick={()=>(
+                            handleAcceptFriend(item.friendName, item.friendId, accessToken),
+                            setAccept(true)
+                          )
+                          }>{accept?'친구':'수락'}</button>
                       }
                     </div>
                 </div>
@@ -184,6 +188,7 @@ const pushData = (friendName:string, friendId:number) => {
   push(ref(db, base + friendId), {
     text: friendName+'님이 친구요청을 수락했습니다.',
     interval: "Daily",
+    time : Date.now(),
   });
   console.log('친구요청수락함')
 };
