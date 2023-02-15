@@ -204,8 +204,10 @@ export function MyWish() {
   return (
     <div>
       <p className="phone-book-title">| My Wish</p>
-      <div className="my-wish-div">
-        <WishCard conList={[...conList]}></WishCard>
+      <div className="under-my-wish-title-div">
+        <div className="my-wish-div">
+          <WishCard conList={[...conList]}></WishCard>
+        </div>
       </div>
     </div>
   );

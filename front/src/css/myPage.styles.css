@@ -57,10 +57,16 @@
   width: 24px;
 }
 
+.under-my-wish-title-div {
+  /* display: flex; */
+  /* justify-content: center; */
+}
+
 .my-wish-div {
-  width: 65vw;
   display: flex;
   flex-wrap: wrap;
+  width: 70%;
+  margin-left: 5%;
 }
 
 .my-wish-div > .wish-box {

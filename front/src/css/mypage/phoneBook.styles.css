@@ -1,9 +1,22 @@
+.contacts-div {
+  width: 70%;
+  min-width: 700px;
+}
+
 .phone-book-title {
   font-weight: 800;
   font-size: 32px;
   line-height: 32px;
   color: #fe3360;
   margin-bottom: 50px;
+}
+
+.under-title-div {
+  display: flex;
+  justify-content: center;
+}
+
+.phone-book-div {
 }
 
 .add-contact-form {

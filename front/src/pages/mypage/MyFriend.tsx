@@ -347,7 +347,7 @@ const FriendsList = () => {
           className="friend-nickname "
           style={{ color: '#0084ff', fontWeight: 'normal' }}
         >
-          팔로우 요청
+          일촌 요청
         </p>
         <p className="friend-username" style={{ fontWeight: 'normal' }}>
           {lastRequestData.requestUsername}
