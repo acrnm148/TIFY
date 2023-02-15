@@ -79,16 +79,6 @@ public class PayController {
 
         System.out.println("결제 완료 : "+pay);
 
-        // Get wish id from the gift and update finishYN if nowPrice and totPrice are the same
-        Wish linkedWish = gift.get().getWish();
-        if (linkedWish != null) {
-            wishId = linkedWish.getId();
-            if (linkedWish.getFinishYN().equals("N") && linkedWish.getNowPrice() == linkedWish.getTotPrice()) {
-                linkedWish.setFinishYN("Y");
-                wishRepository.save(linkedWish);
-            }
-        }
-
         return ResponseEntity.ok().body("축하가 완료되었습니다.");
     }
 
