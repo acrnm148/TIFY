@@ -19,6 +19,7 @@ export const tokenSlice = createSlice({
     expireTime: 0,
     userId: 0,
     userEmail: '',
+    roleList:[''],
   },
   reducers: {
     SET_TOKEN: (state, action: PayloadAction<string>) => {
@@ -35,6 +36,10 @@ export const tokenSlice = createSlice({
       state.userEmail = action.payload;
     },
 
+    SET_ROLELIST: (state, action: PayloadAction<string>) => {
+      state.roleList = action.payload.split(",");
+    },
+
     // 정보 삭제하면서 초기화
     DELETE_TOKEN: (state) => {
       state.authenticated = false;
@@ -42,6 +47,7 @@ export const tokenSlice = createSlice({
       state.expireTime = 0;
       state.userId = 0;
       state.userEmail = '';
+      state.roleList = [''];
     },
   },
 });
@@ -66,7 +72,7 @@ let store = configureStore({
 //state 타입을 export 해두는건데 나중에 쓸 데가 있음
 export type RootState = ReturnType<typeof store.getState>;
 
-export const { SET_TOKEN, DELETE_TOKEN, SET_USERID, SET_USEREMAIL } =
+export const { SET_TOKEN, DELETE_TOKEN, SET_USERID, SET_USEREMAIL, SET_ROLELIST } =
   tokenSlice.actions;
 
 export default tokenSlice.reducer;
