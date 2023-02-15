@@ -52,6 +52,7 @@
   width: 100%;
   display: flex;
   flex-direction: row-reverse;
+  color: #bcdbf7;
 }
 .product-name-like {
   display: flex;
@@ -69,21 +70,28 @@
   height: 42px;
 }
 .make-wish {
+  font-family: 'NanumGothic';
   cursor: pointer;
-  background: #fe3360;
+  color: #fe3360;
+  border-color: #fe3360;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
+  border-width: 1px;
+  border-radius: 8px;
   width: 100%;
   height: 52px;
-  color: white;
+  color: #fe3360;
   font-style: normal;
-  font-weight: 400;
-  font-size: 22.652px;
+  font-weight: bold;
+  font-size: 18px;
   line-height: 27px;
   display: flex;
   align-items: center;
+}
+.make-wish:hover {
+  background-color: #fe3360;
+  color: white;
 }
 .product-info > img {
   width: 20vw;
@@ -114,23 +122,37 @@
   padding-bottom: 10px;
 }
 .product-option {
+  font-family: 'NanumGothic';
+  cursor: pointer;
+  color: #bcdbf7;
+  border-color: #bcdbf7;
+  color: #bcdbf7;
   width: 100%;
-  border: 1px solid gray;
+  border: 1px solid #bcdbf7;
   padding-top: 10px;
   padding-bottom: 10px;
   text-align: center;
   border-radius: 8px;
   margin-bottom: 5px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.product-option:hover {
+  background-color: #bcdbf7;
+  color: white;
 }
 .product-price {
+  color: #838fda;
   font-weight: 700;
 }
 .product-cate-like {
+  font-family: 'NanumGothic';
   display: flex;
   justify-content: space-between;
 }
 .product-cate-like > p {
-  background-color: #ffaec8;
+  font-family: 'NanumGothic';
+  background-color: #838fdaab;
   width: wrap;
   padding-left: 8px;
   padding-right: 8px;
@@ -150,7 +172,8 @@
   color: gray;
 }
 .more-img {
-  width: inherit;
+  font-family: 'NanumGothic';
+  width: 100%;
   font-size: 16px;
   display: flex;
   justify-content: center;
@@ -160,13 +183,14 @@
 .more-img-btn {
   font-weight: bold;
   font-size: 18px;
-  margin: 40px;
-  width: 200%;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  width: 100%;
   padding: 10px;
   padding-left: 50px;
   padding-right: 50px;
   border: 1px solid #fe3360;
-  border-radius: 5px;
+  border-radius: 8px;
   color: #fe3360;
 }
 .toLastPage {
@@ -182,9 +206,55 @@
   display: flex;
 }
 .gift-noti {
+  width: 69%;
+  text-align: center;
+  margin: 0 auto;
+}
+.gift-noti > div {
   display: flex;
-  width: inherit;
   background-color: #ffaec8;
-  height: 50%;
-  padding: 30px;
+  height: 100px;
+  padding-top: 15px;
+  padding-bottom: 25px;
+  /* padding-left: 60px; */
+  text-align: center;
+  margin: 0 auto;
+  border-radius: 10px;
+  justify-content: center;
+}
+.gift-noti-img > img {
+  /* background-image: url('https://tifyimage.s3.ap-northeast-2.amazonaws.com/794dcba2-7048-43c6-ac5a-57412270c175.PNG'); */
+  /* background-color: white; */
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  margin-right: 30px;
+  border-radius: 7px;
+}
+.gift-noti-con {
+  text-align: center;
+  font-family: 'NanumGothic';
+  font-size: 15px;
+  font-weight: bold;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  color: white;
+}
+.gift-noti-con > p {
+  color: #838fda;
+  font-weight: bold;
+}
+.product-name-like > p {
+  font-weight: bold;
+  font-size: 18px;
+}
+.gift-recommend-list > p {
+  color: black;
+  font-weight: 900;
+}
+.gift-recommend-list > img {
+  height: 80%;
+}
+.gift-recommend-list {
+  margin-bottom: 30px;
 }
