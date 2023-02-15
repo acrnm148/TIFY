@@ -1,16 +1,15 @@
 import React, { useState, useEffect} from "react";
 
-import { ref, set, push, onValue, child, get, update, remove } from "firebase/database";
-import { List } from "@mui/material";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Auth';
+import {useLocation  } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Search } from 'react-bootstrap-icons';
-import { NavLink } from 'react-router-dom';
-import {Modal, Form, Collapse, Container, Row, Col} from 'react-bootstrap';
-import {GiftItem, GiftOption, Wish, User} from './AdTypes'
+import {Modal, Form } from 'react-bootstrap';
+import {Wish} from './AdTypes'
 
 const formTitleStyle = {
   color:"black",
@@ -48,9 +47,29 @@ const Wishes = () => {
     const [rangeIdx, setRangeIdx] = useState<number>(0);
     
     const [refresh, setRefresh] = useState<boolean>(false);
+    //관리자 인증
+    const location = useLocation().pathname;
+    const roleList: string[] = useSelector((state: RootState) => state.authToken.roleList);
+    const isAdmin = roleList.includes('ADMIN');
+    const navigate = useNavigate();
+  
+    useEffect(() => {
+      let toLogin = false;
+      location.split('/').forEach((val) => {
+        if (val === 'admin') {
+          toLogin = true;
+        }
+      });
+  
+      if (isAdmin && toLogin) {
+        alert("관리자 권한이 없습니다.");
+        navigate('../login');
+      }
+    }, [location, navigate]);
+    
     useEffect(() => {
       getData(page)}, [refresh]);
-      useEffect(()=>{
+    useEffect(()=>{
         setNowRange([...pageRange[0]])
       }, [totalPages]) //한 함수안에 related useState를 동시에 넣으면 안된다.!
   
@@ -62,12 +81,13 @@ const Wishes = () => {
         let url;
         searchTerm=='' ? url=`${baseUrl}/wish`:url=`${baseUrl}/wishsearch/${searchTerm}`
         const response = await axios.get(url, {
-          // params: {page,},
+          params: {page,},
         }).then((res) => {
           setSearchResults(res.data.content);
           if (totalPages != res.data.totalPages) {
             setTotalPages(res.data.totalPages);
             setPageRange( getPageRanges(res.data.totalPages) ); 
+            setNowPage(1);
             let pageSelect:{ [index: number]: boolean } = {};
             pageSelect[1]=true;
             for (let i=2; i<=res.data.totalPages; i++) {
@@ -75,7 +95,6 @@ const Wishes = () => {
             }
             setPageStates(pageSelect);
           }
-          console.log(res)
           return res});
         return response.data.content;
       } catch (error) {
@@ -88,8 +107,6 @@ const Wishes = () => {
 
     // 수정하기 위한 단일 정보 받아오기
     const handleEdit = async (id: number|undefined) => {
-      console.log(id);
-      console.log("-----------------");
       const response = await axios.get(`${baseUrl}/wish/${id}`).then((res) => {
         let data = res.data;
         SetId(data.id);
@@ -105,13 +122,11 @@ const Wishes = () => {
         return data
       });
       setWishInfo(response);
-      console.log(response);
       return response.data;
     };
 
     const GoToNextPage = () =>{
       if (rangeIdx < pageRange.length-1) {
-        console.log(rangeIdx)
         setPageRange(getPageRanges(totalPages));
         const range = pageRange.at(rangeIdx + 1);
         if (range) {
@@ -177,15 +192,10 @@ const Wishes = () => {
 
     const handleSubmit = async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
-      console.log("-----------------sssssssssss");
-      console.log(wishInfo?.id);
       const response = await axios.put(`${baseUrl}/wish/${id}`,
       {...wishInfo,title,content,finishYN,endDate,cardImageCode,
-      addr1,addr2,zipCode,category}).then((res) => {console.log(res); return res;});
-      console.log("0--=====================");
-      console.log(wishInfo)
+      addr1,addr2,zipCode,category}).then((res) => { return res; });
       setWishInfo(response.data);
-      console.log(response.data);
       setShow(false);
       setRefresh(!refresh);
       return response.data;

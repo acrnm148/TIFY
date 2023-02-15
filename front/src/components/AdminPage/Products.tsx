@@ -1,35 +1,17 @@
 import React, {
   useState,
   useEffect,
-  ReactEventHandler,
-  useCallback,
-  ReactHTMLElement,
 } from 'react';
-import alert from '../../assets/iconAlert.svg';
-import bell from '../../assets/bell.png';
-import anony from '../../assets/anony.png';
 
-import {
-  ref,
-  set,
-  push,
-  onValue,
-  child,
-  get,
-  update,
-  remove,
-} from 'firebase/database';
-import { List } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Auth';
+import {useLocation  } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Justify, Search } from 'react-bootstrap-icons';
-import { NavLink } from 'react-router-dom';
-import {Modal, Form, Collapse, Container, Row, Col, ListGroup} from 'react-bootstrap';
-import { borderRadius } from "@mui/system";
-import { now } from 'moment';
+import { Search } from 'react-bootstrap-icons';
+import {Modal, Form, Collapse, ListGroup} from 'react-bootstrap';
 
 
 
@@ -128,6 +110,26 @@ const Products = () => {
   const [repImg, setRepImg] = useState<string>('');
   
   const [newOpenStates, setNewOpenStates] = useState<{ [index: string]: boolean }>({},);
+  //관리자 인증
+  const location = useLocation().pathname;
+  const roleList: string[] = useSelector((state: RootState) => state.authToken.roleList);
+  const isAdmin = roleList.includes('ADMIN');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    let toLogin = false;
+    location.split('/').forEach((val) => {
+      if (val === 'admin') {
+        toLogin = true;
+      }
+    });
+
+    if (isAdmin && toLogin) {
+      alert("관리자 권한이 없습니다.");
+      navigate('../login');
+    }
+  }, [location, navigate]);
+
   const toggleNewCollapse = (index: number) => {
     setNewOpenStates({
       ...newOpenStates,
@@ -150,7 +152,6 @@ const Products = () => {
 
   const GoToNextPage = () =>{
     if (rangeIdx < pageRange.length-1) {
-      console.log(rangeIdx)
       setPageRange(getPageRanges(totalPages));
       const range = pageRange.at(rangeIdx + 1);
       if (range) {
@@ -196,9 +197,7 @@ const Products = () => {
     await getImgUrl_one();
     await Promise.all(files.map(async (val, idx) => {
       return await getImgUrl(idx);
-    })).then(() => {
-      console.log("image translation finish");
-    });
+    }))
     const response = await axios.post(`${baseUrl}/product`,{
       name:newName,
       quantity:newQuantity,
@@ -212,8 +211,6 @@ const Products = () => {
     })
     .then(
       (response) => {
-        console.log(response);
-        console.log("상품 등록 요청 완료");
         return response;
       });
 
@@ -262,6 +259,7 @@ const Products = () => {
         if (totalPages != res.data.totalPages) {
           setTotalPages(res.data.totalPages);
           setPageRange( getPageRanges(res.data.totalPages) ); 
+          setNowPage(1);
           let pageSelect:{ [index: number]: boolean } = {};
           pageSelect[1]=true;
           for (let i=2; i<=res.data.totalPages; i++) {
@@ -269,7 +267,6 @@ const Products = () => {
           }
           setPageStates(pageSelect);
         }
-        console.log(res)
         
         return res});
       return response.data.content;
@@ -305,8 +302,6 @@ const Products = () => {
 
 
   const handleEdit = async (id: number) => {
-    console.log(id);
-    console.log('-----------------');
     const response = await axios.get(`${baseUrl}/product/${id}`).then((res) => {
       let data = res.data;
       setName(data.name);
@@ -324,13 +319,11 @@ const Products = () => {
       return data;
     });
     setProductInfo(response);
-    console.log(response);
     return response;
     // <UserInfoEdit userInfo={selectUser} />
   };
 
   const handleDelete = async (id: number) => {
-    console.log(id);
     try {
       const response = await axios.delete(`${baseUrl}/product/${id}`);
       getData(page - 1);
@@ -404,13 +397,8 @@ const Products = () => {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
       .then((con) => {
-        console.log('이미지주소불러오기 성공', con.data);
-        // setImgUrlS3(con.data);
         setProductInfo({ ...productInfo, repImg: con.data });
         setRepImg(con.data);
-        console.log(con);
-        console.log('대표이미지 성공');
-        // setNewImgs(newImgs?.concat(temp));
         return con.data;
       })
       .catch((err) => {
@@ -426,17 +414,12 @@ const Products = () => {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
       .then((con) => {
-        console.log('이미지주소불러오기 성공', con.data);
-        // setImgUrlS3(con.data);
         let temp: pImg = {
           url: con.data,
           idx: idx,
         };
         newImgs.push(temp);
         setNewImgs([...newImgs]); // 이미지 추가추가
-        console.log(newImgs);
-        console.log("추가되는 이미지들 인데욥?");
-        // setNewImgs(newImgs?.concat(temp));
         return temp;
       })
       .catch((err) => {
@@ -448,17 +431,12 @@ const Products = () => {
   const submitEdit = async (e: any) => {
     let id = productInfo?.id;
     e.preventDefault();
-
-    console.log('-----------------');
-    console.log(id);
     if (Rfiles.length > 0) {
       await getImgUrl_one();
     }
     await Promise.all(files.map(async (val, idx) => {
       return await getImgUrl(idx);
-    })).then(() => {
-      console.log("finish");
-    });
+    }))
     // files.map(async (val, idx) => {
     //   await getImgUrl(idx);
     // })
@@ -466,8 +444,6 @@ const Products = () => {
     await axios.put(`${baseUrl}/product`,{...productInfo,repImg,imgList:newImgs, options, quantity})
     .then(
       (response) => {
-        console.log(response);
-        console.log("요청 보낸겁니다.");
         setProductInfo(response.data);
       });
     handleClose();

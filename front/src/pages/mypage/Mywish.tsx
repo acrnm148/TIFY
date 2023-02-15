@@ -36,7 +36,7 @@ export function MyWish() {
         // 2. nList를 checkWishPage 에 표출
         // 2-1. nList 진행중인 위시
         // 2-2. nList 완료되었고 축하카드를 확인하지 않은 위시
-        console.log(res, '이게 내 위시들이야!!!');
+        // console.log(res, '이게 내 위시들이야!!!');
         if (res.data.length > 0) {
           setIsWish(true);
           // =-====================reduce방식으로 시도===================
@@ -45,51 +45,54 @@ export function MyWish() {
               const result = conList.some(
                 (con: { wishId: any }) => con.wishId === wish.id,
               );
-              if (wish.finishYN !== 'y' && !result) {
-                let diff =
-                  new Date(wish.endDate).getTime() - new Date().getTime();
-                // console.log(wish, '하나의 위시 입니다.');
-                const payImgs: string[] = [];
-                const froms = wish.giftItems.map(
-                  (
-                    gift: {
-                      payList: {
+              console.log(res, 'res.data입니다~~~~');
+              console.log(wish, 'wish입니다~~~~');
+              // if (wish.finishYN !== 'y' && !result) {
+              let diff =
+                new Date(wish.endDate).getTime() - new Date().getTime();
+              // console.log(wish, '하나의 위시 입니다.');
+              const payImgs: string[] = [];
+              const froms = wish.giftItems.map(
+                (
+                  gift: {
+                    payList: {
+                      pay_id: any;
+                      celeb_from: string;
+                      profImgUrl: string;
+                    }[];
+                  },
+                  i: number,
+                ) => {
+                  if (gift) {
+                    let payids = gift.payList.map(
+                      (p: {
                         pay_id: any;
                         celeb_from: string;
                         profImgUrl: string;
-                      }[];
-                    },
-                    i: number,
-                  ) => {
-                    if (gift) {
-                      let payids = gift.payList.map(
-                        (p: {
-                          pay_id: any;
-                          celeb_from: string;
-                          profImgUrl: string;
-                        }) => {
-                          payImgs.push(p.profImgUrl);
-                          return { id: p.pay_id, from: p.celeb_from };
-                        },
-                      );
+                      }) => {
+                        payImgs.push(p.profImgUrl);
+                        return { id: p.pay_id, from: p.celeb_from };
+                      },
+                    );
 
-                      return { data: payids };
-                    }
-                  },
-                );
-                const data = {
-                  wishId: wish.id,
-                  userName: wish.user.username,
-                  title: wish.title,
-                  category: wish.category,
-                  restDay: Math.floor(diff / (1000 * 60 * 60 * 24)), // 오늘 날짜랑 계산해서 몇일남았는지
-                  percent: (wish.nowPrice / wish.totPrice) * 100,
-                  fromList: froms[0].data,
-                  cardOpen: wish.cardopen,
-                  payImgs,
-                };
-                res.push(data);
-              }
+                    return { data: payids };
+                  }
+                },
+              );
+              const data = {
+                wishId: wish.id,
+                userName: wish.user.username,
+                title: wish.title,
+                category: wish.category,
+                restDay: Math.floor(diff / (1000 * 60 * 60 * 24)), // 오늘 날짜랑 계산해서 몇일남았는지
+                percent: (wish.nowPrice / wish.totPrice) * 100,
+                fromList: froms[0].data,
+                cardOpen: wish.cardopen,
+                payImgs,
+                finishYn: wish.finishYN,
+              };
+              res.push(data);
+              // }
               // console.log(payImgs, 'payImgs 여기 있습니다!!!!');
               return res;
             }, []),
@@ -102,7 +105,7 @@ export function MyWish() {
   }, []);
 
   const GoToWish = (wishId: string): any => {
-    console.log(wishId);
+    // console.log(wishId);
     navigate(`/congrats/${wishId}`);
   };
 
@@ -130,8 +133,8 @@ export function MyWish() {
   };
   const WishCard = ({ conList }: ConProps) => {
     // 축하해준 사람 수
-    console.log(conList, 'conList가 요것입니다.');
-    console.log(typeof conList, 'conList의 타입은 요것입니다.');
+    // console.log(conList, 'conList가 요것입니다.');
+    // console.log(typeof conList, 'conList의 타입은 요것입니다.');
 
     return (
       <>
@@ -139,6 +142,7 @@ export function MyWish() {
           // 완료된 위시
           const conCount = con.payImgs.length;
           const restDay = con.restDay;
+          console.log(con, 'con을 보여주세요!!!!');
           var RD = '';
           if (restDay > 0) {
             var RD = `- ${restDay}`;
@@ -148,7 +152,7 @@ export function MyWish() {
             var RD = `+ ${-restDay}`;
           }
 
-          if (Number(con.restDay) < 1) {
+          if (con.finishYn === 'Y') {
             return (
               <div
                 className="wish-box shadow-xl"
@@ -218,8 +222,8 @@ interface PayImgs {
 }
 
 function Donator({ payImgs }: PayImgs) {
-  console.log(payImgs, 'Donater에서 나오는 pay');
-  console.log(payImgs.slice(-5), 'Donater에서 나오는 pay를 슬라이스 한 것');
+  // console.log(payImgs, 'Donater에서 나오는 pay');
+  // console.log(payImgs.slice(-5), 'Donater에서 나오는 pay를 슬라이스 한 것');
   const imgCount = payImgs.length;
 
   return (

@@ -1,3 +1,12 @@
+.friends-wrap-con {
+  margin-left: 5vw;
+  margin-right: 8vw;
+  margin-bottom: 8vw;
+}
+.friends-title {
+  /* display: flex; */
+  height: 50px;
+}
 .component-1 {
   height: 262px;
   width: 310px;
@@ -125,7 +134,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 5vw;
+  margin-top: 1vw;
 }
 
 .rectangle-2-7 {
@@ -142,14 +151,15 @@
   background-color: #fe3360;
 }
 .search-bar-container {
-  align-items: center;
-  display: flex;
+  /* align-items: center; */
+  /* display: flex; */
   /* justify-content: flex-start; */
-  /* margin-top: 2vh; */
+  margin-top: 2vh;
   width: 100vw;
   /* margin-left: 5vw; */
-  margin-left: auto;
-  margin-right: auto;
+}
+.search-bar-container > input {
+  margin-top: 5vw;
 }
 
 .cardsize {
@@ -179,4 +189,39 @@
 
 .pagination-btn[disabled] {
   opacity: 0.5;
+}
+.friends-wrap-con {
+}
+.userCount {
+  font-size: 15px;
+  color: gray;
+  padding: 10px;
+}
+.find-friends {
+  /* background-image: url('https://tifyimage.s3.ap-northeast-2.amazonaws.com/2d24a7f4-b1c3-4093-b683-2149604845cf.png'); */
+  background-repeat: no-repeat;
+  /* margin-left: 24px; */
+  height: 150px;
+}
+.friends-nickname-box {
+  padding: 10px;
+  border-radius: solid;
+  border-color: gainsboro;
+  border-width: 1px;
+  width: 400px;
+  border-radius: 10px;
+  margin-left: 5vw;
+}
+.friends-nickname-input {
+  background-color: #fff1ef;
+  width: 100%;
+  font-size: 16px;
+  outline: none;
+  margin-left: 2px;
+}
+.pagination-container-friends {
+  margin: 0 auto;
+  justify-content: center;
+  text-align: center;
+  padding: 2vw;
 }

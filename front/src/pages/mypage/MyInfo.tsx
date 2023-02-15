@@ -52,66 +52,70 @@ export function MyInfo() {
     let htel = /^(?=.*[0-9]{2,3})/;
     let mtel = /^(?=.*[0-9]{3,4})/;
     let etel = /^(?=.*[0-9]{4,4})/;
-    
+
     if (htel.test(tel1) && mtel.test(tel2) && etel.test(tel3)) {
-      return "";
+      return '';
     }
-    return "유효하지 않은 연락처입니다."
+    return '유효하지 않은 연락처입니다.';
   }
 
   function birthCheck() {
-    if (Date.parse(`${birthYear}-${birthMonth}-${birthDay}`) && birthYear && birthMonth && birthDay) {
-      return ""
+    if (
+      Date.parse(`${birthYear}-${birthMonth}-${birthDay}`) &&
+      birthYear &&
+      birthMonth &&
+      birthDay
+    ) {
+      return '';
     }
-    return "유효하지 않은 날짜입니다.";
+    return '유효하지 않은 날짜입니다.';
   }
 
   function pwCheck1() {
     let alpah = /^(?=.*[a-zA-Z])/;
 
     if (!alpah.test(password2)) {
-      return "영어가 포함되어 있지 않습니다.";
+      return '영어가 포함되어 있지 않습니다.';
     }
-    return "";
+    return '';
   }
 
   function pwCheck2() {
     let nume = /^(?=.*\d)/;
 
     if (!nume.test(password2)) {
-      return "숫자가 포함되어 있지 않습니다.";
+      return '숫자가 포함되어 있지 않습니다.';
     }
-    return "";
+    return '';
   }
 
   function pwCheck3() {
     let special = /^(?=.*[!@#\$%\^&\*])/;
-  
+
     if (!special.test(password2)) {
-      return "특수문자가 포함되어 있지 않습니다.";
+      return '특수문자가 포함되어 있지 않습니다.';
     }
-    return "";
+    return '';
   }
 
   function pwCheck4() {
     let len = /^(?=.{8,12})/;
 
-    if (password2.length < 8 ) {
-      return "길이가 8자 미만입니다."
+    if (password2.length < 8) {
+      return '길이가 8자 미만입니다.';
+    } else if (password2.length > 12) {
+      return '길이가 12자 초과입니다.';
     }
-    else if (password2.length > 12) {
-      return "길이가 12자 초과입니다."
-    }
-    return "";
+    return '';
   }
 
   function pwCheck5() {
     let pwdCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,12}$/;
 
     if (!pwdCheck.test(password2)) {
-      return "유효하지 않은 비밀번호 입니다."
-   }
-   return "";
+      return '유효하지 않은 비밀번호 입니다.';
+    }
+    return '';
   }
 
   // 처음 유저값 불러오는 부분
@@ -404,44 +408,45 @@ export function MyInfo() {
           value={username}
         />
         <p className="m-1">닉네임</p>
-        <div
-          className={`nickname-box
-              ${nickDubCheck ? 'checkedNickname' : ''}
-              `}
-        >
-          <form className="">
+        <div className="nickname-div">
+          <div
+            className={`nickname-box 
+                ${nickDubCheck ? 'checkedNickname' : ''}
+                `}
+          >
             <input
               type="text"
               maxLength={10}
+              // className={`${nickDubCheck ? 'checkedNickname' : ''}`}
               placeholder="2~10자리 한글/영어"
               value={nickname}
               onChange={(e) => {
                 setNickname(e.target.value);
                 setNickDubCheck(false);
-                console.log(e.target.value);
               }}
             />
-            <button className="formSideButton" onClick={CheckNickname}>
-              중복확인
-            </button>
-          </form>
+          </div>
+          <button className="formSideButton" onClick={CheckNickname}>
+            중복 확인
+          </button>
         </div>
 
         <p className="m-1">생년월일</p>
         <form className="emailForm">
           <div
-            className="mini-input-container"
-            id="birth-box"
-            style={{ color: '#B6BAC1', background: '#eeeeee' }}
+            className={`${
+              birthCheck().length < 1
+                ? 'mini-input-container checkedNickname'
+                : 'mini-input-container'
+            }`}
           >
             <input
               type="number"
               className="mini-input-box"
               placeholder="2000"
               maxLength={4}
-              value={birthYear}
               onChange={(e) => setBirthyear(e.target.value)}
-              disabled
+              value={birthYear}
             />
             <span>년</span>
             <input
@@ -450,9 +455,8 @@ export function MyInfo() {
               placeholder="10"
               min="1"
               max="12"
-              value={birthMonth}
               onChange={(e) => setBirthMonth(e.target.value)}
-              disabled
+              value={birthMonth}
             />
             <span>월</span>
             <input
@@ -460,16 +464,35 @@ export function MyInfo() {
               className="mini-input-box"
               placeholder="10"
               maxLength={2}
-              value={birthDay}
               onChange={(e) => setBirthDay(e.target.value)}
-              disabled
+              value={birthDay}
             />
             <span>일</span>
+          </div>
+          {/* { (Date.parse(`${birthYear}-${birthMonth}-${birthDay}`) 
+                  && birthYear && birthMonth && birthDay) ? 
+                  null :
+                  (<h1 style={{color:"red"}}>유효하지 않은 날짜입니다.</h1>)
+                } */}
+          <div
+            style={{
+              position: 'relative',
+              left: '10%',
+              marginBottom: '5%',
+            }}
+          >
+            <h1 style={{ color: 'red' }}>{birthCheck()}</h1>
           </div>
         </form>
         <p className="m-1">연락처</p>
         <form className="emailForm">
-          <div className={`${ telCehck().length < 1 ? 'mini-input-container checkedNickname' : 'mini-input-container'}`}>
+          <div
+            className={`${
+              telCehck().length < 1
+                ? 'mini-input-container checkedNickname'
+                : 'mini-input-container'
+            }`}
+          >
             <input
               type="number"
               className="mini-input-box"
@@ -500,7 +523,11 @@ export function MyInfo() {
           <div className="address-form-container">
             <label htmlFor="태그">주소</label>
             <input
-              className={`${ enroll_company?.zonecode?.length > 0 ? 'address-form postcode checkedNickname' : 'address-form postcode'}`}
+              className={`${
+                enroll_company?.zonecode?.length > 0
+                  ? 'address-form postcode checkedNickname'
+                  : 'address-form postcode'
+              }`}
               type="text"
               // 바꿀거
               value={enroll_company.zonecode}
@@ -509,8 +536,16 @@ export function MyInfo() {
               style={{ width: '20%' }}
             />
             <div
-              className={`${ enroll_company?.address?.length > 0 ? 'address-form checkedNickname' : 'address-form'}`}
-              style={{ width: '100%', marginBottom: '20px' }}
+              className={`${
+                enroll_company?.address?.length > 0
+                  ? 'address-form checkedNickname'
+                  : 'address-form'
+              }`}
+              style={{
+                width: '100%',
+                marginBottom: '20px',
+                backgroundColor: '#eeeeee',
+              }}
             >
               <input
                 type="text"
@@ -521,6 +556,9 @@ export function MyInfo() {
                 // 바꿀거
                 value={enroll_company.address}
                 disabled
+                style={{
+                  backgroundColor: '#eeeeee',
+                }}
               />
               <Postcode
                 company={enroll_company}
@@ -543,19 +581,27 @@ export function MyInfo() {
         </form>
 
         <form className="emailForm" onSubmit={handleInfoSubmit} method="get">
-          <button type="submit"
-            className={`${ ( (enroll_company?.address?.length > 0) &&
-              (enroll_company?.zonecode?.length > 0) &&
-              (telCehck().length < 1) && 
-              nickDubCheck && 
-              (username.length > 0) ) ? 'loginButton font-bold' : 'loginButton-d font-bold'}`} 
+          <button
+            type="submit"
+            className={`${
+              enroll_company?.address?.length > 0 &&
+              enroll_company?.zonecode?.length > 0 &&
+              telCehck().length < 1 &&
+              nickDubCheck &&
+              username.length > 0
+                ? 'loginButton font-bold'
+                : 'loginButton-d font-bold'
+            }`}
             disabled={
-                !( (enroll_company?.address?.length > 0) &&
-                (enroll_company?.zonecode?.length > 0) &&
-                (telCehck().length < 1) && 
-                nickDubCheck && 
-                (username.length > 0) )
-              }>
+              !(
+                enroll_company?.address?.length > 0 &&
+                enroll_company?.zonecode?.length > 0 &&
+                telCehck().length < 1 &&
+                nickDubCheck &&
+                username.length > 0
+              )
+            }
+          >
             정보 수정하기
           </button>
         </form>
@@ -582,47 +628,60 @@ export function MyInfo() {
           <form className="emailForm">
             <input
               type="password"
-              className={`${!pwCheck5() ? 'inputBox checkedNickname' : 'inputBox'}`}
+              className={`${
+                !pwCheck5() ? 'inputBox checkedNickname' : 'inputBox'
+              }`}
               maxLength={12}
               placeholder={'영어, 숫자, 특수문자를 포함한 8~12자리'}
               onChange={(e) => setPassword2(e.target.value)}
               style={{ width: '100%', marginBottom: '10px' }}
             />
-              <div style={{position:"relative", left:"10%", marginBottom:"5%"}}>
-                <h1 style={{color:"red"}}>{pwCheck1()}</h1>
-                <h1 style={{color:"red"}}>{pwCheck2()}</h1>
-                <h1 style={{color:"red"}}>{pwCheck3()}</h1>
-                <h1 style={{color:"red"}}>{pwCheck4()}</h1>
-                <h1 style={{color:"red"}}>{pwCheck5()}</h1>
-              </div>
+            <div
+              style={{ position: 'relative', left: '10%', marginBottom: '5%' }}
+            >
+              <h1 style={{ color: 'red' }}>{pwCheck1()}</h1>
+              <h1 style={{ color: 'red' }}>{pwCheck2()}</h1>
+              <h1 style={{ color: 'red' }}>{pwCheck3()}</h1>
+              <h1 style={{ color: 'red' }}>{pwCheck4()}</h1>
+              <h1 style={{ color: 'red' }}>{pwCheck5()}</h1>
+            </div>
           </form>
           <span className="m-1">새로운 비밀번호 확인</span>
           <form className="emailForm">
             <input
               type="password"
-              className={`${(password2 == confirmPassword2) ? 'inputBox checkedNickname' : 'inputBox'}`}
+              className={`${
+                password2 == confirmPassword2 && confirmPassword2 != ''
+                  ? 'inputBox checkedNickname'
+                  : 'inputBox'
+              }`}
               maxLength={12}
               placeholder={'영어, 숫자, 특수문자를 포함한 8~12자리'}
               onChange={(e) => setConfirmPassword2(e.target.value)}
             />
-              <div style={{position:"relative", left:"10%", marginBottom:"5%"}}>
-                { ( (password2 != confirmPassword2) || password2.length < 1 ) ? 
-                  (<h1 style={{color:"red"}}>비밀번호가 일치하지 않습니다.</h1>) :
-                   null
-                }
-              </div>
+            <div
+              style={{ position: 'relative', left: '10%', marginBottom: '5%' }}
+            >
+              {password2 != confirmPassword2 || password2.length < 1 ? (
+                <h1 style={{ color: 'red' }}>비밀번호가 일치하지 않습니다.</h1>
+              ) : null}
+            </div>
           </form>
-          <button type="submit" 
-            className={`${ ( 
-              (password2 == confirmPassword2) && 
-              (pwCheck5().length < 1) ) ? 'loginButton font-bold' : 'loginButton-d font-bold'}`}
+          <button
+            type="submit"
+            className={`${
+              password2 == confirmPassword2 && pwCheck5().length < 1
+                ? 'loginButton font-bold'
+                : 'loginButton-d font-bold'
+            }`}
             disabled={
               !(
                 password2 === confirmPassword2 &&
                 password2.length > 0 &&
-                (pwCheck5().length < 1)
+                pwCheck5().length < 1
               )
-            }>
+            }
+          >
             비밀번호 변경
           </button>
         </form>

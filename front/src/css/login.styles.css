@@ -147,7 +147,7 @@
 
   /* Foundation/Red/Normal */
 
-  background: #A4A4A4 !important;
+  background: #a4a4a4 !important;
   box-shadow: 0px 8px 20px rgba(78, 96, 255, 0.16);
   border-radius: 8px;
   color: #000000;
@@ -186,16 +186,20 @@
   border-radius: 8px;
   width: 250px;
   height: 52px;
-  margin-bottom: 20px;
-  padding-left: 8px;
+  padding-left: 15px;
 
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: flex-start;
 }
 
 .formSideButton {
   /* background-color: ; */
+  margin-left: 20px;
+  border: 1px solid #c1c1c1;
+  padding: 5px;
+  border-radius: 8px;
+  color: #158cfb;
 }
 
 .findPassword {
@@ -264,6 +268,6 @@
 
 .checkedNickname {
   background-color: #f9fafb;
-  border-color: #2EFE2E;
-  border-width: 2px;
+  border-color: #158cfb;
+  border-width: 1px;
 }

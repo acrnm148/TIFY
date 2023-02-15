@@ -13,12 +13,13 @@ type TokenType = {
   refresh_token: string;
   user_email: string;
   user_id: number;
+  user_roles: string;
 };
 
 export async function Login(id: string, password: string) {
   try {
     return await axios
-      .post('https://i8e208.p.ssafy.io/api/account/login', {
+      .post('http://localhost:8081/api/account/login', { //https://i8e208.p.ssafy.io/api/account/login
         userid: id,
         password,
       })
@@ -33,6 +34,7 @@ export async function Login(id: string, password: string) {
             refresh_token: res.data.refreshToken,
             user_email: res.data.email,
             user_id: res.data.userSeq,
+            user_roles: res.data.roles
           };
           console.log(tokens);
           console.log('토큰 오브젝트 보냅니다. 페이지야 받아라');

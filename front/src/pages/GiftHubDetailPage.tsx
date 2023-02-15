@@ -162,21 +162,18 @@ export function GiftHubDetailPage() {
     'https://tifyimage.s3.ap-northeast-2.amazonaws.com/b87f76a0-0e29-45ec-9e43-b7b75743bda2.png';
   const GiftRecommend = (props: { giftList: any }) => {
     return (
-      <div className="gift-recommend-list" style={{ width: '90%' }}>
-        {/* <p>
-          {CATEGORY_DATA[data.category]?.name} 카테고리에서 가장 많이 주고받은
-          선물
-        </p>
+      <div className="gift-recommend-list" style={{ width: '69%' }}>
+        <p>{CATEGORY_DATA[data.category]?.name} 카테고리 BEST</p>
         <div className="gift-only-list" style={{ display: 'flex' }}>
           {props.giftList.slice(0, 4).map((gift: any, i: number) => (
             <GiftItem key={i} gift={gift} />
           ))}
-        </div> */}
+        </div>
       </div>
     );
   };
   const HEART_IMG =
-    'https://tifyimage.s3.ap-northeast-2.amazonaws.com/7fca4889-273f-4ec1-8b51-c9a1407bbc6d.png';
+    'https://tifyimage.s3.ap-northeast-2.amazonaws.com/ebf41667-027a-4c7a-98b9-556c7bdf9d6e.png';
 
   const LAST_PAGE_IMG = '';
 
@@ -190,6 +187,18 @@ export function GiftHubDetailPage() {
           <p>
             <img src={TO_LAST_PAGE_IMG} className="toLastPage" />
           </p>
+        </div>
+        <div className="gift-noti">
+          <div>
+            <div className="gift-noti-img">
+              <img src="https://tifyimage.s3.ap-northeast-2.amazonaws.com/794dcba2-7048-43c6-ac5a-57412270c175.PNG" />
+            </div>
+            <div className="gift-noti-con">
+              갖고 싶은 선물을 골라
+              <br />
+              위시를 생성해보세요 :)
+            </div>
+          </div>
         </div>
         <div className="product-info">
           <img className="product-img" src={data.repImg} alt="" />
@@ -208,7 +217,7 @@ export function GiftHubDetailPage() {
             </div>
             <div className="product-price-option">
               <p className="product-price">
-                ₩ {data.price.toLocaleString('ko-KR')}
+                {data.price.toLocaleString('ko-KR')} 원
               </p>
             </div>
             <div>
