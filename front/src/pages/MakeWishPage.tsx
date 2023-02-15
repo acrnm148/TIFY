@@ -46,6 +46,7 @@ import { RootStateFriends } from '../store/Friends';
 // alarm
 import { push, ref } from "firebase/database";
 import { db } from '../components/firebase';
+import TapNameKor from '../components/TapNameKor';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -524,9 +525,11 @@ export function MakeWishPage() {
   }
   return (
     <>
-      <div className="page-name-block">
-        <div className="page-name" />
-      </div>
+      <TapNameKor
+        title="Make A Wish"
+        // content={state.selectGift.name}
+        content="당신의 특별한 날을 위한 위시를 생성해보세요."
+      ></TapNameKor>
       {finished ? (
         <div className='wish-page-container'>
         <div className='make-wish-container wid-50'>

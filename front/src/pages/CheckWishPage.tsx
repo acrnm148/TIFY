@@ -23,6 +23,7 @@ import '../css/checkWishPage.styles.css';
 import gift from '../assets/iconGift.svg';
 import { Bool, List } from 'reselect/es/types';
 import GiftBoxAnimation from '../components/GiftBoxAnimation';
+import TapNameKor from '../components/TapNameKor';
 
 
 export function CheckWishPage() {
@@ -31,8 +32,7 @@ export function CheckWishPage() {
   const [wishGoing, setWishGoing] = useState<Boolean>(true);
   const [conList, setConList] = useState<Array<CheckWish>>();
   const [goOpenList, setGoOpenList] = useState<Array<CheckWish>>();
-  const [setLsts, setSetLsts] = useState<Boolean>(false);
-  const [showIng, setShowIng] = useState<Boolean>(false);
+  const [showIng, setShowIng] = useState<Boolean>(true);
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
@@ -175,18 +175,50 @@ export function CheckWishPage() {
       });
   }, []);
 
-  const CongratCard = (props: { from: string; to: string }) => {
+  const CongratCard = (props: { from: string; to: string, open: boolean}) => {
     return (
-      <div className="congrat-card-cover">
-        <div className="congrat-card">
-          <div className="congrat-card-from">
-            <p>from : {props.from}</p>
+        props.open===true
+        ?
+        <div className='envelope-con'>
+          <div className='envelope-c'>
+            <div className="valentines-day">
+              <div className="envelope"></div>
+              <div className="heart"></div>
+              <div className="open-card-txt">from {props.from} </div>
+              <div className="front"></div>
+              <div className="text2">- hover over the envelope - </div>
+            </div>
           </div>
-          <div className="congrat-card-to">
-            <p>to : {props.to}</p>
+      </div>
+        :
+        <div className="congrat-card-cover">
+          <div className="congrat-card">
+            <img src="https://user-images.githubusercontent.com/87971876/218955541-3a060405-5cd3-4b19-a1f9-3496d99b5dba.png" alt="닫힌 편지" />
           </div>
         </div>
-      </div>
+      // <div className='envelope-con'>
+      //     <div className='envelope-c'>
+      //       <div className="valentines-day">
+      //         <div className="envelope"></div>
+      //         <div className="heart"></div>
+      //         <div className="text">from {props.from} </div>
+      //         <div className="front"></div>
+      //         <div className="text2">- hover over the envelope - </div>
+      //       </div>
+      //     </div>
+      // </div>
+
+
+      // <div className="congrat-card-cover">
+      //   <div className="congrat-card">
+      //     <div className="congrat-card-from">
+      //       <p>from : {props.from}</p>
+      //     </div>
+      //     <div className="congrat-card-to">
+      //       <p>to : {props.to}</p>
+      //     </div>
+      //   </div>
+      // </div>
     );
   };
   // const CongratsCards = (props: {
@@ -229,7 +261,7 @@ const CongratsCards = (props: {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 2,
           slidesToScroll: 3,
           infinite: true,
           dots: true,
@@ -239,7 +271,7 @@ const CongratsCards = (props: {
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
           slidesToScroll: 2,
           initialSlide: 2,
         },
@@ -263,10 +295,12 @@ const CongratsCards = (props: {
             <NavLink
               to={`/thanks/${props.wishId}/${from.id}`}
               state={props.fromList}
+              style={{height:"100%"}}
             >
-              <CongratCard key={i} from={from.from} to={props.userName} />
+              <CongratCard key={i} from={from.from} to={props.userName} open={!showIng} />
             </NavLink>
-          ))}
+          )
+          )}
       </Slider>
     </div>
   );
@@ -283,7 +317,7 @@ const CongratsCards = (props: {
       <>
         {goOpenList?.map((lst: CheckWish, i: number) => {
           return (
-            <div className="wish-container">
+            <div className={showIng?'wish-container':'open-wish-container'}>
               <CongratsCards
                 fromList={lst.fromList}
                 wishId={lst.wishId}
@@ -310,10 +344,8 @@ const CongratsCards = (props: {
   const WishOnGoing = ({ conList }: { conList: CheckWish[] | undefined}) => {
     return (
       <>
-        {/* <button onClick={CheckConList}>list확인용</button> */}
         {conList &&
           conList.map((lst: CheckWish, i: number) => {
-            // console.log('이게뭐야 왜 두개나와',conList)
             return (
               <div className="wish-container">
                 <CongratsCards
@@ -335,19 +367,13 @@ const CongratsCards = (props: {
                     </p>
                     <div className="slider-and-label-container">
                       <div className="slider-and-label">
-                        <span>진행도</span>
+                        <span className='진행도'>{Math.round(lst.percent)}%</span>
                         <ReactSlider
                           className="horizontal-slider"
                           defaultValue={[lst.percent]}
                           disabled={true}
-                          thumbClassName="example-thumb"
+                          thumbClassName="custom-thumb"
                           trackClassName="example-track"
-                          renderTrack={(
-                            props: JSX.IntrinsicAttributes &
-                              ClassAttributes<HTMLDivElement> &
-                              HTMLAttributes<HTMLDivElement>,
-                            state: any,
-                          ) => <div {...props} />} //custom track
                         />
                       </div>
                     </div>
@@ -398,11 +424,11 @@ const CongratsCards = (props: {
   };
   return (
     <>
-      <div className="page-name-block">
-        {/* <h1>userid:{userId}</h1>
-          <button className="temp-button" onClick={()=>(setIsWish(!isWish))}>{isWish?'위시있음':'위시없음'}</button> */}
-        <div className={isWish ? 'page-name check-wish' : ''} />
-      </div>
+      <TapNameKor
+        title="Check Your Wish"
+        // content={state.selectGift.name}
+        content="만든 위시를 확인해보세요."
+      ></TapNameKor>
       <div className="check-wish-container">
         {isWish ? <IsWishLayout /> : <EmptyWishLayout />}
       </div>

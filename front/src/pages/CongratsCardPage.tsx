@@ -216,7 +216,7 @@ const PayInfo = () =>{
       <TapNameKor
         title="축하하기"
         // content={state.selectGift.name}
-        content="ㅊㅋㅊㅋ"
+        content="선물로 축하를 전하세요."
       ></TapNameKor>
       <div className="congrats-card-page-containger">
         <div className="congrats-card-page-containger-border">
