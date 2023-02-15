@@ -1,19 +1,3 @@
-import {
-  ClassAttributes,
-  HTMLAttributes,
-  JSXElementConstructor,
-  ReactElement,
-  ReactFragment,
-  ReactPortal,
-  useEffect,
-  useState,
-} from 'react';
-import { NavLink } from 'react-router-dom';
-import '../css/styles.css';
-import '../css/checkWishPage.styles.css';
-import gift from '../assets/iconGift.svg';
-import { Bool, List } from 'reselect/es/types';
-
 // slider
 import ReactSlider from 'react-slider';
 import 'rc-slider/assets/index.css';
@@ -22,6 +6,24 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
 import { CheckWish } from '../interface/interface';
+//carousel
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
+import {
+  ClassAttributes,
+  HTMLAttributes,
+  useEffect,
+  useState,
+} from 'react';
+import { NavLink } from 'react-router-dom';
+import '../css/styles.css';
+import '../css/checkWishPage.styles.css';
+import gift from '../assets/iconGift.svg';
+import { Bool, List } from 'reselect/es/types';
+import GiftBoxAnimation from '../components/GiftBoxAnimation';
+
 
 export function CheckWishPage() {
   const [userId, setUserId] = useState(useSelector((state: RootState) => state.authToken.userId))
@@ -53,21 +55,29 @@ export function CheckWishPage() {
               if (wish.finishYN !== 'Y' && !result) {
                 let diff =
                   new Date(wish.endDate).getTime() - new Date().getTime();
-                const froms = wish.giftItems.map(
+                let froms: ({ id: any; from: string; } | undefined)[]=[];
+                wish.giftItems.map(
+                  
                   (
                     gift: { payList: { pay_id: any; celeb_from: string }[] },
                     i: number,
                   ) => {
                     if (gift) {
-                      let payids = gift.payList.map(
+                       gift.payList.map(
                         (p: { pay_id: any; celeb_from: string }) => {
-                          return { id: p.pay_id, from: p.celeb_from };
+                          if(p.pay_id){
+                            froms.push({ id: p.pay_id, from: p.celeb_from })
+                          }
                         },
                       );
-                      return { data: payids };
                     }
                   },
                 );
+                if(froms){
+
+                }
+                console.log('froms다~~~~~~~~~~~~~~~~~', froms)
+
                 const data = {
                   wishId: wish.id,
                   userName: wish.user.username,
@@ -75,7 +85,7 @@ export function CheckWishPage() {
                   category: wish.category,
                   restDay: String(Math.floor(diff / (1000 * 60 * 60 * 24))), // 오늘 날짜랑 계산해서 몇일남았는지
                   percent: (wish.nowPrice / wish.totPrice) * 100,
-                  fromList: froms[0]?.data,
+                  fromList: froms?froms:'',
                   cardOpen: wish.cardopen,
                 };
                 res.push(data);
@@ -158,12 +168,6 @@ export function CheckWishPage() {
               })
               setConList(newArr)
             }
-
-        //     // let newArr2 = [...goOpenList]
-        //     // newArr2.sort(function (comp1, comp2){
-        //     //   return Number(comp1.restDay) - Number(comp2.restDay)
-        //     // })
-        //     // setGoOpenList(newArr2)
           })
       })
       .catch((err:any) => {
@@ -185,15 +189,76 @@ export function CheckWishPage() {
       </div>
     );
   };
-  const CongratsCards = (props: {
-    fromList: any[];
-    wishId: string;
-    userName: string;
-  }) => {
-    console.log(props.fromList, 'props.fromList');
-    return (
-      <div className="congrat-card-list">
-        {props.fromList &&
+  // const CongratsCards = (props: {
+  //   fromList: any[];
+  //   wishId: string;
+  //   userName: string;
+  // }) => {
+  //   console.log(props.fromList, 'props.fromList');
+  //   return (
+  //     <div className="congrat-card-list">
+  //       {props.fromList &&
+  //         props.fromList.map((from: { id: any; from: string }, i: number) => (
+  //           <NavLink
+  //             to={`/thanks/${props.wishId}/${from.id}`}
+  //             state={props.fromList}
+  //           >
+  //             <CongratCard key={i} from={from.from} to={props.userName} />
+  //           </NavLink>
+  //         ))}
+  //     </div>
+  //   );
+  // };
+
+// 캐러셀 부분
+const CongratsCards = (props: {
+  fromList: any[];
+  wishId: string;
+  userName: string;
+}) => {
+  // 옵션
+  // console.log(friendWishList);
+  var settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+          arrows: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+  return (
+    <div className="ongoing-wishes">
+      <Slider {...settings} className="congrat-card-list">
+      {props.fromList &&
+        // 캐러셀 한 페이지에 8개씩 담기도록 반복문 수정..!
           props.fromList.map((from: { id: any; from: string }, i: number) => (
             <NavLink
               to={`/thanks/${props.wishId}/${from.id}`}
@@ -202,9 +267,17 @@ export function CheckWishPage() {
               <CongratCard key={i} from={from.from} to={props.userName} />
             </NavLink>
           ))}
-      </div>
-    );
-  };
+      </Slider>
+    </div>
+  );
+};
+
+
+
+
+
+
+
   const WishOpened = ({ goOpenList }: { goOpenList: CheckWish[] | undefined}) => {
     return (
       <>
@@ -216,16 +289,18 @@ export function CheckWishPage() {
                 wishId={lst.wishId}
                 userName={lst.userName}
               />
-              <NavLink to={`/congrats/${lst.wishId}`}>
+              {/* <NavLink to={`/congrats/${lst.wishId}`}>
                 <h1>
                   {lst.userName}님의 {lst.category}위시
                 </h1>
                 <h1>"{lst.title}"</h1>
-              </NavLink>
-              {/* <div className="wish-open wish-on-going-background">
-                  
-                  위시 오픈 애니메이션
-                </div> */}
+              </NavLink> */}
+              <div className="wish-open wish-on-going-background">
+                클릭하세요!
+                {/* <GiftBoxAnimation /> */}
+                  <iframe style={{height: "200%",width: "500px"}} src="https://embed.lottiefiles.com/animation/64058"></iframe>
+                  {/* 위시 오픈 애니메이션 */}
+                </div>
             </div>
           );
         })}
@@ -334,3 +409,52 @@ export function CheckWishPage() {
     </>
   );
 }
+// 캐러셀 부분
+const Carousel = ({ friendWishList }: any) => {
+  // 옵션
+  // console.log(friendWishList);
+  var settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+          arrows: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+  return (
+    <div className="ongoing-wishes">
+      <p className="phone-book-title">| Friends</p>
+      <Slider {...settings}>
+        
+      </Slider>
+    </div>
+  );
+};

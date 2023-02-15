@@ -3,6 +3,7 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import '../css/congratsPage.styles.css';
 
+const WISH_CATEGORY_DATA = ['생일', '취업', '결혼', '건강', '출산', '비혼']
 type Gift = {id:number, img:string, name:string, achieved81:number, achieved:number, price:number, finished:boolean}
 export function CongratsPage() {
   let { wishId } = useParams();
@@ -17,6 +18,7 @@ export function CongratsPage() {
 
   const [clickedGift, setClickedGift] = useState<number>();
   const [wishGiftList, setWishGiftList] = useState<Gift[]>();
+  const [wishUserId, setWishUserId] = useState<number>()
 
   useEffect(() => {
     const API_URL = 'https://i8e208.p.ssafy.io/api/wish/detail/';
@@ -27,7 +29,7 @@ export function CongratsPage() {
         },
       })
       .then((res: { data: {
-        giftItems: any; user: { username: SetStateAction<string>; }; category: SetStateAction<string>; title: SetStateAction<string>; content: SetStateAction<string>; cardImageCode: SetStateAction<string>; 
+        giftItems: any; user: { username: SetStateAction<string>, id:number }; category: SetStateAction<string>; title: SetStateAction<string>; content: SetStateAction<string>; cardImageCode: SetStateAction<string>, userId:number; 
 }; }) => {
         console.log('위시 상세 정보', res.data);
         setUserName(res.data.user.username);
@@ -35,6 +37,7 @@ export function CongratsPage() {
         setTitle(res.data.title);
         setContent(res.data.content);
         setCard(res.data.cardImageCode);
+        setWishUserId(res.data.user.id)
 
         setWishGiftList(
           res.data.giftItems.map(
@@ -147,7 +150,7 @@ export function CongratsPage() {
           <NavLink
             className="button color"
             to={`/congrats/${wishId}/giftcard`}
-            state={{ selectGift: selectGift }}
+            state={{ selectGift: selectGift, wishUserId: wishUserId}}
           >
             선택한 선물로 축하하기 →
           </NavLink>
@@ -165,11 +168,20 @@ export function CongratsPage() {
     <div className="congrats-page-container">
       <div className="wish-components">
         <div className="wish-components-title" style={{ padding: '0 10px' }}>
-          {category ? (
-            <h1>
-              {userName}님의 {category}를 축하해주세요!
-            </h1>
-          ) : (
+          {category ? 
+              WISH_CATEGORY_DATA.indexOf(category) !== -1?
+              (<div>
+                <h1>
+                  {userName}님의 {category}을 축하해주세요!
+                </h1>
+                </div>)
+                :
+              (<div>
+                <h1>
+                  {userName}님의 {category} 축하해주세요!
+                </h1>
+              </div>)
+          : (
             <h1>{userName}님을 축하해주세요!</h1>
           )}
         </div>

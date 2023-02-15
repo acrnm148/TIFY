@@ -5,6 +5,7 @@ import iconSidebar3Friends from '../../assets/sidebar/iconSidebar3Friends.svg';
 import iconSidebar4Privacy from '../../assets/sidebar/iconSidebar4Privacy.svg';
 import iconSidebar5Addressbook from '../../assets/sidebar/iconSidebar5Addressbook.svg';
 import iconSidebar6Postbox from '../../assets/sidebar/iconSidebar6Postbox.svg';
+import iconSidebar7Repo from '../../assets/sidebar/iconSidebar7Repo.svg';
 import iconCategory1Birthday from '../../assets/category/iconCategory1Birthday.svg';
 import iconCategory2Marry from '../../assets/category/iconCategory2Marry.svg';
 import iconCategory3Employed from '../../assets/category/iconCategory3Employed.svg';
@@ -217,6 +218,15 @@ export function MyPage() {
           >
             <img src={iconSidebar6Postbox} alt="" />
             <p>주문조회</p>
+          </NavLink>
+          <NavLink
+            to="archive"
+            className={`side-menu 
+          ${tapId == 'archive' && 'active-menu'} 
+          `}
+          >
+            <img src={iconSidebar7Repo} alt="" />
+            <p>추억 보관함</p>
           </NavLink>
         </div>
       </div>

@@ -12,15 +12,12 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { RootState } from '../../store/Auth';
-import { CheckWish } from '../../interface/interface';
+import { MyWishType } from '../../interface/interface';
 
 export function MyWish() {
   const [isWish, setIsWish] = useState<Boolean>(false);
   const [wishGoing, setWishGoing] = useState<Boolean>(true);
-  const [conList, setConList] = useState<Array<CheckWish>>([]);
-  const [goOpenList, setGoOpenList] = useState<Array<CheckWish>>([]);
-  const [setLsts, setSetLsts] = useState<Boolean>(false);
-  const [showIng, setShowIng] = useState<Boolean>(false);
+  const [conList, setConList] = useState<Array<MyWishType>>([]);
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
@@ -51,17 +48,31 @@ export function MyWish() {
               if (wish.finishYN !== 'y' && !result) {
                 let diff =
                   new Date(wish.endDate).getTime() - new Date().getTime();
+                // console.log(wish, '하나의 위시 입니다.');
+                const payImgs: string[] = [];
                 const froms = wish.giftItems.map(
                   (
-                    gift: { payList: { pay_id: any; celeb_from: string }[] },
+                    gift: {
+                      payList: {
+                        pay_id: any;
+                        celeb_from: string;
+                        profImgUrl: string;
+                      }[];
+                    },
                     i: number,
                   ) => {
                     if (gift) {
                       let payids = gift.payList.map(
-                        (p: { pay_id: any; celeb_from: string }) => {
+                        (p: {
+                          pay_id: any;
+                          celeb_from: string;
+                          profImgUrl: string;
+                        }) => {
+                          payImgs.push(p.profImgUrl);
                           return { id: p.pay_id, from: p.celeb_from };
                         },
                       );
+
                       return { data: payids };
                     }
                   },
@@ -75,68 +86,15 @@ export function MyWish() {
                   percent: (wish.nowPrice / wish.totPrice) * 100,
                   fromList: froms[0].data,
                   cardOpen: wish.cardopen,
+                  payImgs,
                 };
                 res.push(data);
               }
-              return res;
-            }, []),
-          );
-
-          setGoOpenList(
-            res.data.reduce(function (res: Array<any>, wish: any) {
-              const result = goOpenList.some(
-                (go: { wishId: any }) => go.wishId === wish.id,
-              );
-              if (wish.finishYN === 'y') {
-                let diff =
-                  new Date(wish.endDate).getTime() - new Date().getTime();
-                const froms = wish.giftItems.map(
-                  (
-                    gift: { payList: { pay_id: any; celeb_from: string }[] },
-                    i: number,
-                  ) => {
-                    if (gift) {
-                      let payids = gift.payList.map(
-                        (p: { pay_id: any; celeb_from: string }) => {
-                          return { id: p.pay_id, from: p.celeb_from };
-                        },
-                      );
-                      return { data: payids };
-                    }
-                  },
-                );
-                const data = {
-                  wishId: wish.id,
-                  userName: wish.user.username,
-                  title: wish.title,
-                  category: wish.category,
-                  restDay: String(Math.floor(diff / (1000 * 60 * 60 * 24))),
-                  percent: (wish.nowPrice / wish.totPrice) * 100,
-                  fromList: froms[0].data,
-                  cardOpen: wish.cardopen,
-                };
-                res.push(data);
-              }
+              // console.log(payImgs, 'payImgs 여기 있습니다!!!!');
               return res;
             }, []),
           );
         }
-        // }).then(()=>{
-        //   return new Promise (function myo(){
-        //     console.log(conList, 'here is myo')
-        //     // 리스트 restDay가 적은 순서로 정렬
-        //     let newArr = [...conList]
-        //     newArr.sort(function (comp1, comp2){
-        //       return Number(comp1.restDay) - Number(comp2.restDay)
-        //     })
-        //     setConList(newArr)
-
-        //     // let newArr2 = [...goOpenList]
-        //     // newArr2.sort(function (comp1, comp2){
-        //     //   return Number(comp1.restDay) - Number(comp2.restDay)
-        //     // })
-        //     // setGoOpenList(newArr2)
-        //   })
       })
       .catch((err) => {
         console.log('유저의 위시정보 불러오지못함');
@@ -144,7 +102,6 @@ export function MyWish() {
   }, []);
 
   const GoToWish = (wishId: string): any => {
-    console.log('클릭클릭클릭클릭클릭클릭클릭클릭');
     console.log(wishId);
     navigate(`/congrats/${wishId}`);
   };
@@ -167,25 +124,51 @@ export function MyWish() {
       return <img src={iconCategory7Etc} alt="" />;
     }
   }
-  const WishCard = ({ conList }: { conList: CheckWish[] }) => {
-    // 알맞는 카드 골라주는 함수
+
+  type ConProps = {
+    conList: MyWishType[];
+  };
+  const WishCard = ({ conList }: ConProps) => {
+    // 축하해준 사람 수
+    console.log(conList, 'conList가 요것입니다.');
+    console.log(typeof conList, 'conList의 타입은 요것입니다.');
+
     return (
       <>
-        {conList.map((con: CheckWish) => {
+        {conList.map((con: MyWishType) => {
           // 완료된 위시
+          const conCount = con.payImgs.length;
+          const restDay = con.restDay;
+          var RD = '';
+          if (restDay > 0) {
+            var RD = `- ${restDay}`;
+          } else if (restDay == 0) {
+            var RD = '- day';
+          } else {
+            var RD = `+ ${-restDay}`;
+          }
+
           if (Number(con.restDay) < 1) {
             return (
               <div
                 className="wish-box shadow-xl"
                 onClick={() => GoToWish(con.wishId)}
               >
-                <p className="p-date">완료 후 {-con.restDay}일</p>
-                <p className="p-done">완료됨</p>
+                <p className="p-date" style={{ fontWeight: 'bold' }}>
+                  D {RD}
+                </p>
+                <p className="p-done" style={{ fontWeight: 'bold' }}>
+                  완료
+                </p>
                 <div className="category-div">
                   <Categorize category={con.category}></Categorize>
                   <p className="wish-title">"{con.title}"</p>
                 </div>
-                <Donator />
+                {conCount > 0 ? (
+                  <Donator payImgs={con.payImgs} />
+                ) : (
+                  <button>공유해보세요.</button>
+                )}
               </div>
             );
           } else {
@@ -194,13 +177,22 @@ export function MyWish() {
                 className="wish-box shadow-xl"
                 onClick={() => GoToWish(con.wishId)}
               >
-                <p className="p-date">완료까지 {con.restDay}일</p>
+                <p className="p-date"> D {RD}</p>
                 <p className="p-proceed">진행중</p>
                 <div className="category-div">
                   <Categorize category={con.category}></Categorize>
                   <p className="wish-title">"{con.title}"</p>
                 </div>
-                <Donator />
+                {conCount > 0 ? (
+                  <Donator payImgs={con.payImgs} />
+                ) : (
+                  <div className="donator-div">
+                    <p className="no-donate">
+                      <span>아직 축하해주신 분이 없어요😢</span>
+                      <span>당신의 위시를 공유해보세요.</span>
+                    </p>
+                  </div>
+                )}{' '}
               </div>
             );
           }
@@ -210,76 +202,54 @@ export function MyWish() {
   };
 
   return (
-    <div className="my-wish-div">
-      <WishCard conList={[...conList]}></WishCard>
+    <div>
+      <p className="phone-book-title">| My Wish</p>
+      <div className="under-my-wish-title-div">
+        <div className="my-wish-div">
+          <WishCard conList={[...conList]}></WishCard>
+        </div>
+      </div>
     </div>
   );
 }
 
-function Donator() {
+interface PayImgs {
+  payImgs: string[];
+}
+
+function Donator({ payImgs }: PayImgs) {
+  console.log(payImgs, 'Donater에서 나오는 pay');
+  console.log(payImgs.slice(-5), 'Donater에서 나오는 pay를 슬라이스 한 것');
+  const imgCount = payImgs.length;
+
   return (
     <div className="donator-div">
       <div className="flex items-center space-x-2 text-base">
-        <p className="text-xs ">축하해주신 분</p>
+        <p className="text-xs">- 축하해주신 분 -</p>
       </div>
-      <div className="mt-1 flex -space-x-2 overflow-hidden">
-        <img
-          className="inline-block h-10 w-10 rounded-full ring-1 ring-white"
-          src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-          alt=""
-        />
-        <img
-          className="inline-block h-10 w-10 rounded-full ring-1 ring-white"
-          src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-          alt=""
-        />
-        <img
-          className="inline-block h-10 w-10 rounded-full ring-1 ring-white"
-          src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-          alt=""
-        />
-        <img
-          className="inline-block h-10 w-10 rounded-full ring-1 ring-white"
-          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-          alt=""
-        />
-        <img
-          className="inline-block h-10 w-10 rounded-full ring-1 ring-white"
-          src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-          alt=""
-        />
+      <div
+        className="mt-1 flex -space-x-2 overflow-hidden"
+        style={{ height: '42px', alignItems: 'center' }}
+      >
+        {payImgs &&
+          payImgs.slice(-5).map((payImg) => {
+            return (
+              <img
+                className="inline-block h-10 w-10 rounded-full ring-1 ring-white ring-profile"
+                src={payImg}
+                alt=""
+                style={{ border: '1px solid white' }}
+              />
+            );
+          })}
       </div>
-      <div className="mt-1 text-xs">
-        <a className="text-blue-500">+ 198 others</a>
-      </div>
-    </div>
-  );
-}
-
-function WishCardActive(props: { title: string }) {
-  return (
-    <div className="wish-box shadow-xl">
-      <p className="p-date">완료까지 7일</p>
-      <p className="p-proceed">진행중</p>
-      <div className="category-div">
-        <img src={iconCategory1Birthday} alt="" />
-        <p className="wish-title">"{props.title}"</p>
-      </div>
-      <Donator />
-    </div>
-  );
-}
-
-function WishCardDeactive(props: { title: string }) {
-  return (
-    <div className="wish-box shadow-xl">
-      <p className="p-date">완료까지 7일</p>
-      <p className="p-done">진행중</p>
-      <div className="category-div">
-        <img src={iconCategory1Birthday} alt="" />
-        <p className="wish-title">"{props.title}"</p>
-      </div>
-      <Donator />
+      {imgCount > 5 ? (
+        <div className="mt-1 text-xs">
+          <a className="others-number">+ {imgCount - 5} others</a>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

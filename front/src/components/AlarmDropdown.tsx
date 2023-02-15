@@ -8,26 +8,33 @@ import { db } from "./firebase";
 import { List } from "@mui/material";
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
+import logo from '../assets/tifyLogo.svg';
+import axios from "axios";
+
+import "../css/AlramDropDown.styles.css"
 
 interface Alarm {
     [key: string]: any;
     id: string;
   }
 
-const updateData = (dataid:string,data:Alarm,userEmail:string) => {
+const updateData = (dataid:string,data:Alarm,userId:string) => {
     //data는 email 기준 조회합니다.
     data.state = true;
     console.log(data);
-    console.log("/test/tify/"+userEmail+"/"+dataid);
+    console.log("/test/tify/"+userId+"/"+dataid);
     return update(
-        ref(db, "/test/tify/"+userEmail+"/"+dataid),
+        ref(db, "/test/tify/"+userId+"/"+dataid),
         data
     );
 };
 
 const AlarmDropdown = () => {
-  var userEmail = useSelector((state: RootState) => state.authToken.userEmail);
-  if(userEmail) {userEmail = userEmail.replace("@","-").replace(".","-");}
+  var userId = useSelector((state: RootState) => state.authToken.userId);
+  // if(userEmail) {userEmail = userEmail.replace("@","-").replace(".","-");}
+  const accessToken = useSelector(
+    (state: RootState) => state.authToken.accessToken,
+  );
 
   const [showDropdown, setShowDropdown] = useState(false);
   const toggleDropdown = () => {
@@ -35,7 +42,7 @@ const AlarmDropdown = () => {
     if (showDropdown){
       alarmsArray.map((val,idx) => {
         if ( alarmsArray[idx].state === false ){
-            updateData(alarmsArray[idx].id,alarmsArray[idx],userEmail);
+            updateData(alarmsArray[idx].id,alarmsArray[idx],userId);
         }
       })
     }
@@ -43,7 +50,7 @@ const AlarmDropdown = () => {
     console.log(alarmsArray);
     };
 
-  const mb = ref(db, "/test/tify/"+userEmail);
+  const mb = ref(db, "/test/tify/"+userId);
   // const mb = ref(db, "/test/tify/");
 
   var alarmsArray: Alarm[] = [];
@@ -51,7 +58,7 @@ const AlarmDropdown = () => {
   var isNew:string = alert;
   onValue(mb, (snapshot) => {
         const data = snapshot.val();
-        alarmsArray = Object.keys(data).map(key => {
+        alarmsArray = Object?.keys(data)?.map(key => {
             if (data[key].state === false) {
                 console.log("새 알람 발생");
                 isNew = bell;
@@ -70,7 +77,7 @@ const AlarmDropdown = () => {
         console.log(snapshot.val());
       } else {
         console.log("No data available");
-      }
+      }``
     })
       .catch(error => {
       console.error(error);
@@ -112,35 +119,59 @@ const AlarmDropdown = () => {
                   style={{
                     backgroundColor:"#FAFAFA",
                     display: 'flex',
-                    alignItems: 'center',
                     height: '500px',
-                    // width: '200px',
+                    width: '20vw',
                     position: 'absolute',
+                    zIndex: '100',
                     flexDirection : 'column',
-                    overflowY: "auto",
+                    // overflowY: "auto",
                     left: "-200px",  /* set to a negative value */
             }}>
-            {alarmsArray.map((item) => (
+            { alarmsArray.length > 0 ? 
+              alarmsArray.map((item) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    height: '65px',
+                    height: '6em',
+                    width: '100%',
+                    position: 'relative',
+                    flexDirection : 'row',
+                    justifyContent: 'spaceBetween'}}>
+                    <div style={{padding:"5px"}}>
+                      <img style={{borderRadius: '50%', width: '40px', height: '40px',}} src={item.profile? item.profile:anony} alt="img"/>
+                    </div>
+                    <div style={{}}>
+                      <div style={{fontWeight:"bold"}}>{item.title}</div>
+                      <div>{item.text} <div style={{ fontSize:'5px', color: item.state ? "lightgray" : "red"}}>{ passedTime(Date.now() - item.time)}</div></div>
+                    </div>
+                    <div style={{minWidth:"100px", display:"felx"}}>
+                      {item.friend&&
+                        item.friend == 'req' &&
+                          // <div style={{ fontSize:'5px', width:"50px"}}>.</div>
+                          <button className="accept-btn" onClick={()=>handleAcceptFriend(item.friendName, item.friendId, accessToken)}>수락</button>
+                      }
+                    </div>
+                </div>
+            ))
+            :
+            (                 
+              <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: '250px',
                     width: '250px',
                     position: 'relative',
-                    flexDirection : 'row'}}>
-                    <div style={{padding:"5px"}}>
-                      <img style={{borderRadius: '50%', width: '40px', height: '40px',}} src={anony} alt="img"/>
+                    justifyContent: 'center',
+                    flexDirection : 'column'}}
+                    >
+                    <div>
+                      <img src={logo} alt="" style={{ filter:"grayscale(100%)"}} />
                     </div>
-                    {/* <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '5px', }}> */}
-                    {/* </div> */}
-                    <div style={{width:"150px"}}>
-                      <div style={{fontWeight:"bold"}}>{item.title}</div>
-                      <div>{item.content} <div style={{ fontSize:'5px', color: item.state ? "lightgray" : "red"}}>{ passedTime(Date.now() - item.time)}</div></div>
-                    </div>
-
-                    <div style={{ fontSize:'5px', width:"50px"}}>무언가 들어감.</div>
-                </div>
-            ))}
+                    <h1 style={{fontSize:"1rem", fontWeight:"bolder", color:"gray"}}>새로운 알림이 없습니다.</h1>
+                    <p style={{fontSize:"0.5rem", color:"#A4A4A4"}}>나와 관련된 중요한 알림을 한꺼번에<br/>모아서 확인할 수 있습니다.</p>
+                </div> )
+          
+          }
             </div>
       )}
     </div>
@@ -148,3 +179,32 @@ const AlarmDropdown = () => {
 };
 
 export default AlarmDropdown;
+const pushData = (friendName:string, friendId:number) => {
+  let base = "/test/tify/"; 
+  push(ref(db, base + friendId), {
+    text: friendName+'님이 친구요청을 수락했습니다.',
+    interval: "Daily",
+  });
+  console.log('친구요청수락함')
+};
+const handleAcceptFriend = async (friendName:string,friendId: number, accessToken:any) => {
+  try {
+    const response = await axios.post(
+      `https://i8e208.p.ssafy.io/api/friends/accept`,
+      {
+        friendId: friendId,
+        accepted: true,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-type': 'application/json',
+        },
+      },
+    );
+    // 친구수락 받는 사람한테 알림
+    pushData(friendName, friendId)
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -1,6 +1,5 @@
 // import type { WishProps } from '../interface/interface';
 import { ClassAttributes, HTMLAttributes, useState, useEffect } from 'react';
-import '../../css/mypage/myFriend.styles.css';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -8,6 +7,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Auth';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 // slider
 import ReactSlider from 'react-slider';
@@ -15,6 +15,7 @@ import 'rc-slider/assets/index.css';
 
 // scrollBar
 import { Scrollbar } from 'react-scrollbars-custom';
+import '../../css/mypage/myFriend.styles.css';
 
 // 일촌 위시들 보기
 export function Friend() {
@@ -102,6 +103,12 @@ export function Friend() {
   );
 }
 
+interface RequestData {
+  requestImg: string;
+  requestCount: number;
+  requestUsername: string;
+}
+
 // 일촌 관리 부분
 const FriendsList = () => {
   const userId = useSelector((state: RootState) => state.authToken.userId);
@@ -109,11 +116,11 @@ const FriendsList = () => {
   const [requestsList, setRequestsList] = useState<Array<any>>();
   const [requestListBool, setrequestListBool] = useState<boolean>(false);
   // const [lastRequestImg, setLastRequestImg] = useState<string>();
-  const lastRequestData = {
+  const [lastRequestData, setLastRequestData] = useState<RequestData>({
     requestImg: '',
     requestCount: 0,
     requestUsername: '',
-  };
+  });
   // var requestImg = '';
   // var requestCount = 0;
 
@@ -159,11 +166,16 @@ const FriendsList = () => {
 
         // 친구 요청 받은 목록을 받아옴.
         if (res.data.receivedRequests.length > 0) {
-          // console.log(res.data.receivedRequests);
+          console.log(
+            res.data.receivedRequests.length,
+            '렝쓰는 이정도 입니다~~~~~',
+          );
           // console.log(typeof res.data.receivedRequests);
-          const requestsList = Object.values(res.data.receivedRequests);
+          // let copy = { ...lastRequestData };
+          // copy.requestCount = res.data.receivedRequests.length;
+          // setLastRequestData(copy);
 
-          lastRequestData.requestCount = requestsList.length;
+          const requestsList = Object.values(res.data.receivedRequests);
 
           for (let key in requestsList) {
             const value: any = requestsList[key];
@@ -178,9 +190,16 @@ const FriendsList = () => {
             };
             console.log(value.user.profileImg, '요청한 유저들 프로필 사진');
             requetsResult.push(data);
+
             // setLastRequestImg(value.user.profileImg);
-            lastRequestData.requestImg = value.user.profileImg;
-            lastRequestData.requestUsername = value.user.username;
+            // lastRequestData.requestImg = value.user.profileImg;
+            // lastRequestData.requestUsername = value.user.username;
+
+            let copy = { ...lastRequestData };
+            copy.requestImg = value.user.profileImg;
+            copy.requestUsername = value.user.username;
+            copy.requestCount = res.data.receivedRequests.length;
+            setLastRequestData(copy);
           }
         }
         const sortedRequestsResult: any = requetsResult.sort(function (a, b) {
@@ -247,7 +266,7 @@ const FriendsList = () => {
 
     return (
       <li className="list-group-item">
-        <img src={request.profileImg} className="friend-profile"></img>
+        <img src={request.profileImg} className="friend-profile "></img>
         <p className="friend-nickname">{request.nickname}</p>
         <p className="friend-username">{request.username}</p>
         <div className="">
@@ -271,8 +290,8 @@ const FriendsList = () => {
   // 친구 항목 하나
   const SingleFriend = ({ friend }: any) => {
     return (
-      <li className="list-group-item">
-        <img src={friend.profileImg} className="friend-profile"></img>
+      <li className="list-group-item" key={friend.id}>
+        <img src={friend.profileImg} className="friend-profile "></img>
         <p className="friend-nickname">{friend.nickname}</p>
         <p className="friend-username">{friend.username}</p>
         <button
@@ -292,33 +311,80 @@ const FriendsList = () => {
         <img src={lastRequestData.requestImg} className="friend-profile"></img>
         <p className="friend-nickname">일촌 신청</p>
         <p className="friend-username">{lastRequestData.requestUsername}</p>
+      </li>
+    );
+  };
 
+  const GoToFriend = () => {
+    return (
+      <li className="list-group-item">
         <button
+          style={{ marginLeft: '15px' }}
           onClick={() =>
             setrequestListBool((requestListBool: boolean) => !requestListBool)
           }
+          className="friend-request-switch-buttom"
         >
-          현재 / 요청
+          ←
+        </button>
+      </li>
+    );
+  };
+
+  const GoToRequest = () => {
+    let followCount = '';
+    if (lastRequestData.requestCount > 1) {
+      followCount = ` 외 ${lastRequestData.requestCount - 1}명`;
+    }
+
+    return (
+      <li className="list-group-item">
+        <img
+          src={lastRequestData.requestImg}
+          className="friend-profile blur-profile"
+        ></img>
+        <p
+          className="friend-nickname "
+          style={{ color: '#0084ff', fontWeight: 'normal' }}
+        >
+          일촌 요청
+        </p>
+        <p className="friend-username" style={{ fontWeight: 'normal' }}>
+          {lastRequestData.requestUsername}
+          {followCount}
+        </p>
+        <button
+          className="friend-request-switch-buttom"
+          onClick={() =>
+            setrequestListBool((requestListBool: boolean) => !requestListBool)
+          }
+          style={{ marginLeft: '47px' }}
+        >
+          →
         </button>
       </li>
     );
   };
 
   return (
-    <div>
+    <div className="lower-side-friends-div">
       <div className="friends-div">
         <ul className="list-group list-group-flush">
-          <li className="list-group-item">An item</li>
-          <li className="list-group-item">A second item</li>
-          <li className="list-group-item">A third item</li>
-          <li className="list-group-item">A fourth item</li>
-          <li className="list-group-item">And a fifth test</li>
+          {requestListBool ? (
+            <GoToFriend></GoToFriend>
+          ) : (
+            <GoToRequest></GoToRequest>
+          )}
 
           {requestListBool === false
             ? friendList &&
               friendList.map((friend: object) => {
                 // console.log(friend);
-                return <SingleFriend friend={friend}></SingleFriend>;
+                return (
+                  <>
+                    <SingleFriend friend={friend}></SingleFriend>
+                  </>
+                );
               })
             : requestsList &&
               requestsList.map((request: object) => {
@@ -327,13 +393,6 @@ const FriendsList = () => {
               })}
         </ul>
       </div>
-      <button
-        onClick={() =>
-          setrequestListBool((requestListBool: boolean) => !requestListBool)
-        }
-      >
-        현재 / 요청
-      </button>
     </div>
   );
 };
@@ -351,7 +410,7 @@ const Carousel = ({ friendWishList }: any) => {
     initialSlide: 0,
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 2000,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
@@ -361,7 +420,7 @@ const Carousel = ({ friendWishList }: any) => {
         },
       },
       {
-        breakpoint: 600,
+        breakpoint: 1400,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
@@ -369,7 +428,7 @@ const Carousel = ({ friendWishList }: any) => {
         },
       },
       {
-        breakpoint: 480,
+        breakpoint: 800,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -378,17 +437,31 @@ const Carousel = ({ friendWishList }: any) => {
     ],
   };
 
+  interface friendWish {
+    wishId: string;
+    totPrice: number;
+    nowPrice: number;
+    endDate: string;
+    title: string;
+    percent: number;
+    userName: string;
+    nickName: string;
+    userImg: string;
+  }
+
   return (
     <div className="ongoing-wishes">
+      <p className="phone-book-title">| Friends</p>
       <Slider {...settings}>
         {friendWishList &&
-          friendWishList.map((friendWish: object) => {
+          friendWishList.map((friendWish: friendWish) => {
             return <WishCard friendWish={friendWish}></WishCard>;
           })}
         {/* {items.map((item: any) => {
           return <WishCard item={item}></WishCard>;
         })} */}
-        <div className="ongoing-wish">
+        {/* 더미데이터 주석처리하면 그림자사라짐! */}
+        {/* <div className="ongoing-wish">
           <h3>1</h3>
         </div>
         <div className="ongoing-wish">
@@ -411,7 +484,7 @@ const Carousel = ({ friendWishList }: any) => {
         </div>
         <div className="ongoing-wish">
           <h3>8</h3>
-        </div>
+        </div> */}
       </Slider>
     </div>
   );
@@ -419,9 +492,26 @@ const Carousel = ({ friendWishList }: any) => {
 
 // 진행 중인 위시 부분
 function WishCard({ friendWish }: any) {
+  const navigate = useNavigate();
   // console.log(friendWish);
+
+  const GoToFriendWish = (event: React.MouseEvent, wishId: string) => {
+    console.log(event.type);
+    if (event.type === 'dragstart') {
+      event.preventDefault();
+      return;
+    } else {
+      navigate(`/congrats/${wishId}`);
+    }
+  };
+
+  console.log(friendWish.percent);
   return (
-    <div className="ongoing-wish">
+    <div
+      className="ongoing-wish"
+      onClick={(e) => GoToFriendWish(e, friendWish.wishId)}
+      onDragStart={(e) => GoToFriendWish(e, friendWish.wishId)}
+    >
       <div className="wish-profile-div">
         <img src={friendWish.userImg} alt="" className="wish-profile-img" />
         <div className="name-div">
@@ -431,9 +521,19 @@ function WishCard({ friendWish }: any) {
       </div>
       <p className="friend-wish-title">"{friendWish.title}"</p>
       <div className="wish-slider-and-label-container">
-        <div className="slider-and-label">
-          <span>진행도</span>
-          <ReactSlider
+        <div className="wish-slider-and-label">
+          <span className="progress-span">진행도</span>
+          <div className="gift-bar-gray" style={{ width: 'auto' }}>
+            <div
+              style={{
+                width: `${friendWish.percent}%`,
+                backgroundColor: '#FE3360',
+                height: 'inherit',
+                borderRadius: '5px',
+              }}
+            ></div>
+          </div>
+          {/* <ReactSlider
             className="horizontal-slider-myfriend"
             defaultValue={[friendWish.percent]}
             disabled={true}
@@ -445,7 +545,7 @@ function WishCard({ friendWish }: any) {
                 HTMLAttributes<HTMLDivElement>,
               state: any,
             ) => <div {...props} />} //custom track
-          />
+          /> */}
         </div>
       </div>
     </div>

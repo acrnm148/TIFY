@@ -1,6 +1,6 @@
 #base-div {
-  width: 1200px;
-  /* width: 70vw; */
+  /* width: 1200px; */
+  width: 70vw;
   height: 1200px;
   /* background-color: #c1c1c1; */
 }
@@ -10,7 +10,7 @@
 
 .ongoing-wishes {
   /* border: 1px solid black; */
-  margin-bottom: 40px;
+  margin-bottom: 80px;
 }
 
 .ongoing-wishes .ongoing-wish {
@@ -23,6 +23,7 @@
   margin-right: 10px;
   /* box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1); */
   box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 /* border-radius: 50%; */
 
@@ -82,12 +83,33 @@
   font-family: 'Nanum Gothic';
 }
 
+.progress-span {
+  color: #fe3360;
+  font-size: 12px;
+  font-weight: 300;
+  margin-top: 8px;
+}
+
+.wish-slider-and-label {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  font-family: 'Nanum Gothic';
+}
+
+.lower-side-friends-div {
+  display: flex;
+  justify-content: center;
+}
+
 .friends-div {
   border-radius: 10px;
   border: 1px solid gray;
-  width: 65vw;
+  /* width: 65vw; */
+  width: 630px;
   min-width: 600px;
-  height: 800px;
+  height: 600px;
   overflow-y: scroll;
 }
 
@@ -126,6 +148,10 @@
   margin-right: 20px;
 }
 
+.blur-profile {
+  filter: brightness(50%);
+}
+
 .friend-nickname {
   margin-right: 50px;
   font-weight: bold;
@@ -143,6 +169,7 @@
   color: white;
   border-radius: 5px;
   padding: 5px;
+  margin-left: 47px;
 }
 .friend-agree-button {
   background-color: #0084ff;
@@ -156,4 +183,23 @@
   color: white;
   border-radius: 5px;
   padding: 5px;
+}
+
+.change-delete-button-div {
+  margin-left: 60px;
+}
+
+.friend-request-switch-buttom {
+  background-color: #0084ff;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  width: 40px;
+}
+.slick-prev:before,
+.slick-next:before {
+  font-size: 25px;
+  line-height: 1;
+  opacity: 0.75;
+  color: #808080;
 }

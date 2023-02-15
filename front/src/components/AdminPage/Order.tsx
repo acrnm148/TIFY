@@ -41,6 +41,13 @@ interface pImg {
   url?: string;
   id?: number;
 }
+function getPageRanges(n: number): number[][] {
+  const pageRanges: number[][] = [];
+  for (let i = 1; i <= n; i += 10) {
+    pageRanges.push(Array.from({ length: 10 }, (_, j) => i + j).filter(x => x <= n));
+  }
+  return pageRanges;
+}
 
 const Order = () => {
     const [id, setId] = useState<string>(''); // faq id
@@ -62,22 +69,30 @@ const Order = () => {
     // const [newImgs,setNewImgs] = useState<Array<pImg>>([]);
     const [totalPages, setTotalPages] = useState(0);
     const maxResults = 10;
-    // const baseUrl = "https://i8e208.p.ssafy.io/api/faq";
-    const baseUrl = "http://localhost:8081/api/order";
-    const sUrl = "http://localhost:8081/api/admin/ordersearch"
-    const bUrl = "http://localhost:8081/api/admin/order"
+    const baseUrl = "https://i8e208.p.ssafy.io/api/faq";
+    const sUrl = "https://i8e208.p.ssafy.io/api/admin/ordersearch"
+    const bUrl = "https://i8e208.p.ssafy.io/api/admin/order"
+    // const baseUrl = "http://localhost:8081/api/order";
+    // const sUrl = "http://localhost:8081/api/admin/ordersearch"
+    // const bUrl = "http://localhost:8081/api/admin/order"
     const [orderInfo, setOrderInfo] = useState<OrderForm> ({});// for 상품정보 edit
 
     const [newShow, setNewShow] = useState(false); // modal
 
     const [refresh, setRefresh] = useState<boolean>(false); //페이지 갱신용
     // Pagination
-    const [nowPage, setNowPage] = useState<number>();
-    const pamount = 10
-    const [nowStartNum, setNowStartNum] = useState<number>(1)
-    const [nowLastNum, setNowLastNum] = useState<number>(1)
+    const [nowPage, setNowPage] = useState<number>(0);
+    const [pageRange, setPageRange] = useState<Array<Array<number>>>([[],])
+    const [pageStates, setPageStates] = useState<{ [index: number]: boolean }>({},); // page 선택 여부.
+    const [nowRange,setNowRange] = useState<Array<number>>([]);
+    const [rangeIdx, setRangeIdx] = useState<number>(0);
+
     useEffect(() => {
       getData(page)}, [refresh]);
+
+    useEffect(()=>{
+        setNowRange([...pageRange[0]])
+      }, [totalPages]) //한 함수안에 related useState를 동시에 넣으면 안된다.!
 
     // const handleSearch = async (event:any) => {
     //   if (event.key === 'Enter' || event.type === 'click') {
@@ -96,11 +111,18 @@ const Order = () => {
             max_result:10
           },
         }).then((res) => {
-          console.log(res,"페이지 찐정보"); 
           setSearchResults(res.data.content);
-          setTotalPages(res.data.totalPages);
-          totalPages > 10 ? setNowLastNum(10):setNowLastNum(res.data.totalPages)
-          console.log(totalPages,nowLastNum,"페이지 정보")
+          if (totalPages != res.data.totalPages) {
+            setTotalPages(res.data.totalPages);
+            setPageRange( getPageRanges(res.data.totalPages) ); 
+            let pageSelect:{ [index: number]: boolean } = {};
+            pageSelect[1]=true;
+            for (let i=2; i<=res.data.totalPages; i++) {
+              pageSelect[i]=false;
+            }
+            setPageStates(pageSelect);
+          }
+          console.log(res)
           return res});
         return response.data.content;
       } catch (error) {
@@ -112,48 +134,50 @@ const Order = () => {
     }
 
     const GoToNextPage = () =>{
-      let target = nowLastNum+1
-      // if(target)
-      setNowPage(target)
-      getData(target-1)
-      setNowStartNum(target)
-      if (totalPages > (nowLastNum+pamount) ) { setNowLastNum(nowLastNum+pamount) }
-      else { setNowLastNum(totalPages) }
-     }
-     const GoToBeforePage = () =>{
-      let target = nowStartNum-pamount
-      if(target < 1){
-        return
+      if (rangeIdx < pageRange.length-1) {
+        console.log(rangeIdx)
+        setPageRange(getPageRanges(totalPages));
+        const range = pageRange.at(rangeIdx + 1);
+        if (range) {
+            setNowRange([...range]);
+        }
+        setRangeIdx(rangeIdx + 1);
       }
-      setNowPage(target)
-      getData(target-1)
-      setNowLastNum(nowStartNum-1)
-      setNowStartNum(target)
+     }
+  
+     const GoToBeforePage = () =>{
+      if (rangeIdx > 0) {
+        setPageRange(getPageRanges(totalPages));
+        const range = pageRange.at(rangeIdx-1);
+        if (range) {
+            setNowRange([...range]);
+        }
+        setRangeIdx(rangeIdx - 1);
+      }
      }
 
      const PageButtons = ({ totalPages }: { totalPages: number }) => {
-      let buttons = [];
-      for (let i = nowStartNum; i <= nowLastNum; i++) {
+      let buttons:Array<any> = [];
+      nowRange.map(i => {
         buttons.push(
-          <li className="page-item" key={i}>
+          <li className="page-item" key={`button idx-${i}`}>
             <button
               className="page-link"
               onClick={() => {
                 // setPage(i - 1);
+                setPageStates({...pageStates,[nowPage]:false,[i]:true})
                 setNowPage(i);
                 if (searchTerm.trim() == "" || searchTerm==null) {
                   getData(i - 1);
                 }
-                // else {
-                //   searchDataByName(i-1);
-                // }
               }}
+              style={pageStates[i] ? {color:"white", backgroundColor: "blue"} : {backgroundColor: ""}}
             >
               {i}
             </button>
-          </li>,
+          </li>
         );
-      }
+      })
       return <>{buttons}</>;
     };
 
@@ -371,7 +395,6 @@ const Order = () => {
                 <li className="page-item">
                   { 
                     
-                    (nowLastNum > totalPages) &&
                     <a className="page-link" onClick={(e)=>{e.preventDefault(); GoToNextPage()}}>
                       Next
                     </a>

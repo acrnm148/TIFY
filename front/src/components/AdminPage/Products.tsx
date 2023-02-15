@@ -74,6 +74,13 @@ interface productDetail {
   options?: Array<Option>;
   likeCount?: string;
 }
+function getPageRanges(n: number): number[][] {
+  const pageRanges: number[][] = [];
+  for (let i = 1; i <= n; i += 10) {
+    pageRanges.push(Array.from({ length: 10 }, (_, j) => i + j).filter(x => x <= n));
+  }
+  return pageRanges;
+}
 
 const Products = () => {
   const [options, setOptions] = useState<Array<Option>>([]); // for Option
@@ -88,8 +95,8 @@ const Products = () => {
   const [newImgs, setNewImgs] = useState<Array<pImg>>([]);
   const [totalPages, setTotalPages] = useState(0);
   const maxResults = 10;
-  // const baseUrl = "https://i8e208.p.ssafy.io/api/gifthub";
-  const baseUrl = 'http://localhost:8081/api/gifthub';
+  const baseUrl = "https://i8e208.p.ssafy.io/api/gifthub";
+  // const baseUrl = 'http://localhost:8081/api/gifthub';
   const [productInfo, setProductInfo] = useState<productDetail | null>(null); // for 상품정보 edit
 
   const [name, setName] = useState<string>('');
@@ -104,10 +111,11 @@ const Products = () => {
     const [addODV,setAddODV] = useState<string>("");
     const [addODI,setAddODI] = useState<string>("");
   // Pagination
-  const [nowPage, setNowPage] = useState<number>();
-  const pamount = 10
-  const [nowStartNum, setNowStartNum] = useState<number>(1)
-  const [nowLastNum, setNowLastNum] = useState<number>(1)
+  const [nowPage, setNowPage] = useState<number>(0);
+  const [pageRange, setPageRange] = useState<Array<Array<number>>>([[],])
+  const [pageStates, setPageStates] = useState<{ [index: number]: boolean }>({},); // page 선택 여부.
+  const [nowRange,setNowRange] = useState<Array<number>>([]);
+  const [rangeIdx, setRangeIdx] = useState<number>(0);
 
   ////////////////////// 상품 등록용 state
   const [newProductInfo, setNewProductInfo] = useState<productDetail | null>({});
@@ -129,6 +137,9 @@ const Products = () => {
   const [refresh, setRefresh] = useState<boolean>(false);
   useEffect(() => {
     getData(page)}, [refresh]);
+  useEffect(()=>{
+    setNowRange([...pageRange[0]])
+  }, [totalPages]) //한 함수안에 related useState를 동시에 넣으면 안된다.!
 
   const toggleCollapse = (index: number) => {
     setOpenStates({
@@ -138,29 +149,30 @@ const Products = () => {
   };
 
   const GoToNextPage = () =>{
-    let target = nowLastNum+1
-    // if(target)
-    setNowPage(target)
-    getData(target-1)
-    setNowStartNum(target)
-    if (totalPages > (nowLastNum+pamount) ) { setNowLastNum(nowLastNum+pamount) }
-    else { setNowLastNum(totalPages) }
-   }
-   const GoToBeforePage = () =>{
-    let target = nowStartNum-pamount
-    if(target < 1){
-      return
+    if (rangeIdx < pageRange.length-1) {
+      console.log(rangeIdx)
+      setPageRange(getPageRanges(totalPages));
+      const range = pageRange.at(rangeIdx + 1);
+      if (range) {
+          setNowRange([...range]);
+      }
+      setRangeIdx(rangeIdx + 1);
     }
-    setNowPage(target)
-    getData(target-1)
-    setNowLastNum(nowStartNum-1)
-    setNowStartNum(target)
+   }
+
+   const GoToBeforePage = () =>{
+    if (rangeIdx > 0) {
+      setPageRange(getPageRanges(totalPages));
+      const range = pageRange.at(rangeIdx-1);
+      if (range) {
+          setNowRange([...range]);
+      }
+      setRangeIdx(rangeIdx - 1);
+    }
    }
 
 
   const handleNewClose = () => {
-    console.log(newImgs);
-    console.log("저장은되냐?");
     setNewShow(false);
    }
   const handleNewShow = () => {
@@ -179,7 +191,6 @@ const Products = () => {
     setNewDescription('');
     setNewShow(true)
   };
-
   const createProduct = async (e: any) => {
     e.preventDefault();
     await getImgUrl_one();
@@ -239,47 +250,28 @@ const Products = () => {
 
   const getData = async (page: number) => {
     try {
-      const response = await axios.get(`${baseUrl}/products`, {
+      let url;
+      searchTerm=='' ? url=`${baseUrl}/products`:url=`${baseUrl}/search/${searchTerm}`
+      const response = await axios.get(`${url}`, {
         params: {
           page,
           max_result: 20,
         },
       }).then((res) => {
-        console.log(res,"페이지 찐정보"); 
         setSearchResults(res.data.content);
-        setTotalPages(res.data.totalPages);
-        totalPages > 10 ? setNowLastNum(10):setNowLastNum(res.data.totalPages)
-        console.log(totalPages,nowLastNum,"페이지 정보")
+        if (totalPages != res.data.totalPages) {
+          setTotalPages(res.data.totalPages);
+          setPageRange( getPageRanges(res.data.totalPages) ); 
+          let pageSelect:{ [index: number]: boolean } = {};
+          pageSelect[1]=true;
+          for (let i=2; i<=res.data.totalPages; i++) {
+            pageSelect[i]=false;
+          }
+          setPageStates(pageSelect);
+        }
+        console.log(res)
+        
         return res});
-      return response.data.content;
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  if (searchResults === null) {
-    getData(0);
-  }
-
-  const searchDataByName = async (page: number) => {
-    let urls;
-    if (searchTerm.trim() == "" || searchTerm==null) {
-      urls = `${baseUrl}/products`
-    }
-    else {
-      urls = `${baseUrl}/search/${searchTerm}`
-    }
-    try {
-      const response = await axios.get(urls, {
-        params: {
-          page,
-          max_result: 20,
-        },
-      }
-      );
-      setSearchResults(response.data.content);
-      setTotalPages(response.data.totalPages);
-      console.log(response.data);
-      console.log("----------- page info")
       return response.data.content;
     } catch (error) {
       console.error(error);
@@ -287,30 +279,30 @@ const Products = () => {
   };
 
   const PageButtons = ({ totalPages }: { totalPages: number }) => {
-    let buttons = [];
-    for (let i = nowStartNum; i <= nowLastNum; i++) {
+    let buttons:Array<any> = [];
+    nowRange.map(i => {
       buttons.push(
-        <li className="page-item" key={i}>
+        <li className="page-item" key={`button idx-${i}`}>
           <button
             className="page-link"
             onClick={() => {
               // setPage(i - 1);
+              setPageStates({...pageStates,[nowPage]:false,[i]:true})
               setNowPage(i);
               if (searchTerm.trim() == "" || searchTerm==null) {
                 getData(i - 1);
               }
-              else {
-                searchDataByName(i-1);
-              }
             }}
+            style={pageStates[i] ? {color:"white", backgroundColor: "blue"} : {backgroundColor: ""}}
           >
             {i}
           </button>
-        </li>,
+        </li>
       );
-    }
+    })
     return <>{buttons}</>;
   };
+
 
   const handleEdit = async (id: number) => {
     console.log(id);
@@ -519,10 +511,8 @@ const Products = () => {
   return (
     <div className="m-12">
       <div className="input-group mb-3">
-        <Form.Control type="text" placeholder="상품명으로 검색" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
-        <button className="input-group-text" onClick={(e) => {e.preventDefault(); searchDataByName(0)}}>
-          <Search size={24} style={{ margin: '0 auto' }} />
-        </button>
+          <Form.Control type="text" placeholder="상품명으로 검색하세요." value={searchTerm} onKeyUp={(e) => { if (e.key=="Enter") {getData(0)} }}  onChange={(e) => { e.preventDefault(); setSearchTerm(e.target.value)}}/>
+          <button className="input-group-text"><Search size={24} style={{ margin: "0 auto" }} onClick={()=>getData(0)}/></button>
       </div>
       <button
                   className="btn"
@@ -864,10 +854,11 @@ const Products = () => {
             </a>
           </li>
           <PageButtons totalPages={totalPages} />
+
           <li className="page-item">
             { 
               
-              (nowLastNum > totalPages) &&
+              // (nowLastNum < totalPages) &&
               <a className="page-link" onClick={(e)=>{e.preventDefault(); GoToNextPage()}}>
                 Next
               </a>

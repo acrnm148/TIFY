@@ -1,7 +1,8 @@
 .mypage-div {
-  margin-left: 90px;
+  margin-left: 10%;
   margin-top: 80px;
   display: flex;
+  min-height: 1000px;
 }
 
 .side-div {
@@ -56,11 +57,16 @@
   width: 24px;
 }
 
+.under-my-wish-title-div {
+  /* display: flex; */
+  /* justify-content: center; */
+}
+
 .my-wish-div {
-  width: 1000px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  width: 70%;
+  margin-left: 5%;
 }
 
 .my-wish-div > .wish-box {
@@ -70,6 +76,7 @@
   margin-bottom: 20px;
   cursor: pointer;
   transition: 0.5s;
+  margin-right: 20px;
 }
 
 .my-wish-div > .wish-box:hover {
@@ -80,10 +87,12 @@
   text-align: right;
   font-size: 9px;
   color: #a1a3a2;
+  font-weight: bold;
 }
 
 .wish-box > .p-proceed {
   text-align: right;
+  font-weight: bold;
   font-size: 14px;
   color: #fe3360;
 }
@@ -91,7 +100,6 @@
 .wish-box > .p-done {
   text-align: right;
   font-size: 14px;
-  color: #a1a3a2;
 }
 
 .wish-box > .category-div {
@@ -105,6 +113,9 @@
   font-weight: bold;
   width: 100%;
   font-size: 18px;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .wish-box > .profile-div {
@@ -114,6 +125,17 @@
 
 .donator-div {
   margin-top: 50px;
+}
+
+.no-donate {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  margin-top: 66px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .img-div {
@@ -136,4 +158,13 @@
   width: 20%;
   height: 20%;
   /* float: right; */
+}
+
+.ring-profile {
+  margin: 0.5px;
+}
+
+.others-number {
+  color: rgb(59 130 246 / 0.8);
+  margin-left: 5px;
 }
