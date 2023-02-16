@@ -7,6 +7,8 @@ import { RootState } from '../store/Auth';
 import { push, ref } from "firebase/database";
 import { db } from '../components/firebase';
 
+import defaultProfile from '../assets/defaultProfile.svg'
+
 // 기존 윈도우에 없는 객체에 접근할 때 에러 발생
 // 임의로 IMP 값이 있다고 정의해주는 부분
 declare const window: typeof globalThis & {
@@ -15,21 +17,22 @@ declare const window: typeof globalThis & {
 
 let paying = {
             amount : -1,
-            payType : "",
+            payType : "카드",
             celebFrom : "",
             celebTel : "",
             celebContent : "",
             celebImgUrl : "",
-            giftId : 0,
-            userId : 0,
+            giftId : -1, 
+            userId : 0, // userId 없을 때 0 : 비회원축하
 }
 let tk: string | null = null
 export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:number) {
+  console.log(congratsInfo.giftId)
   paying = congratsInfo
   /* 1. 가맹점 식별하기 */
     const {IMP} = window;
     IMP.init('imp34060260');
-    if(!giftName){giftName = '티피로 축하하기'}
+    if(!giftName || giftName=='현금'){giftName = '티피로 축하하기'}
     /* 2. 결제 데이터 정의하기 */
     const data = {
       pg: 'html5_inicis.INIpayTest',                           // PG사
@@ -44,6 +47,15 @@ export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:
       buyer_postcode: '06018',                              // 구매자 우편번호
     };
 
+    // giftId값이 없으면 못넘어가게
+    if (!paying.giftId || paying.giftId == -1){{
+      const result = confirm('현금으로 축하하시겠습니까?')
+      if(result){
+        console.log('giftId가 없거나 -1임')
+      } else{
+        return
+      }
+    }}
     /* 4. 결제 창 호출하기 */
     IMP.request_pay(data, callback);
 
@@ -56,6 +68,7 @@ export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:
         text: paying.celebFrom+'님이 '+ giftName+ '에 축하를 보냈습니다!', // 필드는 자유롭게 추가 하셔도 됩니다.
         profile : profile,
         interval: "Daily", // nonSql db라서 확장/수정이 자유롭습니다.
+        time: Date.now()
       });
       console.log(wishUserId+'위시 당사자에게 알림 발송 완료!')
     };
@@ -91,7 +104,7 @@ export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:
             console.log('축하 결제 성공!!!', res)
             window.location.href = 'https://i8e208.p.ssafy.io'
 
-            // 축하해준 유저가 비회원이면 유저정보 불러와서 profile 사진 받아오기 
+            // 축하해준 유저가 회원이면 유저정보 불러와서 profile 사진 받아오기 
             if (paying.userId!==0){
               const getUser = async () =>{
                 const API_URL = `https://i8e208.p.ssafy.io/api/account/userInfo`
@@ -111,11 +124,13 @@ export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:
               getUser();
             } else{
               // 비회원이면 기본 프로필 이미지
-              pushData('')
+              pushData(defaultProfile)
             }
-            history.go(-2)
+            history.go(-1)
+            console.log('축하결제성공', data)
           }).catch((err:any) => {
             console.log('축하 결제 실패', err)
+            console.log('시도한데이터', data)
           })
       } else {
         alert(`결제 실패: ${error_msg}`);

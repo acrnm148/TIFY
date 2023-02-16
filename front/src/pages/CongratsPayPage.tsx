@@ -1,11 +1,7 @@
-import { memo, useEffect, useState } from 'react';
-import ReactSlider from 'react-slider';
+import { useState } from 'react';
 import TapNameKor from '../components/TapNameKor';
 import '../css/congratsCardPage.styles.css';
 import { Link, NavLink, useLocation, useParams } from 'react-router-dom';
-import loading7 from '../assets/loading7.svg';
-import loading2 from '../assets/loading2.svg';
-import { Dictionary } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { useCallback, useRef } from 'react';
 import * as PayingPort from '../components/PayingPort';
@@ -17,8 +13,9 @@ import Fade from '@mui/material/Fade';
 import Box from '@mui/material/Box';
 import Backdrop from '@mui/material/Backdrop';
 import Policy from '../components/Policy';
+import { ThanksPage } from './ThanksPage';
 
-export function CongratsPayPage(){
+export function CongratsPayPage() {
   const userId = useSelector((state: RootState) => state.authToken.userId);
   const params = useParams();
   const wishId = params.wishId;
@@ -26,10 +23,14 @@ export function CongratsPayPage(){
   const payAmountNum = [5000, 10000, 50000, 100000];
   const [amount, setAmount] = useState<any>();
 
-  // 선택한 선물 정보 prop으로 받음
+  // 위시&유저 정보 prop으로 받음
+  // state={{ wishInfo: wishInfo, wishUserId: wishUserId, userName:userName}}
   const location = useLocation();
-  const { state } = location;
-  const [wishDetail, setWishDetail] = useState();
+  const { state } = location;  
+  const wishInfo = {...state?.wishInfo} //const wishInfo = { WishCardCover: card, WishCardContent:content, WishCardTitle:title}
+  const wishUserId = state?.wishUserId
+  const cashId = state.cashId
+
 
   // makeCard form 데이터
   const [cardFrom, setCardFrom] = useState<string>('');
@@ -39,22 +40,23 @@ export function CongratsPayPage(){
   //이용약관동의 선택여부
   const [isChecked, setIsChecked] = useState(false);
 
+  // 가격이 상품가격보다 넘었는지 확인
+  const [priceOver, setPriceOver] = useState(false);
   // modal
   const handleClose = () => setOpen(false);
   const [open, setOpen] = useState(false);
-  const [openPayInfo, setOpenPayInfo] = useState(false)
-  const handlePayInfoClose = () => setOpenPayInfo(false);
   const handleOpen = () => {
     setOpen(true);
   };
+  const [openPayInfo, setOpenPayInfo] = useState(false)
+  const handlePayInfoClose = () => setOpenPayInfo(false);
   const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    minWidth: '400px',
     bgcolor: 'background.paper',
-    border: '2px solid #000',
     boxShadow: 24,
     p: 4,
   };
@@ -109,22 +111,26 @@ export function CongratsPayPage(){
   const amountSelected = (i: any) => {
     console.log(payAmount[i]);
     setAmount(payAmountNum[i]);
+    setPriceOver(false)
   };
   const getAmount = (e: any) => {
     e.preventDefault();
-    console.log(e.target.value);
-    const neww = e.target.value;
+    const neww = e.target.value.replace(/[^0-9]/g,'');
     setAmount(neww);
   };
 
   function checkValidate(e: any) {
     // e.preventDefault()
 
-    // amount 숫자이고 공백아닌지 확인
-    if (Number.isNaN(amount)) {
+    // amount 공백아닌지 확인
+    if (!amount) {
       e.preventDefault();
-      alert('축하금액에 숫자를 입력하세요!');
+      alert('축하금액을 입력하세요!');
       return;
+    }
+    if(!cardPhone){
+      let res = confirm('연락처를 입력하시면 감사카드를 받을 수 있습니다!')
+      if(res){return}
     }
     // card from 입력 확인 =>>> 자동완성에 카드문구들어가도록
     // console.log(cardFrom, cardContents, cardPhone)
@@ -135,87 +141,78 @@ export function CongratsPayPage(){
       alert('이용약관에 동의해주세요!');
       return;
     }
-    const congratsInfo: Paying = {
-      amount: amount,
-      payType: '',
-      celebFrom: cardFrom,
-      celebTel: cardPhone,
-      celebContent: cardContents,
-      celebImgUrl: imgUrl,
-      giftId: -1,
-      userId: userId,
-    };
-    // Paying 자료형 >> 결제창으로 넘어갈때 결제정보 인자로 넘기기
-    PayingPort.onClickPayment(congratsInfo, '티피로 축하하기', state.wishUserId);
-  }
-  function ifisChecked() {
-    return isChecked ? true : false;
+    setOpenPayInfo(true)
+  
   }
 
   const onChangeFrom = (e: any) => {
     setCardFrom(e.target.value);
   };
   const onChangePhone = (e: any) => {
-    setCardPhone(e.target.value);
-  };
-  const onChangeContents = (e: any) => {
-    setCardContents(e.target.value);
+    setCardPhone(e.target.value.replace(/[^0-9]/g,''));
   };
 
   function setCheckbox() {
     setIsChecked(!isChecked);
     console.log('이용약관..', isChecked);
   }
+
   const showPolicy=()=>{
     setOpen(true)
   }
-  function GogoPay(){
-    const congratsInfo: Paying = {
-      amount: amount,
-      payType: 'card',
-      celebFrom: cardFrom,
-      celebTel: cardPhone,
-      celebContent: cardContents,
-      celebImgUrl: imgUrl,
-      giftId: 0,
-      userId: userId?userId:0,
-    };
-    // Paying 자료형 >> 결제창으로 넘어갈때 결제정보 인자로 넘기기
-    PayingPort.onClickPayment(congratsInfo, state.selectGift.name, state.wishUserId);
-  }
-  
-    const PayInfo = () =>{
-      return(
-        <div>
-          <h1>결제정보입니다</h1>
-            <div className='underline'></div>
-              <p>축하금액 : {amount}</p>
-              <p>연락처 : {cardPhone}</p>
-            <div className='underline'></div>
-                <div className='disp-flex align-center pb10 pt10'>
-                  <div className="con-card">
-                    <div className='tofrom'>From {cardFrom} </div>
-                    <div className='con-photo' style={{"backgroundImage":`url(${imgUrl})`}}></div>
-                    <div className='con-text' style={{"lineHeight":"2"}}><pre>{cardContents?.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n')}</pre></div>
-                  </div>
-                </div>
-          
-          <button onClick={()=>(GogoPay(),setOpenPayInfo(false))}>결제하기</button>
-        </div>
-      )
-    }
+function GogoPay(){
+  const congratsInfo: Paying = {
+    amount: amount,
+    payType: '',
+    celebFrom: cardFrom,
+    celebTel: cardPhone,
+    celebContent: cardContents,
+    celebImgUrl: imgUrl,
+    giftId: cashId,
+    userId: userId?userId:0,
+  };
+  // Paying 자료형 >> 결제창으로 넘어갈때 결제정보 인자로 넘기기
+  PayingPort.onClickPayment(congratsInfo, '현금', state.wishUserId);
+}
+
+const PayInfo = () =>{
+  return(
+    <div>
+      <h1>결제정보입니다</h1>
+        <div className='underline'></div>
+          <p>축하금액 : {amount}</p>
+          <p>연락처 : {cardPhone}</p>
+        <div className='underline'></div>
+            <div className='disp-flex align-center pb10 pt10'>
+              <div className="con-card">
+                <div className='tofrom'>From {cardFrom} </div>
+                <div className='con-photo' style={{"backgroundImage":`url(${imgUrl})`}}></div>
+                <div className='con-text' style={{"lineHeight":"2"}}><pre>{cardContents?.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n')}</pre></div>
+              </div>
+            </div>
+      
+      <button onClick={()=>(GogoPay(),setOpenPayInfo(false))}>결제하기</button>
+    </div>
+  )
+}
   return (
     <>
       <TapNameKor
         title="축하하기"
-        content="친구의 생일을 페이로 축하해주세요!"
-    ></TapNameKor>
+        // content={state.selectGift.name}
+        content="금액으로 축하를 전하세요."
+      ></TapNameKor>
       <div className="congrats-card-page-containger">
         <div className="congrats-card-page-containger-border">
           <div className="congrats-card-page-left">
             <div className="gift-info">
-        
-              <div className="underline"></div>
+              <div className="gift-img-box-con">
+                <img
+                  className="gift-img-box"
+                  src={wishInfo.WishCardCover}
+                  alt="WishCardCover"
+                />
+              </div>
               <div className="pay-amount-selection">
                 <p className="selection-label">축하 금액 선택</p>
                 <div className="pay-amount-selection-btns">
@@ -224,7 +221,7 @@ export function CongratsPayPage(){
                       onClick={() => {
                         amountSelected(i);
                       }}
-                    >
+                      >
                       {amt}
                     </button>
                   ))}
@@ -239,6 +236,9 @@ export function CongratsPayPage(){
                   value={amount}
                   onChange={getAmount}
                 />
+                {/* {priceOver&&
+                  <p className='font-sm font-red'>축하금액은 상품가격을 초과할 수 없습니다.</p>
+                } */}
               </div>
             </div>
           </div>
@@ -252,9 +252,10 @@ export function CongratsPayPage(){
                     className="input-small"
                     type="text"
                     name="제목"
-                    value={cardFrom}
+                    value={state.userName? state.userName : cardFrom}
                     onChange={onChangeFrom}
                     placeholder="받는 사람이 알 수 있도록 이름을 입력해주세요!"
+                    disabled={state.userName?true:false}
                   />
                 </div>
                 <div className="thanks-input">
@@ -262,8 +263,7 @@ export function CongratsPayPage(){
                   <textarea
                     name="내용"
                     placeholder="카드 내용을 입력하세요"
-                    value={cardContents}
-                    onChange={onChangeContents}
+                    onChange={(e) => setCardContents(e.target.value.replaceAll(/(\n|\r\n)/g,'<br>'))}
                   ></textarea>
                 </div>
                 <div className="thanks-input">
@@ -308,7 +308,7 @@ export function CongratsPayPage(){
                 defaultChecked={false}
                 onChange={setCheckbox}
               />
-              <p className="txt-underline cursor gray" onClick={showPolicy}>이용약관동의</p>
+              <a className="txt-underline cursor gray" onClick={showPolicy}>이용약관동의</a>
               <Modal
                 className="modal-modal"
                 aria-labelledby="transition-modal-title"

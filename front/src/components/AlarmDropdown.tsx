@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import alert from '../assets/iconAlert.svg';
-import bell from '../assets/bell.png';
+import bell from '../assets/alert.svg';
 import anony from '../assets/anony.png';
 
 import { ref, push, onValue, child, get, update } from "firebase/database";
@@ -142,10 +142,11 @@ const AlarmDropdown = () => {
                       <img style={{borderRadius: '50%', width: '40px', height: '40px',}} src={item.profile? item.profile:anony} alt="img"/>
                     </div>
                     <div style={{}}>
-                      <div style={{fontWeight:"bold"}}>{item.title}</div>
-                      <div>{item.text} <div style={{ fontSize:'5px', color: item.state ? "lightgray" : "red"}}>{ passedTime(Date.now() - item.time)}</div></div>
+                      <div style={{fontWeight:"bold",paddingTop:"5px"}}>{item.title}</div>
+                      <div>{item.text} <div style={{ padding:"5px", fontSize:'5px', color: item.state ? "lightgray" : "red"}}>{ passedTime(Date.now() - item.time)}</div></div>
                     </div>
-                    <div style={{minWidth:"100px", display:"felx"}}>
+                  </div>
+                    <div style={{minWidth:"36px", display:"felx"}}>
                       {item.friend&&
                         item.friend == 'req' &&
                           // <div style={{ fontSize:'5px', width:"50px"}}>.</div>
