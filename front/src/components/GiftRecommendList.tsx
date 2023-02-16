@@ -12,7 +12,6 @@ export function GiftRecommendList(props:{ giftList: GiftProps, category:number})
                 <GiftRecommend giftList={props.giftList} wish='생일' num = {Math.random()  * (props.giftList.length-3)}/>
                 <GiftRecommend giftList={props.giftList} wish='결혼' num = {Math.random()  * (props.giftList.length-3)}/>
                 <GiftRecommend giftList={props.giftList} wish='졸업' num = {Math.random()  * (props.giftList.length-3)}/>
-                
             </div>
         </div>
 
