@@ -49,6 +49,7 @@ public class WishController {
             FromFrontRequestDTO messageDto = new FromFrontRequestDTO();
             List<MessageDTO> messages = new ArrayList<>();
             List<Phonebook> tels = phonebookService.getPhonebookByMyId(dto.getUserId());
+            if (tels.size() == 0) return "wish created!";
             for (Phonebook tel : tels) {
                 MessageDTO mtemp = new MessageDTO();
                 String telNo = tel.getPhoneNumber().replaceAll("-","");
