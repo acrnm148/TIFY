@@ -110,7 +110,12 @@ export function MakeWishPage() {
     `${date.getFullYear()}-${zero(date.getMonth() + 1)}-${zero(
       date.getDate(),
     )}`;
-  const startDate = dateFomat(range[0].startDate);
+  // const startDate = dateFomat(range[0].startDate);
+  const date = new Date();
+  const hours = String(date.getFullYear()).padStart(2, '0');
+  const minutes = String(date.getMonth()).padStart(2, '0');
+  const seconds = String(date.getDay()).padStart(2, '0');
+  const startDate = `${hours}-${minutes}-${seconds}`;
   const endDate = dateFomat(range[0].endDate);
 
   const [imgBase64, setImgBase64] = useState(''); // 파일 base64
@@ -669,14 +674,12 @@ export function MakeWishPage() {
                   <label htmlFor="">기간</label>
                   <div className="make-wish-period-part make-wish-period-box wid-100 padding-10 disp-flex just-btwn bg-gray align-center">
                     <p className="totalDays font-lrg">
-                      총<span>{duration.toFixed(0)}</span>일
+                      총 <span>{duration.toFixed(0)}</span>일
                     </p>
                     <p className="totalDays-right">
                       위시 진행 기간 :
-                      <span className="padding-10">{startDate}</span>
-                      <span>00시</span> ~
+                      <span className="padding-10">{startDate}</span>~
                       <span className="padding-10">{endDate}</span>
-                      <span>밤 12시</span>
                     </p>
                   </div>
 
@@ -816,9 +819,7 @@ export function MakeWishPage() {
                     <input
                       className="address-form postcode wid-50"
                       type="text"
-                      value={
-                        userZipCode ? userZipCode : enroll_company.zonecode
-                      }
+                      value={callMyAddr ? userZipCode : enroll_company.zonecode}
                       placeholder="우편번호"
                       disabled
                     />
