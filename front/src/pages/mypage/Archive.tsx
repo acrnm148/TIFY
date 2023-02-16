@@ -141,8 +141,8 @@ const Archive: React.FC = () => {
   }, [users, selectedCategory]);
 
   return (
-    <div className="flex flex-col">
-      <div className="flex justify-left mt-4">
+    <div className="archive-wrap flex flex-col">
+      <div className="archive-wrap-con flex justify-left mt-4">
         {categories.map((category) => (
           <button
             key={category.name}
@@ -161,114 +161,125 @@ const Archive: React.FC = () => {
           </button>
         ))}
       </div>
-      <div className="flex gap-4 mt-4 justyfy-start">
-        {categoryUsers.map((user) => (
-          <div key={user.id}>
-            <button
-              onClick={() => handleUserClick(user)}
-              className="bg-white rounded-md shadow-md w-full h-full p-4 flex flex-col flex-shrink-0"
-              style={{ width: '250px' }} // set fixed width here
-            >
-              <p className="text-gray-500 text-sm mb-2">{user.endDate}</p>
-              <p className="text-gray-800 text-lg">{user.title}</p>
-            </button>
-          </div>
-        ))}
-      </div>
-      {selectedUser && (
-        <div className="mt-4">
-          <div className="bg-white rounded-md shadow-md p-4">
-            <h2 className="text-lg font-bold text-gray-800 mb-4">
-              {selectedUser.title}
-            </h2>
-            <div className="flex flex-wrap -mx-2">
-              {selectedUser.giftItems.map((gift) => (
-                <div
-                  key={gift.giftname}
-                  className="w-full sm:w-1/2 md:w-1/3 px-2 mb-4 justify-start"
-                >
-                  <button
-                    onClick={() => handleGiftClick(gift, 0)}
-                    className="button"
+      <div className="keep-box-item-div">
+        <div className=" gap-4 mt-4">
+          {categoryUsers.map((user) => (
+            <div key={user.id} className="archive-mywish-items-mini">
+              <button
+                onClick={() => handleUserClick(user)}
+                className="items-mini bg-white rounded-md shadow-md w-full h-full p-4 flex flex-col flex-shrink-0"
+                style={{ width: '250px' }} // set fixed width here
+              >
+                <p className="archive-end-date text-gray-500 text-sm mb-2">
+                  {user.endDate}
+                </p>
+                <p className="archive-title text-gray-800 text-lg">
+                  {user.title}
+                </p>
+              </button>
+            </div>
+          ))}
+        </div>
+        {!selectedUser && (
+          <p className="no-list-comment">다시 보고싶은 위시를 선택해보세요.</p>
+        )}
+        {selectedUser && (
+          <div className="mt-4">
+            <div className="archive-mywish bg-white rounded-md shadow-md p-4">
+              <h2 className="text-lg font-bold text-gray-800 mb-4">
+                {selectedUser.title}
+              </h2>
+              <div className="flex flex-wrap -mx-2">
+                {selectedUser.giftItems.map((gift) => (
+                  <div
+                    key={gift.giftname}
+                    className="w-full sm:w-1/2 md:w-1/3 px-2 mb-4 justify-start"
                   >
-                    {gift.giftname}
-                  </button>
-                  {selectedGift === gift.giftname && (
-                    <div className="pl-4 mt-2 botton">
-                      <div className="flex">
-                        {gift.payList.map((pay, index) => (
-                          <button
-                            className={`w-full p-4 text-left font-medium ${
-                              selectedGift === gift.giftname &&
-                              clickedButtonIndex === index
-                                ? 'bg-gray-400 text-black'
-                                : 'bg-gray-200 text-gray-700 hover:bg-green-400 hover:text-black'
-                            }`}
-                            onClick={() => handleGiftClick(gift, index)}
-                            key={pay.pay_id}
-                          >
-                            {pay.celeb_from}
-                          </button>
-                        ))}
-                      </div>
-                      <div className="card-case">
-                        {thkcard && (
-                          <div className="flex flex-row">
-                            <div>
+                    <button
+                      onClick={() => handleGiftClick(gift, 0)}
+                      className="gift-item-button button"
+                    >
+                      {gift.giftname}
+                    </button>
+                    {selectedGift === gift.giftname && (
+                      <div className="pl-4 mt-2 botton">
+                        <div className="flex">
+                          {gift.payList.map((pay, index) => (
+                            <button
+                              className={`w-full p-4 text-left font-medium ${
+                                selectedGift === gift.giftname &&
+                                clickedButtonIndex === index
+                                  ? 'bg-gray-400 text-black'
+                                  : 'bg-gray-200 text-gray-700 hover:bg-green-400 hover:text-black'
+                              }`}
+                              onClick={() => handleGiftClick(gift, index)}
+                              key={pay.pay_id}
+                            >
+                              {pay.celeb_from}
+                            </button>
+                          ))}
+                        </div>
+                        <div className="card-case">
+                          {thkcard && (
+                            <div className="flex flex-row">
                               <div>
-                                <div className="con-card-detail">
-                                  <div className="con-card">
-                                    <img
-                                      className="photo-size"
-                                      src={
-                                        selectedPay?.celeb_img_url
-                                          ? selectedPay?.celeb_img_url
-                                          : ''
-                                      }
-                                      alt="감사카드 이미지"
-                                    />
-                                    <div className="con-text">
-                                      {selectedPay?.celeb_content}
+                                <div>
+                                  <div className="con-card-detail">
+                                    <div className="con-card">
+                                      <img
+                                        className="photo-size"
+                                        src={
+                                          selectedPay?.celeb_img_url
+                                            ? selectedPay?.celeb_img_url
+                                            : ''
+                                        }
+                                        alt="감사카드 이미지"
+                                      />
+                                      <div className="con-text">
+                                        {selectedPay?.celeb_content}
+                                      </div>
+                                      <div className="userName tofrom">
+                                        전송된 연락처 : {selectedPay?.celeb_tel}
+                                      </div>
                                     </div>
-                                    <div className="userName tofrom">
-                                      전송된 연락처 : {selectedPay?.celeb_tel}
+                                  </div>
+                                </div>
+                              </div>
+                              <div>
+                                <div>
+                                  <div className="con-card-detail">
+                                    <div className="con-card">
+                                      <img
+                                        className="photo-size"
+                                        src={
+                                          thkcard.imageUrl
+                                            ? thkcard.imageUrl
+                                            : ''
+                                        }
+                                        alt="감사카드 이미지"
+                                      />
+                                      <div className="con-text">
+                                        {thkcard.content}
+                                      </div>
+                                      <div className="userName tofrom">
+                                        전송된 연락처 : {thkcard.phoneNumber}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                            <div>
-                              <div>
-                                <div className="con-card-detail">
-                                  <div className="con-card">
-                                    <img
-                                      className="photo-size"
-                                      src={
-                                        thkcard.imageUrl ? thkcard.imageUrl : ''
-                                      }
-                                      alt="감사카드 이미지"
-                                    />
-                                    <div className="con-text">
-                                      {thkcard.content}
-                                    </div>
-                                    <div className="userName tofrom">
-                                      전송된 연락처 : {thkcard.phoneNumber}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              ))}
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
