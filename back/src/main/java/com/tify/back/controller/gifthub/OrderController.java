@@ -51,6 +51,16 @@ public class OrderController {
         existingOrder.setTel(order.getTel());
         return orderService.saveOrder(existingOrder);
     }
+    @PutMapping("/{id}")
+    public Order updateOrder(@RequestBody Order order,@PathVariable Long id) {
+        Order existingOrder = findOrderById(id);
+        existingOrder.setGatheredPrice(order.getGatheredPrice());
+        existingOrder.setOrderPrice(order.getOrderPrice());
+        existingOrder.setDeliveryNumber(order.getDeliveryNumber());
+        existingOrder.setState(order.getState());
+        existingOrder.setTel(order.getTel());
+        return orderService.saveOrder(existingOrder);
+    }
 
     @DeleteMapping("/gift/{id}")
     public String deleteOrderByGift(@PathVariable Long id) {

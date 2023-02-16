@@ -309,15 +309,15 @@ public class UserApiController {
     /**
      * 유저 권한 확인 (USER, ADMIN)
      */
-    @GetMapping("/roleCheck")
-    public ResponseEntity<?> checkRole(@RequestParam("userid") String userid) {
-        User user = userRepository.findByUserid(userid);
-        if (user != null) {
-            List<String> list = user.getRoleList();
-            return ResponseEntity.status(HttpStatus.MULTI_STATUS).body(list.get(0));
-        }
-        return ResponseEntity.ok().body("해당 유저가 없습니다.");
-    }
+//    @GetMapping("/roleCheck")
+//    public ResponseEntity<?> checkRole(@RequestParam("userid") String userid) {
+//        User user = userRepository.findByUserid(userid);
+//        if (user != null) {
+//            List<String> list = user.getRoleList();
+//            return ResponseEntity.status(HttpStatus.MULTI_STATUS).body(list.get(0));
+//        }
+//        return ResponseEntity.ok().body("해당 유저가 없습니다.");
+//    }
 
     /**
      * 비밀번호 찾기

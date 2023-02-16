@@ -9,4 +9,8 @@ public interface ProductSummary {
     String getRepImg();
     @Value("#{target.price}")
     Integer getPrice();
+    @Value("#{target.id}")
+    Long getId();
+
+
 }

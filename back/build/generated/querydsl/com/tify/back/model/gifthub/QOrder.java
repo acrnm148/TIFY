@@ -22,10 +22,9 @@ public class QOrder extends EntityPathBase<Order> {
 
     public static final QOrder order = new QOrder("order1");
 
-    public final com.tify.back.common.QBaseEntity _super = new com.tify.back.common.QBaseEntity(this);
+    public final StringPath createdDt = createString("createdDt");
 
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
+    public final DateTimePath<java.time.LocalDateTime> createdTime = createDateTime("createdTime", java.time.LocalDateTime.class);
 
     public final StringPath deliveryNumber = createString("deliveryNumber");
 
@@ -33,18 +32,39 @@ public class QOrder extends EntityPathBase<Order> {
 
     public final QGift gift;
 
+    public final NumberPath<Long> gift_gift_id = createNumber("gift_gift_id", Long.class);
+
+    public final NumberPath<Long> gift_product_id = createNumber("gift_product_id", Long.class);
+
+    public final StringPath giftImgUrl = createString("giftImgUrl");
+
+    public final StringPath giftName = createString("giftName");
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
-
     public final NumberPath<Integer> orderPrice = createNumber("orderPrice", Integer.class);
+
+    public final StringPath refState = createString("refState");
+
+    public final StringPath refUserAccount = createString("refUserAccount");
+
+    public final StringPath refUserBank = createString("refUserBank");
+
+    public final StringPath refUserName = createString("refUserName");
 
     public final NumberPath<Integer> state = createNumber("state", Integer.class);
 
     public final StringPath tel = createString("tel");
 
     public final com.tify.back.model.users.QUser user;
+
+    public final StringPath userOption = createString("userOption");
+
+    public final StringPath wishFinishDate = createString("wishFinishDate");
+
+    public final NumberPath<Long> wishId = createNumber("wishId", Long.class);
+
+    public final StringPath wishName = createString("wishName");
 
     public QOrder(String variable) {
         this(Order.class, forVariable(variable), INITS);
