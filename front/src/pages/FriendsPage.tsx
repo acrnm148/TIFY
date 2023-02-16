@@ -307,12 +307,10 @@ const FriendsPage: React.FC = () => {
                       <img className="friend-profImg" src={user.profileImg} />
                       <b>
                         <p className="w-96 text-xl text-center text-1">
-                          {user.name}
+                          {user.nickname}
                         </p>
                       </b>
-                      <p className=" w-96 text-center text-2">
-                        {user.nickname}
-                      </p>
+                      <p className=" w-96 text-center text-2">{user.name}</p>
                       <p className="w-96 text-xs text-center text 2">
                         {user.id === userPk ? (
                           <p>me</p>
