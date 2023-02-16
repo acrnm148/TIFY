@@ -56,7 +56,7 @@ public class WishController {
                 mtemp.setTo(telNo);
                 String content = user.getUsername() + "님의 "+dto.getCategory()+"\n을 축하해주세요! ♪\n"
                 +"<"+dto.getWishTitle()+">"+"\n위시에 마음을 전해보세요.★\n"
-                +dto.getEndDate()+"일 까지 아래 링크를 통해 선물을 보낼 수 있습니다.♥ \n"
+                +dto.getEndDate()+"일 까지 아래 링크를 통해 선물을 보낼 수 있습니다♥ \n"
                 +"https://i8e208.p.ssafy.io/congrats/"+dto.getWishId()+"\n"
                 +"본 문자는 TIFY티피의 "+user.getUsername()+"님의\n주소록에 저장된 "+tel.getName()+"님에게 발송되었습니다."
                 +"\n∞당신을 위한 축하 TIFY∞";
