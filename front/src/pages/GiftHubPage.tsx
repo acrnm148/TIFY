@@ -8,9 +8,7 @@ import axios from 'axios';
 import Slider from '@mui/material/Slider';
 // import { NavLink } from 'react-router-dom';
 import { GiftItem } from '../components/GiftItem';
-import {
-  NavLink,
-} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 // mui option
 import InputLabel from '@mui/material/InputLabel';
@@ -290,7 +288,7 @@ export function GiftHubPage() {
               )}
               {giftList.length > 0 && searchPrice[0] !== 0 && (
                 <div className="filter-show">
-                  최소가격{searchPrice[0]}
+                  최소 {searchPrice[0].toLocaleString('ko-KR')}원
                   <span
                     onClick={() => {
                       const v = [0, priceRange[1]];
@@ -300,14 +298,13 @@ export function GiftHubPage() {
                       setComval([String(min), v[1].toLocaleString('ko-KR')]);
                     }}
                   >
-                    원
                     <img src={X_IMG} className="xImg" />
                   </span>
                 </div>
               )}
               {giftList.length > 0 && searchPrice[1] !== max && (
                 <div className="filter-show">
-                  최대 {searchPrice[1]}
+                  최대 {searchPrice[1].toLocaleString('ko-KR')}원
                   <span
                     onClick={() => {
                       const v = [priceRange[0], max];
@@ -317,7 +314,6 @@ export function GiftHubPage() {
                       setComval([v[0].toLocaleString('ko-kr'), String(max)]);
                     }}
                   >
-                    원
                     <img src={X_IMG} className="xImg" />
                   </span>
                 </div>

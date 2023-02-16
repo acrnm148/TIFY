@@ -3,7 +3,15 @@ import '../css/giftHubList.styles.css';
 import '../css/makeWishPage.styles.css';
 import '../css/styles.css';
 import addHeart from '../assets/addHeart.svg';
-import React, { useEffect, useRef, useState } from 'react';
+import hands from '../assets/miri/miri-5.png';
+import { Player } from '@lottiefiles/react-lottie-player';
+import React, {
+  Component,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -20,7 +28,11 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import axios from 'axios';
+import { GiftItem } from '../components/GiftItem';
+import { GiftHubList } from '../components/GiftHubList';
 import { Gift } from '../interface/interface';
+import { CongratsPage } from './CongratsPage';
+import BlueLogoTify from '../assets/BlueLogoTify.svg';
 
 // user
 import { useSelector } from 'react-redux';
@@ -28,13 +40,14 @@ import { RootState } from '../store/Auth';
 import { NavLink } from 'react-router-dom';
 import ConfirmationDialog from '../components/WishCategoryOption';
 import CarouselComponent from '../components/ResponsiveCarousel';
+import { async } from '@firebase/util';
 import { positions } from '@mui/system';
+import { RootStateFriends } from '../store/Friends';
 
 // alarm
 import { push, ref } from 'firebase/database';
 import { db } from '../components/firebase';
 import TapNameKor from '../components/TapNameKor';
-import Swal from 'sweetalert2';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -97,7 +110,12 @@ export function MakeWishPage() {
     `${date.getFullYear()}-${zero(date.getMonth() + 1)}-${zero(
       date.getDate(),
     )}`;
-  const startDate = dateFomat(range[0].startDate);
+  // const startDate = dateFomat(range[0].startDate);
+  const date = new Date();
+  const hours = String(date.getFullYear()).padStart(2, '0');
+  const minutes = String(date.getMonth()).padStart(2, '0');
+  const seconds = String(date.getDay()).padStart(2, '0');
+  const startDate = `${hours}-${minutes}-${seconds}`;
   const endDate = dateFomat(range[0].endDate);
 
   const [imgBase64, setImgBase64] = useState(''); // 파일 base64
@@ -176,6 +194,7 @@ export function MakeWishPage() {
             });
           });
           setCartList(conlst);
+          console.log('카트 리스트불러오기 성공', conlst);
         })
         .catch((err) => {
           console.log('카트 리스트불러오기 실패', err);
@@ -200,6 +219,7 @@ export function MakeWishPage() {
               username: React.SetStateAction<string | undefined>;
             };
           }) => {
+            console.log('유저정보 불러오기 성공', con.data);
             setUserProfile(con.data.profileImg);
             setUserAddr1(con.data.addr1);
             setUserAddr2(con.data.addr2);
@@ -258,10 +278,7 @@ export function MakeWishPage() {
           <div>
             <div className="like-list">
               {cartList.map((gift, i: number) => (
-                <div
-                  className="like-item-card-container"
-                  key={`${gift.name}-최대6개-${i}`}
-                >
+                <div className="like-item-card-container">
                   <div className="like-item-card">
                     <div className="like-gift-image">
                       {gift.repImg ? (
@@ -292,8 +309,8 @@ export function MakeWishPage() {
         ) : (
           <p>카드에 상품이 없습니다.</p>
         )}
-        <div>
-          <h1>총가격 : {totalPrice}</h1>
+        <div className="total-price-div">
+          <h1>총 가격 {totalPrice.toLocaleString('ko-KR')}원</h1>
         </div>
       </>
     );
@@ -312,7 +329,7 @@ export function MakeWishPage() {
   const [finished, setFinished] = useState(false);
   const MakeWish = () => {
     const makeWish = async () => {
-      const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/'; // http://localhost:8081/api/wish/add/
+      const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';
       const gift: {
         giftUrl: string; // test를 위해 추가했습니다.
         productId: number;
@@ -365,6 +382,7 @@ export function MakeWishPage() {
         addr1: userAddr1 ? userAddr1 : enroll_company.address,
         addr2: addr2,
       };
+      console.log('data', data);
       axios({
         url: API_URL,
         method: 'POST',
@@ -375,10 +393,12 @@ export function MakeWishPage() {
         },
       })
         .then((con: any) => {
+          console.log('위시생성 성공', con, userId);
           setFinished(true);
           // user_friends에 알림보내기
           user_friends.forEach((fri: number) => {
             pushData(fri);
+            console.log('친구에게 위시생성 알림보냄' + fri);
           });
         })
         .catch((err: any) => {
@@ -414,6 +434,7 @@ export function MakeWishPage() {
     if (userOptions && i in userOptions) {
       let delo: string = userOptions[i];
       delOp = delo.split('-')[1];
+      console.log('delOp', delOp);
       // 최종 가격에서 option정보 빼기
     }
     // [i] // 'optionname-optionvalue'
@@ -462,6 +483,7 @@ export function MakeWishPage() {
                 {category && userName
                   ? userName + '의 ' + category + cateKorean + ' '
                   : ''}
+                <br />
                 축하해주세요!
               </h1>
             </div>
@@ -472,7 +494,7 @@ export function MakeWishPage() {
               />
               <div className="wish-card fin-wcd wish-card-content">
                 <h1>{title}</h1>
-                <pre>{content?.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n')}</pre>
+                <div>{content?.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n')}</div>
               </div>
               <div
                 className="wish-congrats-btns"
@@ -499,7 +521,7 @@ export function MakeWishPage() {
   };
   const CallMyAddr = () => {
     if (!userAddr1 && !userAddr2) {
-      Swal.fire('저장된 주소가 없습니다');
+      alert('저장된 주소가 없습니다');
       setCallMyAddr(false);
     } else {
       setCallMyAddr(true);
@@ -538,6 +560,7 @@ export function MakeWishPage() {
     setGoAddr1(true);
     setGoAddr2(true);
     setAddr1(enroll_company.address);
+    console.log('주소지 찾기로 입력한 주소', enroll_company.address);
   }, [enroll_company]);
 
   const notValid = () => {
@@ -551,6 +574,7 @@ export function MakeWishPage() {
   };
   const ChangeOption = (e: any, i: number) => {
     if (e.target.value) {
+      console.log('ininini', e.target.value);
       setUserOptions({ ...userOptions, [i]: e.target.value });
       const val = e.target.value.split('-');
       setTotalPrice(totalPrice + Number(val[1]));
@@ -583,221 +607,265 @@ export function MakeWishPage() {
         <div className="wish-page-container">
           <div className="make-wish-container wid-50">
             <div className="make-wish-form">
-              <div className="wid-100 flex-between">
-                <ConfirmationDialog propFunction={getCategory} />
-                {cateForm && (
-                  <div className="wid-50 start-bottom">
-                    {!goCategory && (
-                      <span className="warning">
-                        축하 카테고리를 입력해주세요!
-                      </span>
+              <div className="make-wish-part">
+                <div className="make-wish-category-box">
+                  <label>
+                    {/* <Player
+                      autoplay
+                      loop
+                      src="https://assets7.lottiefiles.com/packages/lf20_5JBjfrVjZH.json"
+                      style={{ height: '100px', width: '100px' }}
+                    ></Player> */}
+                    <img src={hands} />
+                  </label>
+                  <div className="wish-personal-box wid-100 flex-between">
+                    <div className="wish-personal-box-left">
+                      <ConfirmationDialog propFunction={getCategory} />
+                    </div>
+                    {cateForm && (
+                      <div className="wish-personal-box-right">
+                        {!goCategory && (
+                          <span className="make-wish-warning warning">
+                            축하 카테고리를 입력해주세요!
+                          </span>
+                        )}
+                        <input
+                          onChange={(e) => setCategory(e.target.value)}
+                          className="wid-100 cate-input"
+                          placeholder="축하 카테고리를 입력해주세요!"
+                        />
+                      </div>
                     )}
-                    <input
-                      onChange={(e) => setCategory(e.target.value)}
-                      className="wid-100 cate-input"
-                      placeholder="축하 카테고리를 입력해주세요!"
+                  </div>
+                </div>
+              </div>
+              {/* <div className="padd"></div> */}
+              <div className="make-wish-part">
+                <div className="input-form">
+                  <label htmlFor="태그">위시 이름</label>
+                  <input
+                    type="text"
+                    name="태그"
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                  {goTitle === false && (
+                    <span className="warning">위시 이름을 입력해주세요!</span>
+                  )}
+                </div>
+
+                <div className="input-form input-wide">
+                  <label htmlFor="태그">내용</label>
+                  <textarea
+                    name="태그"
+                    onChange={(e) =>
+                      setContent(
+                        e.target.value.replaceAll(/(\n|\r\n)/g, '<br>'),
+                      )
+                    }
+                  ></textarea>
+                  {goContent === false && (
+                    <span className="warning">내용을 입력해주세요!</span>
+                  )}
+                </div>
+              </div>
+              {/* <div className="brbr padd"></div> */}
+              <div className="duration-container wid-100">
+                <div className="make-wish-part">
+                  <label htmlFor="">기간</label>
+                  <div className="make-wish-period-part make-wish-period-box wid-100 padding-10 disp-flex just-btwn bg-gray align-center">
+                    <p className="totalDays font-lrg">
+                      총 <span>{duration.toFixed(0)}</span>일
+                    </p>
+                    <p className="totalDays-right">
+                      위시 진행 기간 :
+                      <span className="padding-10">{startDate}</span>~
+                      <span className="padding-10">{endDate}</span>
+                    </p>
+                  </div>
+
+                  <div className="duration-from calendar-container">
+                    <DateRange
+                      editableDateInputs={false}
+                      onChange={(item) => setRange([item.selection])}
+                      moveRangeOnFirstSelection={false}
+                      retainEndDateOnFirstSelection={true}
+                      ranges={range}
+                      months={2}
+                      direction="horizontal"
+                      minDate={moment().add(1, 'days').toDate()}
+                      maxDate={disableDates}
+                      locale={ko}
+                      dateDisplayFormat="yyyy년 MM월 dd일"
                     />
                   </div>
-                )}
-              </div>
-              <div className="padd"></div>
-              <div className="input-form">
-                <label htmlFor="태그">제목</label>
-                <input
-                  type="text"
-                  name="태그"
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-                {goTitle === false && (
-                  <span className="warning">제목을 입력해주세요!</span>
-                )}
-              </div>
-
-              <div className="input-form input-wide">
-                <label htmlFor="태그">내용</label>
-                <textarea
-                  name="태그"
-                  onChange={(e) =>
-                    setContent(e.target.value.replaceAll(/(\n|\r\n)/g, '<br>'))
-                  }
-                ></textarea>
-                {goContent === false && (
-                  <span className="warning">내용을 입력해주세요!</span>
-                )}
-              </div>
-              <div className="brbr padd"></div>
-              <div className="duration-container wid-100">
-                <label htmlFor="">기간</label>
-                <div className="wid-100 padding-10 disp-flex just-btwn bg-gray align-center">
-                  <p className="font-lrg">
-                    총<span>{duration.toFixed(0)}</span>일
-                  </p>
-                  <p>
-                    위시 진행 기간{' '}
-                    <span className="padding-10">{startDate}</span>
-                    <span>00시</span>-
-                    <span className="padding-10">{endDate}</span>
-                    <span>밤 12시</span>
-                  </p>
-                </div>
-
-                <div className="duration-from calendar-container">
-                  <DateRange
-                    editableDateInputs={false}
-                    onChange={(item) => setRange([item.selection])}
-                    moveRangeOnFirstSelection={false}
-                    retainEndDateOnFirstSelection={true}
-                    ranges={range}
-                    months={2}
-                    direction="horizontal"
-                    minDate={moment().add(1, 'days').toDate()}
-                    maxDate={disableDates}
-                    locale={ko}
-                    dateDisplayFormat="yyyy년 MM월 dd일"
-                  />
-                </div>
-                {/* {
+                  {/* {
                     !go&&
                     <span className='warning'>기간을 선택해주세요</span>
                   } */}
+                </div>
               </div>
-              <div className="brbr padd"></div>
+              {/* <div className="brbr padd"></div> */}
               <div className="card-container wid-100">
-                <label htmlFor="">카드</label>
-                <CarouselComponent propFunction={CardClicked} />
-                {goImgUrl === false && (
-                  <span className="warning">카드를 선택해주세요</span>
-                )}
-              </div>
-              <div className="brbr padd"></div>
-              <div className="wid-100">
-                <label htmlFor="">선물</label>
-                <div className="wish-card-container gift-container w-100">
-                  <div className="modal-con">
-                    <Modal
-                      className="modal-modal"
-                      aria-labelledby="transition-modal-title"
-                      aria-describedby="transition-modal-description"
-                      open={open}
-                      onClose={handleClose}
-                      closeAfterTransition
-                      BackdropComponent={Backdrop}
-                      BackdropProps={{
-                        timeout: 500,
-                      }}
-                    >
-                      <Fade in={open}>
-                        <Box sx={style}>
-                          <CartList />
-                        </Box>
-                      </Fade>
-                    </Modal>
+                <div className="make-wish-part">
+                  <div className="card-imgs-div">
+                    <label className="card-label" htmlFor="">
+                      카드
+                    </label>
+                    <CarouselComponent propFunction={CardClicked} />
+                    {goImgUrl === false && (
+                      <span className="warning">카드를 선택해주세요</span>
+                    )}
                   </div>
+                </div>
+                {/* <div className="brbr padd"></div> */}
+                <div className="make-wish-part">
                   <div className="wid-100">
-                    <div className="add-gift-icon-con" onClick={handleOpen}>
-                      <img className="add-gift-icon" src={addHeart} alt="" />
-                    </div>
-                    {wishCart?.map((e, i: number) => {
-                      return (
-                        <div
-                          className="wish-card-gift wid-100"
-                          key={`${i}-${Date.now()}`}
+                    <label className="card-label" htmlFor="">
+                      선물
+                    </label>
+                    <div className="wish-card-container gift-container w-100">
+                      <div className=" modal-con">
+                        <Modal
+                          className="modal-modal"
+                          aria-labelledby="transition-modal-title"
+                          aria-describedby="transition-modal-description"
+                          open={open}
+                          onClose={handleClose}
+                          closeAfterTransition
+                          BackdropComponent={Backdrop}
+                          BackdropProps={{
+                            timeout: 500,
+                          }}
                         >
-                          <div className="wid-50 disp-flex align-center">
-                            <div onClick={() => delWishGift(e.id, i)}>삭제</div>
-                            <div className="disp-flex align-center">
-                              <img src={e.repImg}></img>
-                              <p className="padding-10 ">{e.name}</p>
-                            </div>
-                          </div>
-                          <div className="wid-50 disp-flex flex-end">
-                            {e.optionTitle && (
-                              <div className="padding-r-20">
-                                <select
-                                  name={e.optionTitle}
-                                  onChange={(e) => ChangeOption(e, i)}
-                                  defaultValue=""
-                                >
-                                  <option value="" selected>
-                                    {e.optionTitle}
-                                  </option>
-                                  {e.options.map((opt) => {
-                                    let res = opt.split('-');
-                                    return (
-                                      <option value={opt} key={opt}>
-                                        <span className="font-bold">
-                                          {res[0]}
-                                        </span>{' '}
-                                        + {res[1]}원
-                                      </option>
-                                    );
-                                  })}
-                                </select>
-                              </div>
-                            )}
-                            <p className="font-lrg font-bold">
-                              {e.price.toLocaleString('ko-KR')}
-                            </p>
-                          </div>
+                          <Fade in={open}>
+                            <Box sx={style}>
+                              <CartList />
+                            </Box>
+                          </Fade>
+                        </Modal>
+                      </div>
+                      <div className="wid-100 back-white">
+                        <div
+                          className="wish-card-gift-select add-gift-icon-con"
+                          onClick={handleOpen}
+                        >
+                          <img
+                            className="add-gift-icon"
+                            src={addHeart}
+                            alt=""
+                          />
                         </div>
-                      );
-                    })}
-                  </div>
-                  <div className="font-bold padding-10 font-lrg  tot-price">
-                    <p>총 위시금액 : {totalPrice.toLocaleString('ko-KR')}원</p>
+                        {wishCart?.map((e, i: number) => {
+                          return (
+                            <div className="wish-card-gift wid-100">
+                              <div className="wid-50 align-center">
+                                <div className="disp-flex align-center">
+                                  <img className="wid-38" src={e.repImg}></img>
+                                  <p className="padding-10">{e.name}</p>
+                                </div>
+                              </div>
+                              <div className="wid-50 disp-flex flex-end">
+                                {e.optionTitle && (
+                                  <div className="padding-r-20">
+                                    <select
+                                      name={e.optionTitle}
+                                      onChange={(e) => ChangeOption(e, i)}
+                                    >
+                                      <option value="" selected>
+                                        {e.optionTitle}
+                                      </option>
+                                      {e.options.map((opt) => {
+                                        let res = opt.split('-');
+                                        return (
+                                          <option value={opt}>
+                                            <span className="font-bold">
+                                              {res[0]}
+                                            </span>{' '}
+                                            + {res[1]}원
+                                          </option>
+                                        );
+                                      })}
+                                    </select>
+                                  </div>
+                                )}
+                                <p className="font-lrg font-bold">
+                                  {e.price.toLocaleString('ko-KR')}
+                                </p>
+                              </div>
+                              <div
+                                className="delete-gift-btn"
+                                onClick={() => delWishGift(e.id, i)}
+                              >
+                                삭제
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="font-bold padding-10 font-lrg  tot-price">
+                        <p>
+                          총 위시금액 : {totalPrice.toLocaleString('ko-KR')}원
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="brbr padd"></div>
-              <div className="address-form-container wid-100">
-                <label htmlFor="태그">주소</label>
-                <div className="postcode-myaddr">
-                  <input
-                    className="address-form postcode wid-50"
-                    type="text"
-                    value={userZipCode ? userZipCode : enroll_company.zonecode}
-                    placeholder="우편번호"
-                    disabled
-                  />
-                  <div className="wid-20 my-addr" onClick={CallMyAddr}>
-                    내 주소 불러오기
+              {/* <div className="brbr padd"></div> */}
+              <div className="make-wish-part">
+                <div className="address-form-container wid-100">
+                  <label htmlFor="태그">주소</label>
+                  <div className="postcode-myaddr">
+                    <input
+                      className="address-form postcode wid-50"
+                      type="text"
+                      value={callMyAddr ? userZipCode : enroll_company.zonecode}
+                      placeholder="우편번호"
+                      disabled
+                    />
+                    <div
+                      className="my-addr wid-20 my-addr"
+                      onClick={CallMyAddr}
+                    >
+                      내 주소 불러오기
+                    </div>
                   </div>
-                </div>
-                <div className="address-form wid-100">
-                  <input
-                    type="text"
-                    placeholder="주소"
-                    required={true}
-                    name="address"
-                    value={callMyAddr ? userAddr1 : enroll_company.address}
-                    disabled
-                  />
-                  <Postcode
-                    company={enroll_company}
-                    setcompany={setEnroll_company}
-                  />
+                  <div className="address-form wid-100">
+                    <input
+                      type="text"
+                      placeholder="주소"
+                      required={true}
+                      name="address"
+                      value={callMyAddr ? userAddr1 : enroll_company.address}
+                      disabled
+                    />
+                    <Postcode
+                      company={enroll_company}
+                      setcompany={setEnroll_company}
+                    />
+                  </div>
                   {!addr1 ? (
                     <span className="warning">주소지를 작성해주세요</span>
                   ) : (
                     ''
                   )}
                 </div>
-              </div>
-              <div className="wid-100">
-                <label htmlFor="상세주소">상세주소</label>
-                <div className="input-form">
-                  <input
-                    type="text"
-                    name="상세주소"
-                    onChange={(e) => setAddr2(e.target.value)}
-                    value={callMyAddr ? userAddr2 : addr2}
-                  />
+                <div className="address-form-bottom wid-100">
+                  <label htmlFor="상세주소">상세주소</label>
+                  <div className="input-form">
+                    <input
+                      type="text"
+                      name="상세주소"
+                      onChange={(e) => setAddr2(e.target.value)}
+                      value={callMyAddr ? userAddr2 : addr2}
+                    />
+                  </div>
+                  {goAddr2 === false && (
+                    <span className="warning">상세주소지를 작성해주세요</span>
+                  )}
                 </div>
-                {goAddr2 === false && (
-                  <span className="warning">상세주소지를 작성해주세요</span>
-                )}
               </div>
-              <div className="brbr padd"></div>
+              {/* <div className="brbr padd"></div> */}
               {/* 위시 폼 유효하면 위시만들기 버튼 활성화 */}
               {wishValidated ? (
                 <div className="make-wish-btn-con wid-100">
