@@ -34,7 +34,8 @@ export function CheckWishPage() {
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState<{ [key: string]: boolean }>({});
+const [animationComplete, setAnimationComplete] = useState<{ [key: string]: boolean }>({});
 
   
   useEffect(() => {
@@ -265,93 +266,101 @@ const CongratsCards = (props: {
 };
 
   
-  const handleClick = () => {
-    setIsPlaying(!isPlaying);
-  }
+const handleClick = (wishId: string) => {
+  setIsPlaying((prev) => ({ ...prev, [wishId]: true }));
+  setAnimationComplete((prev) => ({ ...prev, [wishId]: false }));
+};
 
-  const handleAnimationComplete = () => {
-    setIsPlaying(false);
-  };
+const handleAnimationComplete = (wishId: string) => {
+  setIsPlaying((prev) => ({ ...prev, [wishId]: false }));
+  setAnimationComplete((prev) => ({ ...prev, [wishId]: true }));
+  axios.put(`https://i8e208.p.ssafy.io/api/wish/cardopen/${wishId}`)
+  .then(response => {
+    console.log(response.data);
+  })
+  .catch(error => {
+    console.log(error);
+  });
+};
 
-  const WishOpened = ({
-    goOpenList,
-  }: {
-    goOpenList: CheckWish[] | undefined;
-  }) => {
-    return (
-      <>
-        {goOpenList?.map((lst: CheckWish, i: number) => {
-          return (
-            <div className={showIng?'wish-container':'open-wish-container'}>
-              <p className='finished-wish-text'><h1>{lst.userName}님의 완료된 위시 {i+1} </h1><span>"{lst.title}"</span></p>
-              <CongratsCards
-                fromList={lst.fromList}
-                wishId={lst.wishId}
-                userName={lst.userName}
-              />
-    <div onClick={handleClick}>
-      <Player
-        src={"https://assets9.lottiefiles.com/packages/lf20_0oco6l9x.json"}
-        autoplay={isPlaying}
-        loop={false}
-        style={{ height:'200%', width: '500px'}}
-        onEvent={event => {
-          if (event === 'complete') handleAnimationComplete(); 
-        }}
-      />
+const WishOpened = ({
+  goOpenList,
+}: {
+  goOpenList: CheckWish[] | undefined;
+}) => {
+  return (
+    <>
+      {goOpenList?.map((lst: CheckWish, i: number) => {
+return (
+  <div className={showIng ? 'wish-container' : 'open-wish-container'}>
+    <div style={{ position: 'relative', zIndex: 1 }}>
+    <div
+  style={{
+    display:
+      lst.cardOpen === 'open' || animationComplete[lst.wishId] ? 'none' : 'block',
+    position: 'absolute',
+    top: 0,
+    left: -900,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }}
+  onClick={() => handleClick(lst.wishId)}
+>
+  <Player
+    src="https://assets6.lottiefiles.com/packages/lf20_8pdke2ib.json"
+    autoplay={isPlaying[lst.wishId]}
+    loop={false}
+    style={{
+      height: '700px',
+      width: '3600px',
+    }}
+    onEvent={(event) => {
+      if (event === 'complete') handleAnimationComplete(lst.wishId);
+    }}
+  />
+</div>
+
+
     </div>
-            
-                {/* <iframe
-                  style={{ height: '200%', width: '500px' }}
-                  src="https://embed.lottiefiles.com/animation/64058"
-                ></iframe>
-                위시 오픈 애니메이션 */}
-              </div>
-          );
-        })}
-      </>
-    );
-  };
+    <p className="finished-wish-text">
+      <h1>{lst.userName}님의 완료된 위시 {i + 1} </h1>
+      <span>"{lst.title}"</span>
+    </p>
+    <CongratsCards
+      fromList={lst.fromList}
+      wishId={lst.wishId}
+      userName={lst.userName}
+    />
+  </div>
+);
+
+      })}
+    </>
+  );
+};
   const WishOnGoing = ({ conList }: { conList: CheckWish[] | undefined }) => {
     return (
       <>
         {conList &&
           conList.map((lst: CheckWish, i: number) => {
-            return (
-              <div className="wish-container">
-                <CongratsCards
-                  fromList={lst.fromList}
-                  wishId={lst.wishId}
-                  userName={lst.userName}
-                />
-                <NavLink
-                  to={`/congrats/${lst.wishId}`}
-                  className="wish-on-going-background"
-                >
-                  <div className="wish-on-going-box">
-                    <h3 className="font-lg">
-                      {lst.userName}님의 {lst.category}위시
-                    </h3>
-                    <p className="font-xl">"{lst.title}"</p>
-                    <p className="font-lg">
-                      {lst.restDay}일 뒤 축하편지를 확인하세요
-                    </p>
-                    <div className="slider-and-label-container">
-                      <div className="slider-and-label">
-                        <span className='진행도'>{Math.round(lst.percent)}%</span>
-                        <ReactSlider
-                          className="horizontal-slider"
-                          defaultValue={[lst.percent]}
-                          disabled={true}
-                          thumbClassName="custom-thumb"
-                          trackClassName="example-track"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </NavLink>
-              </div>
-            );
+<Player
+  src="https://assets9.lottiefiles.com/packages/lf20_0oco6l9x.json"
+  autoplay={isPlaying[lst.wishId]}
+  loop={false}
+  style={{
+    height: '100%', //increasing the height to account for the 30% cut from top and bottom
+    width: '1500px', //increasing the width to account for the 30% cut from left and right
+    overflow: 'hidden', //hiding the portion of the animation that falls outside the specified height and width
+    marginTop: '-30%', //cutting the top 30% of the animation
+    marginBottom: '-30%', //cutting the bottom 30% of the animation
+    marginLeft: '-30%', //cutting the left 30% of the animation
+    marginRight: '-30%', //cutting the right 30% of the animation
+  }}
+  renderer="canvas"
+  onEvent={(event) => {
+    if (event === 'complete') handleAnimationComplete(lst.wishId);
+  }}
+/>
           })}
       </>
     );

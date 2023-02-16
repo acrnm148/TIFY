@@ -50,7 +50,8 @@
     "react-slider": "^2.0.4",
     "redux": "^4.2.1",
     "slick-carousel": "^1.8.1",
-    "sqlite3": "^5.1.4"
+    "sqlite3": "^5.1.4",
+    "sweetalert2": "^11.7.1"
   },
   "devDependencies": {
     "@mapbox/node-pre-gyp": "^1.0.10",

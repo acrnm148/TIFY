@@ -10,6 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Search } from 'react-bootstrap-icons';
 import {Modal, Form } from 'react-bootstrap';
 import {Wish} from './AdTypes'
+import Swal from "sweetalert2";
 
 const formTitleStyle = {
   color:"black",
@@ -50,19 +51,23 @@ const Wishes = () => {
     //관리자 인증
     const location = useLocation().pathname;
     const roleList: string[] = useSelector((state: RootState) => state.authToken.roleList);
-    const isAdmin = roleList.includes('ADMIN');
+    const roleList2: string[]|undefined = localStorage.getItem('roles')?.split(",");
+    const isAdmin = roleList.includes('ADMIN') || roleList2?.includes('ADMIN');
     const navigate = useNavigate();
+    console.log(roleList);
+    console.log(isAdmin,"--------------");
   
     useEffect(() => {
       let toLogin = false;
       location.split('/').forEach((val) => {
-        if (val === 'admin') {
+        if (val.includes("admin")) {
+          console.log("aaaaaaaaaaaaaaaaaaaaaaa")
           toLogin = true;
         }
       });
   
-      if (isAdmin && toLogin) {
-        alert("관리자 권한이 없습니다.");
+      if (!(isAdmin && toLogin)) {
+        Swal.fire("관리자 권한이 없습니다.");
         navigate('../login');
       }
     }, [location, navigate]);

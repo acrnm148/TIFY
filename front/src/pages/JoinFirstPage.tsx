@@ -4,6 +4,7 @@ import checkIcon from '../assets/iconCheck.svg';
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 export function JoinFirstPage() {
   const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ export function JoinFirstPage() {
         .then((r) => {
           console.log(r.data);
           if (r.data == '유저가 존재합니다.') {
-            alert('이미 존재하는 이메일입니다.');
+            Swal.fire('이미 존재하는 이메일입니다.');
           } else {
             axios
               .get(
@@ -31,7 +32,7 @@ export function JoinFirstPage() {
                 console.log('요청 보냄!');
                 console.log(doRequest);
                 console.log(r);
-                alert(
+                Swal.fire(
                   '요청하신 주소로 인증 요청 메일을 보냈습니다. 확인 후 완료 버튼을 눌러주세요.',
                 );
               })
@@ -55,14 +56,14 @@ export function JoinFirstPage() {
       .then((r) => {
         console.log(r);
         if (r.data == 'Y') {
-          alert('이메일 인증이 확인되었습니다. 추가 정보를 입력해주세요.');
+          ('이메일 인증이 확인되었습니다. 추가 정보를 입력해주세요.');
           navigate('/join2', {
             state: {
               emailData: email,
             },
           });
         } else if (r.data == 'N') {
-          alert(
+          Swal.fire(
             '아직 이메일 인증이 확인되지 않습니다. 인증 완료 후 시도해주세요',
           );
           // navigate('/join2', {

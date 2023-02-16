@@ -27,6 +27,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Auth';
 import axios from 'axios';
 import '../../css/myPage.styles.css';
+import Swal from 'sweetalert2';
 
 export function MyPage() {
   const locate = useLocation();
@@ -95,7 +96,7 @@ export function MyPage() {
     const sizeLimit = 300 * 10000;
     // 300만 byte 넘으면 경고문구 출력
     if (event.target.files[0].size > sizeLimit) {
-      alert('사진 크기가 3MB를 넘을 수 없습니다.');
+      Swal.fire('사진 크기가 3MB를 넘을 수 없습니다.');
     } else {
       console.log('3mb가 아님');
       if (event.target.files[0]) {
@@ -295,7 +296,7 @@ function Sidebar(props: { tapId: string }) {
     const sizeLimit = 300 * 10000;
     // 300만 byte 넘으면 경고문구 출력
     if (event.target.files[0].size > sizeLimit) {
-      alert('사진 크기가 3MB를 넘을 수 없습니다.');
+      Swal.fire('사진 크기가 3MB를 넘을 수 없습니다.');
     } else {
       console.log('3mb가 아님');
       if (event.target.files[0]) {
