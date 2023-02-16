@@ -247,6 +247,7 @@ export function MakeWishPage() {
               {cartList.map((gift, i: number) => (
                 <div
                   className="like-item-card-container"
+                  key={`${gift.name}-최대6개-${i}`}
                 >
                   <div className="like-item-card">
                     <div className="like-gift-image">

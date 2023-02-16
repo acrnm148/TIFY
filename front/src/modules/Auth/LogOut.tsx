@@ -26,8 +26,11 @@ export function LogOut() {
         'Content-type': 'application/json',
       },
     })
-      .then((con) => {
-        console.log('로그아웃 성공', con);
+      .then(() => {
+        console.log('로그아웃 성공');
+        // 로컬 쿠키 삭제.
+        // localStorage.removeItem('roles');
+        // localStorage.removeItem('firebase:host:tify-noti-default-rtdb.firebaseio.com');
       })
       .catch((err) => {
         console.log('로그아웃 실패', err);

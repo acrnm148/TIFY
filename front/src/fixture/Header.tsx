@@ -1,7 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import logo from '../assets/tifyLogo.svg';
 import heart from '../assets/iconLikeCart.svg';
-import alertIcon from '../assets/iconAlert.svg';
 import profile from '../assets/iconProfile.svg';
 import logout from '../assets/iconLogout.svg';
 import '../css/header.styles.css';
@@ -105,7 +104,7 @@ export function Header() {
 
     const handleLogOut = () => {
       alert('로그아웃 되셨습니다.');
-      console.log('로그아웃됨!');
+      // console.log('로그아웃됨!');
       dispatch(DELETE_TOKEN());
       // Cookie에 저장된 Refresh Token 정보를 삭제
       removeCookieToken();
@@ -119,7 +118,7 @@ export function Header() {
         },
       })
         .then((con) => {
-          console.log('로그아웃 성공', con);
+          // console.log('로그아웃 성공', con);
         })
         .catch((err) => {
           console.log('로그아웃 실패', err);

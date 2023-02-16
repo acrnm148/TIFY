@@ -17,7 +17,7 @@ const RABBIT_IMG =
   'https://tifyimage.s3.ap-northeast-2.amazonaws.com/386b7d5f-fc70-46df-98ec-de52719efcca.png';
 export function GiftItem({ gift }: GiftProps, key: number) {
   return (
-    <div className="gift-item-card-container">
+    <div className="gift-item-card-container" key={`${gift.name}-${Date.now()}-giftitem`}>
       <Link to={`/gifthub/${gift.id}`}>
         <div className="gift-item-card">
           <div className="gift-image">
