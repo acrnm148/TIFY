@@ -171,7 +171,12 @@ export function MyWish() {
                 {conCount > 0 ? (
                   <Donator payImgs={con.payImgs} />
                 ) : (
-                  <button>공유해보세요.</button>
+                  <div className="donator-div">
+                    <p className="no-donate">
+                      <span>아직 축하해주신 분이 없어요😢</span>
+                      <span>당신의 위시를 공유해보세요.</span>
+                    </p>
+                  </div>
                 )}
               </div>
             );
