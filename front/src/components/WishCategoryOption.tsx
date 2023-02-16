@@ -1,19 +1,19 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import Dialog from "@mui/material/Dialog";
-import RadioGroup from "@mui/material/RadioGroup";
-import Radio from "@mui/material/Radio";
-import FormControlLabel from "@mui/material/FormControlLabel";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Dialog from '@mui/material/Dialog';
+import RadioGroup from '@mui/material/RadioGroup';
+import Radio from '@mui/material/Radio';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import '../css/makeWishPage.styles.css';
 
-const options = ["생일", "결혼", "취업", "건강", "출산", "비혼", "직접입력"];
+const options = ['생일', '결혼', '취업', '건강', '출산', '비혼', '직접입력'];
 
 export interface ConfirmationDialogRawProps {
   id: string;
@@ -50,12 +50,11 @@ function ConfirmationDialogRaw(props: ConfirmationDialogRawProps) {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue((event.target as HTMLInputElement).value);
-    
   };
 
   return (
     <Dialog
-      sx={{ "& .MuiDialog-paper": { width: "80%", maxHeight: 435 } }}
+      sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }}
       maxWidth="xs"
       TransitionProps={{ onEntering: handleEntering }}
       open={open}
@@ -64,13 +63,12 @@ function ConfirmationDialogRaw(props: ConfirmationDialogRawProps) {
       <DialogTitle>카테고리</DialogTitle>
       <DialogContent dividers>
         <RadioGroup
-            className="radio-group"
+          className="radio-group"
           ref={radioGroupRef}
           aria-label="ringtone"
           name="ringtone"
           value={value}
           onChange={handleChange}
-          
         >
           {options.map((option) => (
             <FormControlLabel
@@ -92,9 +90,11 @@ function ConfirmationDialogRaw(props: ConfirmationDialogRawProps) {
   );
 }
 
-export default function ConfirmationDialog(props:{propFunction: (arg0: string) => void}) {
+export default function ConfirmationDialog(props: {
+  propFunction: (arg0: string) => void;
+}) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("선택해주세요");
+  const [value, setValue] = React.useState('선택해주세요');
 
   const handleClickListItem = () => {
     setOpen(true);
@@ -105,12 +105,12 @@ export default function ConfirmationDialog(props:{propFunction: (arg0: string) =
 
     if (newValue) {
       setValue(newValue);
-      props.propFunction(newValue)
+      props.propFunction(newValue);
     }
   };
 
   return (
-    <Box sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+    <Box sx={{ width: '100%', maxWidth: 360, bgcolor: '#ff4a6e00' }}>
       <List component="div" role="group">
         <ListItem
           button
