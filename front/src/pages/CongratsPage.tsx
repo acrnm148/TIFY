@@ -2,7 +2,6 @@ import axios from 'axios';
 import { SetStateAction, useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import '../css/congratsPage.styles.css';
-import Swal from "sweetalert2";
 
 const WISH_CATEGORY_DATA = ['생일', '취업', '결혼', '건강', '출산', '비혼'];
 type Gift = {
@@ -224,7 +223,7 @@ export function CongratsPage() {
     );
   };
   function NoPresent() {
-    Swal.fire('상품을 선택해주세요.');
+    alert('상품을 선택해주세요.');
   }
   const WishCongratsBtns = () => {
     const wishInfo = {
