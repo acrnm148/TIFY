@@ -17,10 +17,15 @@ import iconCategory6Unmarried from '../../assets/category/iconCategory6Unmarried
 import iconCategory7Etc from '../../assets/category/iconCategory7Etc.svg';
 import { RootState } from '../../store/Auth';
 import '../../css/mypage/archive.styles.css';
+import { Justify } from 'react-bootstrap-icons';
 
 interface Pay {
   celeb_from: string;
   pay_id: number;
+  amount: string,
+  celeb_img_url: string,
+  celeb_tel: string,
+  celeb_content: string,
 }
 
 interface Gift {
@@ -58,7 +63,7 @@ const Archive: React.FC = () => {
   const [categoryUsers, setCategoryUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedGift, setSelectedGift] = useState<string>('');
-
+  const [selectedPay, setSelectedPay] = useState<Pay | null>(null);
   const accessToken = useSelector((state: RootState) => state.authToken.accessToken);
   const userPk = useSelector((state: RootState) => state.authToken.userId);
 const [isClicked, setIsClicked] = useState(false);
@@ -73,8 +78,9 @@ const [isClicked, setIsClicked] = useState(false);
   
   const handleGiftClick = async (gift: Gift, payIndex: number) => {
     setSelectedGift(gift.giftname);
+    const pay = gift.payList[payIndex];
+    setSelectedPay(pay);
     try {
-      const pay = gift.payList[payIndex];
       const response = await axios.get(`https://i8e208.p.ssafy.io/api/thkcards/match/${pay.pay_id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -87,7 +93,6 @@ const [isClicked, setIsClicked] = useState(false);
       console.error(error);
     }
   };
-  
 
 
   const [thkcard, setThkcard] = useState<{
@@ -184,17 +189,35 @@ const [isClicked, setIsClicked] = useState(false);
 ))}
   {thkcard && (
     <div>
-            <div>
-        {/* <h1>보낸 감사카드</h1> */}
-        <div className="con-card-detail">
-          <div className="con-card">
-            <img
-              className="con-photo"
-              src={thkcard.imageUrl ? thkcard.imageUrl : ''}
-              alt="감사카드 이미지"
-            />
-            <div className="con-text">{thkcard.content}</div>
-            <div className="userName tofrom">전송된 연락처 : {thkcard.phoneNumber}</div>
+      <div>
+        <div>
+          {/* <h1>받은 카드</h1> */}
+          <div className="con-card-detail">
+            <div className="con-card">
+              <img
+                className="photo-siza"
+                src={selectedPay?.celeb_img_url ? selectedPay?.celeb_img_url : ''}
+                alt="감사카드 이미지"
+              />
+              <div className="con-text">{selectedPay?.celeb_content}</div>
+              <div className="userName tofrom">전송된 연락처 : {selectedPay?.celeb_tel}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>
+          {/* <h1>보낸 감사카드</h1> */}
+          <div className="con-card-detail">
+            <div className="con-card">
+              <img
+                className="cphoto-siza"
+                src={thkcard.imageUrl ? thkcard.imageUrl : ''}
+                alt="감사카드 이미지"
+              />
+              <div className="con-text">{thkcard.content}</div>
+              <div className="userName tofrom">전송된 연락처 : {thkcard.phoneNumber}</div>
+            </div>
           </div>
         </div>
       </div>
