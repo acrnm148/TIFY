@@ -86,6 +86,7 @@ public class PayService {
 
         // 펀딩금액 초과 시 기프트 상태 변경
         if(validateGathered(gift));
+        if(validatewish(wish));
 
         return pay;
     }
@@ -104,6 +105,16 @@ public class PayService {
             User user = wish.getUser(); //위시 주인
             Order newOrder = orderService.addNewOrder(gift, user);
             System.out.println("자동 주문 :"+newOrder);
+
+            return true;
+        }
+        else return false;
+    }
+
+    @Transactional
+    public boolean validatewish(Wish wish) {
+        if (wish.getNowPrice() >= wish.getTotPrice()) {
+            wish.setFinishYN("Y");
 
             return true;
         }

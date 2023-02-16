@@ -61,7 +61,7 @@ const Archive: React.FC = () => {
 
   const accessToken = useSelector((state: RootState) => state.authToken.accessToken);
   const userPk = useSelector((state: RootState) => state.authToken.userId);
-
+const [isClicked, setIsClicked] = useState(false);
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
   };
@@ -184,11 +184,20 @@ const Archive: React.FC = () => {
 ))}
   {thkcard && (
     <div>
-      <h3 className="text-gray-800 font-medium my-2">THK Card Details:</h3>
-      <p className="text-gray-500">Title: {thkcard.title}</p>
-      <p className="text-gray-500">Phone number: {thkcard.phoneNumber}</p>
-      <p className="text-gray-500">Content: {thkcard.content}</p>
-      <img className="w-32 h-32 my-2" src={thkcard.imageUrl} alt="THK Card" />
+            <div>
+        {/* <h1>보낸 감사카드</h1> */}
+        <div className="con-card-detail">
+          <div className="con-card">
+            <img
+              className="con-photo"
+              src={thkcard.imageUrl ? thkcard.imageUrl : ''}
+              alt="감사카드 이미지"
+            />
+            <div className="con-text">{thkcard.content}</div>
+            <div className="userName tofrom">전송된 연락처 : {thkcard.phoneNumber}</div>
+          </div>
+        </div>
+      </div>
     </div>
   )}
 </div>
