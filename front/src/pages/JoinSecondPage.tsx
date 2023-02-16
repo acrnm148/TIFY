@@ -78,7 +78,7 @@ export function JoinSecondPage() {
     if (htel.test(tel1) && mtel.test(tel2) && etel.test(tel3)) {
       return '';
     }
-    return '유효하지 않은 연락처입니다.';
+    return '* 유효하지 않은 연락처입니다.';
   }
 
   function birthCheck() {
@@ -90,14 +90,14 @@ export function JoinSecondPage() {
     ) {
       return '';
     }
-    return '유효하지 않은 날짜입니다.';
+    return '* 유효하지 않은 날짜입니다.';
   }
 
   function pwCheck1(pw: string) {
     let alpah = /^(?=.*[a-zA-Z])/;
 
     if (!alpah.test(password)) {
-      return '영어가 포함되어 있지 않습니다.';
+      return '* 영어가 포함되어 있지 않습니다.';
     }
     return '';
   }
@@ -106,7 +106,7 @@ export function JoinSecondPage() {
     let nume = /^(?=.*\d)/;
 
     if (!nume.test(password)) {
-      return '숫자가 포함되어 있지 않습니다.';
+      return '* 숫자가 포함되어 있지 않습니다.';
     }
     return '';
   }
@@ -115,7 +115,7 @@ export function JoinSecondPage() {
     let special = /^(?=.*[!@#\$%\^&\*])/;
 
     if (!special.test(password)) {
-      return '특수문자가 포함되어 있지 않습니다.';
+      return '* 특수문자가 포함되어 있지 않습니다.';
     }
     return '';
   }
@@ -124,9 +124,9 @@ export function JoinSecondPage() {
     let len = /^(?=.{8,12})/;
 
     if (pw.length < 8) {
-      return '길이가 8자 미만입니다.';
+      return '* 길이가 8자 미만입니다.';
     } else if (pw.length > 12) {
-      return '길이가 12자 초과입니다.';
+      return '* 길이가 12자 초과입니다.';
     }
     return '';
   }
@@ -135,7 +135,7 @@ export function JoinSecondPage() {
     let pwdCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,12}$/;
 
     if (!pwdCheck.test(password)) {
-      return '유효하지 않은 비밀번호 입니다.';
+      return '* 유효하지 않은 비밀번호 입니다.';
     }
     return '';
   }
@@ -466,7 +466,7 @@ export function JoinSecondPage() {
               className="profile-img"
             />
           </div>
-          <div className="emailBox">
+          <div className="emailBox" style={{ marginTop: '40px' }}>
             <p className="m-1">이메일</p>
             <form className="emailForm">
               <input

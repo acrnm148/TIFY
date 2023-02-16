@@ -200,10 +200,13 @@
 .likeImg {
   width: 26px;
   height: 25px;
+  margin-right: 5px;
 }
 .gift-detail-likes {
   font-size: 17px;
   display: flex;
+  align-items: center;
+  margin-right: 5px;
 }
 .gift-noti {
   width: 69%;
