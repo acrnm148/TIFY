@@ -798,7 +798,7 @@ export function MakeWishPage() {
                       ranges={range}
                       months={2}
                       direction="horizontal"
-                      minDate={moment().add(1, 'days').toDate()}
+                      minDate={moment().add(0, 'days').toDate()}
                       maxDate={disableDates}
                       locale={ko}
                       dateDisplayFormat="yyyy년 MM월 dd일"
