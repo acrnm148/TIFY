@@ -1,20 +1,29 @@
 .card-size {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #F4F4F4;
-    max-width: 600px;
-    margin: 0 auto;
-    height: 400px; /* add fixed height */
-    width: 100%; /* add fixed width */
-  }
-  
-  .photo-size {
-    height: 200px;
-    width: 70%;
-    object-fit: fill;
-    margin-top: 30px;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f4f4f4;
+  max-width: 600px;
+  margin: 0 auto;
+  height: 400px; /* add fixed height */
+  width: 100%; /* add fixed width */
+}
+
+.photo-size {
+  height: 200px;
+  width: 70%;
+  object-fit: fill;
+  margin-top: 30px;
+}
+.archive-wrap {
+  margin-left: auto;
+  margin-right: auto;
+}
+.archive-item {
+  width: 1200px;
+  height: 800px;
+  border-color: #ff4a6e;
+}

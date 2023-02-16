@@ -22,10 +22,10 @@ import { Justify } from 'react-bootstrap-icons';
 interface Pay {
   celeb_from: string;
   pay_id: number;
-  amount: string,
-  celeb_img_url: string,
-  celeb_tel: string,
-  celeb_content: string,
+  amount: string;
+  celeb_img_url: string;
+  celeb_tel: string;
+  celeb_content: string;
 }
 
 interface Gift {
@@ -64,9 +64,11 @@ const Archive: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedGift, setSelectedGift] = useState<string>('');
   const [selectedPay, setSelectedPay] = useState<Pay | null>(null);
-  const accessToken = useSelector((state: RootState) => state.authToken.accessToken);
+  const accessToken = useSelector(
+    (state: RootState) => state.authToken.accessToken,
+  );
   const userPk = useSelector((state: RootState) => state.authToken.userId);
-const [isClicked, setIsClicked] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
   };
@@ -75,25 +77,27 @@ const [isClicked, setIsClicked] = useState(false);
     setSelectedUser(user);
     setSelectedGift('');
   };
-  
+
   const handleGiftClick = async (gift: Gift, payIndex: number) => {
     setSelectedGift(gift.giftname);
     const pay = gift.payList[payIndex];
     setSelectedPay(pay);
     try {
-      const response = await axios.get(`https://i8e208.p.ssafy.io/api/thkcards/match/${pay.pay_id}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-type': 'application/json',
+      const response = await axios.get(
+        `https://i8e208.p.ssafy.io/api/thkcards/match/${pay.pay_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-type': 'application/json',
+          },
         },
-      });
+      );
       const data = response.data;
       setThkcard(data);
     } catch (error) {
       console.error(error);
     }
   };
-
 
   const [thkcard, setThkcard] = useState<{
     id: number;
@@ -103,16 +107,19 @@ const [isClicked, setIsClicked] = useState(false);
     imageUrl: string;
     userId: number;
   } | null>(null);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://i8e208.p.ssafy.io/api/wish/wish/${userPk}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-type': 'application/json',
+        const response = await axios.get(
+          `https://i8e208.p.ssafy.io/api/wish/wish/${userPk}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-type': 'application/json',
+            },
           },
-        });
+        );
         const data = response.data;
         setUsers(data);
         setCategoryUsers(data);
@@ -124,8 +131,8 @@ const [isClicked, setIsClicked] = useState(false);
   }, [accessToken, userPk]);
 
   useEffect(() => {
-    const filteredUsers = selectedCategory 
-      ? users.filter(user => user.category === selectedCategory)
+    const filteredUsers = selectedCategory
+      ? users.filter((user) => user.category === selectedCategory)
       : users;
     setCategoryUsers(filteredUsers);
     setSelectedUser(null);
@@ -133,7 +140,7 @@ const [isClicked, setIsClicked] = useState(false);
   }, [users, selectedCategory]);
 
   return (
-    <div className="flex flex-col">
+    <div className="archive-wrap flex flex-col">
       <div className="flex justify-center mt-4">
         {categories.map((category) => (
           <button
@@ -142,17 +149,24 @@ const [isClicked, setIsClicked] = useState(false);
             className="p-2 focus:outline-none"
           >
             <img
-              src={selectedCategory === category.name ? category.clickedIcon : category.icon}
+              src={
+                selectedCategory === category.name
+                  ? category.clickedIcon
+                  : category.icon
+              }
               alt={category.name}
               className="category-icon"
             />
           </button>
         ))}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+      <div className="archive-item grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 h">
         {categoryUsers.map((user) => (
           <div key={user.id}>
-            <button onClick={() => handleUserClick(user)} className="bg-white rounded-md shadow-md w-full h-full p-4 flex flex-col">
+            <button
+              onClick={() => handleUserClick(user)}
+              className="bg-white rounded-md shadow-md w-full h-full p-4 flex flex-col"
+            >
               <p className="text-gray-500 text-sm mb-2">{user.endDate}</p>
               <p className="text-gray-800 text-lg">{user.title}</p>
             </button>
@@ -162,69 +176,82 @@ const [isClicked, setIsClicked] = useState(false);
       {selectedUser && (
         <div className="mt-4">
           <div className="bg-white rounded-md shadow-md p-4">
-            <h2 className="text-lg font-bold text-gray-800 mb-4">{selectedUser.title}</h2>
+            <h2 className="text-lg font-bold text-gray-800 mb-4">
+              {selectedUser.title}
+            </h2>
             {selectedUser.giftItems.map((gift) => (
               <div key={gift.giftname} className="mb-4">
-<button
-  className={`w-full p-4 text-left font-medium ${
-    selectedGift === gift.giftname
-      ? 'bg-gray-200 text-gray-700'
-      : 'text-gray-500 hover:bg-gray-100'
-  }`}
-  onClick={() => handleGiftClick(gift, 0)}
->
-  {gift.giftname}
-</button>
+                <button
+                  className={`w-full p-4 text-left font-medium ${
+                    selectedGift === gift.giftname
+                      ? 'bg-gray-200 text-gray-700'
+                      : 'text-gray-500 hover:bg-gray-100'
+                  }`}
+                  onClick={() => handleGiftClick(gift, 0)}
+                >
+                  {gift.giftname}
+                </button>
 
                 {selectedGift === gift.giftname && (
-<div className="pl-4 mt-2">
-{gift.payList.map((pay, index) => (
-  <button
-    key={pay.pay_id}
-    className="text-gray-500 mb-1 focus:outline-none hover:text-gray-700"
-    onClick={() => handleGiftClick(gift, index)}
-  >
-    {pay.celeb_from}
-  </button>
-))}
-  {thkcard && (
-    <div>
-      <div>
-        <div>
-          {/* <h1>받은 카드</h1> */}
-          <div className="con-card-detail">
-            <div className="con-card">
-              <img
-                className="photo-siza"
-                src={selectedPay?.celeb_img_url ? selectedPay?.celeb_img_url : ''}
-                alt="감사카드 이미지"
-              />
-              <div className="con-text">{selectedPay?.celeb_content}</div>
-              <div className="userName tofrom">전송된 연락처 : {selectedPay?.celeb_tel}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div>
-          {/* <h1>보낸 감사카드</h1> */}
-          <div className="con-card-detail">
-            <div className="con-card">
-              <img
-                className="cphoto-siza"
-                src={thkcard.imageUrl ? thkcard.imageUrl : ''}
-                alt="감사카드 이미지"
-              />
-              <div className="con-text">{thkcard.content}</div>
-              <div className="userName tofrom">전송된 연락처 : {thkcard.phoneNumber}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )}
-</div>
-
+                  <div className="pl-4 mt-2">
+                    {gift.payList.map((pay, index) => (
+                      <button
+                        key={pay.pay_id}
+                        className="text-gray-500 mb-1 focus:outline-none hover:text-gray-700"
+                        onClick={() => handleGiftClick(gift, index)}
+                      >
+                        {pay.celeb_from}
+                      </button>
+                    ))}
+                    {thkcard && (
+                      <div>
+                        <div>
+                          <div>
+                            {/* <h1>받은 카드</h1> */}
+                            <div className="con-card-detail">
+                              <div className="con-card">
+                                <img
+                                  className="photo-siza"
+                                  src={
+                                    selectedPay?.celeb_img_url
+                                      ? selectedPay?.celeb_img_url
+                                      : ''
+                                  }
+                                  alt="감사카드 이미지"
+                                />
+                                <div className="con-text">
+                                  {selectedPay?.celeb_content}
+                                </div>
+                                <div className="userName tofrom">
+                                  전송된 연락처 : {selectedPay?.celeb_tel}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <div>
+                            {/* <h1>보낸 감사카드</h1> */}
+                            <div className="con-card-detail">
+                              <div className="con-card">
+                                <img
+                                  className="cphoto-siza"
+                                  src={thkcard.imageUrl ? thkcard.imageUrl : ''}
+                                  alt="감사카드 이미지"
+                                />
+                                <div className="con-text">
+                                  {thkcard.content}
+                                </div>
+                                <div className="userName tofrom">
+                                  전송된 연락처 : {thkcard.phoneNumber}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             ))}
@@ -232,8 +259,7 @@ const [isClicked, setIsClicked] = useState(false);
         </div>
       )}
     </div>
-  );  
+  );
 };
 
 export default Archive;
-

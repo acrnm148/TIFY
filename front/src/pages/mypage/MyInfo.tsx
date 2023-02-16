@@ -130,16 +130,15 @@ export function MyInfo() {
       },
     })
       .then((res) => {
-        // console.log(res, 'res입니다.');
         setAddr1(res.data.addr1);
         setAddr2(res.data.addr2);
         setBirthyear(res.data.birthYear);
-        // console.log(res.data.birth);
         const birthMonth = res.data.birth.substr(0, 2);
         const birthDay = res.data.birth.substr(2, 2);
         setBirthMonth(birthMonth);
         setBirthDay(birthDay);
         setNickname(res.data.nickname);
+        const tel = res.data.tel;
         const tels = res.data.tel.split('-');
         setTel1(tels[0]);
         setTel2(tels[1]);
@@ -215,10 +214,6 @@ export function MyInfo() {
     event: React.FormEvent<HTMLFormElement>,
   ) => {
     event.preventDefault();
-    // console.log(enroll_company.address);
-    // console.log(password1);
-    // console.log(password2);
-    // console.log(confirmPassword2);
     if (CheckValidPassword()) {
       try {
         axios.defaults.headers.common[
@@ -276,15 +271,16 @@ export function MyInfo() {
         console.log('닉네임 확인 완료');
         console.log(e);
         if (e.data === 'Y') {
-          Swal.fire(`You can't do it! 😅`);
+          Swal.fire(`수정에 실패했습니다.`);
+          // Swal.fire(`You can't do it! 😅`);
           setNickDubCheck(false);
         } else if (e.data === 'N') {
-          Swal.fire('You can do it! 👍');
+          Swal.fire('수정되었습니다.');
           setNickDubCheck(true);
         }
       })
       .catch((err) => {
-        Swal.fire(`You can't do it! 😅`);
+        Swal.fire(`수정에 실패했습니다.`);
         console.log('error', err);
         setNickDubCheck(false);
       });
@@ -388,9 +384,9 @@ export function MyInfo() {
 
   return (
     <div className="info-page">
+      <p className="infopage-title">| Manage Account</p>
       <div className="emailBox">
-        <p className="infopage-title">| Manage Account</p>
-        <p className="m-1">이메일</p>
+        <p className="info-p m-1">이메일</p>
         <form className="emailForm">
           <input
             type="text"
@@ -400,7 +396,7 @@ export function MyInfo() {
             id="disabled-input-box"
           />
         </form>
-        <p className="m-1">이름</p>
+        <p className="info-p m-1">이름</p>
         <input
           type="text"
           className={`${username ? 'inputBox checkedNickname' : 'inputBox'}`}
@@ -408,32 +404,33 @@ export function MyInfo() {
           maxLength={6}
           value={username}
         />
-        <p className="m-1">닉네임</p>
-        <div className="nickname-div">
-          <div
-            className={`nickname-box 
+        <div className="info-nickname">
+          <p className="info-p m-1">닉네임</p>
+          <div className="">
+            <div
+              className={`inputBox 
                 ${nickDubCheck ? 'checkedNickname' : ''}
                 `}
-          >
-            <input
-              type="text"
-              maxLength={10}
-              // className={`${nickDubCheck ? 'checkedNickname' : ''}`}
-              placeholder="2~10자리 한글/영어"
-              value={nickname}
-              onChange={(e) => {
-                setNickname(e.target.value);
-                setNickDubCheck(false);
-              }}
-            />
+            >
+              <input
+                type="text"
+                maxLength={10}
+                // className={`${nickDubCheck ? 'checkedNickname' : ''}`}
+                placeholder="2~10자리 한글/영어"
+                value={nickname}
+                onChange={(e) => {
+                  setNickname(e.target.value);
+                  setNickDubCheck(false);
+                }}
+              />
+            </div>
+            <button className="form-dup-check-btn" onClick={CheckNickname}>
+              <div>중복확인</div>
+            </button>
           </div>
-          <button className="formSideButton" onClick={CheckNickname}>
-            중복 확인
-          </button>
         </div>
-
-        <p className="m-1">생년월일</p>
-        <form className="emailForm">
+        <p className="info-p m-1">생년월일</p>
+        <form className="emailForm birth">
           <div
             className={`${
               birthCheck().length < 1
@@ -478,15 +475,14 @@ export function MyInfo() {
           <div
             style={{
               position: 'relative',
-              left: '10%',
               marginBottom: '5%',
             }}
           >
             <h1 style={{ color: 'red' }}>{birthCheck()}</h1>
           </div>
         </form>
-        <p className="m-1">연락처</p>
-        <form className="emailForm">
+        <p className="info-p m-1">연락처</p>
+        <form className="emailForm phone">
           <div
             className={`${
               telCehck().length < 1
@@ -522,7 +518,9 @@ export function MyInfo() {
             />
           </div>
           <div className="address-form-container">
-            <label htmlFor="태그">주소</label>
+            <label className="info-p" htmlFor="태그">
+              주소
+            </label>
             <input
               className={`${
                 enroll_company?.zonecode?.length > 0
@@ -530,7 +528,6 @@ export function MyInfo() {
                   : 'address-form postcode'
               }`}
               type="text"
-              // 바꿀거
               value={enroll_company.zonecode}
               placeholder="우편번호"
               disabled
@@ -554,7 +551,6 @@ export function MyInfo() {
                 required={true}
                 name="address"
                 onChange={handleInput}
-                // 바꿀거
                 value={enroll_company.address}
                 disabled
                 style={{
@@ -568,7 +564,9 @@ export function MyInfo() {
             </div>
           </div>
           <div>
-            <label htmlFor="상세주소">상세주소</label>
+            <label className="info-p" htmlFor="상세주소">
+              상세주소
+            </label>
             <div className="input-form">
               <input
                 type="text"
@@ -614,7 +612,7 @@ export function MyInfo() {
           onSubmit={handlePasswordSubmit}
           method="get"
         >
-          <span className="m-1">현재 비밀번호</span>
+          <span className="info-p m-1">현재 비밀번호</span>
           <form className="emailForm">
             <input
               type="password"
@@ -625,7 +623,7 @@ export function MyInfo() {
               style={{ width: '100%', marginBottom: '40px' }}
             />
           </form>
-          <span className="m-1">새로운 비밀번호</span>
+          <span className="info-p m-1">새로운 비밀번호</span>
           <form className="emailForm">
             <input
               type="password"
@@ -635,19 +633,19 @@ export function MyInfo() {
               maxLength={12}
               placeholder={'영어, 숫자, 특수문자를 포함한 8~12자리'}
               onChange={(e) => setPassword2(e.target.value)}
-              style={{ width: '100%', marginBottom: '10px' }}
+              style={{ width: '100%', marginBottom: '5px' }}
             />
-            <div
-              style={{ position: 'relative', left: '10%', marginBottom: '5%' }}
-            >
-              <h1 style={{ color: 'red' }}>{pwCheck1()}</h1>
-              <h1 style={{ color: 'red' }}>{pwCheck2()}</h1>
-              <h1 style={{ color: 'red' }}>{pwCheck3()}</h1>
-              <h1 style={{ color: 'red' }}>{pwCheck4()}</h1>
-              <h1 style={{ color: 'red' }}>{pwCheck5()}</h1>
-            </div>
+            {password2.length > 0 && (
+              <div style={{ position: 'relative', marginBottom: '5%' }}>
+                <h1 style={{ color: 'red' }}>{pwCheck1()}</h1>
+                <h1 style={{ color: 'red' }}>{pwCheck2()}</h1>
+                <h1 style={{ color: 'red' }}>{pwCheck3()}</h1>
+                <h1 style={{ color: 'red' }}>{pwCheck4()}</h1>
+                <h1 style={{ color: 'red' }}>{pwCheck5()}</h1>
+              </div>
+            )}
           </form>
-          <span className="m-1">새로운 비밀번호 확인</span>
+          <span className="info-p m-1">새로운 비밀번호 확인</span>
           <form className="emailForm">
             <input
               type="password"
@@ -660,9 +658,7 @@ export function MyInfo() {
               placeholder={'영어, 숫자, 특수문자를 포함한 8~12자리'}
               onChange={(e) => setConfirmPassword2(e.target.value)}
             />
-            <div
-              style={{ position: 'relative', left: '10%', marginBottom: '5%' }}
-            >
+            <div style={{ position: 'relative' }}>
               {password2 != confirmPassword2 || password2.length < 1 ? (
                 <h1 style={{ color: 'red' }}>비밀번호가 일치하지 않습니다.</h1>
               ) : null}
