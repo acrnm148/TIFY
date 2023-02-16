@@ -106,6 +106,7 @@ export function LoginPage() {
                 className="inputBox"
                 id="emailForm"
                 placeholder="name@example.com"
+                value={userEmail}
                 onChange={(e) => setUserEmail(e.target.value)}
                 required
               />
