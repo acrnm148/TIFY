@@ -3,7 +3,7 @@ import alert from '../assets/iconAlert.svg';
 import bell from '../assets/alert.svg';
 import anony from '../assets/anony.png';
 
-import { ref, push, onValue, child, get, update } from "firebase/database";
+import { ref, push, get, update } from "firebase/database";
 import { db } from "./firebase";
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
