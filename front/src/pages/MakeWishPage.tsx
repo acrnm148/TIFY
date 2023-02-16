@@ -30,7 +30,7 @@ import Fade from '@mui/material/Fade';
 import axios from 'axios';
 import { GiftItem } from '../components/GiftItem';
 import { GiftHubList } from '../components/GiftHubList';
-import { Gift } from '../interface/interface';
+import { Gift,Option,Detail } from '../interface/interface';
 import { CongratsPage } from './CongratsPage';
 import BlueLogoTify from '../assets/BlueLogoTify.svg';
 
@@ -127,6 +127,7 @@ export function MakeWishPage() {
   const [userAddr2, setUserAddr2] = useState<string>();
   const [userZipCode, setUserZipCode] = useState<any>();
   const [userName, setUserName] = useState<string>();
+  const [couUrl, setCouUrl] = useState<string>("");
 
   const [userOptions, setUserOptions] = useState<any>();
 
@@ -168,24 +169,28 @@ export function MakeWishPage() {
           const lst = con.data.content;
           const conlst: Gift[] = [];
 
-          lst.map((d: any) => {
+          // d.product = 상품정보임. 원래 cart에 옵션이 담겨서 저장되야하나, 지금 거기 수정 시간 x
+          // wish에서 옵션 선택으로 간다.
+          lst?.map((d: any) => {
             conlst.push({
-              giftId: 0,
+              // giftId: 0, // 아이디 줄 필요 없음
+              userOption:"", // 추가
               id: d.product.id,
               name: d.product.name,
               price: d.product.price,
               repImg: d.product.repImg,
-              optionTitle: d.product.options[0]
-                ? d.product.options[0].title
-                : '',
-              // options : [],
-              options: d.product.options[0]
-                ? d.product.options[0].details.map(
-                    (opt: { content: string; value: number }) => {
-                      return opt.content + '-' + opt.value;
-                    },
-                  )
-                : [],
+              // optionTitle: d.product.options[0]
+              //   ? d.product.options[0].title
+              //   : '',
+              selectOptions:[],
+              options : d.product.options,
+              // options: d.product.options[0]
+              //   ? d.product.options[0].details.map(
+              //       (opt: { content: string; value: number }) => {
+              //         return opt.content + '-' + opt.value;
+              //       },
+              //     )
+              //   : [],
             });
           });
           setCartList(conlst);
@@ -231,11 +236,13 @@ export function MakeWishPage() {
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
+    setCouUrl("");
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
   const [wishCart, setWishCart] = useState<Gift[]>([]);
 
+  // 자기 카트 목록에서 index 기준, wishCart 에 아이템 추가
   const pushItem = (i: number) => {
     if (wishCart) {
       if (wishCart.length == 6) {
@@ -249,11 +256,33 @@ export function MakeWishPage() {
     setTotalPrice(totalPrice + cartList[i].price);
   };
 
+  const pushUrl = async (i: string) => {
+    if (i.length > 10) {
+      let data = await axios.post("http://localhost:8081/api/new/crawler",{giftUrl:i}).then((res) => {console.log(res); return res.data});
+      data["price"] = data.purePrice;
+      data["name"] = data.giftname;
+      data["repImg"] = data.giftImgUrl;
+      data["id"] = 0;
+  
+      if (wishCart) {
+        if (wishCart.length == 6) {
+          setToomany(true);
+          return;
+        }
+        setWishCart([...wishCart,data]);
+      } else {
+        setWishCart([data]);
+      }
+      setTotalPrice(totalPrice + data.purePrice );
+    }
+    return 0;
+  };
+
   function checkItemAmount(i: number) {
     //cartList[i]가 wishList에 몇개 담겼는지 확인
     let num = 0;
     if (wishCart) {
-      wishCart.map((item) => {
+      wishCart?.map((item) => {
         if (item.id === i) {
           num += 1;
         }
@@ -272,8 +301,8 @@ export function MakeWishPage() {
         {cartList.length > 0 ? (
           <div>
             <div className="like-list">
-              {cartList.map((gift, i: number) => (
-                <div className="like-item-card-container">
+              {cartList?.map((gift, i: number) => (
+                <div className="like-item-card-container" key={`${i}-${gift.name}-carList`}>
                   <div className="like-item-card">
                     <div className="like-gift-image">
                       {gift.repImg ? (
@@ -304,6 +333,20 @@ export function MakeWishPage() {
         ) : (
           <p>카드에 상품이 없습니다.</p>
         )}
+        <div className="input-form">
+          <label htmlFor="링크">링크로 상품 추가</label>
+          <input
+            type="text"
+            name="gifturl"
+            placeholder='상품 url을 입력해주세요.'
+            value={couUrl}
+            onChange={(e) => {setCouUrl(e.target.value)}}
+          />
+          <div className="pm-btn" style={{"position":"relative","bottom":"40px", "left":"360px"}}>
+            <button onClick={() => pushUrl(couUrl)}>+</button>
+          </div>
+          
+        </div>
         <div className="total-price-div">
           <h1>총 가격 {totalPrice.toLocaleString('ko-KR')}원</h1>
         </div>
@@ -336,12 +379,17 @@ export function MakeWishPage() {
         quantity: number;
         giftOptionList: never[];
       }[] = wishCart
-        .map((item) => {
+        ?.map((item) => {
+          let optionString = "";
+          item.selectOptions?.map( opt => {
+            let temp = opt.title+"-"+opt.content+"-"+opt.value;
+            optionString.length < 1 ? optionString = temp : optionString = optionString.concat(",",temp);
+          })
           return {
             giftUrl: '', // test를 위해 추가했습니다.
             productId: item.id,
             purePrice: item.price,
-            userOption: item.optionTitle + '-' + userOptions,
+            userOption: optionString,
             giftImgUrl: item.repImg,
             giftname: item.name,
             maxAmount: item.price + Math.round(item.price * 0.05),
@@ -349,19 +397,19 @@ export function MakeWishPage() {
             giftOptionList: [],
           };
         })
-        .concat([
-          {
-            giftUrl: '',
-            productId: -1, // 현금: -1, 링크입력선물 : 0, ,
-            purePrice: 9999999,
-            userOption: '',
-            giftImgUrl: '',
-            giftname: '현금',
-            maxAmount: 9999999,
-            quantity: 1,
-            giftOptionList: [],
-          },
-        ]); // 현금축하를 위한 gift데이터
+        // .concat([
+        //   {
+        //     giftUrl: '',
+        //     productId: -1, // 현금: -1, 링크입력선물 : 0, ,
+        //     purePrice: 9999999,
+        //     userOption: '',
+        //     giftImgUrl: '',
+        //     giftname: '현금',
+        //     maxAmount: 9999999,
+        //     quantity: 1,
+        //     giftOptionList: [],
+        //   },
+        // ]); // 현금축하를 위한 gift데이터
       const data = {
         userId: userId,
         giftItems: gift,
@@ -436,7 +484,7 @@ export function MakeWishPage() {
     // console.log('delOp',delOp, 'typeof(delOp)', typeof(delOp) )
 
     if (wishCart) {
-      setTotalPrice(totalPrice - wishCart[i].price - Number(delOp));
+      delOp ? setTotalPrice(totalPrice - wishCart[i].price - parseInt(delOp)): setTotalPrice(totalPrice - wishCart[i].price);
       wishCart.forEach((prod) => {
         if (prod.id === id) {
           wishCart.splice(i, 1);
@@ -567,14 +615,72 @@ export function MakeWishPage() {
     addr1 ? setGoAddr1(true) : setGoAddr1(false);
     addr2 ? setGoAddr2(true) : setGoAddr2(false);
   };
-  const ChangeOption = (e: any, i: number) => {
-    if (e.target.value) {
-      console.log('ininini', e.target.value);
-      setUserOptions({ ...userOptions, [i]: e.target.value });
-      const val = e.target.value.split('-');
-      setTotalPrice(totalPrice + Number(val[1]));
+
+  // wish 만들 상품에서 옵션 변경
+  const ChangeOption = (event: any, idx: number, giftInfo:any, optIdx:number) => {
+    if (event.target.value) {
+      // setUserOptions({ ...userOptions, [idx]: event.target.value }); // e.target.value = 소분류-가격 꼴
+      let newOpt = `${giftInfo.options[idx].title}-${event.target.value}`
+      wishCart[idx].userOption = newOpt;
+
+      const val = event.target.value.split('-');
+      wishCart[idx]?.selectOptions?.map( (item,index) => {
+        if (item.idx === optIdx) {
+          wishCart[idx].selectOptions.splice(index,1); // 기존 선택되어있던 옵션 삭제.
+        }
+      })
+      wishCart[idx].selectOptions.push({idx:optIdx, opt:newOpt}) // 새로 선택한 옵션으로 교체.
+
+      let newPrice = 0;
+      wishCart?.map(wcItem => {
+        newPrice += wcItem.price // 상품 본래가격 추가
+        wcItem?.selectOptions?.map((dwc) => {
+          const optPrice = dwc.opt.split('-')[2];
+          newPrice += parseInt(optPrice); // 옵션별 가격 추가.
+        })
+      })
+      setWishCart([...wishCart]);
+      setTotalPrice(newPrice);
     }
   };
+
+  const OptionDetails = (values:any) => {
+    let option:Option = values.val;
+    let index:number = values.seq;
+    let gift:Gift = values.gift;
+    const [selectedValue, setSelectedValue] = useState("");
+  
+    const handleSelectChange = (event: any) => {
+      console.log(event.target.value)
+      setSelectedValue(event.target.value);
+      ChangeOption(event, index, gift, option.idx);
+    }
+  
+    console.log(selectedValue);
+    console.log("---------------");
+  
+    return (
+      <div className="padding-r-5" style={{ fontSize: "0.5em" }}>
+        <select
+          name={option.title}
+          onChange={handleSelectChange}
+          defaultValue=""
+        >
+          <option value="" >
+            {option.title}
+            {/* .length > 0 ? selectedValue : option.title} */}
+          </option>
+  
+          {option?.details?.map((detail: Detail) => (
+            <option key={detail.content} value={`${detail.content}-${detail.value}`}>
+              <span className="font-bold">{detail.content}</span> + {detail.value}원
+            </option>
+          ))}
+        </select>
+      </div>
+    );
+  };
+
   return (
     <>
       <TapNameKor
@@ -752,48 +858,30 @@ export function MakeWishPage() {
                             alt=""
                           />
                         </div>
-                        {wishCart?.map((e, i: number) => {
+                        {wishCart?.map((gift, idx: number) => {
                           return (
-                            <div className="wish-card-gift wid-100">
-                              <div className="wid-50 align-center">
-                                <div className="disp-flex align-center">
-                                  <img className="wid-38" src={e.repImg}></img>
-                                  <p className="padding-10">{e.name}</p>
+                            <div className="wish-card-gift wid-100" key={`${idx}-${gift.name}`}>
+                              <div className="align-center">
+                                <img style={{"width":"75px"}} src={gift.repImg}></img>
+                              </div>
+                              <div className="wid-50 disp-flex flex-end" style={{ "flexDirection":"column" }}>
+                                <p style={{"paddingLeft":"10px", "fontWeight":"bold"}}>{gift.name}</p>
+                                <div style={{"paddingLeft":"10px"}}>
+                                  {gift?.options?.map( (option:Option,seq) => {
+                                    return (<OptionDetails val={option} seq={seq} gift={gift}/>)
+                                  } ) }
                                 </div>
                               </div>
-                              <div className="wid-50 disp-flex flex-end">
-                                {e.optionTitle && (
-                                  <div className="padding-r-20">
-                                    <select
-                                      name={e.optionTitle}
-                                      onChange={(e) => ChangeOption(e, i)}
-                                    >
-                                      <option value="" selected>
-                                        {e.optionTitle}
-                                      </option>
-                                      {e.options.map((opt) => {
-                                        let res = opt.split('-');
-                                        return (
-                                          <option value={opt}>
-                                            <span className="font-bold">
-                                              {res[0]}
-                                            </span>{' '}
-                                            + {res[1]}원
-                                          </option>
-                                        );
-                                      })}
-                                    </select>
-                                  </div>
-                                )}
+                              <div>
                                 <p className="font-lrg font-bold">
-                                  {e.price.toLocaleString('ko-KR')}
-                                </p>
-                              </div>
-                              <div
-                                className="delete-gift-btn"
-                                onClick={() => delWishGift(e.id, i)}
-                              >
-                                삭제
+                                    {gift.price.toLocaleString('ko-KR')}
+                                  </p>
+                                <div
+                                  className="delete-gift-btn"
+                                  onClick={() => delWishGift(gift.id, idx)}
+                                >
+                                  삭제
+                                </div>
                               </div>
                             </div>
                           );
