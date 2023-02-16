@@ -11,18 +11,19 @@ function Admin() {
 
   const location = useLocation().pathname;
   const roleList: string[] = useSelector((state: RootState) => state.authToken.roleList);
-  const isAdmin = roleList.includes('ADMIN');
+  //const roleList2: string[]|undefined = localStorage.getItem('roles')?.split(",");
+  const isAdmin = roleList.includes('ADMIN'); //|| roleList2?.includes('ADMIN');
   const navigate = useNavigate();
 
   useEffect(() => {
     let toLogin = false;
     location.split('/').forEach((val) => {
-      if (val === 'admin') {
+      if (val.includes("admin")) {
         toLogin = true;
       }
     });
 
-    if (isAdmin && toLogin) {
+    if (!(isAdmin && toLogin)) {
       alert("관리자 권한이 없습니다.");
       navigate('../login');
     }
