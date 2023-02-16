@@ -1,7 +1,5 @@
 .friends-wrap-con {
-  margin-left: 5vw;
-  margin-right: 8vw;
-  margin-bottom: 8vw;
+  min-height: 20vw;
 }
 .friends-title {
   /* display: flex; */
@@ -86,9 +84,11 @@
   background-color: white;
 }
 .backcolor {
-  background-color: #fff1ef;
+  background-color: white;
   width: 100vw;
-  min-height: 30vw;
+  min-height: 45vw;
+  position: relative;
+  margin-bottom: 40px;
 }
 
 .탭-이-름 {
@@ -135,6 +135,7 @@
   flex-wrap: wrap;
   justify-content: center;
   margin-top: 1vw;
+  margin-bottom: 20px;
 }
 
 .rectangle-2-7 {
@@ -161,7 +162,10 @@
 .search-bar-container > input {
   margin-top: 5vw;
 }
-
+.friend-list-item > img {
+  border-radius: 100%;
+  width: 10%;
+}
 .cardsize {
   width: 15vw;
   height: 15vw;
@@ -173,7 +177,8 @@
   justify-content: center;
   margin-top: 20px;
 }
-
+.friends-nickname-box {
+}
 .pagination-btn {
   border: 1px solid #c1c1c1;
   border-radius: 10px;
@@ -190,38 +195,152 @@
 .pagination-btn[disabled] {
   opacity: 0.5;
 }
-.friends-wrap-con {
+.friends-search-img {
+  width: 40px;
+  cursor: pointer;
 }
+
 .userCount {
-  font-size: 15px;
-  color: gray;
+  justify-content: center;
+  display: flex;
+  font-weight: 100;
+  font-size: 16px;
+  color: rgb(151, 151, 151);
   padding: 10px;
+  font-family: 'Nanum Gothic';
+  margin: 0 auto;
+  text-align: center;
 }
 .find-friends {
   /* background-image: url('https://tifyimage.s3.ap-northeast-2.amazonaws.com/2d24a7f4-b1c3-4093-b683-2149604845cf.png'); */
   background-repeat: no-repeat;
   /* margin-left: 24px; */
-  height: 150px;
+  height: 100px;
 }
 .friends-nickname-box {
+  display: flex;
   padding: 10px;
   border-radius: solid;
   border-color: gainsboro;
   border-width: 1px;
-  width: 400px;
+  width: 40%;
   border-radius: 10px;
-  margin-left: 5vw;
+  margin: 0 auto;
+  margin-bottom: 40px;
+}
+.friends-nickname-box {
+  margin-top: 2.8vw;
 }
 .friends-nickname-input {
-  background-color: #fff1ef;
+  background-color: white;
   width: 100%;
   font-size: 16px;
   outline: none;
   margin-left: 2px;
 }
-.pagination-container-friends {
-  margin: 0 auto;
+.pagination-container-friends-item {
+  bottom: 0;
   justify-content: center;
   text-align: center;
   padding: 2vw;
+}
+
+.friend-list > div {
+  height: 250px;
+  width: 250px;
+  margin-left: 20px;
+  margin-right: 20px;
+  text-align: center;
+  background-color: #bbdaf741;
+}
+.friend-profImg {
+  width: 55px;
+  height: 55px;
+  border-radius: 100%;
+}
+.friends-req-me {
+  cursor: pointer;
+  font-family: 'NanumGothic';
+  background-color: #fe3360;
+  color: white;
+  width: wrap;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 5px;
+}
+.friends-req-cancel {
+  cursor: pointer;
+  font-family: 'NanumGothic';
+  color: white;
+  background-color: #bbdaf7;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 5px;
+}
+.friends-req-delete {
+  cursor: pointer;
+  font-family: 'NanumGothic';
+  color: white;
+  background-color: #bbdaf7;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 5px;
+}
+.friends-req-ok {
+  cursor: pointer;
+  font-family: 'NanumGothic';
+  color: white;
+  background-color: #ff4a6e;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 5px;
+}
+.friends-req-no {
+  cursor: pointer;
+  font-family: 'NanumGothic';
+  color: white;
+  background-color: #bbdaf7;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 5px;
+}
+.friends-req {
+  cursor: pointer;
+  font-family: 'NanumGothic';
+  color: white;
+  background-color: #ff4a6e;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 5px;
+}
+.friends-paging-wrap {
+  width: 100%;
+  background-color: white;
+  position: absolute;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+}
+.friends-paging {
+  margin: 0 auto;
+  text-align: center;
+  background-color: blue;
+}
+.friends-wrap-inner-con {
+  min-height: 100px;
+}
+.userCount > img {
+  width: 50px;
 }
