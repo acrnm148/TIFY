@@ -59,7 +59,7 @@ const GiftHubCategory = (props: {
     <div className="gift-category-icon">
       {CATEGORY_DATA.map((data, i: number) => {
         return (
-          <div>
+          <div key={`${i}-${data.name}`}>
             <div
               onClick={() => cateChangeHandler(i)}
               className={`gh-icon ${

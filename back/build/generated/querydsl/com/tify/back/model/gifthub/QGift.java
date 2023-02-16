@@ -30,7 +30,7 @@ public class QGift extends EntityPathBase<Gift> {
 
     public final StringPath giftImgUrl = createString("giftImgUrl");
 
-    public final ListPath<GiftOption, QGiftOption> giftOption = this.<GiftOption, QGiftOption>createList("giftOption", GiftOption.class, QGiftOption.class, PathInits.DIRECT2);
+    public final StringPath giftname = createString("giftname");
 
     public final StringPath giftUrl = createString("giftUrl");
 
@@ -41,6 +41,8 @@ public class QGift extends EntityPathBase<Gift> {
     public final NumberPath<Integer> maxAmount = createNumber("maxAmount", Integer.class);
 
     public final QOrder order;
+
+    public final ListPath<com.tify.back.model.pay.Pay, com.tify.back.model.pay.QPay> payList = this.<com.tify.back.model.pay.Pay, com.tify.back.model.pay.QPay>createList("payList", com.tify.back.model.pay.Pay.class, com.tify.back.model.pay.QPay.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> productId = createNumber("productId", Long.class);
 

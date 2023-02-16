@@ -1,8 +1,7 @@
 import SearchBar from '../components/SearchBar';
 import GiftHubCategory from '../components/GiftHubCategory';
 import '../css/giftHubPage.styles.css';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import iconFilter from '../assets/iconFilter.svg';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 // mui Slider 사용
@@ -11,23 +10,13 @@ import Slider from '@mui/material/Slider';
 import { GiftItem } from '../components/GiftItem';
 import {
   NavLink,
-  Link,
-  MemoryRouter,
-  Routes,
-  Route,
-  useLocation,
 } from 'react-router-dom';
-import Pagination from '@mui/material/Pagination';
-import PaginationItem from '@mui/material/PaginationItem';
 
 // mui option
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { query } from 'firebase/database';
-import priceFormat from '../modules/comma';
-import ScrollBar from '../components/ScrollBar';
 
 const CATEGORY_DATA = [
   { id: 0, name: '전체' },
@@ -46,7 +35,7 @@ export function GiftHubPage() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [category, setCategory] = useState<number | null>();
   let [giftList, setGiftList] = useState<Array<any>>([]);
-  const [sortingCode, setSortingCode] = useState<string | number | null>();
+  const [sortingCode, setSortingCode] = useState<string | number | null>(0);
   // Slider 설정
   const [min, max] = [0, 2000000];
   const [priceRange, setPriceRange] = useState([min, max]);
@@ -94,7 +83,6 @@ export function GiftHubPage() {
         },
       })
       .then((e) => {
-        console.log(e.data);
         let copy: Array<any> = [...e.data.content]; // let copy = [...giftList,{name:'new', price:9999, gitId:4}];
         setGiftList([...e.data.content]);
         setTotalPages(e.data.totalPages);
@@ -109,7 +97,6 @@ export function GiftHubPage() {
   }, [searchQuery, category, sortingCode, searchPrice]);
 
   const getQuery = (q: string) => {
-    console.log('쿼리받음');
     setSearchQuery(q);
     setPage(0);
   };
@@ -275,7 +262,6 @@ export function GiftHubPage() {
                       setSearchPrice([priceRange[0], priceRange[1]]);
                       setPage(0);
                       setFilterState(true);
-                      console.log(filterState);
                     }}
                   >
                     <img
@@ -357,6 +343,7 @@ export function GiftHubPage() {
                   onChange={handleFilterChange}
                   label="인기순"
                   className="gift-select-sort"
+                  value="" // prop을 기본적으로 받는 요소라 안넣으면 오류메시지 뜸
                 >
                   <MenuItem value="">
                     <em>선택안함</em>

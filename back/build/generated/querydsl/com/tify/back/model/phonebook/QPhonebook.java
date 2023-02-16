@@ -21,11 +21,11 @@ public class QPhonebook extends EntityPathBase<Phonebook> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final NumberPath<Long> myId = createNumber("myId", Long.class);
+
     public final StringPath name = createString("name");
 
     public final StringPath phoneNumber = createString("phoneNumber");
-
-    public final NumberPath<Long> userId = createNumber("userId", Long.class);
 
     public QPhonebook(String variable) {
         super(Phonebook.class, forVariable(variable));

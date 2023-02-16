@@ -18,9 +18,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -107,5 +111,44 @@ public class CartController {
     @GetMapping("/forwish/{userId}")
     public List<CartItem> getCartForWish(@PathVariable Long userId) throws Exception {
         return cartRepository.findByUserId(userId).getCartItems();
+    }
+
+    @PostMapping("/check-already")
+    public Boolean check(@RequestBody Map<String,Long> map) throws Exception {
+        Cart cart = cartRepository.findByUserId(map.get("userId"));
+        for (CartItem cartItem : cart.getCartItems()) {
+            if (cartItem.getProduct().getId().equals(map.get("productId")) ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Operation(summary = "유저 장바구니 속 아이템 삭제", description = "유저 장바구니 속 아이템 삭제")
+    @Transactional
+    @DeleteMapping
+    public String deleteCartItem(@RequestBody Map<String,Long> map) throws Exception {
+        Cart cart = cartRepository.findByUserId(map.get("userId"));
+        List<CartItem> items = cart.getCartItems();
+        try {
+            items = items.stream()
+                    .filter(val -> {
+                        if (val.getProduct().getId().equals(map.get("productId"))) {
+                            try {
+                                cartService.deleteItemInCart(cart.getId(), val.getId());
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                            return false;
+                        }
+                        return true;
+                    })
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            items = new ArrayList<>();
+        }
+        cart.setCartItems(items);
+        cartRepository.save(cart);
+        return "delete success";
     }
 }

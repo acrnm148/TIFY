@@ -1,13 +1,24 @@
 package com.tify.back.controller.wish;
+import com.tify.back.dto.noti.FromFrontRequestDTO;
+import com.tify.back.dto.noti.MessageDTO;
+import com.tify.back.dto.noti.SmsResponseDTO;
 import com.tify.back.dto.wish.AddWishDto;
-import com.tify.back.model.friend.Friend;
+import com.tify.back.model.phonebook.Phonebook;
+import com.tify.back.model.users.User;
 import com.tify.back.model.wish.Wish;
+import com.tify.back.repository.users.UserRepository;
 import com.tify.back.repository.wish.WishRepository;
+import com.tify.back.service.noti.SmsService;
+import com.tify.back.service.phonebook.PhonebookService;
 import com.tify.back.service.wish.WishService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,8 +28,11 @@ import java.util.Optional;
 public class WishController {
     private final WishService wishService;
     private final WishRepository wishRepository;
+    private final SmsService smsService;
+    private final PhonebookService phonebookService;
+    private final UserRepository userRepository;
     @PostMapping("/add")
-    public String addWish(@RequestBody AddWishDto dto) throws IOException {
+    public String addWish(@RequestBody AddWishDto dto) throws IOException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException {
 
         //유효성 검사
         if(dto.getWishTitle().equals(""))
@@ -31,6 +45,30 @@ public class WishController {
 
         if(result)
         {
+            User user = userRepository.findById(dto.getUserId()).orElse(null);
+            FromFrontRequestDTO messageDto = new FromFrontRequestDTO();
+            List<MessageDTO> messages = new ArrayList<>();
+            List<Phonebook> tels = phonebookService.getPhonebookByMyId(dto.getUserId());
+            for (Phonebook tel : tels) {
+                MessageDTO mtemp = new MessageDTO();
+                String telNo = tel.getPhoneNumber().replaceAll("-","");
+                mtemp.setTo(telNo);
+                String content = user.getUsername() + "님의 "+dto.getCategory()+"\n을 축하해주세요! ♪\n"
+                +"<"+dto.getWishTitle()+">"+"\n위시에 마음을 전해보세요.★\n"
+                +dto.getEndDate()+"일 까지 아래 링크를 통해 선물을 보낼 수 있습니다.♥ \n"
+                +"https://i8e208.p.ssafy.io/congrats/"+dto.getWishId()+"\n"
+                +"본 문자는 TIFY티피의 "+user.getUsername()+"님의\n주소록에 저장된 "+tel.getName()+"님에게 발송되었습니다."
+                +"\n∞당신을 위한 축하 TIFY∞";
+
+                mtemp.setContent(content);
+                mtemp.setSubject("");
+                messages.add(mtemp);
+            }
+
+            messageDto.setMessageList(messages);
+            SmsResponseDTO response = smsService.sendSms(messageDto);
+
+
             return "wish created!";
         }else {
             return "failed to create wish!";
