@@ -224,7 +224,7 @@ export function CongratsPage() {
     );
   };
   function NoPresent() {
-    alert('상품을 선택해주세요.');
+    Swal.fire('상품을 선택해주세요.');
   }
   const WishCongratsBtns = () => {
     const wishInfo = {

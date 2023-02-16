@@ -5,6 +5,7 @@ import { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import '../../css/mypage/myInfo.styles.css';
 import Postcode from '../../components/Post';
 import { useOutletContext } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 type ChildType = {
   Setname: (arg0: any) => void;
@@ -198,7 +199,7 @@ export function MyInfo() {
             console.log(res, '정보 변경 api 시도 성공!');
             Setname(username);
             SetNickName(nickname);
-            alert('정보가 변경되었습니다.');
+            Swal.fire('정보가 변경되었습니다.');
           })
           .catch((err) => {
             console.log(err);
@@ -231,9 +232,9 @@ export function MyInfo() {
           .then((res) => {
             console.log(res, '비밀번호 변경 api 시도 성공!');
             if (res.data === '비밀번호가 수정되었습니다.') {
-              alert('정보가 변경되었습니다.');
+              Swal.fire('정보가 변경되었습니다.');
             } else if (res.data === '비밀번호가 일치하지 않습니다.') {
-              alert('현재 비밀번호를 틀리셨습니다.');
+              Swal.fire('현재 비밀번호를 틀리셨습니다.');
             }
           })
           .catch((err) => {
@@ -250,18 +251,18 @@ export function MyInfo() {
     event.preventDefault();
 
     if (nickname == '') {
-      alert('닉네임을 입력하세요.');
+      Swal.fire('닉네임을 입력하세요.');
       return false;
     }
     const nicknameCheck = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|]+$/;
     if (!nicknameCheck.test(nickname)) {
-      alert('닉네임은 영어/한글만 가능합니다.');
+      Swal.fire('닉네임은 영어/한글만 가능합니다.');
       return false;
     }
 
     console.log(nickname.length);
     if (nickname.length < 2 || nickname.length > 10) {
-      alert('닉네임은 2~10글자로 구성해주셔야 합니다.');
+      Swal.fire('닉네임은 2~10글자로 구성해주셔야 합니다.');
       return false;
     }
 
@@ -275,15 +276,15 @@ export function MyInfo() {
         console.log('닉네임 확인 완료');
         console.log(e);
         if (e.data === 'Y') {
-          alert(`You can't do it! 😅`);
+          Swal.fire(`You can't do it! 😅`);
           setNickDubCheck(false);
         } else if (e.data === 'N') {
-          alert('You can do it! 👍');
+          Swal.fire('You can do it! 👍');
           setNickDubCheck(true);
         }
       })
       .catch((err) => {
-        alert(`You can't do it! 😅`);
+        Swal.fire(`You can't do it! 😅`);
         console.log('error', err);
         setNickDubCheck(false);
       });
@@ -292,48 +293,48 @@ export function MyInfo() {
 
   function CheckValid() {
     if (username == '') {
-      alert('이름을 입력하세요.');
+      Swal.fire('이름을 입력하세요.');
       return false;
     }
 
     // 닉네임 중복 여부 확인\
     if (!nickDubCheck) {
-      alert('닉네임 중복 확인을 해주세요.');
+      Swal.fire('닉네임 중복 확인을 해주세요.');
       return false;
     }
 
     var reg = /^[0-9]+/g; //숫자만 입력하는 정규식
 
     if (birthYear == undefined) {
-      alert('태어난 연도를 입력해주세요.');
+      Swal.fire('태어난 연도를 입력해주세요.');
       return false;
     }
 
     if (birthYear.length < 4 || 4 < birthYear.length) {
-      alert('태어난 연도를 4자리로 입력해주세요.');
+      Swal.fire('태어난 연도를 4자리로 입력해주세요.');
       return false;
     }
 
     if (birthMonth == '') {
-      alert('태어난 월을 입력해주세요.');
+      Swal.fire('태어난 월을 입력해주세요.');
       return false;
     }
     if (birthMonth.length < 2 || 2 < birthMonth.length) {
-      alert('몇 월인지를 2자리로 입력해주세요.');
+      Swal.fire('몇 월인지를 2자리로 입력해주세요.');
       return false;
     }
     if (birthDay == '') {
-      alert('태어난 날짜를 입력해주세요.');
+      Swal.fire('태어난 날짜를 입력해주세요.');
       return false;
     }
 
     if (2 < birthDay.length) {
-      alert('몇 일인지를 2자리로 입력해주세요.');
+      Swal.fire('몇 일인지를 2자리로 입력해주세요.');
       return false;
     }
 
     if (birthDay.length < 2) {
-      alert('몇 일인지를 2자리로 입력해주세요.');
+      Swal.fire('몇 일인지를 2자리로 입력해주세요.');
       return false;
     }
 
@@ -341,20 +342,20 @@ export function MyInfo() {
     // console.log(typeof birthYear, typeof birthMonth, typeof birthDay);
 
     if (tel1 == '' || tel2 == '' || tel3 == '') {
-      alert('전화번호를 입력해주세요.');
+      Swal.fire('전화번호를 입력해주세요.');
       return false;
     }
 
     if (3 < tel1.length) {
-      alert('전화번호 첫 자리가 너무 길어요.');
+      Swal.fire('전화번호 첫 자리가 너무 길어요.');
       return false;
     }
     if (4 < tel2.length) {
-      alert('전화번호 두 번째 자리가 너무 길어요.');
+      Swal.fire('전화번호 두 번째 자리가 너무 길어요.');
       return false;
     }
     if (4 < tel3.length) {
-      alert('전화번호 세 번째 자리가 너무 길어요.');
+      Swal.fire('전화번호 세 번째 자리가 너무 길어요.');
       return false;
     }
 
@@ -366,20 +367,20 @@ export function MyInfo() {
     var pwdCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,12}$/;
 
     if (!pwdCheck.test(password1)) {
-      alert(
+      Swal.fire(
         '비밀번호는 영문자+숫자+특수문자 조합으로 8~12자리 사용해야 합니다.',
       );
       return false;
     }
     if (!pwdCheck.test(password2)) {
-      alert(
+      Swal.fire(
         '비밀번호는 영문자+숫자+특수문자 조합으로 8~12자리 사용해야 합니다.',
       );
       return false;
     }
 
     if (password2 !== confirmPassword2) {
-      alert('비밀번호가 다릅니다.');
+      Swal.fire('비밀번호가 다릅니다.');
       return false;
     }
     return true;

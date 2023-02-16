@@ -34,6 +34,7 @@ import { positions } from '@mui/system';
 import { push, ref } from 'firebase/database';
 import { db } from '../components/firebase';
 import TapNameKor from '../components/TapNameKor';
+import Swal from 'sweetalert2';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -498,7 +499,7 @@ export function MakeWishPage() {
   };
   const CallMyAddr = () => {
     if (!userAddr1 && !userAddr2) {
-      alert('저장된 주소가 없습니다');
+      Swal.fire('저장된 주소가 없습니다');
       setCallMyAddr(false);
     } else {
       setCallMyAddr(true);

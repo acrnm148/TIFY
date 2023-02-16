@@ -14,6 +14,7 @@ import Box from '@mui/material/Box';
 import Backdrop from '@mui/material/Backdrop';
 import Policy from '../components/Policy';
 import { ThanksPage } from './ThanksPage';
+import Swal from 'sweetalert2';
 
 export function CongratsPayPage() {
   const userId = useSelector((state: RootState) => state.authToken.userId);
@@ -80,7 +81,7 @@ export function CongratsPayPage() {
       const sizeLimit = 300 * 10000;
       // 300만 byte 넘으면 경고문구 출력
       if (e.target.files[0].size > sizeLimit) {
-        alert('사진 크기가 3MB를 넘을 수 없습니다.');
+        Swal.fire('사진 크기가 3MB를 넘을 수 없습니다.');
       } else {
         // 파일을 formData로 만들어주기
         const formData = new FormData();
@@ -125,7 +126,7 @@ export function CongratsPayPage() {
     // amount 공백아닌지 확인
     if (!amount) {
       e.preventDefault();
-      alert('축하금액을 입력하세요!');
+      Swal.fire('축하금액을 입력하세요!');
       return;
     }
     if(!cardPhone){
@@ -138,7 +139,7 @@ export function CongratsPayPage() {
     // 이용약관 동의 확인
     if (!isChecked) {
       e.preventDefault();
-      alert('이용약관에 동의해주세요!');
+      Swal.fire('이용약관에 동의해주세요!');
       return;
     }
     setOpenPayInfo(true)
