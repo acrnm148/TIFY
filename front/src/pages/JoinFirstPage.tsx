@@ -4,6 +4,7 @@ import checkIcon from '../assets/iconCheck.svg';
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 export function JoinFirstPage() {
   const [email, setEmail] = useState('');
@@ -62,7 +63,7 @@ export function JoinFirstPage() {
             },
           });
         } else if (r.data == 'N') {
-          alert(
+          Swal.fire(
             '아직 이메일 인증이 확인되지 않습니다. 인증 완료 후 시도해주세요',
           );
           // navigate('/join2', {

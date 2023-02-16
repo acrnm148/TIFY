@@ -128,7 +128,7 @@ export function GiftHubDetailPage() {
             userId: userId,
             productId: data.id, //data.id,
           },
-        }).then(()=>{alert("장바구니에서 상품을 삭제했습니다.")})
+        }).then(()=>{Swal.fire("장바구니에서 상품을 삭제했습니다.")})
       }
 
     } else {
