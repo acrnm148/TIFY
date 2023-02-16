@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
 .wish-page-container {
+  font-family: 'Nanum Gothic';
   width: 100vw;
   display: flex;
   justify-content: space-around;
@@ -29,6 +31,7 @@
 }
 .input-form > input,
 .input-form > textarea {
+  font-family: 'Nanum Gothic';
   width: 100%;
   max-width: 882px;
   min-height: 52px;
@@ -67,8 +70,10 @@
 }
 
 .wish-card {
-  width: 523px;
-  height: 312px;
+  /* width: 523px;
+  height: 312px; */
+  width: 430px;
+  height: 430px;
   border-radius: 8px;
 }
 .m-wish-card {
@@ -85,8 +90,14 @@
 .wid-100 {
   width: 100%;
 }
+.back-white {
+  background-color: white;
+}
 .wid-50 {
   width: 50%;
+}
+.wid-38 {
+  width: 38%;
 }
 .flex-between {
   display: flex;
@@ -130,18 +141,23 @@
 }
 
 .wish-card-gift {
+  padding: 20px;
+  background-color: white;
+  border-color: #e52e562c;
+  border-style: solid;
+  border-width: 1px;
   display: flex;
-  width: 100%;
+  width: 97.5%;
   /* height: 128px; */
   border-radius: 8px;
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin: 8px;
   align-items: center;
   padding-left: 20px;
   padding-right: 20px;
 }
-.wish-card-gift > img {
+.wish-card-gift > div > div > img {
   border-radius: 8px;
 }
 .align-center {
@@ -250,6 +266,8 @@ abbr[title] {
 }
 
 .address-form {
+  height: 52px;
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -270,7 +288,7 @@ abbr[title] {
     width: inherit; */
 }
 .address-form-container span {
-  color: #c1c1c1;
+  color: #a0cbf7;
 }
 .grd-btn {
   background: radial-gradient(
@@ -286,6 +304,10 @@ abbr[title] {
     /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
 }
 .make-wish-btn {
+  font-family: 'Nanum Gothic';
+  color: white;
+  font-size: 21px;
+  font-weight: 600;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -295,6 +317,7 @@ abbr[title] {
   width: 100%;
   border: 1px solid #fff1ef;
   border-radius: 10px;
+  cursor: pointer;
 }
 .just-btwn {
   justify-content: space-between;
@@ -372,7 +395,7 @@ abbr[title] {
 }
 
 .postcode {
-  width: 8%;
+  width: 180px;
 }
 
 .modal-modal {
@@ -406,7 +429,7 @@ abbr[title] {
 
 .like-item-card-container {
   width: 100%;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
 }
 .gift-text {
   font-size: small;
@@ -426,9 +449,12 @@ abbr[title] {
   justify-content: center;
 }
 .pm-btn button {
-  min-width: 30px;
-  background-color: #e9e9e9;
+  min-width: 25px;
+  background-color: #bbdaf7;
   border-radius: 5px;
+  color: white;
+  font-weight: 800;
+  font-size: 16px;
 }
 .pm-btn * {
   margin-right: 10px;
@@ -441,7 +467,11 @@ abbr[title] {
   display: flex;
 }
 .like-gift-image {
-  width: 230px;
+  width: 180px;
+}
+.like-gift-image > img {
+  border-radius: 10px;
+  width: 100%;
 }
 
 .finish-wish-con {
@@ -497,7 +527,9 @@ abbr[title] {
   justify-content: space-between;
   align-items: flex-end;
 }
-
+.address-form-bottom {
+  margin-top: 20px;
+}
 .cart-list {
   font-size: 22px;
   padding: 5px;
@@ -627,9 +659,12 @@ abbr[title] {
   background-color: #d0d0d0;
   color: white;
 }
+.address-form-container > span > .warning,
 .warning {
-  color: rgba(255, 0, 0, 0.544);
+  color: #a0cbf7;
   padding: 5px;
+  font-size: 16px;
+  font-weight: 800;
 }
 .align-center {
   align-items: center;
@@ -643,4 +678,164 @@ abbr[title] {
 }
 .padding-r-20 {
   padding-right: 20px;
+}
+.make-wish-form-label {
+  font-size: 15px;
+  font-family: 'Nanum Gothic';
+  color: #ff4a6e;
+  font-weight: 800;
+}
+.make-wish-part > .input-form > textarea,
+.make-wish-part > .input-form > input {
+  font-size: 15px;
+  font-family: 'Nanum Gothic';
+  color: rgb(105, 105, 105);
+  font-weight: 500;
+}
+.make-wish-part {
+  font-family: 'Nanum Gothic';
+  background-color: #ffdee84f;
+  padding: 50px;
+  border-radius: 15px;
+  width: 100%;
+  margin-bottom: 30px;
+}
+.make-wish-category-box {
+  justify-content: center;
+  text-align: center;
+  margin: 0 auto;
+  display: flex;
+}
+.make-wish-part > div > label {
+  /* display: flex; */
+}
+.make-wish-part > div > label > img {
+  width: 100px;
+}
+.make-wish-part > div > label > p {
+  padding-top: 30px;
+  padding-left: 20px;
+  font-weight: 800;
+}
+.make-wish-part > div > label,
+.make-wish-part > label,
+.input-form > label {
+  font-size: 19px;
+  font-family: 'Nanum Gothic';
+  font-weight: 510;
+  color: #ff4a6e;
+  /* margin-bottom: 20px; */
+}
+
+.input-form > textarea:focus,
+.input-form > input:focus {
+  outline: none !important;
+  border-color: #ff4a6ece;
+  box-shadow: 0 0 10px #ff4a6e7e;
+}
+.input-form > textarea {
+  resize: none;
+}
+.make-wish-period-box {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-weight: bold;
+  font-family: 'Nanum Gothic';
+  background-color: #ffdee8;
+  color: #828282;
+  border-radius: 10px;
+}
+.calendar-container {
+  text-align: center;
+}
+.totalDays {
+  font-size: 20px;
+}
+.my-addr {
+  width: 150px;
+  font-family: 'NanumGothic';
+  font-size: 15px;
+  background-color: #ff4a6e;
+  border: none;
+  color: white;
+  font-weight: 600;
+}
+.card-label {
+  margin-bottom: 20px;
+}
+.wish-card-gift-select {
+  background-color: white;
+}
+.wish-personal-box {
+  /* height: 20px; */
+  padding: 10px;
+}
+.wish-personal-box-left {
+  width: 100%;
+}
+.wish-personal-box-right {
+  padding-top: 10px;
+  width: 100%;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.wish-personal-box-right > input {
+  height: 42px;
+  background-color: #ffdee8;
+}
+.wish-personal-box-right > input:focus {
+  outline: none !important;
+  border-color: #ff4a6ece;
+  box-shadow: 0 0 10px #ff4a6e7e;
+}
+.card-img-style {
+  background-color: white;
+  width: 436px;
+  height: 436px;
+}
+.cards-img {
+  width: 436px;
+  text-align: center;
+  justify-content: center;
+}
+.card-imgs-div > img {
+  text-align: center;
+  justify-content: center;
+}
+.make-wish-period-part > .totalDays {
+  color: #212529;
+}
+.totalDays-right {
+  color: #ff4a6ece;
+}
+.wish-components-title {
+  margin-bottom: 30px;
+}
+.wish-components-title > h1 {
+  width: 100%;
+}
+.wish-card-content > h1 {
+  text-align: center;
+  font-size: 20px;
+  width: 100%;
+  color: white;
+}
+.delete-gift-btn {
+  cursor: pointer;
+  background-color: #e52e56;
+  color: white;
+  font-size: 14px;
+  margin-left: 10px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 8px;
+}
+.total-price-div {
+  font-size: 18px;
+  padding-top: 20px;
+  font-weight: 800;
 }
