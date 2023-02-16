@@ -1,4 +1,5 @@
 import { useDaumPostcodePopup } from 'react-daum-postcode';
+import search_h from '../assets/miri/miri-12.png';
 
 const Postcode = (props: { setcompany: (arg0: any) => void; company: any }) => {
   const scriptUrl =
@@ -21,8 +22,9 @@ const Postcode = (props: { setcompany: (arg0: any) => void; company: any }) => {
   };
 
   return (
-    <button type="button" onClick={handleClick} style={{ width: '20%' }}>
-      주소찾기
+    <button type="button" onClick={handleClick} style={{ width: '40px' }}>
+      {/* 주소찾기 */}
+      <img src={search_h} />
     </button>
   );
 };
