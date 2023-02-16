@@ -242,14 +242,25 @@ function Donator({ payImgs }: PayImgs) {
       >
         {payImgs &&
           payImgs.slice(-5).map((payImg) => {
-            return (
-              <img
-                className="inline-block h-10 w-10 rounded-full ring-1 ring-white ring-profile"
-                src={payImg}
-                alt=""
-                style={{ border: '1px solid white' }}
-              />
-            );
+            if (payImg == '') {
+              return (
+                <img
+                  className="inline-block h-10 w-10 rounded-full ring-1 ring-white ring-profile"
+                  src={`https://tifyimage.s3.ap-northeast-2.amazonaws.com/ff45a59a-05c6-447d-9f89-3bd7694e8497.jpg`}
+                  alt=""
+                  style={{ border: '1px solid white' }}
+                />
+              );
+            } else {
+              return (
+                <img
+                  className="inline-block h-10 w-10 rounded-full ring-1 ring-white ring-profile"
+                  src={payImg}
+                  alt=""
+                  style={{ border: '1px solid white' }}
+                />
+              );
+            }
           })}
       </div>
       {imgCount > 5 ? (
