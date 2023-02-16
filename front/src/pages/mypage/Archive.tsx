@@ -17,7 +17,6 @@ import iconCategory6Unmarried from '../../assets/category/iconCategory6Unmarried
 import iconCategory7Etc from '../../assets/category/iconCategory7Etc.svg';
 import { RootState } from '../../store/Auth';
 import '../../css/mypage/archive.styles.css';
-import { Justify } from 'react-bootstrap-icons';
 
 interface Pay {
   celeb_from: string;
@@ -66,7 +65,7 @@ const Archive: React.FC = () => {
   const [selectedPay, setSelectedPay] = useState<Pay | null>(null);
   const accessToken = useSelector((state: RootState) => state.authToken.accessToken);
   const userPk = useSelector((state: RootState) => state.authToken.userId);
-const [isClicked, setIsClicked] = useState(false);
+  const [clickedButtonIndex, setClickedButtonIndex] = useState<number | null>(null);
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
   };
@@ -78,10 +77,10 @@ const [isClicked, setIsClicked] = useState(false);
   
   const handleGiftClick = async (gift: Gift, payIndex: number) => {
     setSelectedGift(gift.giftname);
-    const pay = gift.payList[payIndex];
-    setSelectedPay(pay);
+    setClickedButtonIndex(payIndex);
+    setSelectedPay(gift.payList[payIndex]);
     try {
-      const response = await axios.get(`https://i8e208.p.ssafy.io/api/thkcards/match/${pay.pay_id}`, {
+      const response = await axios.get(`https://i8e208.p.ssafy.io/api/thkcards/match/${gift.payList[payIndex].pay_id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-type': 'application/json',
@@ -134,7 +133,7 @@ const [isClicked, setIsClicked] = useState(false);
 
   return (
     <div className="flex flex-col">
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-left mt-4">
         {categories.map((category) => (
           <button
             key={category.name}
@@ -149,10 +148,14 @@ const [isClicked, setIsClicked] = useState(false);
           </button>
         ))}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+      <div className="flex gap-4 mt-4 justyfy-start">
         {categoryUsers.map((user) => (
           <div key={user.id}>
-            <button onClick={() => handleUserClick(user)} className="bg-white rounded-md shadow-md w-full h-full p-4 flex flex-col">
+            <button
+              onClick={() => handleUserClick(user)}
+              className="bg-white rounded-md shadow-md w-full h-full p-4 flex flex-col flex-shrink-0"
+              style={{ width: '250px' }} // set fixed width here
+            >
               <p className="text-gray-500 text-sm mb-2">{user.endDate}</p>
               <p className="text-gray-800 text-lg">{user.title}</p>
             </button>
@@ -163,71 +166,74 @@ const [isClicked, setIsClicked] = useState(false);
         <div className="mt-4">
           <div className="bg-white rounded-md shadow-md p-4">
             <h2 className="text-lg font-bold text-gray-800 mb-4">{selectedUser.title}</h2>
-            {selectedUser.giftItems.map((gift) => (
-              <div key={gift.giftname} className="mb-4">
-<button
-  className={`w-full p-4 text-left font-medium ${
-    selectedGift === gift.giftname
-      ? 'bg-gray-200 text-gray-700'
-      : 'text-gray-500 hover:bg-gray-100'
-  }`}
-  onClick={() => handleGiftClick(gift, 0)}
->
-  {gift.giftname}
-</button>
-
-                {selectedGift === gift.giftname && (
-<div className="pl-4 mt-2">
-{gift.payList.map((pay, index) => (
-  <button
-    key={pay.pay_id}
-    className="text-gray-500 mb-1 focus:outline-none hover:text-gray-700"
-    onClick={() => handleGiftClick(gift, index)}
-  >
-    {pay.celeb_from}
-  </button>
-))}
-  {thkcard && (
-    <div>
-      <div>
-        <div>
-          {/* <h1>받은 카드</h1> */}
-          <div className="con-card-detail">
-            <div className="con-card">
-              <img
-                className="photo-siza"
-                src={selectedPay?.celeb_img_url ? selectedPay?.celeb_img_url : ''}
-                alt="감사카드 이미지"
-              />
-              <div className="con-text">{selectedPay?.celeb_content}</div>
-              <div className="userName tofrom">전송된 연락처 : {selectedPay?.celeb_tel}</div>
+            <div className="flex flex-wrap -mx-2">
+              {selectedUser.giftItems.map((gift) => (
+                <div key={gift.giftname} className="w-full sm:w-1/2 md:w-1/3 px-2 mb-4 justify-start">
+                  <button
+                    onClick={() => handleGiftClick(gift, 0)}
+                    className="button"
+                  >
+                    {gift.giftname}
+                  </button>
+                  {selectedGift === gift.giftname && (
+                    <div className="pl-4 mt-2 botton">
+                      <div className='flex'>
+                        {gift.payList.map((pay, index) => (
+                          <button
+                            className={`w-full p-4 text-left font-medium ${
+                              selectedGift === gift.giftname && clickedButtonIndex === index
+                                ? 'bg-gray-400 text-black'
+                                : 'bg-gray-200 text-gray-700 hover:bg-green-400 hover:text-black'
+                            }`}
+                            onClick={() => handleGiftClick(gift, index)}
+                            key={pay.pay_id}
+                          >
+                            {pay.celeb_from}
+                          </button>
+                        ))}
+                      </div>
+                      <div className='card-case'>
+                        {thkcard && (
+                          <div className="flex flex-row">
+                            <div>
+                              <div>
+                                <div className="con-card-detail">
+                                  <div className="con-card">
+                                    <img
+                                      className="photo-size"
+                                      src={selectedPay?.celeb_img_url ? selectedPay?.celeb_img_url : ''}
+                                      alt="감사카드 이미지"
+                                    />
+                                    <div className="con-text">{selectedPay?.celeb_content}</div>
+                                    <div className="userName tofrom">전송된 연락처 : {selectedPay?.celeb_tel}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <div>
+                                <div className="con-card-detail">
+                                  <div className="con-card">
+                      <img
+                        className="photo-size"
+                        src={thkcard.imageUrl ? thkcard.imageUrl : ''}
+                        alt="감사카드 이미지"
+                      />
+                      <div className="con-text">{thkcard.content}</div>
+                      <div className="userName tofrom">전송된 연락처 : {thkcard.phoneNumber}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+          )}
           </div>
         </div>
-      </div>
-      <div>
-        <div>
-          {/* <h1>보낸 감사카드</h1> */}
-          <div className="con-card-detail">
-            <div className="con-card">
-              <img
-                className="cphoto-siza"
-                src={thkcard.imageUrl ? thkcard.imageUrl : ''}
-                alt="감사카드 이미지"
-              />
-              <div className="con-text">{thkcard.content}</div>
-              <div className="userName tofrom">전송된 연락처 : {thkcard.phoneNumber}</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
-  )}
+  ))}
 </div>
 
-                )}
-              </div>
-            ))}
           </div>
         </div>
       )}
