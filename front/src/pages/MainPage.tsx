@@ -31,7 +31,6 @@ export function MainPage() {
         ).then((r) => { 
           let copy:Array<any> = [...r.data];
           setGiftList(copy)
-          console.log(r);
         }).catch((r) => { console.log(r)}
         )}
     fetchdata();
