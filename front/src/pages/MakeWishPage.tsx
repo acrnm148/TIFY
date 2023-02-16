@@ -4,8 +4,6 @@ import '../css/makeWishPage.styles.css';
 import '../css/styles.css';
 import addHeart from '../assets/addHeart.svg';
 import React, {
-  Component,
-  useCallback,
   useEffect,
   useRef,
   useState,
@@ -26,11 +24,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import axios from 'axios';
-import { GiftItem } from '../components/GiftItem';
-import { GiftHubList } from '../components/GiftHubList';
 import { Gift } from '../interface/interface';
-import { CongratsPage } from './CongratsPage';
-import BlueLogoTify from '../assets/BlueLogoTify.svg';
 
 
 // user
@@ -39,9 +33,7 @@ import { RootState } from '../store/Auth';
 import { NavLink } from 'react-router-dom';
 import ConfirmationDialog from '../components/WishCategoryOption';
 import CarouselComponent from '../components/ResponsiveCarousel';
-import { async } from '@firebase/util';
 import { positions } from '@mui/system';
-import { RootStateFriends } from '../store/Friends';
 
 // alarm
 import { push, ref } from "firebase/database";
@@ -180,7 +172,6 @@ export function MakeWishPage() {
             });
           });
           setCartList(conlst);
-          console.log('카트 리스트불러오기 성공',conlst);
         })
         .catch((err) => {
           console.log('카트 리스트불러오기 실패', err);
@@ -196,7 +187,6 @@ export function MakeWishPage() {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
         .then((con: { data: { profileImg: React.SetStateAction<string | undefined>; addr1: React.SetStateAction<string | undefined>; addr2: React.SetStateAction<string | undefined>; zipcode: React.SetStateAction<number | undefined>; username: React.SetStateAction<string | undefined>; }; }) => {
-          console.log('유저정보 불러오기 성공',con.data);
           setUserProfile(con.data.profileImg)
           setUserAddr1(con.data.addr1)
           setUserAddr2(con.data.addr2)
@@ -306,7 +296,7 @@ export function MakeWishPage() {
   const [finished, setFinished] = useState(false);
   const MakeWish = () => {
     const makeWish = async () => {
-      const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';
+      const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';// http://localhost:8081/api/wish/add/
       const gift:{
         giftUrl: string; // test를 위해 추가했습니다.
         productId: number;
@@ -357,7 +347,6 @@ export function MakeWishPage() {
           addr1:userAddr1? userAddr1 :enroll_company.address,
           addr2: addr2,
       }
-      console.log('data', data)
       axios({
         url: API_URL,
         method: 'POST',
@@ -368,12 +357,10 @@ export function MakeWishPage() {
         },
       })
         .then((con: any) => {
-          console.log('위시생성 성공', con, userId);
           setFinished(true);
           // user_friends에 알림보내기
           user_friends.forEach((fri:number) =>{
             pushData(fri)
-            console.log('친구에게 위시생성 알림보냄'+fri)
           })
         })
         .catch((err: any) => {
@@ -410,7 +397,6 @@ export function MakeWishPage() {
     if(userOptions && i in userOptions){
       let delo:string = userOptions[i]
       delOp = delo.split('-')[1]
-      console.log('delOp',delOp)
       // 최종 가격에서 option정보 빼기
     }
     // [i] // 'optionname-optionvalue'
@@ -503,7 +489,6 @@ export function MakeWishPage() {
     setGoAddr1(true)
     setGoAddr2(true)
     setAddr1(enroll_company.address)
-    console.log('주소지 찾기로 입력한 주소', enroll_company.address)
   }, [enroll_company])
 
   const notValid = () => {
@@ -517,7 +502,6 @@ export function MakeWishPage() {
   }
   const ChangeOption = (e:any, i:number)=>{ 
     if(e.target.value){
-      console.log('ininini', e.target.value)
       setUserOptions({...userOptions,[i]:e.target.value})
       const val = e.target.value.split('-')
       setTotalPrice(totalPrice+Number(val[1]))
@@ -658,7 +642,7 @@ export function MakeWishPage() {
                     </div>
                     {wishCart?.map((e, i: number) => {
                       return (
-                        <div className="wish-card-gift wid-100">
+                        <div className="wish-card-gift wid-100" key={`${i}-${Date.now()}`}>
                           <div className='wid-50 disp-flex align-center'>
                             <div onClick={() => delWishGift(e.id, i)}>
                               삭제
@@ -671,14 +655,14 @@ export function MakeWishPage() {
                           <div className="wid-50 disp-flex flex-end">
                             {e.optionTitle &&
                               <div className='padding-r-20'>
-                                <select name={e.optionTitle} onChange={(e)=>ChangeOption(e, i)}>
+                                <select name={e.optionTitle} onChange={(e)=>ChangeOption(e, i)} defaultValue="">
                        
                                   <option value='' selected>{e.optionTitle}</option>
                                   {
                                     e.options.map(opt=>{
                                       let res = opt.split('-')
                                       return(
-                                        <option value={opt}><span className='font-bold'>{res[0]}</span> + {res[1]}원</option>
+                                        <option value={opt} key={opt}><span className='font-bold'>{res[0]}</span> + {res[1]}원</option>
                                       )
                                     })
                                   }
