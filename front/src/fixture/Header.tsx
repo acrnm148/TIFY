@@ -17,6 +17,7 @@ import { DELETE_TOKEN } from '../store/Auth';
 
 import AlarmDropdown from '../components/AlarmDropdown';
 import { useLocation } from 'react-router-dom';
+import Swal from "sweetalert2";
 
 export function Header() {
   const [showWishDetail, setShowWishDetail] = useState<boolean>(false);
@@ -103,7 +104,7 @@ export function Header() {
     const navigate = useNavigate();
 
     const handleLogOut = () => {
-      alert('로그아웃 되셨습니다.');
+      Swal.fire('로그아웃 되셨습니다.');
       // console.log('로그아웃됨!');
       dispatch(DELETE_TOKEN());
       // Cookie에 저장된 Refresh Token 정보를 삭제

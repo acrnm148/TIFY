@@ -17,6 +17,7 @@ import { RootState } from '../store/Auth';
 import axios from 'axios';
 import FirebaseAuth from '../components/FirebaseAuth';
 import { SET_FRIENDS_IDS } from '../store/Friends';
+import Swal from 'sweetalert2';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ export function LoginPage() {
     Login(userEmail, password)
       .then((response) => {
         if (response === '로그인 실패!') {
-          alert('미등록 회원이거나 잘못된 아이디/비밀번호를 입력하셨습니다.');
+          Swal.fire('미등록 회원이거나 잘못된 아이디/비밀번호를 입력하셨습니다.');
         } else {
           // console.log(response);
           // console.log('리프레쉬토큰 가자', response);

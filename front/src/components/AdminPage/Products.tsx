@@ -12,6 +12,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Search } from 'react-bootstrap-icons';
 import {Modal, Form, Collapse, ListGroup} from 'react-bootstrap';
+import Swal from "sweetalert2";
 
 
 
@@ -126,7 +127,7 @@ const Products = () => {
     });
 
     if (!(isAdmin && toLogin)) {
-      alert("관리자 권한이 없습니다.");
+      Swal.fire("관리자 권한이 없습니다.");
       navigate('../login');
     }
   }, [location, navigate]);
