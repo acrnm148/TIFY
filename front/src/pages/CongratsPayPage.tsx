@@ -130,8 +130,23 @@ export function CongratsPayPage() {
       return;
     }
     if(!cardPhone){
-      let res = confirm('연락처를 입력하시면 감사카드를 받을 수 있습니다!')
-      if(res){return}
+      let res = Swal.fire({
+        text: '연락처를 입력하시면 감사카드를 받을 수 있습니다!',
+        icon: 'warning',
+        
+        showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+        confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+        cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+        confirmButtonText: '괜찮아요', // confirm 버튼 텍스트 지정
+        cancelButtonText: '재작성', // cancel 버튼 텍스트 지정
+        
+        reverseButtons: true, // 버튼 순서 거꾸로
+        
+     }).then(res => {
+        // 만약 Promise리턴을 받으면,
+        if (res.isConfirmed) { return
+        }
+     });
     }
     // card from 입력 확인 =>>> 자동완성에 카드문구들어가도록
     // console.log(cardFrom, cardContents, cardPhone)
