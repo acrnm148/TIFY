@@ -9,6 +9,7 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Search } from 'react-bootstrap-icons';
 import {Modal, Form } from 'react-bootstrap';
+import Swal from "sweetalert2";
 
 export interface FaqForm {
 	createdDate: string;
@@ -75,6 +76,7 @@ const Faq = () => {
     //const roleList2: string[]|undefined = localStorage.getItem('roles')?.split(",");
     const isAdmin = roleList.includes('ADMIN'); //|| roleList2?.includes('ADMIN');
     const navigate = useNavigate();
+
   
     useEffect(() => {
       let toLogin = false;
@@ -85,7 +87,7 @@ const Faq = () => {
       });
   
       if (!(isAdmin && toLogin)) {
-        alert("관리자 권한이 없습니다.");
+        Swal.fire("관리자 권한이 없습니다.");
         navigate('../login');
       }
     }, [location, navigate]);

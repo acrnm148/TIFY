@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import '../css/giftHubDetail.styles.css';
 import { GiftItem } from '../components/GiftItem';
 import { useLocation  } from 'react-router-dom';
+import Swal from "sweetalert2";
 const CATEGORY_DATA = [
   { id: 0, name: '전체' },
   { id: 1, name: '뷰티' },
@@ -149,10 +150,10 @@ export function GiftHubDetailPage() {
             },
           })
             .then((con) => {
-              alert('장바구니에 담기 완료');
+              Swal.fire('장바구니에 담기 완료');
             })
             .catch((err) => {
-              alert('장바구니에 이미 담긴 상품입니다.');
+              Swal.fire('장바구니에 이미 담긴 상품입니다.');
               console.log('상품 좋아요 실패', err);
             });
         };

@@ -8,6 +8,7 @@ import { push, ref } from "firebase/database";
 import { db } from '../components/firebase';
 
 import defaultProfile from '../assets/defaultProfile.svg'
+import Swal from "sweetalert2";
 
 // 기존 윈도우에 없는 객체에 접근할 때 에러 발생
 // 임의로 IMP 값이 있다고 정의해주는 부분
@@ -85,7 +86,7 @@ export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:
       
       if (success) {
         // success = true
-        alert(`결제가 완료되었습니다.`);
+        Swal.fire(`결제가 완료되었습니다.`);
         // api/celebrate/ 로 축하요청
         const data = {
           "amount": paying.amount?String(paying.amount):88,
@@ -133,7 +134,7 @@ export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:
             console.log('시도한데이터', data)
           })
       } else {
-        alert(`결제 실패: ${error_msg}`);
+        Swal.fire(`결제 실패: ${error_msg}`);
       }
     } 
 
