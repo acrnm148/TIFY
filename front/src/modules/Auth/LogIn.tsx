@@ -18,8 +18,8 @@ type TokenType = {
 
 export async function Login(id: string, password: string) {
   try {
-    return await axios
-      .post('http://localhost:8081/api/account/login', { //https://i8e208.p.ssafy.io/api/account/login
+    return await axios 
+      .post('https://i8e208.p.ssafy.io/api/account/login', { //http://localhost:8081/api/account/login
         userid: id,
         password,
       })
