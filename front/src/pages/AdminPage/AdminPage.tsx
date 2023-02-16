@@ -1,18 +1,10 @@
-import { BrowserRouter, Route, Routes,useLocation  } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useLocation  } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Auth';
 import { useNavigate } from 'react-router';
 import {useEffect } from "react";
-import PrivateRoute from '../../modules/routes/PrivateRoutes';
-import PublicRoute from '../../modules/routes/PublicRoutes';
-
-import { Header } from '../../fixture/Header';
-import { Footer } from '../../fixture/Footer';
-import { NotFound } from '../../pages/NotFound';
 
 import '../../css/styles.css';
-import { useReducer } from 'react';
-import ScrollTop from '../../interface/scroll';
 import { NavLink } from "react-router-dom";
 
 function Admin() {

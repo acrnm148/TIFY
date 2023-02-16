@@ -1,27 +1,24 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import alert from '../assets/iconAlert.svg';
 import bell from '../assets/alert.svg';
 import anony from '../assets/anony.png';
 
-import { ref, set, push, onValue, child, get, update, remove } from "firebase/database";
+import { ref, push, onValue, child, get, update } from "firebase/database";
 import { db } from "./firebase";
-import { List } from "@mui/material";
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
 import logo from '../assets/tifyLogo.svg';
 import axios from "axios";
 
 import "../css/AlramDropDown.styles.css"
-
 interface Alarm {
     [key: string]: any;
     id: string;
   }
+
 const updateData = (dataid:string,data:Alarm,userId:string) => {
     //data는 email 기준 조회합니다.
     data.state = true;
-    console.log(data);
-    console.log("/test/tify/"+userId+"/"+dataid);
     return update(
         ref(db, "/test/tify/"+userId+"/"+dataid),
         data
@@ -31,12 +28,48 @@ const updateData = (dataid:string,data:Alarm,userId:string) => {
 const AlarmDropdown = () => {
   const [accept, setAccept] = useState<boolean>(false)
   var userId = useSelector((state: RootState) => state.authToken.userId);
-  // if(userEmail) {userEmail = userEmail.replace("@","-").replace(".","-");}
+  const [isNew, setIsNew] = useState<string>(alert)
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
-
   const [showDropdown, setShowDropdown] = useState(false);
+  const mb = ref(db, "/test/tify/"+userId);
+  const [alarmsArray, setAlarmsArray] = useState<Alarm[]>([]);
+
+  const readOne = () => {
+    get(mb)
+      .then(snapshot => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const newAlarmsArray = Object?.keys(data)?.map((key) => {
+          if (data[key].state === false) {
+            console.log('새 알람 발생');
+            setIsNew(bell);
+          }
+          return { ...data[key], id: key } as Alarm;
+        });
+        newAlarmsArray.sort((a, b) => (a.time < b.time ? 1 : -1));
+        setAlarmsArray(newAlarmsArray);
+      } else {
+        console.log("No data available");
+      }
+    })
+      .catch(error => {
+      console.error(error);
+    });
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      readOne()
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [alarmsArray]);
+
+
+
+
+  // view 
   const toggleDropdown = () => {
     setIsNew(alert);
     if (showDropdown){
@@ -47,43 +80,7 @@ const AlarmDropdown = () => {
       })
     }
     setShowDropdown(!showDropdown);
-    console.log(alarmsArray);
     };
-
-  const mb = ref(db, "/test/tify/"+userId);
-  // const mb = ref(db, "/test/tify/");
-
-  var alarmsArray: Alarm[] = [];
-
-  const [isNew, setIsNew] = useState<string>(alert);
-  onValue(mb, (snapshot) => {
-        const data = snapshot.val();
-        alarmsArray = Object?.keys(data)?.map(key => {
-            if (data[key].state === false) {
-                console.log("새 알람 발생");
-            }
-            return { ...data[key], id: key } as Alarm;
-            });
-        alarmsArray.sort((a, b) => (a.time < b.time) ? 1 : -1);
-        // setIsNew(bell);
-        console.log(alarmsArray)
-    });
-
-  const readOne = () => {
-    const dbRef = ref(db);
-    get(child(dbRef, "test/tify/rkdrlgks321-naver-com"))
-      .then(snapshot => {
-      if (snapshot.exists()) {
-        console.log(snapshot.val());
-      } else {
-        console.log("No data available");
-      }``
-    })
-      .catch(error => {
-      console.error(error);
-    });
-  };
-  readOne();
 
   const passedTime = (timeDiff : number) : string => {
     const minute = 60 * 1000;
@@ -115,13 +112,31 @@ const AlarmDropdown = () => {
         onClick={toggleDropdown}
       />
       {showDropdown && (
-        <div className="dropdown-con rounded-lg shadow-xl">
+        <div className="absolute bg-white py-2 rounded-lg shadow-xl"
+                  style={{
+                    backgroundColor:"#FAFAFA",
+                    display: 'flex',
+                    height: '500px',
+                    width: '20vw',
+                    position: 'absolute',
+                    zIndex: '100',
+                    flexDirection : 'column',
+                    overflowY: "auto", //  넘치는거 스크롤
+                    left: "-200px",  /* set to a negative value */
+            }}>
             { alarmsArray.length > 0 ? 
               alarmsArray.map((item) => (
-                <div className="alarm-contents" >
-                  <div className="alarm-contents-left">
-                    <div style={{padding:"5px", paddingTop:"10px"}}>
-                      <img style={{borderRadius: '50%', width: '40px', height: '40px', backgroundColor:"white"}} src={item.profile? item.profile:anony} alt="img"/>
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: '6em',
+                    width: '100%',
+                    position: 'relative',
+                    flexDirection : 'row',
+                    justifyContent: 'spaceBetween'}}
+                    key={item.id}>
+                    <div style={{padding:"5px"}}>
+                      <img style={{borderRadius: '50%', width: '40px', height: '40px',}} src={item.profile? item.profile:anony} alt="img"/>
                     </div>
                     <div style={{}}>
                       <div style={{fontWeight:"bold",paddingTop:"5px"}}>{item.title}</div>
