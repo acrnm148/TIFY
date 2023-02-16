@@ -19,8 +19,6 @@ interface Alarm {
 const updateData = (dataid:string,data:Alarm,userId:string) => {
     //data는 email 기준 조회합니다.
     data.state = true;
-    console.log(data);
-    console.log("/test/tify/"+userId+"/"+dataid);
     return update(
         ref(db, "/test/tify/"+userId+"/"+dataid),
         data
@@ -82,7 +80,6 @@ const AlarmDropdown = () => {
       })
     }
     setShowDropdown(!showDropdown);
-    console.log(alarmsArray);
     };
 
   const passedTime = (timeDiff : number) : string => {
