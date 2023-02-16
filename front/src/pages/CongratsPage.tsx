@@ -11,14 +11,17 @@ export function CongratsPage() {
   // [ TODO] 유저 이름은 어디서 가져와?!?! store에서!??!?
   const [userName, setUserName] = useState('티피');
   const [category, setCategory] = useState('');
-  const [selectGift, setSelectGift] = useState<Gift>();
+  const [selectGift, setSelectGift] = useState<Gift|null>();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [card, setCard] = useState('');
 
-  const [clickedGift, setClickedGift] = useState<number>();
+  const [clickedGift, setClickedGift] = useState<number|null>();
   const [wishGiftList, setWishGiftList] = useState<Gift[]>();
   const [wishUserId, setWishUserId] = useState<number>()
+
+  // 현금축하 giftId
+  const [cashId, setCashId] = useState<number>(-1)
 
   useEffect(() => {
     const API_URL = 'https://i8e208.p.ssafy.io/api/wish/detail/';
@@ -40,8 +43,9 @@ export function CongratsPage() {
         setWishUserId(res.data.user.id)
 
         setWishGiftList(
-          res.data.giftItems.map(
+          res.data.giftItems.reduce(
             (
+              acc: { id: number; img: any; productNum: number; name: string; achieved: number; achieved81: number; price: number; giftId: number; finished: boolean; }[], 
               item: {
                 successYN: string;
                 giftname: string;
@@ -54,25 +58,67 @@ export function CongratsPage() {
               },
               i: number,
             ) => {
-              const pricevat =
-                Number(item.purePrice) + Number(item.purePrice) * 0.05;
-              const achieved = (Number(item.gathered) / pricevat) * 100;
-              // successYN 이 Y이면 종료
-              let fin = item.successYN==='Y'? true: false
-              return {
-                id: i,
-                img: item.giftImgUrl,
-                productNum: item.productNum,
-                name: item.giftname,
-                achieved: Math.round(achieved),
-                achieved81: Math.round(achieved * 0.81),
-                price: Math.round(pricevat),
-                giftId: item.id,
-                finished: fin,
-              };
-            },
-          ),
+                if(item.giftname == '현금'){
+                  setCashId(item.id)
+                  console.log('현금id', cashId)
+                } else{
+                  const pricevat =
+                    Number(item.purePrice) + Number(item.purePrice) * 0.05;
+                  const achieved = (Number(item.gathered) / pricevat) * 100;
+                  // successYN 이 Y이면 종료
+                  let fin = item.successYN==='Y'? true: false
+                  acc.push({
+                    id: i,
+                    img: item.giftImgUrl,
+                    productNum: item.productNum,
+                    name: item.giftname,
+                    achieved: Math.round(achieved),
+                    achieved81: Math.round(achieved * 0.81),
+                    price: Math.round(pricevat),
+                    giftId: item.id,
+                    finished: fin,
+                  })
+                }
+                return acc
+            },[])
         );
+
+
+
+        // setWishGiftList(
+        //   res.data.giftItems.map(
+        //     (
+        //       item: {
+        //         successYN: string;
+        //         giftname: string;
+        //         giftImgUrl: any;
+        //         productNum: number;
+        //         gathered: number;
+        //         purePrice: number;
+        //         id: number;
+        //         finished : boolean;
+        //       },
+        //       i: number,
+        //     ) => {
+        //         const pricevat =
+        //           Number(item.purePrice) + Number(item.purePrice) * 0.05;
+        //         const achieved = (Number(item.gathered) / pricevat) * 100;
+        //         // successYN 이 Y이면 종료
+        //         let fin = item.successYN==='Y'? true: false
+        //         return {
+        //           id: i,
+        //           img: item.giftImgUrl,
+        //           productNum: item.productNum,
+        //           name: item.giftname,
+        //           achieved: Math.round(achieved),
+        //           achieved81: Math.round(achieved * 0.81),
+        //           price: Math.round(pricevat),
+        //           giftId: item.id,
+        //           finished: fin,
+        //         };
+        //     },
+        //   ),
+        // );
       })
       .catch((err: any) => {
         console.log('위시 상세정보 어디감', err);
@@ -96,11 +142,15 @@ export function CongratsPage() {
     );
   };
   const giftClicked = (i: number) => {
-    if(wishGiftList){
+    if(clickedGift == i){
+      setClickedGift(null)
+      setSelectGift(null)
+    }
+    else if(wishGiftList){
       setSelectGift({...wishGiftList[i]});
       setClickedGift(i);
-      console.log(clickedGift + 'clicked');
     }
+
   };
   const WishGiftListCompo = () => {
     return (
@@ -143,6 +193,7 @@ export function CongratsPage() {
     alert('상품을 선택해주세요.')
   }
   const WishCongratsBtns = () => {
+    const wishInfo = { WishCardCover: card, WishCardContent:content, WishCardTitle:title}
     return (
       <div className="wish-congrats-btns">
         {
@@ -150,7 +201,7 @@ export function CongratsPage() {
           <NavLink
             className="button color"
             to={`/congrats/${wishId}/giftcard`}
-            state={{ selectGift: selectGift, wishUserId: wishUserId}}
+            state={{ selectGift: selectGift, wishUserId: wishUserId, userName:userName}}
           >
             선택한 선물로 축하하기 →
           </NavLink>
@@ -158,7 +209,11 @@ export function CongratsPage() {
           <div className="button color" onClick={NoPresent}>선택한 선물로 축하하기 →</div>
 
         }
-        <NavLink className="button gray" to={`/congrats/${wishId}/giftpay`}>
+        <NavLink 
+          className="button gray" 
+          to={`/congrats/${wishId}/giftpay`}
+          state={{ wishInfo: wishInfo, wishUserId: wishUserId, userName:userName, cashId:cashId}}
+        >
           축하금으로 보내기 →
         </NavLink>
       </div>

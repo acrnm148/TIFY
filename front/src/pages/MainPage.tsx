@@ -58,7 +58,7 @@ export function MainPage() {
       //   </div>
       // </div>
   return (
-    <div style={{}}>
+    <div>
       <ScrollContainer>
       <ScrollPage style={{height : "auto"}}>
            <Animator animation={FadeUp} >
@@ -80,10 +80,11 @@ export function MainPage() {
 
           {/* </Animator> */}
         </ScrollPage>
+        <div style={{height:"5px"}}></div>
         <ScrollPage style={{width:"100%", paddingLeft:"20%",paddingRight:"20%", height:"1218px"}}>
           <div className='messages-con' style={{width:"100%" }}>
 
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", fontSize: "40px",height: "auto", flexDirection:'column',width:"100%"}} >
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", fontSize: "40px", flexDirection:'column',width:"100%"}} >
                 <Animator className="gomin" animation={MoveIn(-500, 0)}>
                   <div>이번에는 무슨 선물해야 하지?</div>
                 </Animator>
@@ -92,7 +93,7 @@ export function MainPage() {
                 </Animator>
 
             </div>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", fontSize: "40px",width:"100%",height: "auto", flexDirection:'column'}} >
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", fontSize: "40px",width:"100%", flexDirection:'column'}} >
                 <Animator className="gomin gomin-right" animation={MoveIn(500, 0)}>
                   <div>기프티콘 선물은 이제 그만..</div>
                 </Animator>
@@ -102,6 +103,7 @@ export function MainPage() {
             </div>
           </div>
         </ScrollPage>
+        <div style={{height:"5px"}}></div>
         <ScrollPage 
           style={{
             display: "flex",

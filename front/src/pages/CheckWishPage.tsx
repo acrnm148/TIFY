@@ -18,6 +18,9 @@ import '../css/checkWishPage.styles.css';
 import gift from '../assets/iconGift.svg';
 import { Bool, List } from 'reselect/es/types';
 import { Player } from '@lottiefiles/react-lottie-player';
+import GiftBoxAnimation from '../components/GiftBoxAnimation';
+import TapNameKor from '../components/TapNameKor';
+
 
 export function CheckWishPage() {
   const [userId, setUserId] = useState(
@@ -27,8 +30,7 @@ export function CheckWishPage() {
   const [wishGoing, setWishGoing] = useState<Boolean>(true);
   const [conList, setConList] = useState<Array<CheckWish>>();
   const [goOpenList, setGoOpenList] = useState<Array<CheckWish>>();
-  const [setLsts, setSetLsts] = useState<Boolean>(false);
-  const [showIng, setShowIng] = useState<Boolean>(false);
+  const [showIng, setShowIng] = useState<Boolean>(true);
   const accessToken = useSelector(
     (state: RootState) => state.authToken.accessToken,
   );
@@ -173,102 +175,95 @@ export function CheckWishPage() {
       });
   }, []);
 
-  const CongratCard = (props: { from: string; to: string }) => {
+
+  const CongratCard = (props: { from: string; to: string, open: boolean}) => {
     return (
-      <div className="congrat-card-cover">
-        <div className="congrat-card">
-          <div className="congrat-card-from">
-            <p>from : {props.from}</p>
+        props.open===true
+        ?
+        <div className='envelope-con'>
+          <div className='envelope-c'>
+            <div className="valentines-day">
+              <div className="envelope"></div>
+              <div className="heart"></div>
+              <div className="open-card-txt">from {props.from} </div>
+              <div className="front"></div>
+              <div className="text2">- hover over the envelope - </div>
+            </div>
           </div>
-          <div className="congrat-card-to">
-            <p>to : {props.to}</p>
+      </div>
+        :
+        <div className="congrat-card-cover">
+          <div className="congrat-card">
+            <img src="https://user-images.githubusercontent.com/87971876/218955541-3a060405-5cd3-4b19-a1f9-3496d99b5dba.png" alt="닫힌 편지" />
           </div>
         </div>
-      </div>
     );
   };
-  // const CongratsCards = (props: {
-  //   fromList: any[];
-  //   wishId: string;
-  //   userName: string;
-  // }) => {
-  //   console.log(props.fromList, 'props.fromList');
-  //   return (
-  //     <div className="congrat-card-list">
-  //       {props.fromList &&
-  //         props.fromList.map((from: { id: any; from: string }, i: number) => (
-  //           <NavLink
-  //             to={`/thanks/${props.wishId}/${from.id}`}
-  //             state={props.fromList}
-  //           >
-  //             <CongratCard key={i} from={from.from} to={props.userName} />
-  //           </NavLink>
-  //         ))}
-  //     </div>
-  //   );
-  // };
 
-  // 캐러셀 부분
-  const CongratsCards = (props: {
-    fromList: any[];
-    wishId: string;
-    userName: string;
-  }) => {
-    // 옵션
-    // console.log(friendWishList);
-    var settings = {
-      dots: true,
-      infinite: false,
-      speed: 500,
-      slidesToShow: 4,
-      slidesToScroll: 4,
-      initialSlide: 0,
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 3,
-            slidesToScroll: 3,
-            infinite: true,
-            dots: true,
-            arrows: true,
-          },
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 2,
-            initialSlide: 2,
-          },
-        },
-        {
-          breakpoint: 480,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-          },
-        },
-      ],
-    };
 
-    return (
-      <div className="ongoing-wishes">
-        <Slider {...settings} className="congrat-card-list">
-          {props.fromList &&
-            // 캐러셀 한 페이지에 8개씩 담기도록 반복문 수정..!
-            props.fromList.map((from: { id: any; from: string }, i: number) => (
-              <NavLink
-                to={`/thanks/${props.wishId}/${from.id}`}
-                state={props.fromList}
-              >
-                <CongratCard key={i} from={from.from} to={props.userName} />
-              </NavLink>
-            ))}
-        </Slider>
-      </div>
-    );
+// 캐러셀 부분
+const CongratsCards = (props: {
+  fromList: any[];
+  wishId: string;
+  userName: string;
+}) => {
+  // 옵션
+  // console.log(friendWishList);
+  var settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+          arrows: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
+
+  return (
+    <div className={showIng?'ongoing-wishes':"open-wishes"}>
+      <Slider {...settings} className="congrat-card-list">
+      {props.fromList &&
+          props.fromList.map((from: { id: any; from: string }, i: number) => (
+            <NavLink
+              to={`/thanks/${props.wishId}/${from.id}`}
+              state={props.fromList}
+              style={{height:"100%"}}
+            >
+              <CongratCard key={i} from={from.from} to={props.userName} open={!showIng} />
+            </NavLink>
+          )
+          )}
+      </Slider>
+    </div>
+  );
+};
+
   
   const handleClick = () => {
     setIsPlaying(!isPlaying);
@@ -287,7 +282,8 @@ export function CheckWishPage() {
       <>
         {goOpenList?.map((lst: CheckWish, i: number) => {
           return (
-            <div className="wish-container">
+            <div className={showIng?'wish-container':'open-wish-container'}>
+              <p className='finished-wish-text'><h1>{lst.userName}님의 완료된 위시 {i+1} </h1><span>"{lst.title}"</span></p>
               <CongratsCards
                 fromList={lst.fromList}
                 wishId={lst.wishId}
@@ -319,10 +315,8 @@ export function CheckWishPage() {
   const WishOnGoing = ({ conList }: { conList: CheckWish[] | undefined }) => {
     return (
       <>
-        {/* <button onClick={CheckConList}>list확인용</button> */}
         {conList &&
           conList.map((lst: CheckWish, i: number) => {
-            // console.log('이게뭐야 왜 두개나와',conList)
             return (
               <div className="wish-container">
                 <CongratsCards
@@ -344,19 +338,13 @@ export function CheckWishPage() {
                     </p>
                     <div className="slider-and-label-container">
                       <div className="slider-and-label">
-                        <span>진행도</span>
+                        <span className='진행도'>{Math.round(lst.percent)}%</span>
                         <ReactSlider
                           className="horizontal-slider"
                           defaultValue={[lst.percent]}
                           disabled={true}
-                          thumbClassName="example-thumb"
+                          thumbClassName="custom-thumb"
                           trackClassName="example-track"
-                          renderTrack={(
-                            props: JSX.IntrinsicAttributes &
-                              ClassAttributes<HTMLDivElement> &
-                              HTMLAttributes<HTMLDivElement>,
-                            state: any,
-                          ) => <div {...props} />} //custom track
                         />
                       </div>
                     </div>
@@ -380,7 +368,7 @@ export function CheckWishPage() {
           </button>
           <button
             onClick={() => setShowIng(true)}
-            className={`show-toggle-btn ${showIng && 'show-toggle-selected'}`}
+            className={`show-toggle-btn ${showIng && 'show-toggle-selected-pink'}`}
           >
             진행중
           </button>
@@ -407,11 +395,11 @@ export function CheckWishPage() {
   };
   return (
     <>
-      <div className="page-name-block">
-        {/* <h1>userid:{userId}</h1>
-          <button className="temp-button" onClick={()=>(setIsWish(!isWish))}>{isWish?'위시있음':'위시없음'}</button> */}
-        <div className={isWish ? 'page-name check-wish' : ''} />
-      </div>
+      <TapNameKor
+        title="Check Your Wish"
+        // content={state.selectGift.name}
+        content="만든 위시를 확인해보세요."
+      ></TapNameKor>
       <div className="check-wish-container">
         {isWish ? <IsWishLayout /> : <EmptyWishLayout />}
       </div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import alert from '../assets/iconAlert.svg';
-import bell from '../assets/bell.png';
+import bell from '../assets/alert.svg';
 import anony from '../assets/anony.png';
 
 import { ref, set, push, onValue, child, get, update, remove } from "firebase/database";
@@ -61,11 +61,11 @@ const AlarmDropdown = () => {
         alarmsArray = Object?.keys(data)?.map(key => {
             if (data[key].state === false) {
                 console.log("새 알람 발생");
-                setIsNew(bell);
             }
             return { ...data[key], id: key } as Alarm;
             });
         alarmsArray.sort((a, b) => (a.time < b.time) ? 1 : -1);
+        // setIsNew(bell);
         console.log(alarmsArray)
     });
 
@@ -115,36 +115,20 @@ const AlarmDropdown = () => {
         onClick={toggleDropdown}
       />
       {showDropdown && (
-        <div className="absolute bg-white py-2 rounded-lg shadow-xl"
-                  style={{
-                    backgroundColor:"#FAFAFA",
-                    display: 'flex',
-                    height: '500px',
-                    width: '20vw',
-                    position: 'absolute',
-                    zIndex: '100',
-                    flexDirection : 'column',
-                    // overflowY: "auto",
-                    left: "-200px",  /* set to a negative value */
-            }}>
+        <div className="dropdown-con rounded-lg shadow-xl">
             { alarmsArray.length > 0 ? 
               alarmsArray.map((item) => (
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    height: '6em',
-                    width: '100%',
-                    position: 'relative',
-                    flexDirection : 'row',
-                    justifyContent: 'spaceBetween'}}>
-                    <div style={{padding:"5px"}}>
-                      <img style={{borderRadius: '50%', width: '40px', height: '40px',}} src={item.profile? item.profile:anony} alt="img"/>
+                <div className="alarm-contents" >
+                  <div className="alarm-contents-left">
+                    <div style={{padding:"5px", paddingTop:"10px"}}>
+                      <img style={{borderRadius: '50%', width: '40px', height: '40px', backgroundColor:"white"}} src={item.profile? item.profile:anony} alt="img"/>
                     </div>
                     <div style={{}}>
-                      <div style={{fontWeight:"bold"}}>{item.title}</div>
-                      <div>{item.text} <div style={{ fontSize:'5px', color: item.state ? "lightgray" : "red"}}>{ passedTime(Date.now() - item.time)}</div></div>
+                      <div style={{fontWeight:"bold",paddingTop:"5px"}}>{item.title}</div>
+                      <div>{item.text} <div style={{ padding:"5px", fontSize:'5px', color: item.state ? "lightgray" : "red"}}>{ passedTime(Date.now() - item.time)}</div></div>
                     </div>
-                    <div style={{minWidth:"100px", display:"felx"}}>
+                  </div>
+                    <div style={{minWidth:"36px", display:"felx"}}>
                       {item.friend&&
                         item.friend == 'req' &&
                           // <div style={{ fontSize:'5px', width:"50px"}}>.</div>
