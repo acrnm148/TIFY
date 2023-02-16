@@ -98,7 +98,7 @@ export function GiftHubDetailPage() {
   }, [data]);
 
   const checkHeart = async() => {
-    const API_URL = `http://localhost:8081/api/cart/`; //https://i8e208.p.ssafy.io/api/cart/
+    const API_URL = `https://i8e208.p.ssafy.io/api/cart/`;
     const isExist = await axios({
       method: 'post',
       url: API_URL+`check-already`,
