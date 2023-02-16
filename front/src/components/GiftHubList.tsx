@@ -1,7 +1,5 @@
-import { GiftItem } from './GiftItem';
 import '../css/giftHubList.styles.css';
-import type { Gift, GiftProps } from '../interface/interface';
-import { NavLink } from 'react-router-dom';
+import type { GiftProps } from '../interface/interface';
 
 export function GiftHubList({ giftList }: GiftProps) {
   return (
