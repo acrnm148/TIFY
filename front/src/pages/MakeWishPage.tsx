@@ -115,7 +115,7 @@ export function MakeWishPage() {
   const hours = String(date.getFullYear()).padStart(2, '0');
   const minutes = String(date.getMonth()).padStart(2, '0');
   const seconds = String(date.getDay()).padStart(2, '0');
-  const startDate = `${hours}-${minutes}-${seconds}`;
+  const startDate = dateFomat(range[0].startDate);
   const endDate = dateFomat(range[0].endDate);
 
   const [imgBase64, setImgBase64] = useState(''); // 파일 base64
