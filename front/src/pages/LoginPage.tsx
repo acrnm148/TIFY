@@ -1,33 +1,29 @@
 import '../css/login.styles.css';
-import iconGoogle from '../assets/iconGoogle.svg';
 import iconKakaoLogo from '../assets/iconKakaoLogo.svg';
 import iconNaverLogo from '../assets/iconNaverLogo.png';
 
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
-import { useForm } from 'react-hook-form';
 
 import { Login } from '../modules/Auth/LogIn';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { setRefreshToken } from '../modules/Auth/RefreshtokenLocal';
 import { SET_TOKEN, SET_USERID, SET_USEREMAIL, SET_ROLELIST } from '../store/Auth';
 import { Outlet } from 'react-router-dom';
-import { LogOut } from '../modules/Auth/LogOut';
-import { SignOut } from '../modules/Auth/SignOut';
 
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/Auth';
 
 import axios from 'axios';
 import FirebaseAuth from '../components/FirebaseAuth';
-import { RootStateFriends, SET_FRIENDS_IDS } from '../store/Friends';
+import { SET_FRIENDS_IDS } from '../store/Friends';
 
 export function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [userEmail, setUserEmail] = useState<any>();
-  const [password, setPassword] = useState<any>();
+  const [userEmail, setUserEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   // const userId = useSelector((state: RootState) => state.authToken.userId);
   // console.log(userId);
   // console.log('요것이 userId');
@@ -45,17 +41,18 @@ export function LoginPage() {
         if (response === '로그인 실패!') {
           alert('미등록 회원이거나 잘못된 아이디/비밀번호를 입력하셨습니다.');
         } else {
-          console.log(response);
-          console.log('리프레쉬토큰 가자', response);
+          // console.log(response);
+          // console.log('리프레쉬토큰 가자', response);
           setRefreshToken(response.refresh_token);
           dispatch(SET_TOKEN(response.access_token));
           dispatch(SET_USERID(response.user_id));
           dispatch(SET_USEREMAIL(response.user_email));
-          dispatch(SET_ROLELIST(response.user_roles))
-          console.log("------------");
-          console.log(response.user_roles);
-          console.log(response.user_email);
-          console.log('로그인 성공!!');
+          dispatch(SET_ROLELIST(response.user_roles));
+          // localStorage.setItem('roles',response.user_roles);
+          // console.log("------------");
+          // console.log(response.user_roles);
+          // console.log(response.user_email);
+          // console.log('로그인 성공!!');
 
           //로그인 성공시 백으로 firebase customized token 요청
           //받아오면 알아서 쿠키에 refresh_token 으로 저장됨.
@@ -64,8 +61,8 @@ export function LoginPage() {
               pk: userId,
             })
             .then((res) => {
-              console.log(res.data);
-              console.log('성공!');
+              // console.log(res.data);
+              // console.log('성공!');
               FirebaseAuth(res.data);
             })
             .catch((err) => {

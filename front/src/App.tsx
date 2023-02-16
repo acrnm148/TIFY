@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
 import PrivateRoute from './modules/routes/PrivateRoutes';
 import PublicRoute from './modules/routes/PublicRoutes';
 
@@ -11,7 +10,6 @@ import { ThanksPage } from './pages/ThanksPage';
 import FriendsPage from './pages/FriendsPage';
 import { MyPage } from './pages/mypage/MyPage';
 import { LikePage } from './pages/LikePage';
-import { AlarmPage } from './pages/AlarmPage';
 import { FaqPage } from './pages/FaqPage';
 import { AskPage } from './pages/AskPage';
 
@@ -41,17 +39,13 @@ import { NotFound } from './pages/NotFound';
 import PayingService from './components/PayingService';
 import PayResult from './components/PayResult';
 import WishSuccess from './components/WishSuccess';
-import Admin from './pages/AdminPage/AdminPage';
 
 import './css/styles.css';
 import { GiftHubDetailPage } from './pages/GiftHubDetailPage';
 
-import { useReducer } from 'react';
-import { Login } from './modules/Auth/LogIn';
-
 import ScrollTop from '../src/interface/scroll';
 
-import { AdminPage } from './pages/AdminPage';
+import Admin from './pages/AdminPage/AdminPage';
 import Users from './components/AdminPage/Users';
 import Wishes from './components/AdminPage/Wishes';
 import UserInfoEdit from './components/AdminPage/UserInfoEdit';
@@ -75,6 +69,11 @@ import Order from './components/AdminPage/Order';
 // }
 
 function App() {
+  // useEffect(() => {
+  //   localStorage.removeItem('roles'); 
+  //   localStorage.removeItem('firebase:host:tify-noti-default-rtdb.firebaseio.com');
+  // }, []);
+
   // const [state, dispatch] = useReducer(reducer, initialState);
   // const { authenticated } = state;
   // console.log(state, '-------------------------');
