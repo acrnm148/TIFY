@@ -25,9 +25,9 @@ const GiftRecommend = (props:{
         <div className="gift-recommend-list">
                 <p>{props.wish}위시에 가장 많이 주고받은 선물</p>
                 <div className="gift-only-list" style={{display:"flex"}}>
-                    {props.giftList.slice(props.num, props.num+3).map((gift: { name: string; price: number; repImg: string; id: number; likeCount:number;}, i:number) => (
-                        <GiftItem key={i} gift={gift} />
-                    ))}
+                {props.giftList?.slice(props.num, props.num+3)?.map(( gift:any, i:number) => (
+                    <GiftItem key={i} gift={gift} />
+                ))}
                 </div>
             </div>
     )

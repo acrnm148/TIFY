@@ -26,12 +26,12 @@ export function MainPage() {
 
   useEffect(() => {
     async function fetchdata() {
-      const API_URL = 'https://i8e208.p.ssafy.io/api/gifthub/main';
+      const API_URL = 'https://i8e208.p.ssafy.io/api/gifthub/main';//http://localhost:8081/api/gifthub/main
       axios.get(API_URL
         ).then((r) => { 
-          console.log(r)
           let copy:Array<any> = [...r.data];
           setGiftList(copy)
+          console.log(r);
         }).catch((r) => { console.log(r)}
         )}
     fetchdata();

@@ -35,7 +35,7 @@ export function GiftHubPage() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [category, setCategory] = useState<number | null>();
   let [giftList, setGiftList] = useState<Array<any>>([]);
-  const [sortingCode, setSortingCode] = useState<string | number | null>();
+  const [sortingCode, setSortingCode] = useState<string | number | null>(0);
   // Slider 설정
   const [min, max] = [0, 2000000];
   const [priceRange, setPriceRange] = useState([min, max]);
@@ -343,6 +343,7 @@ export function GiftHubPage() {
                   onChange={handleFilterChange}
                   label="인기순"
                   className="gift-select-sort"
+                  value="" // prop을 기본적으로 받는 요소라 안넣으면 오류메시지 뜸
                 >
                   <MenuItem value="">
                     <em>선택안함</em>
