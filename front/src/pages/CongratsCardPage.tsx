@@ -209,7 +209,7 @@ function GogoPay(){
     userId: userId?userId:0,
   };
   // Paying 자료형 >> 결제창으로 넘어갈때 결제정보 인자로 넘기기
-  PayingPort.onClickPayment(congratsInfo, state.selectGift.name, state.wishUserId, wishId);
+  PayingPort.onClickPayment(congratsInfo, state.selectGift.name, state.wishUserId, Number(wishId));
 }
 
 const PayInfo = () =>{
