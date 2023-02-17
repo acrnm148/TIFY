@@ -1,12 +1,29 @@
 export interface Gift {
   name: string;
   price: number;
-  giftId: number;
+  // giftId: number;
   repImg: string;
   id: number;
-  optionTitle: string;
-  options: string[];
+  options: Array<Option>;
+  userOption: string;
+  selectOptions : Array<any>;
 }
+
+export interface Option {
+  id: number;
+  title: string;
+  idx: number;
+  details : Array<Detail>;
+}
+
+export interface Detail {
+  id?: number;
+  content?: string;
+  idx?: number;
+  value : number;
+}
+
+
 export interface GiftList {
   product_id: number;
   category_id: number;
