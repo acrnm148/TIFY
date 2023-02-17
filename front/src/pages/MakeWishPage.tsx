@@ -263,7 +263,7 @@ export function MakeWishPage() {
 
   const pushUrl = async (i: string) => {
     if (i.length > 10) {
-      let data = await axios.post("http://localhost:8081/api/new/crawler",{giftUrl:i}).then((res) => {console.log(res); return res.data});
+      let data = await axios.post("https://i8e208.p.ssafy.io/api/new/crawler",{giftUrl:i}).then((res) => {console.log(res); return res.data});
       data["price"] = data.purePrice;
       data["name"] = data.giftname;
       data["repImg"] = data.giftImgUrl;
@@ -372,7 +372,7 @@ export function MakeWishPage() {
   const [finished, setFinished] = useState(false);
   const MakeWish = () => {
     const makeWish = async () => {
-      const API_URL = 'http://localhost:8081/api/wish/add/';//https://i8e208.p.ssafy.io/
+      const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';//https://i8e208.p.ssafy.io/
       const gift: {
         giftUrl: string; // test를 위해 추가했습니다.
         productId: number;
