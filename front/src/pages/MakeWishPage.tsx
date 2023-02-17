@@ -536,9 +536,9 @@ export function MakeWishPage() {
             <div className="wish-card-box">
               <div
                 className="wish-card fin-wcd wish-card-cover"
-                style={{ backgroundImage: `url(${imgUrlS3 ? imgUrlS3 : ''})` }}
+                style={{ width:"100%",backgroundImage: `url(${imgUrlS3 ? imgUrlS3 : ''})` }}
               />
-              <div className="wish-card fin-wcd wish-card-content">
+              <div className="wish-card fin-wcd wish-card-content" style={{ width:"100%"}}>
                 <h1>{title}</h1>
                 <div>{content?.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n')}</div>
               </div>
