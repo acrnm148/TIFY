@@ -287,7 +287,10 @@ const WishOpened = ({
   goOpenList,
 }: {
   goOpenList: CheckWish[] | undefined;
-}) => {
+}) => {{
+  if (!goOpenList || goOpenList.length === 0) {
+    return <div className="wish-container open-wish-container finished-wish-text">완료된 위시가 없습니다</div>;
+  }}
   return (
     <>
       {goOpenList?.map((lst: CheckWish, i: number) => {
@@ -304,7 +307,6 @@ return (
         justifyContent: 'center',
         alignItems: 'center',
         height: '688px',
-        backgroundColor: '#ffdbbb',
         width: '100%',
 
       }}
