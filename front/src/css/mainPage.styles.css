@@ -182,3 +182,128 @@
 .gift-recommend-list .gift-recommend-list{
   margin: 0;
 }
+.bubble-con{
+  display: flex;
+  justify-content: center;
+  font-size: 30px;
+  height: auto;
+  flex-direction: column;
+  width: 100%;
+}
+.present{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.present img{
+  width: 20%;
+}
+/* .gift-con-wrap{
+  height: 100px;
+} */
+.no-gomin{
+  font-size: 32px;
+}
+@media (min-width: 1025px) {
+  .present{
+    display: none;
+  }
+}
+@media (max-width: 1024px) {
+  .present{
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  /* .bubble-con{
+    width: auto;
+  } */
+  .main-components{
+    flex-wrap: wrap;
+  }
+  .messages-con{
+    padding: 0;
+  }
+  .gomin{
+    width: auto;
+    font-size: 16px;
+  }
+  .make-your-wish{
+    flex-direction: column;
+  }
+  .wish-preview{
+    width: 50%;
+    /* height: 100%; */
+    margin-left: 0;
+  }
+  .myw-text{
+    font-weight: 700;
+    font-size: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .moamoa{
+    width: 90%;
+  }
+  .recommends .gift-recommend-list>div>div>a>div {
+    width: 140px;
+  }
+  .recommends .gift-recommend-list .gift-image > img {
+    width: 100%;
+    height: auto;
+}
+  .gift-item-card{
+    padding: 10px;
+  }
+  .gift-only-list{
+    flex-wrap: nowrap;
+    overflow: scroll;
+  }
+  .gift-only-list{
+    -ms-overflow-style: none;
+ }
+ .gift-only-list::-webkit-scrollbar{
+   display:none;
+ }
+
+  .recommends{
+    height: auto;
+  }
+  .no-gomin >span{
+    font-size: 22.2px;
+  }
+  /* .gift-con-name-con{
+    height: 2em;
+  } */
+  .gift-con-name{
+    text-overflow: ellipsis;
+    line-height: 1;
+    /* height: 100%; */
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100px;
+    height: 20px;
+  }
+  .present-mini{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    
+  }
+  .present-mini img{
+    max-width: 5em;
+  }
+  .go-gifthub{
+    border: 2px solid #99c5fb92;
+    padding: 5px;
+    border-radius: 8px;
+    background-color: #99c5fb92;
+    width: 10em;
+    text-align: center;
+  }
+
+  .no-gomin{
+    font-size: 22px;
+  }
+}

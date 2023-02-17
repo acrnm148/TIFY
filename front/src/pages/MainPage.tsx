@@ -8,7 +8,7 @@ import {
 import SearchBar from '../components/SearchBar';
 import '../css/mainPage.styles.css';
 import '../css/styles.css';
-
+import present from '../assets/miri/miri-9.png'
 // scroll animation
 import {
   Animator,
@@ -82,12 +82,16 @@ export function MainPage() {
               }}
             >
               <img src={phone} className="phone-image" alt="phone image" />
-              <img src={마음을모아} alt="" />
+              <img  className="moamoa" src={마음을모아} alt="" />
+            </div>
+            <div className='present'>
+              <img src={present} alt="" />
             </div>
           </Animator>
         </ScrollPage>
         <ScrollPage>
           <div
+            className='recommends'
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -114,9 +118,9 @@ export function MainPage() {
             </Animator>
             <Animator  animation={MoveIn(0, 200)}>
               <NavLink to={'/gifthub'} className="main-navlink">
-                <h1 style={{ fontSize: '30px' }}>
-                  GiftHub<span style={{ fontSize: '20px' }}>더보기🎁</span>
-                </h1>
+                <div className='go-gifthub' style={{ fontSize: '30px' }}>
+                  GiftHub<span style={{ fontSize: '20px' }}>더보기</span>
+                </div>
               </NavLink>
             </Animator>
 
@@ -134,14 +138,9 @@ export function MainPage() {
             }}
           >
             <div
+              className='bubble-con'
               style={{
-                display: 'flex',
-                justifyContent: 'center',
                 alignItems: 'flex-start',
-                fontSize: '30px',
-                height: 'auto',
-                flexDirection: 'column',
-                width: '100%',
               }}
             >
               <Animator className="gomin" animation={MoveIn(-600, 0)}>
@@ -153,13 +152,7 @@ export function MainPage() {
             </div>
             <div
               style={{
-                display: 'flex',
-                justifyContent: 'center',
                 alignItems: 'flex-end',
-                fontSize: '30px',
-                width: '100%',
-                height: 'auto',
-                flexDirection: 'column',
               }}
             >
               <Animator
@@ -174,6 +167,9 @@ export function MainPage() {
               >
                 <div>내가 갖고싶은걸 어떻게 말하지?</div>
               </Animator>
+              <div className='present-mini'>
+                <img src={present} alt="" />
+              </div>
             </div>
           </div>
         </ScrollPage>
@@ -197,14 +193,15 @@ export function MainPage() {
                 alignItems: 'center',
               }}
             >
-              <span style={{ fontSize: '32px' }}>TIFY와 함께하세요</span>
+              <span>TIFY와 함께하세요</span>
               <img src={tifyou} alt="" />
             </div>
             </Animator>
           </div>
         </ScrollPage>
-        <ScrollPage>
+        {/* <ScrollPage>
           <div
+           className='last-page'
             style={{ height: '1000px', display: 'flex', alignItems: 'center' }}
           >
             <div
@@ -234,7 +231,7 @@ export function MainPage() {
               </Animator>
             </div>
           </div>
-        </ScrollPage>
+        </ScrollPage> */}
       </ScrollContainer>
       <div className="to-top">
         <img src={TO_TOP_IMG} onClick={MoveToTop} />
@@ -243,67 +240,3 @@ export function MainPage() {
   );
 }
 
-
-// <ScrollContainer>
-//       <ScrollPage style={{height : "auto"}}>
-//           <Animator animation={FadeUp} >
-//           <div className="main-components" style={{display: "flex", justifyContent: "center", alignItems: "center" }} >
-//                 <img src={phone} className="phone-image" alt="phone image" />
-//                 <img src={마음을모아} alt="" />
-//             </div>
-//           </Animator>
-//         </ScrollPage>
-//         <ScrollPage style={{display: "flex", flexDirection: "column",justifyContent: "center", alignItems:"center", height:"auto"}}>
-//             <Animator animation={MoveIn(-50, 0)} >
-//               <GiftRecommend giftList={giftList} wish='' num = {Math.random()  * (giftList.length-3)}/>
-//             </Animator>
-//             <Animator animation={MoveIn(0, 200)} >
-//               <GiftRecommend giftList={giftList} wish='' num = {Math.random()  * (giftList.length-3)}/>
-//             </Animator>
-//             <NavLink to={'/gifthub'} className="main-navlink"><h1 style={{fontSize:"40px"}}>GiftHub<span style={{ fontSize: "20px" }}>더보기🎁</span></h1></NavLink>
-
-//         </ScrollPage>
-//         <ScrollPage>
-//             <div style={{fontSize: "40px", display: "flex", flexDirection:"column",justifyContent: "center", alignItems: "center", height: "100%" }} >
-//                   <Animator className="gomin" animation={MoveIn(-500, -200)}><div>“이번에는 무슨 선물해야 하지?” 👋🏻</div></Animator>
-//                   <Animator className="gomin gomin-right" animation={MoveIn(500, 200)}><div>“뭘 좋아할 지 모르겠네...” 🙋🏻‍♀️</div></Animator>
-//             </div>
-//         </ScrollPage>
-//         {/* <ScrollPage>
-//           <Animator animation={FadeUp}>
-//             <span style={{ fontSize: "40px" }}>I'm FadeUp ⛅️</span>
-//           </Animator>
-//           <div className="no-gomin" style={{fontSize: "40px", display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }} >
-//             <Animator animation={Fade()} className="no-gomin">
-//               <div className="no-gomin" style={{fontSize: "40px", display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }} >
-//                 <span style={{ fontSize: "40px" }}>티피와 함께💛</span>
-//                 <img src={tifyou} alt="" />
-//               </div>
-//             </Animator>
-//           </div>
-//         </ScrollPage> */}
-//         <ScrollPage>
-//           <div >
-//             <Animator animation={batch(FadeIn(0, -200), Sticky())} style={{ backgroundColor:"#FF7062" ,display: "flex" , justifyContent: "center", alignItems: "center", height: "100%"}}>
-//             <div className=''>
-//               <img src={TIFYphone} alt="" />
-//             </div>
-//             <div className=''>
-//               <h1>make your wish</h1>
-//               <p>당신만의 위시를 만들어보세요.</p>
-//               <p>꼭 받고 싶은 선물을 담아보세요.</p>
-//             </div>
-//             </Animator>
-//           </div>
-//         </ScrollPage>
-//         <ScrollPage>
-//           <Animator animation={batch(FadeIn(0, -200))}  style={{ backgroundColor:"#FF7062" ,display: "flex" , justifyContent: "center", alignItems: "center", height: "100vh"}}>
-//             <span style={{ fontSize: "40px" }}>Done</span>
-//             <br/>
-//             <span style={{ fontSize: "30px" }}>
-//               RRR
-//             </span>
-//           </Animator>
-//         </ScrollPage>
-//         <Footer />
-//       </ScrollContainer>

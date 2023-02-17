@@ -124,8 +124,8 @@ export function ThanksPage() {
         <div className='sent-card'>
           <h1>보낸 감사카드</h1>
         </div>
-        <div className="con-card-detail">
-          <div className="con-card">
+        <div className="con-card-detail sent-card-detail">
+          <div className="con-card sent-card-detail">
             <div className="tofrom">{from}</div>
             <div
               className="con-photo"
