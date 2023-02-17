@@ -108,34 +108,6 @@ const MakeCardComponent = (props:{
         })
       });
     }
-
-    else{        
-      if(!iphone){
-        setPhone(props.phone)
-      }
-      if(!contents){
-        Swal.fire('감사메세지가 비어있습니다.')
-        return
-      }
-      console.log('감사 보내자')
-    const API_URL = 'https://i8e208.p.ssafy.io/api/thkcards'
-    const data = {
-      "title":title,
-      "phoneNumber":iphone,
-      "content":contents,
-      "imageUrl":image,
-      "userId":Number(props.userId),
-      "payId":Number(props.payId)
-    }
-    axios.post(API_URL, data
-      ).then((res) =>{
-        console.log('감사메세지 보내기 성공!!!', res)
-        Swal.fire("감사카드가 <br/>연락처로 <br/>문자 전송될 예정입니다")
-        props.propFunction(true)
-      }).catch((err) => {
-        console.log('감사메세지 보내기 실패', err)
-      })
-
   }
   const inputChange=useCallback((e:any) =>{
     const value = e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
@@ -211,5 +183,5 @@ const MakeCardComponent = (props:{
     </div>
   );
 };
-}
+
 export default MakeCardComponent;
