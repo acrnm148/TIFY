@@ -1,23 +1,29 @@
 .info-page {
-  width: 838px;
+  font-family: 'Nanum Gothic';
+  /* width: 838px; */
   height: 1550px;
-
-  box-shadow: 30px 30px 20px rgba(0, 0, 0, 0.1);
-  border-radius: 15px;
+  width: 100%;
+  /* box-shadow: 30px 30px 20px rgba(0, 0, 0, 0.1); */
+  /* border-radius: 15px; */
 }
 
-.emailBox > .infopage-title {
+.infopage-title {
   font-weight: 800;
   font-size: 32px;
   line-height: 32px;
   color: #fe3360;
   margin-bottom: 50px;
 }
-
+.emailBox {
+  margin-top: 50px;
+  /* width: 35%; */
+}
 #disabled-input-box {
   background-color: #eeeeee;
 }
-
+.checkedNickname {
+  margin: ;
+}
 .checkedNickname2 {
   background-color: #eeeeee;
 }
@@ -25,4 +31,66 @@
 .divied-info-tap {
   margin-top: 30px;
   margin-bottom: 30px;
+}
+.emailForm > .info-input {
+  width: 100%;
+}
+.info-nickname {
+  width: 100%;
+}
+.info-nickname > div {
+  display: flex;
+}
+.info-nickname > div > input {
+  width: 100%;
+  margin: 10px;
+}
+.formSideButton {
+  font-size: 17px;
+}
+.form-dup-check-btn {
+  width: 25%;
+  height: 100%;
+  font-size: 15px;
+  border-radius: 10px;
+  margin-left: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-color: #158cfb;
+  border-width: 1px;
+  color: #158cfb;
+}
+.form-dup-check-btn:hover {
+  background-color: #158cfb;
+  color: white;
+}
+.nickname-dup-btn {
+  height: 100%;
+}
+.info-nickname > div > div > input {
+  border-color: black;
+  width: 100%;
+  /* background-color: black; */
+  height: 100%;
+  border-radius: 10px;
+}
+.form-dup-check-btn {
+  padding: 11px;
+}
+.info-p {
+  color: gray;
+}
+.mini-input-container {
+  /* background-color: black; */
+  margin: 0;
+}
+.birth > div > input {
+  background-color: #f9fafb;
+}
+.phone > div > input {
+  background-color: white;
+}
+.emailForm > button {
+  color: white;
+  cursor: pointer;
 }
