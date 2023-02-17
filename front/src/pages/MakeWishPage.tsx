@@ -372,7 +372,7 @@ export function MakeWishPage() {
   const [finished, setFinished] = useState(false);
   const MakeWish = () => {
     const makeWish = async () => {
-      const API_URL = 'https://i8e208.p.ssafy.io/api/wish/add/';
+      const API_URL = 'http://localhost:8081/api/wish/add/';//https://i8e208.p.ssafy.io/
       const gift: {
         giftUrl: string; // test를 위해 추가했습니다.
         productId: number;
@@ -451,10 +451,8 @@ export function MakeWishPage() {
         })
         .catch((err: any) => {
           console.log('위시생성 실패', err);
+          alert("만드려는 Wish에 Gift가 없습니다!.")
         })
-        .catch((err: any) => {
-          console.log('위시생성 실패', err);
-        });
     };
     makeWish();
   };
@@ -622,24 +620,27 @@ export function MakeWishPage() {
   };
 
   // wish 만들 상품에서 옵션 변경
-  const ChangeOption = (event: any, idx: number, giftInfo:any, optIdx:number) => {
-    if (event.target.value) {
+  const ChangeOption = (eventVal: string, idx: number, giftInfo:any, optIdx:number) => {
+    if (eventVal) {
+      console.log(idx,"sdadasdasdasdsa");
       // setUserOptions({ ...userOptions, [idx]: event.target.value }); // e.target.value = 소분류-가격 꼴
-      let newOpt = `${giftInfo.options[idx].title}-${event.target.value}`
+      let newOpt = `${giftInfo.options[optIdx].title}-${eventVal}`
       wishCart[idx].userOption = newOpt;
-
-      const val = event.target.value.split('-');
+      
+      const val = eventVal?.split('-');
       wishCart[idx]?.selectOptions?.map( (item,index) => {
         if (item.idx === optIdx) {
           wishCart[idx].selectOptions.splice(index,1); // 기존 선택되어있던 옵션 삭제.
         }
       })
-      wishCart[idx].selectOptions.push({idx:optIdx, opt:newOpt}) // 새로 선택한 옵션으로 교체.
+      wishCart[idx]?.selectOptions?.push({idx:optIdx, opt:newOpt}) // 새로 선택한 옵션으로 교체.
 
       let newPrice = 0;
       wishCart?.map(wcItem => {
         newPrice += wcItem.price // 상품 본래가격 추가
         wcItem?.selectOptions?.map((dwc) => {
+          console.log(idx)
+          console.log("재계산중",wcItem.name)
           const optPrice = dwc.opt.split('-')[2];
           newPrice += parseInt(optPrice); // 옵션별 가격 추가.
         })
@@ -648,31 +649,31 @@ export function MakeWishPage() {
       setTotalPrice(newPrice);
     }
   };
-
   const OptionDetails = (values:any) => {
     let option:Option = values.val;
-    let index:number = values.seq;
+    let index:number = values.orderOfOption;
+    let ooc:number = values.orderOfCart 
     let gift:Gift = values.gift;
     const [selectedValue, setSelectedValue] = useState("");
   
     const handleSelectChange = (event: any) => {
-      console.log(event.target.value)
+      ChangeOption(event.target.value, ooc, gift, option.idx);
       setSelectedValue(event.target.value);
-      ChangeOption(event, index, gift, option.idx);
+      console.log(event.target.value)
     }
-  
-    console.log(selectedValue);
-    console.log("---------------");
-  
+
+    useEffect(() => {
+      console.log();
+    }, [selectedValue])
     return (
       <div className="padding-r-5" style={{ fontSize: "0.5em" }}>
         <select
           name={option.title}
           onChange={handleSelectChange}
-          defaultValue=""
+          value={selectedValue}
         >
           <option value="" >
-            {option.title}
+            {selectedValue.length < 1 ? option.title : selectedValue}
             {/* .length > 0 ? selectedValue : option.title} */}
           </option>
   
@@ -871,14 +872,19 @@ export function MakeWishPage() {
                                 <p style={{"paddingLeft":"10px", "fontWeight":"bold"}}>{gift.name}</p>
                                 <div style={{"paddingLeft":"10px"}}>
                                   {gift?.options?.map( (option:Option,seq) => {
-                                    return (<OptionDetails val={option} seq={seq} gift={gift}/>)
+                                    return (<OptionDetails val={option} orderOfOption={seq} orderOfCart={idx} gift={gift}/>)
                                   } ) }
                                 </div>
                               </div>
                               <div>
                                 <p className="font-lrg font-bold">
                                     {gift.price.toLocaleString('ko-KR')}
-                                  </p>
+                                </p>
+                                <p className="font-lrg" style={{"fontSize":"0.5rem"}}>
+                                    opt + {gift?.selectOptions?.length > 0 ? gift?.selectOptions?.reduce((accumulator, item) => {
+                                      return accumulator + parseInt(item?.opt?.split('-')[2]);
+                                      }, 0): 0}
+                                </p>
                                 <div
                                   className="delete-gift-btn"
                                   onClick={() => delWishGift(gift.id, idx)}
