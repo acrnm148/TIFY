@@ -143,18 +143,18 @@ export function JoinSecondPage() {
 
   function CheckValid() {
     if (username == '') {
-      Swal.fire('이름을 입력하세요.');
+      Swal.fire({icon:'warning', text:'이름을 입력하세요.'});
       return false;
     }
 
     // 닉네임 중복 여부 확인\
     if (!nickDubCheck) {
-      Swal.fire('닉네임 중복 확인을 해주세요.');
+      Swal.fire({icon:'warning', text:'닉네임 중복 확인을 해주세요.'});
       return false;
     }
 
     if (password == '') {
-      Swal.fire('비밀번호를 입력하세요.');
+      Swal.fire({icon:'warning', text:'비밀번호를 입력하세요.'});
       return false;
     }
 
@@ -162,49 +162,49 @@ export function JoinSecondPage() {
     var pwdCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,12}$/;
 
     if (!pwdCheck.test(password)) {
-      Swal.fire(
+      Swal.fire({icon:'warning', text:
         '비밀번호는 영문자+숫자+특수문자 조합으로 8~12자리 사용해야 합니다.',
-      );
+    });
       return false;
     }
 
     if (password !== confirmPassword) {
-      Swal.fire('비밀번호가 다릅니다.');
+      Swal.fire({icon:'warning', text:'비밀번호가 다릅니다.'});
       return false;
     }
 
     var reg = /^[0-9]+/g; //숫자만 입력하는 정규식
 
     if (birthYear == undefined) {
-      Swal.fire('태어난 연도를 입력해주세요.');
+      Swal.fire({icon:'warning', text:'태어난 연도를 입력해주세요.'});
       return false;
     }
 
     if (birthYear.length < 4 || 4 < birthYear.length) {
-      Swal.fire('태어난 연도를 4자리로 입력해주세요.');
+      Swal.fire({icon:'warning', text:'태어난 연도를 4자리로 입력해주세요.'});
       return false;
     }
 
     if (birthMonth == '') {
-      Swal.fire('태어난 월을 입력해주세요.');
+      Swal.fire({icon:'warning', text:'태어난 월을 입력해주세요.'});
       return false;
     }
     if (birthMonth.length < 2 || 2 < birthMonth.length) {
-      Swal.fire('몇 월인지를 2자리로 입력해주세요.');
+      Swal.fire({icon:'warning', text:'몇 월인지를 2자리로 입력해주세요.'});
       return false;
     }
     if (birthDay == '') {
-      Swal.fire('태어난 날짜를 입력해주세요.');
+      Swal.fire({icon:'warning', text:'태어난 날짜를 입력해주세요.'});
       return false;
     }
 
     if (2 < birthDay.length) {
-      Swal.fire('몇 일인지를 2자리로 입력해주세요.');
+      Swal.fire({icon:'warning', text:'몇 일인지를 2자리로 입력해주세요.'});
       return false;
     }
 
     if (birthDay.length < 2) {
-      Swal.fire('몇 일인지를 2자리로 입력해주세요.');
+      Swal.fire({icon:'warning', text:'몇 일인지를 2자리로 입력해주세요.'});
       return false;
     }
 
@@ -230,20 +230,20 @@ export function JoinSecondPage() {
     // }
 
     if (tel1 == '' || tel2 == '' || tel3 == '') {
-      Swal.fire('전화번호를 입력해주세요.');
+      Swal.fire({icon:'warning', text:'전화번호를 입력해주세요.'});
       return false;
     }
 
     if (3 < tel1.length) {
-      Swal.fire('전화번호 첫 자리가 너무 길어요.');
+      Swal.fire({icon:'warning', text:'전화번호 첫 자리가 너무 길어요.'});
       return false;
     }
     if (4 < tel2.length) {
-      Swal.fire('전화번호 두 번째 자리가 너무 길어요.');
+      Swal.fire({icon:'warning', text:'전화번호 두 번째 자리가 너무 길어요.'});
       return false;
     }
     if (4 < tel3.length) {
-      Swal.fire('전화번호 세 번째 자리가 너무 길어요.');
+      Swal.fire({icon:'warning', text:'전화번호 세 번째 자리가 너무 길어요.'});
       return false;
     }
 
@@ -316,9 +316,9 @@ export function JoinSecondPage() {
             Login(userid, password)
               .then((response) => {
                 if (response === '로그인 실패!') {
-                  Swal.fire(
+                  Swal.fire({icon:'warning', text:
                     '미등록 회원이거나 잘못된 아이디/비밀번호를 입력하셨습니다.',
-                  );
+                });
                 } else {
                   console.log('리프레쉬토큰 가자');
                   setRefreshToken(response.refresh_token);
@@ -349,18 +349,18 @@ export function JoinSecondPage() {
     event.preventDefault();
 
     if (nickname == '') {
-      Swal.fire('닉네임을 입력하세요.');
+      Swal.fire({icon:'warning', text:'닉네임을 입력하세요.'});
       return false;
     }
     const nicknameCheck = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|]+$/;
     if (!nicknameCheck.test(nickname)) {
-      Swal.fire('닉네임은 영어/한글만 가능합니다.');
+      Swal.fire({icon:'warning', text:'닉네임은 영어/한글만 가능합니다.'});
       return false;
     }
 
     console.log(nickname.length);
     if (nickname.length < 2 || nickname.length > 10) {
-      Swal.fire('닉네임은 2~10글자로 구성해주셔야 합니다.');
+      Swal.fire({icon:'warning', text:'닉네임은 2~10글자로 구성해주셔야 합니다.'});
       return false;
     }
 
@@ -375,15 +375,15 @@ export function JoinSecondPage() {
         console.log('닉네임 확인 완료');
         console.log(e);
         if (e.data == 'Y') {
-          Swal.fire(`이미 존재하는 닉네임입니다. 😅`);
+          Swal.fire({icon:'warning', text:`이미 존재하는 닉네임입니다. 😅`});
           setNickDubCheck(false);
           return;
         }
-        Swal.fire('You can do it! 👍');
+        Swal.fire({icon:'success', text:'사용가능한 닉네임입니다 👍'});
         setNickDubCheck(true);
       })
       .catch((err) => {
-        Swal.fire(`You can't do it! 😅`);
+        Swal.fire({icon:'warning', text:`You can't do it! 😅`});
         console.log('error', err);
       });
     console.log('abc');
@@ -398,7 +398,7 @@ export function JoinSecondPage() {
     const sizeLimit = 300 * 10000;
     // 300만 byte 넘으면 경고문구 출력
     if (event.target.files[0].size > sizeLimit) {
-      Swal.fire('사진 크기가 3MB를 넘을 수 없습니다.');
+      Swal.fire({icon:'error', text:'사진 크기가 3MB를 넘을 수 없습니다.'});
     } else {
       console.log('3mb가 아님');
       if (event.target.files[0]) {

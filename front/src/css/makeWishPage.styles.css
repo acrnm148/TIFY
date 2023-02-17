@@ -839,3 +839,15 @@ abbr[title] {
   padding-top: 20px;
   font-weight: 800;
 }
+@media (max-width : 768px)
+{
+  .wish-components{
+    width: 100%;
+  }
+  .congrats-page-container{
+    margin: 0;
+  }
+  .finish-wish-con{
+    margin-top: 10%;
+  }
+}

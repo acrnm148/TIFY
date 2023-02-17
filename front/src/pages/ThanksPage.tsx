@@ -42,6 +42,9 @@ export function ThanksPage() {
 
   let fromList;
 
+  const TO_LAST_PAGE_IMG =
+    'https://tifyimage.s3.ap-northeast-2.amazonaws.com/b87f76a0-0e29-45ec-9e43-b7b75743bda2.png';
+    
   // 사진 업로드하는 html 버튼에 직접 접근해서 값을 가져오는 inputRef
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -72,6 +75,7 @@ export function ThanksPage() {
       }
     }
   }
+
   useEffect(() => {
     const API_URL = `https://i8e208.p.ssafy.io/api/thkcards/match/${conId}`;
     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
@@ -108,6 +112,7 @@ export function ThanksPage() {
           userId={userId}
           phone={conInfo.tel}
           propFunction={isThkCard}
+          from={conInfo.from}
         />
       </div>
     );
@@ -115,16 +120,17 @@ export function ThanksPage() {
   // 카드 하나의 정보 useState로 관리
   const ThanksReply = () => {
     return (
-      <div>
-        {/* <h1>보낸 감사카드</h1> */}
-        <div className="con-card-detail">
-          <div className="con-card">
+      <div className='sent-card-con'>
+        <div className='sent-card'>
+          <h1>보낸 감사카드</h1>
+        </div>
+        <div className="con-card-detail sent-card-detail">
+          <div className="con-card sent-card-detail">
             <div className="tofrom">{from}</div>
-            <img
+            <div
               className="con-photo"
-              src={getImg ? getImg : ''}
-              alt="감사카드 이미지"
-            />
+              style={{ backgroundImage: `url(${getImg !==null? getImg : ''})` }}
+            ></div>
             <div className="con-text">{message}</div>
             <div className="userName tofrom">전송된 연락처 : {phone}</div>
           </div>
@@ -136,7 +142,9 @@ export function ThanksPage() {
     return (
       <div className="disp-flex align-center wid-100">
         <div className="disp-flex align-center flex-col wid-100">
-          {/* <h1>받은 축하카드</h1> */}
+        <div className='sent-card'>
+          <h1>받은 축하카드</h1>
+        </div>
           <div className="con-card">
             <div className="tofrom">From {conInfo.from} </div>
             <div
@@ -153,10 +161,18 @@ export function ThanksPage() {
   return (
     <div className="thanks-page-con-container">
       <div className="thanks-page-container">
-        <button className="back-botton" onClick={() => navigate(-1)}>
+        {/* <button className="back-botton" onClick={() => navigate(-1)}>
           {' '}
           뒤로가기!!
-        </button>
+        </button> */}
+        <div
+          className="go-back"
+          onClick={() => (window.location.href = '/checkwish')}
+        >
+          <p>
+            <img src={TO_LAST_PAGE_IMG} className="toLastPage" />
+          </p>
+        </div>
         <div className="con-thanks-container">
           <div className="con-card-detail">
             <div className="arrow" onClick={() => setGetEmit(!getEmit)}>

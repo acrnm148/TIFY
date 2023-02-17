@@ -196,7 +196,7 @@ const Refund = () => {
       .then((con: any) => {
         console.log('환불 요청 성공', con, userId);
 
-        Swal.fire('환불 요청이 완료되었습니다.');
+        Swal.fire({icon:'success', text:'환불 요청이 완료되었습니다.'});
         window.location.href = '/mypage/order';
       })
       .catch((err: any) => {

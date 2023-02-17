@@ -27,7 +27,7 @@ let paying = {
             userId : 0, // userId 없을 때 0 : 비회원축하
 }
 let tk: string | null = null
-export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:number) {
+export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:number, wishId:number|undefined) {
   console.log(congratsInfo.giftId)
   paying = congratsInfo
   /* 1. 가맹점 식별하기 */
@@ -50,12 +50,23 @@ export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:
 
     // giftId값이 없으면 못넘어가게
     if (!paying.giftId || paying.giftId == -1){{
-      const result = confirm('현금으로 축하하시겠습니까?')
-      if(result){
+      const result = Swal.fire({
+        text:'현금으로 축하하시겠습니까?',
+        icon: 'question',
+        showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+        confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+        cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+        confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+        cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+        
+        reverseButtons: true, // 버튼 순서 거꾸로
+      }).then(result => {
+        // 만약 Promise리턴을 받으면,
+        if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
         console.log('giftId가 없거나 -1임')
-      } else{
-        return
-      }
+        }
+     });
+     return
     }}
     /* 4. 결제 창 호출하기 */
     IMP.request_pay(data, callback);
@@ -86,7 +97,7 @@ export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:
       
       if (success) {
         // success = true
-        Swal.fire(`결제가 완료되었습니다.`);
+        Swal.fire({icon:'success', text:`결제가 완료되었습니다.`});
         // api/celebrate/ 로 축하요청
         const data = {
           "amount": paying.amount?String(paying.amount):88,
@@ -127,14 +138,14 @@ export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:
               // 비회원이면 기본 프로필 이미지
               pushData(defaultProfile)
             }
-            history.go(-1)
+            window.location.href =`https://i8e208.p.ssafy.io/congrats/${wishId}`
             console.log('축하결제성공', data)
           }).catch((err:any) => {
             console.log('축하 결제 실패', err)
             console.log('시도한데이터', data)
           })
       } else {
-        Swal.fire(`결제 실패: ${error_msg}`);
+        Swal.fire({icon:'error', text:`결제 실패: ${error_msg}`});
       }
     } 
 

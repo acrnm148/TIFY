@@ -67,7 +67,7 @@ export function PhoneBook() {
           .then((res) => {
             console.log(res, '연락처 추가 요청 시도 성공!');
             GetPhoneBook();
-            Swal.fire('연락처가 추가되었습니다.');
+            Swal.fire({icon:'success', text:'연락처가 추가되었습니다.'});
             setUsername('');
             setTel1('');
             setTel2('');
@@ -85,24 +85,24 @@ export function PhoneBook() {
 
   function CheckValid() {
     if (username == '') {
-      Swal.fire('이름을 입력하세요.');
+      Swal.fire({icon:'warning', text:'이름을 입력하세요.'});
       return false;
     }
     if (tel1 == '' || tel2 == '' || tel3 == '') {
-      Swal.fire('전화번호를 입력해주세요.');
+      Swal.fire({icon:'warning', text:'전화번호를 입력해주세요.'});
       return false;
     }
 
     if (3 < tel1.length) {
-      Swal.fire('전화번호 첫 자리가 너무 길어요.');
+      Swal.fire({icon:'warning', text:'전화번호 첫 자리가 너무 길어요.'});
       return false;
     }
     if (4 < tel2.length) {
-      Swal.fire('전화번호 두 번째 자리가 너무 길어요.');
+      Swal.fire({icon:'warning', text:'전화번호 두 번째 자리가 너무 길어요.'});
       return false;
     }
     if (4 < tel3.length) {
-      Swal.fire('전화번호 세 번째 자리가 너무 길어요.');
+      Swal.fire({icon:'warning', text:'전화번호 세 번째 자리가 너무 길어요.'});
       return false;
     }
 
@@ -123,7 +123,7 @@ export function PhoneBook() {
       .then((res: any) => {
         console.log(res, '연락처 수정 시도 성공');
         GetPhoneBook();
-        Swal.fire('연락처가 수정되었습니다.');
+        Swal.fire({icon:'success', text:'연락처가 수정되었습니다.'});
         setUsername('');
         setTel1('');
         setTel2('');

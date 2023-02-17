@@ -81,7 +81,7 @@ export function CongratsPayPage() {
       const sizeLimit = 300 * 10000;
       // 300만 byte 넘으면 경고문구 출력
       if (e.target.files[0].size > sizeLimit) {
-        Swal.fire('사진 크기가 3MB를 넘을 수 없습니다.');
+        Swal.fire({icon:'error', text:'사진 크기가 3MB를 넘을 수 없습니다.'});
       } else {
         // 파일을 formData로 만들어주기
         const formData = new FormData();
@@ -126,12 +126,27 @@ export function CongratsPayPage() {
     // amount 공백아닌지 확인
     if (!amount) {
       e.preventDefault();
-      Swal.fire('축하금액을 입력하세요!');
+      Swal.fire({icon:'warning', text:'축하금액을 입력하세요!'});
       return;
     }
     if(!cardPhone){
-      let res = confirm('연락처를 입력하시면 감사카드를 받을 수 있습니다!')
-      if(res){return}
+      let res = Swal.fire({
+        text: '연락처를 입력하시면 감사카드를 받을 수 있습니다!',
+        icon: 'info',
+        
+        showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+        confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+        cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+        confirmButtonText: '괜찮아요', // confirm 버튼 텍스트 지정
+        cancelButtonText: '재작성', // cancel 버튼 텍스트 지정
+        
+        reverseButtons: true, // 버튼 순서 거꾸로
+        
+     }).then(res => {
+        // 만약 Promise리턴을 받으면,
+        if (res.isConfirmed) { return
+        }
+     });
     }
     // card from 입력 확인 =>>> 자동완성에 카드문구들어가도록
     // console.log(cardFrom, cardContents, cardPhone)
@@ -139,7 +154,7 @@ export function CongratsPayPage() {
     // 이용약관 동의 확인
     if (!isChecked) {
       e.preventDefault();
-      Swal.fire('이용약관에 동의해주세요!');
+      Swal.fire({icon:'warning', text:'이용약관에 동의해주세요!'});
       return;
     }
     setOpenPayInfo(true)
@@ -173,7 +188,7 @@ function GogoPay(){
     userId: userId?userId:0,
   };
   // Paying 자료형 >> 결제창으로 넘어갈때 결제정보 인자로 넘기기
-  PayingPort.onClickPayment(congratsInfo, '현금', state.wishUserId);
+  PayingPort.onClickPayment(congratsInfo, '현금', state.wishUserId, Number(wishId));
 }
 
 const PayInfo = () =>{

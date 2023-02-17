@@ -295,17 +295,21 @@ return (
   <div className={showIng ? 'wish-container' : 'open-wish-container'}>
     <div style={{ position: 'relative', zIndex: 1 }}>
     <div
-  style={{
-    display:
-      lst.cardOpen === 'open' || animationComplete[lst.wishId] ? 'none' : 'block',
-    position: 'absolute',
-    top: 0,
-    left: -900,
-    justifyContent: 'center',
-    alignItems: 'center',
-  }}
-  onClick={() => handleClick(lst.wishId)}
->
+      style={{
+        display:
+          lst.cardOpen === 'open' || animationComplete[lst.wishId] ? 'none' : 'block',
+        position: 'absolute',
+        top: 0,
+        left: -900,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '688px',
+        backgroundColor: '#ffdbbb',
+        width: '100%',
+
+      }}
+      onClick={() => handleClick(lst.wishId)}
+    >
   <Player
     src="https://assets6.lottiefiles.com/packages/lf20_8pdke2ib.json"
     autoplay={isPlaying[lst.wishId]}
@@ -338,33 +342,53 @@ return (
     </>
   );
 };
-  const WishOnGoing = ({ conList }: { conList: CheckWish[] | undefined }) => {
-    return (
-      <>
-        {conList &&
-          conList.map((lst: CheckWish, i: number) => {
-<Player
-  src="https://assets9.lottiefiles.com/packages/lf20_0oco6l9x.json"
-  autoplay={isPlaying[lst.wishId]}
-  loop={false}
-  style={{
-    height: '100%', //increasing the height to account for the 30% cut from top and bottom
-    width: '1500px', //increasing the width to account for the 30% cut from left and right
-    overflow: 'hidden', //hiding the portion of the animation that falls outside the specified height and width
-    marginTop: '-30%', //cutting the top 30% of the animation
-    marginBottom: '-30%', //cutting the bottom 30% of the animation
-    marginLeft: '-30%', //cutting the left 30% of the animation
-    marginRight: '-30%', //cutting the right 30% of the animation
-  }}
-  renderer="canvas"
-  onEvent={(event) => {
-    if (event === 'complete') handleAnimationComplete(lst.wishId);
-  }}
-/>
-          })}
-      </>
-    );
-  };
+const WishOnGoing = ({ conList }: { conList?: Array<CheckWish> }) => {
+  if (!conList || conList.length === 0) {
+    return <div className="wish-container wish-on-going-background empty-space">진행중인 위시가 없습니다</div>;
+  }
+
+  return (
+    <>
+      {conList.map((lst: CheckWish, i: number) => {
+        return (
+          <div className="wish-container">
+                <CongratsCards
+                  fromList={lst.fromList}
+                  wishId={lst.wishId}
+                  userName={lst.userName}
+                />
+                <NavLink
+                  to={`/congrats/${lst.wishId}`}
+                  className="wish-on-going-background"
+                >
+                  <div className="wish-on-going-box">
+                    <h3 className="font-lg">
+                      {lst.userName}님의 {lst.category}위시
+                    </h3>
+                    <p className="font-xl">"{lst.title}"</p>
+                    <p className="font-lg">
+                      {lst.restDay}일 뒤 축하편지를 확인하세요
+                    </p>
+                    <div className="slider-and-label-container">
+                      <div className="slider-and-label">
+                        <span className='진행도'>{Math.round(lst.percent)}%</span>
+                        <ReactSlider
+                          className="horizontal-slider"
+                          defaultValue={[lst.percent]}
+                          disabled={true}
+                          thumbClassName="custom-thumb"
+                          trackClassName="example-track"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </NavLink>
+                </div>
+        );
+      })}
+    </>
+  );
+};
   const IsWishLayout = () => {
     return (
       <div className="is-wish-layout">

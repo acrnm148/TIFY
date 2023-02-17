@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { SetStateAction, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/Auth';
 import { NavLink, useParams } from 'react-router-dom';
 import '../css/congratsPage.styles.css';
 
@@ -15,9 +17,8 @@ type Gift = {
 };
 export function CongratsPage() {
   let { wishId } = useParams();
-  // [TODO] wishId로 위시 디테일 정보 요청 => 여기서 유저id, 유저name도 받아오기
-  // [ TODO] 유저 이름은 어디서 가져와?!?! store에서!??!?
-  const [userName, setUserName] = useState('티피');
+  const [userName, setUserName] = useState('');
+  const [ userPhone, setUserPhone] = useState()
   const [category, setCategory] = useState('');
   const [selectGift, setSelectGift] = useState<Gift | null>();
   const [title, setTitle] = useState('');
@@ -31,6 +32,13 @@ export function CongratsPage() {
   // 현금축하 giftId
   const [cashId, setCashId] = useState<number>(-1);
 
+  const [friendName, setFriendName] = useState('');
+  const [friendPhone, setFriendPhone] = useState('');
+  // acc token
+  const accessToken = useSelector(
+    (state: RootState) => state.authToken.accessToken,
+  );
+  
   useEffect(() => {
     const API_URL = 'https://i8e208.p.ssafy.io/api/wish/detail/';
     axios
@@ -111,46 +119,31 @@ export function CongratsPage() {
               [],
             ),
           );
-
-          // setWishGiftList(
-          //   res.data.giftItems.map(
-          //     (
-          //       item: {
-          //         successYN: string;
-          //         giftname: string;
-          //         giftImgUrl: any;
-          //         productNum: number;
-          //         gathered: number;
-          //         purePrice: number;
-          //         id: number;
-          //         finished : boolean;
-          //       },
-          //       i: number,
-          //     ) => {
-          //         const pricevat =
-          //           Number(item.purePrice) + Number(item.purePrice) * 0.05;
-          //         const achieved = (Number(item.gathered) / pricevat) * 100;
-          //         // successYN 이 Y이면 종료
-          //         let fin = item.successYN==='Y'? true: false
-          //         return {
-          //           id: i,
-          //           img: item.giftImgUrl,
-          //           productNum: item.productNum,
-          //           name: item.giftname,
-          //           achieved: Math.round(achieved),
-          //           achieved81: Math.round(achieved * 0.81),
-          //           price: Math.round(pricevat),
-          //           giftId: item.id,
-          //           finished: fin,
-          //         };
-          //     },
-          //   ),
-          // );
         },
       )
       .catch((err: any) => {
         console.log('위시 상세정보 어디감', err);
       });
+      // 로그인한 유저정보 받기
+      const getUser = async () => {
+        const API_URL = `https://i8e208.p.ssafy.io/api/account/userInfo`;
+        axios({
+          method: 'get',
+          url: API_URL,
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+          .then(
+            (con) => {
+              console.log('유저정보 불러오기 성공', con.data);
+              setFriendName(con.data.username);
+              setFriendPhone(con.data.tel)
+            },
+          )
+          .catch((err: any) => {
+            console.log('유저정보 불러오기 실패', err);
+          });
+      };
+      getUser()
   }, []);
 
   const WishCardCover = () => {
@@ -240,7 +233,8 @@ export function CongratsPage() {
             state={{
               selectGift: selectGift,
               wishUserId: wishUserId,
-              userName: userName,
+              userName: friendName,
+              userPhone:friendPhone,
             }}
           >
             선택한 선물로 축하하기 →
@@ -268,7 +262,7 @@ export function CongratsPage() {
   return (
     <div className="congrats-page-container">
       <div className="wish-components">
-        <div className="wish-components-title" style={{ padding: '0 10px' }}>
+        <div className="wish-compo-title" style={{ padding: '0 10px' }}>
           {category ? (
             WISH_CATEGORY_DATA.indexOf(category) !== -1 ? (
               <div>

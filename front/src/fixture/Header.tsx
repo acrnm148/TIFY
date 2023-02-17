@@ -104,7 +104,7 @@ export function Header() {
     const navigate = useNavigate();
 
     const handleLogOut = () => {
-      Swal.fire('로그아웃 되셨습니다.');
+      Swal.fire({icon:'success', text:'로그아웃 되셨습니다.'});
       // console.log('로그아웃됨!');
       dispatch(DELETE_TOKEN());
       // Cookie에 저장된 Refresh Token 정보를 삭제

@@ -38,3 +38,9 @@
 .company-info{
     padding-left: 30px;
 }
+@media (max-width : 768px)
+{
+    .footer-middle{
+        display: none;
+    }
+}

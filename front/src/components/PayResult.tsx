@@ -55,7 +55,7 @@ class PayResult extends React.Component {
 
         if (error.response.status === 400) {
           if (error.response.data.code === -702) {
-            Swal.fire('결제가 이미 처리되었습니다!');
+            Swal.fire({icon:'warning', text:'결제가 이미 처리되었습니다!'});
             return;
           } else if (error.response.data.code === -723) {
             // alert('결제 요청이 만료되었습니다! 다시 시도해주세요!')

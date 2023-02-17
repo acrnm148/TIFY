@@ -23,7 +23,7 @@ import Swal from "sweetalert2";
 export function CongratsCardPage() {
   const userId = useSelector((state: RootState) => state.authToken.userId);
   const params = useParams();
-  const wishId = params.wishId;
+  const wishId = Number(params.wishId);
   const payAmount = ['5,000', '10,000', '50,000', '100,000'];
   const payAmountNum = [5000, 10000, 50000, 100000];
   const [amount, setAmount] = useState<any>();
@@ -82,7 +82,7 @@ export function CongratsCardPage() {
       const sizeLimit = 300 * 10000;
       // 300만 byte 넘으면 경고문구 출력
       if (e.target.files[0].size > sizeLimit) {
-        Swal.fire('사진 크기가 3MB를 넘을 수 없습니다.');
+        Swal.fire({icon:'error', text:'사진 크기가 3MB를 넘을 수 없습니다.'});
       } else {
         // 파일을 formData로 만들어주기
         const formData = new FormData();
@@ -133,17 +133,33 @@ export function CongratsCardPage() {
     // amount 공백아닌지 확인
     if (!amount) {
       e.preventDefault();
-      Swal.fire('축하금액을 입력하세요!');
+      Swal.fire({icon:'warning', text:'축하금액을 입력하세요!'});
       return;
     }
     // amount 상품가격보다 높은지 확인
     if(amount > state.selectGift.price){
-      Swal.fire('상품가격을 초과하여 축하할 수 없습니다!')
+      Swal.fire({icon:'error', text:'상품가격을 초과하여 축하할 수 없습니다!'})
       return;
     }
-    if(!cardPhone){
-      let res = confirm('연락처를 입력하시면 감사카드를 받을 수 있습니다!')
-      if(res){return}
+
+    if(!cardPhone && state.userPhone){setCardPhone(state.userPhone)}
+    else if(!cardPhone){
+      let res = Swal.fire({
+        text: '연락처를 입력하시면 감사카드를 받을 수 있습니다!',
+        icon: 'info',
+        
+        showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+        confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+        cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+        confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+        cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+        
+        reverseButtons: true, // 버튼 순서 거꾸로
+        
+     }).then(res => {
+        if (res.isConfirmed) { return
+        }
+     });
     }
     // card from 입력 확인 =>>> 자동완성에 카드문구들어가도록
     // console.log(cardFrom, cardContents, cardPhone)
@@ -151,9 +167,14 @@ export function CongratsCardPage() {
     // 이용약관 동의 확인
     if (!isChecked) {
       e.preventDefault();
-      Swal.fire('이용약관에 동의해주세요!');
+      Swal.fire({icon:'warning', text:'이용약관에 동의해주세요!'});
       return;
     }
+    if(!cardFrom && state.userName){
+      setCardFrom(state.userName)
+     } else if(!cardFrom && !state.userName){
+       alert('보내는 사람 이름을 작성해주세요')
+     }
     setOpenPayInfo(true)
   
   }
@@ -172,7 +193,7 @@ export function CongratsCardPage() {
     setIsChecked(!isChecked);
     console.log('이용약관..', isChecked);
   }
-
+ 
   const showPolicy=()=>{
     setOpen(true)
   }
@@ -180,15 +201,15 @@ function GogoPay(){
   const congratsInfo: Paying = {
     amount: amount,
     payType: '',
-    celebFrom: cardFrom,
-    celebTel: cardPhone,
+    celebFrom: !cardFrom && state.userName?state.userName: cardFrom ,
+    celebTel: !cardPhone && state.userPhone?state.userPhone: cardPhone,
     celebContent: cardContents,
     celebImgUrl: imgUrl,
     giftId: state.selectGift.giftId,
     userId: userId?userId:0,
   };
   // Paying 자료형 >> 결제창으로 넘어갈때 결제정보 인자로 넘기기
-  PayingPort.onClickPayment(congratsInfo, state.selectGift.name, state.wishUserId);
+  PayingPort.onClickPayment(congratsInfo, state.selectGift.name, state.wishUserId, Number(wishId));
 }
 
 const PayInfo = () =>{
@@ -233,7 +254,7 @@ const PayInfo = () =>{
               </div>
               <div className="name_and_price">
                 <h1>{state.selectGift.name}</h1>
-                <p>{state.selectGift.price}</p>
+                <p>{state.selectGift.price.toLocaleString('ko-KR')}</p>
               </div>
               <div className="underline"></div>
               <div className="pay-amount-selection">
@@ -257,12 +278,11 @@ const PayInfo = () =>{
                   className=""
                   type="text"
                   placeholder="축하금액"
-                  value={amount}
+                  value={amount?amount.toLocaleString('ko-KR'):0}
                   onChange={getAmount}
                 />
                 {priceOver&&
-                  <p className='font-sm font-red'>축하금액은 상품가격을 초과할 수 없습니다.</p>
-                }
+cardFrom                }
               </div>
             </div>
           </div>
@@ -319,9 +339,10 @@ const PayInfo = () =>{
                     className="input-small"
                     type="text"
                     name="연락처"
-                    value={cardPhone}
+                    value={state.userPhone? state.userPhone:cardPhone}
                     onChange={onChangePhone}
-                    placeholder="000-0000-0000"
+                    disabled={state.userPhone?true:false}
+                    // placeholder="000-0000-0000"
                   />
                 </div>
               </div>

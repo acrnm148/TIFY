@@ -321,3 +321,27 @@
 .font-red{
     color: #FE3360;
 }
+
+@media (min-width : 1025px)
+{
+
+}
+@media (max-width : 1024px)
+{
+
+}
+@media (max-width : 768px)
+{
+    .middle-line-vertical{
+        display: none;
+    }
+    .congrats-card-page-containger-border{
+        flex-wrap: wrap;
+    }
+    .congrats-card-page-right, .congrats-card-page-left{
+        width: 90%;
+    }
+    .tap-box{
+        margin-left: 2em;
+    }
+}

@@ -7,7 +7,9 @@ type UploadImage = {
   thumbnail: string;
   type: string;
 };
-const MakeCardComponent = (props:{phone: string,payId:string|undefined, userId:number|string|undefined, propFunction:(arg0:boolean)=>void,}) => {
+const MakeCardComponent = (props:{
+  from: string | number | readonly string[] | undefined;phone: string,payId:string|undefined, userId:number|string|undefined, propFunction:(arg0:boolean)=>void,
+}, from: string) => {
   // 사진 업로드하는 html 버튼에 직접 접근해서 값을 가져오는 inputRef
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [title, setTitle] = useState<string>()
@@ -25,7 +27,8 @@ const MakeCardComponent = (props:{phone: string,payId:string|undefined, userId:n
     const sizeLimit = 300*10000
     // 300만 byte 넘으면 경고문구 출력
     if (e.target.files[0].size > sizeLimit){
-      Swal.fire({text: '사진 크기가 3MB를 넘을 수 없습니다.'})
+      Swal.fire({
+        icon: 'error' ,text: '사진 크기가 3MB를 넘을 수 없습니다.'})
     } else{
       if (e.target.files[0]) {
         formData.append('file', e.target.files[0] ); // 파일 상태 업데이트
@@ -64,37 +67,49 @@ const MakeCardComponent = (props:{phone: string,payId:string|undefined, userId:n
     // form 유효성검사
     let result;
     if(!title){
-      result = confirm('제목을 작성하지 않으셨군요')
-      if (!result){
-        return
-      }
+      result = Swal.fire({
+        text: '제목을 작성하지 않으셨군요',
+        icon: 'warning',
+  
+        showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+        confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+        cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+        confirmButtonText: '괜찮아요', // confirm 버튼 텍스트 지정
+        cancelButtonText: '작성할게요', // cancel 버튼 텍스트 지정
+  
+        reverseButtons: true, // 버튼 순서 거꾸로
+  
+      }).then(result => {
+        // 만약 Promise리턴을 받으면,
+        if (result.isDismissed) { return
+        }
+        if(!iphone){
+          setPhone(props.phone)
+        }
+        if(!contents){
+          Swal.fire({icon: 'error',
+          text: '감사메세지가 비어있습니다.'})
+          return
+        }
+        console.log('감사 보내자')
+        const API_URL = 'https://i8e208.p.ssafy.io/api/thkcards'
+        const data = {
+          "title":title,
+          "phoneNumber":iphone,
+          "content":contents,
+          "imageURL":image,
+          "userId":Number(props.userId),
+          "payId":Number(props.payId)
+        }
+        axios.post(API_URL, data).then((res) =>{
+          console.log('감사메세지 보내기 성공!!!', res)
+          Swal.fire({icon:'success', text:"감사카드가 <br/>연락처로 <br/>문자 전송될 예정"})
+          props.propFunction(true)
+        }).catch((err) => {
+          console.log('감사메세지 보내기 실패', err)
+        })
+      });
     }
-    if(!iphone){
-      setPhone(props.phone)
-    }
-    if(!contents){
-      Swal.fire('감사메세지가 비어있습니다.')
-      return
-    }
-    console.log('감사 보내자')
-    const API_URL = 'https://i8e208.p.ssafy.io/api/thkcards'
-    const data = {
-      "title":title,
-      "phoneNumber":iphone,
-      "content":contents,
-      "imageURL":image,
-      "userId":Number(props.userId),
-      "payId":Number(props.payId)
-    }
-    axios.post(API_URL, data
-      ).then((res) =>{
-        console.log('감사메세지 보내기 성공!!!', res)
-        Swal.fire("감사카드가 <br/>연락처로 <br/>문자 전송될 예정")
-        props.propFunction(true)
-      }).catch((err) => {
-        console.log('감사메세지 보내기 실패', err)
-      })
-
   }
   const inputChange=useCallback((e:any) =>{
     const value = e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
@@ -103,6 +118,19 @@ const MakeCardComponent = (props:{phone: string,payId:string|undefined, userId:n
   return (
     <div className="thanks-card-container">
       <div className="thanks-card">
+      <div className="thanks-input">
+          <label htmlFor="받는사람">
+            받는사람
+          </label>
+          <input
+            className="input-small"
+            type="text"
+            name="받는사람"
+            value={props.from}
+            // onKeyUp={(e)=>setTitleFunc(e)}
+            disabled
+          />
+        </div>
         <div className="thanks-input">
           <label htmlFor="제목">
             제목
@@ -133,7 +161,7 @@ const MakeCardComponent = (props:{phone: string,payId:string|undefined, userId:n
             placeholder="카드 내용을 입력하세요"
           ></textarea>
         </div>
-        <div className="thanks-input" style={{"backgroundImage":`url(${image})`}}>
+        <div className="thanks-input">
           <label htmlFor="">사진</label>
           <input
             className="img-input"
@@ -146,6 +174,7 @@ const MakeCardComponent = (props:{phone: string,payId:string|undefined, userId:n
           <div
             className={`thanks-photo-btn`}
             onClick={onUploadImageButtonClick}
+            style={{"backgroundImage":`url(${image})`}}
           >
           </div>
         </div>
@@ -156,4 +185,5 @@ const MakeCardComponent = (props:{phone: string,payId:string|undefined, userId:n
     </div>
   );
 };
+
 export default MakeCardComponent;
