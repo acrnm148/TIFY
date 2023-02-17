@@ -230,17 +230,40 @@
     font-weight: 700;
     margin-bottom: 1.4em;
 }
-
+@media (max-width : 1280px){
+    .con-thanks-container{
+        justify-content: center;
+    }
+    .sent-card-con{
+        margin-top: 10%;
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .con-card-detail{
+        width: 80%;
+    }
+    .sent-card-detail{
+        width: 100%;
+    }
+}
 @media (max-width : 1024px){
     .con-thanks-container{
         justify-content: center;
     }
     .sent-card-con{
         margin-top: 10%;
-        width: 90%;
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
     .con-card-detail{
         width: 80%;
+    }
+    .sent-card-detail{
+        width: 100%;
     }
 }
 @media (max-width : 768px)
@@ -261,5 +284,12 @@
         width: 100%;
         margin-top: 10%;
         margin-bottom: 10%;
+    }
+    .sent-card-con{
+        margin-top: 10%;
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 }
