@@ -1,5 +1,8 @@
 package com.tify.back.controller.gifthub;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import com.tify.back.dto.gifthub.GiftDto;
 import com.tify.back.model.gifthub.Gift;
 import com.tify.back.model.gifthub.Product;
@@ -12,11 +15,14 @@ import com.tify.back.service.wish.WishService;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,5 +110,38 @@ public class GiftController {
         if (max_result == null) {max_result = 0; }
         Pageable pageable = PageRequest.of(page, Math.max(10, max_result));
         return giftRepository.findByWish(pageable, wishService.findWishById(wish_id));
+    }
+
+    // gift url 정보 가져오기
+    @GetMapping("/crawler")
+    public GiftDto crawlGift(@RequestBody Map<String,String> map) throws IOException {
+        String giftUrl = map.get("giftUrl");
+        System.out.println("-----------11111-----");
+        GiftDto dto = new GiftDto();
+
+        System.out.println("-----------22222222-----");
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(giftUrl)
+                .build();
+        Response response = client.newCall(request).execute();
+        String html = response.body().string();
+        // Parse HTML using Jsoup
+        Document doc = Jsoup.parse(html);
+        String price = "";
+        System.out.println("----------------------------------------");
+        String imgUrl = doc.head().getElementsByAttributeValue("property","og:image").attr("content");
+        try {
+            price = doc.getElementsByClass("origin-price").first().text().replaceAll("[^\\d]", "");
+        } catch (Exception e) {
+            price = doc.getElementsByClass("total-price").first().text().replaceAll("[^\\d]", "");
+        }
+        String productName = doc.getElementsByClass("prod-buy-header__title").first().text();
+
+        dto.setGiftImgUrl(imgUrl);
+        dto.setGiftname(productName);
+        dto.setPurePrice(Integer.parseInt(price));
+
+        return dto;
     }
 }
