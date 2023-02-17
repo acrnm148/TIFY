@@ -7,6 +7,7 @@ import { RootState } from '../store/Auth';
 import axios from 'axios';
 import { Gift } from '../interface/interface';
 import "../css/LikePage.styles.css"
+import Swal from 'sweetalert2';
 
 export function LikePage() {
   const [cartList, setCartList] = useState<Array<any>>([]);
@@ -32,9 +33,23 @@ export function LikePage() {
   },[]);
   
   const deleteItem = (id:number) =>{
-    let result = confirm('장바구니에서 삭제하시겠습니까?')
-    if(result){
-      const API_URL = `https://i8e208.p.ssafy.io/api/cart/${userId}/${id}`
+    let result = Swal.fire({
+      title: '정말로 그렇게 하시겠습니까?',
+      text: '다시 되돌릴 수 없습니다. 신중하세요.',
+      icon: 'warning',
+      
+      showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+      confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+      cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+      confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+      cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+      
+      reverseButtons: true, // 버튼 순서 거꾸로
+      
+   }).then(result => {
+      // 만약 Promise리턴을 받으면,
+      if (result.isConfirmed) {       
+        const API_URL = `https://i8e208.p.ssafy.io/api/cart/${userId}/${id}`
       axios.delete(API_URL
         ).then((res)=>{
           console.log('장바구니에서 삭제 완료')
@@ -42,7 +57,8 @@ export function LikePage() {
       }).catch((err)=>{
         console.log('장바구니에서 삭제 못함', id)
       })
-    }
+      }
+   });
   }
   return (
     <div>

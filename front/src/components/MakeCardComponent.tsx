@@ -66,19 +66,58 @@ const MakeCardComponent = (props:{
     // form 유효성검사
     let result;
     if(!title){
-      result = confirm('제목을 작성하지 않으셨군요')
-      if (!result){
+      result = Swal.fire({
+        text: '제목을 작성하지 않으셨군요',
+        icon: 'warning',
+  
+        showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+        confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+        cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+        confirmButtonText: '괜찮아요', // confirm 버튼 텍스트 지정
+        cancelButtonText: '작성할게요', // cancel 버튼 텍스트 지정
+  
+        reverseButtons: true, // 버튼 순서 거꾸로
+  
+      }).then(result => {
+        // 만약 Promise리턴을 받으면,
+        if (result.isDismissed) { return
+        }
+        if(!iphone){
+          setPhone(props.phone)
+        }
+        if(!contents){
+          Swal.fire('감사메세지가 비어있습니다.')
+          return
+        }
+        console.log('감사 보내자')
+        const API_URL = 'https://i8e208.p.ssafy.io/api/thkcards'
+        const data = {
+          "title":title,
+          "phoneNumber":iphone,
+          "content":contents,
+          "imageURL":image,
+          "userId":Number(props.userId),
+          "payId":Number(props.payId)
+        }
+        axios.post(API_URL, data).then((res) =>{
+          console.log('감사메세지 보내기 성공!!!', res)
+          Swal.fire("감사카드가 <br/>연락처로 <br/>문자 전송될 예정")
+          props.propFunction(true)
+        }).catch((err) => {
+          console.log('감사메세지 보내기 실패', err)
+        })
+      });
+    }
+
+    else{        
+      if(!iphone){
+        setPhone(props.phone)
+      }
+      if(!contents){
+        Swal.fire('감사메세지가 비어있습니다.')
         return
       }
-    }
-    if(!iphone){
-      setPhone(props.phone)
-    }
-    if(!contents){
-      Swal.fire('감사메세지가 비어있습니다.')
-      return
-    }
-    console.log('감사 보내자')
+      console.log('감사 보내자')
     const API_URL = 'https://i8e208.p.ssafy.io/api/thkcards'
     const data = {
       "title":title,
@@ -172,4 +211,5 @@ const MakeCardComponent = (props:{
     </div>
   );
 };
+}
 export default MakeCardComponent;
