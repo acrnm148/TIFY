@@ -141,12 +141,9 @@ export function CongratsCardPage() {
       Swal.fire('상품가격을 초과하여 축하할 수 없습니다!')
       return;
     }
+
     if(!cardPhone && state.userPhone){setCardPhone(state.userPhone)}
     else if(!cardPhone){
-      let res = confirm('연락처를 입력하시면 감사카드를 받을 수 있습니다!')
-      if(res){return}
-    
-    if(!cardPhone){
       let res = Swal.fire({
         text: '연락처를 입력하시면 감사카드를 받을 수 있습니다!',
         icon: 'warning',
