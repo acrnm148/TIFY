@@ -11,7 +11,7 @@ export default function PrivateRoute() {
   // console.log('Location은 지금', location);
 
   if (isAuth === 'Failed') {
-    Swal.fire('로그인 해야 합니다.');
+    Swal.fire({icon:'warning', text:'로그인 해야 합니다.'});
     return <Navigate to="/login" />;
   } else if (isAuth === 'Loading') {
     return <LoadingModal />;

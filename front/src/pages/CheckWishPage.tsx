@@ -342,13 +342,16 @@ return (
     </>
   );
 };
-  const WishOnGoing = ({ conList }: { conList: CheckWish[] | undefined }) => {
-    return (
-      <>
-        {conList &&
-          conList.map((lst: CheckWish, i: number) => {
-            return (
-              <div className="wish-container">
+const WishOnGoing = ({ conList }: { conList?: Array<CheckWish> }) => {
+  if (!conList || conList.length === 0) {
+    return <div className="wish-container wish-on-going-background empty-space">진행중인 위시가 없습니다</div>;
+  }
+
+  return (
+    <>
+      {conList.map((lst: CheckWish, i: number) => {
+        return (
+          <div className="wish-container">
                 <CongratsCards
                   fromList={lst.fromList}
                   wishId={lst.wishId}
@@ -380,31 +383,12 @@ return (
                     </div>
                   </div>
                 </NavLink>
-              </div>
-            );
-
-          // <Player
-          //   src="https://assets9.lottiefiles.com/packages/lf20_0oco6l9x.json"
-          //   autoplay={isPlaying[lst.wishId]}
-          //   loop={false}
-          //   style={{
-          //     height: '100%', //increasing the height to account for the 30% cut from top and bottom
-          //     width: '1500px', //increasing the width to account for the 30% cut from left and right
-          //     overflow: 'hidden', //hiding the portion of the animation that falls outside the specified height and width
-          //     marginTop: '-30%', //cutting the top 30% of the animation
-          //     marginBottom: '-30%', //cutting the bottom 30% of the animation
-          //     marginLeft: '-30%', //cutting the left 30% of the animation
-          //     marginRight: '-30%', //cutting the right 30% of the animation
-          //   }}
-          //   renderer="canvas"
-          //   onEvent={(event) => {
-          //     if (event === 'complete') handleAnimationComplete(lst.wishId);
-          //   }}
-          // />
-          })}
-      </>
-    );
-  };
+                </div>
+        );
+      })}
+    </>
+  );
+};
   const IsWishLayout = () => {
     return (
       <div className="is-wish-layout">

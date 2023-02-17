@@ -82,7 +82,7 @@ export function CongratsCardPage() {
       const sizeLimit = 300 * 10000;
       // 300만 byte 넘으면 경고문구 출력
       if (e.target.files[0].size > sizeLimit) {
-        Swal.fire('사진 크기가 3MB를 넘을 수 없습니다.');
+        Swal.fire({icon:'error', text:'사진 크기가 3MB를 넘을 수 없습니다.'});
       } else {
         // 파일을 formData로 만들어주기
         const formData = new FormData();
@@ -133,12 +133,12 @@ export function CongratsCardPage() {
     // amount 공백아닌지 확인
     if (!amount) {
       e.preventDefault();
-      Swal.fire('축하금액을 입력하세요!');
+      Swal.fire({icon:'warning', text:'축하금액을 입력하세요!'});
       return;
     }
     // amount 상품가격보다 높은지 확인
     if(amount > state.selectGift.price){
-      Swal.fire('상품가격을 초과하여 축하할 수 없습니다!')
+      Swal.fire({icon:'error', text:'상품가격을 초과하여 축하할 수 없습니다!'})
       return;
     }
 
@@ -146,7 +146,7 @@ export function CongratsCardPage() {
     else if(!cardPhone){
       let res = Swal.fire({
         text: '연락처를 입력하시면 감사카드를 받을 수 있습니다!',
-        icon: 'warning',
+        icon: 'info',
         
         showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
         confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
@@ -167,7 +167,7 @@ export function CongratsCardPage() {
     // 이용약관 동의 확인
     if (!isChecked) {
       e.preventDefault();
-      Swal.fire('이용약관에 동의해주세요!');
+      Swal.fire({icon:'warning', text:'이용약관에 동의해주세요!'});
       return;
     }
     if(!cardFrom && state.userName){

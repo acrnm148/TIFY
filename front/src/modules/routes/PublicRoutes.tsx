@@ -12,7 +12,7 @@ export default function PublicRoute({}) {
   const { isAuth } = CheckTokenByKey(location.key);
 
   if (isAuth === 'Success') {
-    Swal.fire('비로그인 전용.');
+    Swal.fire({icon:'success', text:'비로그인 전용.'});
     return <Navigate to="/" />;
   } else if (isAuth === 'Loading') {
     return <LoadingModal />;

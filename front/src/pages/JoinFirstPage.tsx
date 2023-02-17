@@ -21,7 +21,7 @@ export function JoinFirstPage() {
         .then((r) => {
           console.log(r.data);
           if (r.data == '유저가 존재합니다.') {
-            Swal.fire('이미 존재하는 이메일입니다.');
+            Swal.fire({icon:'warning', text:'이미 존재하는 이메일입니다.'});
           } else {
             axios
               .get(
@@ -32,9 +32,9 @@ export function JoinFirstPage() {
                 console.log('요청 보냄!');
                 console.log(doRequest);
                 console.log(r);
-                Swal.fire(
+                Swal.fire({icon:'success', text:
                   '요청하신 주소로 인증 요청 메일을 보냈습니다. 확인 후 완료 버튼을 눌러주세요.',
-                );
+              });
               })
               .catch((err) => {
                 console.log(err, '에러!!');
@@ -63,9 +63,9 @@ export function JoinFirstPage() {
             },
           });
         } else if (r.data == 'N') {
-          Swal.fire(
+          Swal.fire({icon:'warning', text:
             '아직 이메일 인증이 확인되지 않습니다. 인증 완료 후 시도해주세요',
-          );
+        });
           // navigate('/join2', {
           //   state: {
           //     emailData: email,

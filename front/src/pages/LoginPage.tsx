@@ -40,7 +40,7 @@ export function LoginPage() {
     Login(userEmail, password)
       .then((response) => {
         if (response === '로그인 실패!') {
-          Swal.fire('미등록 회원이거나 잘못된 아이디/비밀번호를 입력하셨습니다.');
+          Swal.fire({icon:'warning', text:'미등록 회원이거나 잘못된 아이디/비밀번호를 입력하셨습니다.'});
         } else {
           // console.log(response);
           // console.log('리프레쉬토큰 가자', response);

@@ -27,7 +27,8 @@ const MakeCardComponent = (props:{
     const sizeLimit = 300*10000
     // 300만 byte 넘으면 경고문구 출력
     if (e.target.files[0].size > sizeLimit){
-      Swal.fire({text: '사진 크기가 3MB를 넘을 수 없습니다.'})
+      Swal.fire({
+        icon: 'error' ,text: '사진 크기가 3MB를 넘을 수 없습니다.'})
     } else{
       if (e.target.files[0]) {
         formData.append('file', e.target.files[0] ); // 파일 상태 업데이트
@@ -86,7 +87,8 @@ const MakeCardComponent = (props:{
           setPhone(props.phone)
         }
         if(!contents){
-          Swal.fire('감사메세지가 비어있습니다.')
+          Swal.fire({icon: 'error',
+          text: '감사메세지가 비어있습니다.'})
           return
         }
         console.log('감사 보내자')
@@ -101,7 +103,7 @@ const MakeCardComponent = (props:{
         }
         axios.post(API_URL, data).then((res) =>{
           console.log('감사메세지 보내기 성공!!!', res)
-          Swal.fire("감사카드가 <br/>연락처로 <br/>문자 전송될 예정")
+          Swal.fire({icon:'success', text:"감사카드가 <br/>연락처로 <br/>문자 전송될 예정"})
           props.propFunction(true)
         }).catch((err) => {
           console.log('감사메세지 보내기 실패', err)

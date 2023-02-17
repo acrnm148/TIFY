@@ -118,7 +118,7 @@ export function GiftHubDetailPage() {
     if (isExist) {
       let r = Swal.fire({
         text: '이미 장바구니에 존재하는 상품입니다.' + '\n장바구니에서 삭제할까요?',
-        icon: 'warning',
+        icon: 'question',
         
         showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
         confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
@@ -146,9 +146,8 @@ export function GiftHubDetailPage() {
 
     } else {
       let result = Swal.fire({
-        title: '정말로 그렇게 하시겠습니까?',
-        text: '다시 되돌릴 수 없습니다. 신중하세요.',
-        icon: 'warning',
+        text: '장바구니에 담으시겠습니까?.',
+        icon: 'question',
         
         showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
         confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
@@ -179,10 +178,10 @@ export function GiftHubDetailPage() {
                 },
               })
                 .then((con) => {
-                  Swal.fire('장바구니에 담기 완료');
+                  Swal.fire({icon:'success', text:'장바구니에 담기 완료'});
                 })
                 .catch((err) => {
-                  Swal.fire('장바구니에 이미 담긴 상품입니다.');
+                  Swal.fire({icon:'error', text:'장바구니에 이미 담긴 상품입니다.'});
                   console.log('상품 좋아요 실패', err);
                 });
             };

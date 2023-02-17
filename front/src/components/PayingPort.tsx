@@ -52,7 +52,7 @@ export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:
     if (!paying.giftId || paying.giftId == -1){{
       const result = Swal.fire({
         text:'현금으로 축하하시겠습니까?',
-        icon: 'warning',
+        icon: 'question',
         showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
         confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
         cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
@@ -97,7 +97,7 @@ export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:
       
       if (success) {
         // success = true
-        Swal.fire(`결제가 완료되었습니다.`);
+        Swal.fire({icon:'success', text:`결제가 완료되었습니다.`});
         // api/celebrate/ 로 축하요청
         const data = {
           "amount": paying.amount?String(paying.amount):88,
@@ -145,7 +145,7 @@ export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:
             console.log('시도한데이터', data)
           })
       } else {
-        Swal.fire(`결제 실패: ${error_msg}`);
+        Swal.fire({icon:'error', text:`결제 실패: ${error_msg}`});
       }
     } 
 
