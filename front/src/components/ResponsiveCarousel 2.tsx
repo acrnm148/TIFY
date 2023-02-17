@@ -27,7 +27,7 @@ export default function CarouselComponent( props:{propFunction: (arg0: string) =
     const sizeLimit = 300*10000
     // 300만 byte 넘으면 경고문구 출력
     if (event.target.files[0].size > sizeLimit){
-      Swal.fire('사진 크기가 3MB를 넘을 수 없습니다.')
+      Swal.fire({icon:'error', text:'사진 크기가 3MB를 넘을 수 없습니다.'})
     } else{
       if (event.target.files[0]) {
         formData.append('file', event.target.files[0] ); // 파일 상태 업데이트

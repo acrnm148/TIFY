@@ -34,9 +34,8 @@ export function LikePage() {
   
   const deleteItem = (id:number) =>{
     let result = Swal.fire({
-      title: '정말로 그렇게 하시겠습니까?',
-      text: '다시 되돌릴 수 없습니다. 신중하세요.',
-      icon: 'warning',
+      text: '장바구니에서 삭제하시겠습니까?',
+      icon: 'question',
       
       showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
       confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정

@@ -29,12 +29,12 @@ export function ForgotPasswordPage() {
     })
       .then((r) => {
         console.log('요청 보냄!', r);
-        Swal.fire('요청하신 주소로 인증 요청 메일을 보냈습니다.');
+        Swal.fire({icon:'success', text:'요청하신 주소로 인증 요청 메일을 보냈습니다.'});
         return navigate('/login');
       })
       .catch((err) => {
         console.log(err);
-        Swal.fire('존재하지 않는 이메일입니다.');
+        Swal.fire({icon:'error', text:'존재하지 않는 이메일입니다.'});
       });
   };
 

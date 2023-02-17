@@ -809,6 +809,7 @@ export function MakeWishPage() {
                       </div>
                     </div>
                   </div>
+                  <p>※TIFY의 서비스 이용료로 5% 가산된 금액이 나옵니다</p>
                 </div>
               </div>
               {/* <div className="brbr padd"></div> */}

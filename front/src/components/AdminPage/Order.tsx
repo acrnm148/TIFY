@@ -98,7 +98,7 @@ const Order = () => {
       });
   
       if (!(isAdmin && toLogin)) {
-        Swal.fire("관리자 권한이 없습니다.");
+        Swal.fire({icon:'error', text:"관리자 권한이 없습니다."});
         navigate('../login');
       }
     }, [location, navigate]);
