@@ -1,0 +1,14 @@
+.gift-list-con-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.gift-list-container{
+    width: 100%;
+}
+
+
+.gift-list{
+    display: flex;
+    flex-wrap: wrap;
+}

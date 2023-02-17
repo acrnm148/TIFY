@@ -20,11 +20,11 @@ spring:
           connectiontimeout: 5000 #링크 만료시간 5분
           timeout: 5000
           writetimeout: 5000
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    # url: jdbc:mysql://localhost:3306/tify?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
-    # username: root
-    # password: 1234
     url: jdbc:mysql://i8e208.p.ssafy.io:3306/tify?useSSL=false&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
     username: tify
     password: tify88rising!
@@ -56,8 +56,6 @@ spring:
   #file system
   servlet:
     multipart:
-      enabled: true
-      location: C:/Temp
       file-size-threshold: 2KB
       max-file-size: 200MB
       max-request-size: 215MB
@@ -67,13 +65,25 @@ spring:
 file:
   uploadDir: ./88files
 
-#    <!--  transport.protocol">smtp</prop>
-#    <prop key="mail.smtp.auth">true</prop>
-#    <!-- gmail의 경우 보안문제 업데이트로 인해 SSLSocketFactory를 추가해야 smtp 사용 가능. -->
-#    <prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
-#    <prop key="mail.smtp.starttls.enable">true</prop>
-#    <prop key="mail.debug">true</prop>
-#    <prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+#aws s3
+aws:
+  access_key: AKIA2CCTTED2IIZLQOHS
+  secret_key: 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
+  s3:
+    bucket: tifyimage
 
+#iamport Keys
+imp_key: 8753437
+imp_secret: fec4af82c2d97e8fa4ebdb2c6a8ffb5d021b5794
 
+#firebase
+app:
+  firebase-configuration-file: firebaseconfig/sp-fcm-key.json
+
+# naver kgh key
+naver-cloud-sms:
+  accessKey: Ins3y4evD9z8sY45fTXN
+  secretKey: 5Xz1XV8TnS5EmRnQo6PAKJISbDt2xHAvrX2JJhzb
+  serviceId: ncp:sms:kr:299557230184:tify
+  senderPhone: 01049221157
 

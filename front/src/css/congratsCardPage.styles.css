@@ -1,0 +1,347 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+
+.congrats-card-page-containger{
+    display: flex;
+    justify-content: center;
+
+}
+.congrats-card-page-containger-border{
+    width: 85vw;
+    /* height: 970px; */
+    left: 70px;
+    border: 3px solid rgba(136, 136, 136, 0.31);
+    border-radius: 10px;
+    /* background-color: azure; */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.congrats-card-page-right, .congrats-card-page-left{
+    padding-bottom: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 3%;
+    width: 40%;
+}
+.selected{
+    border: 2px solid #fe3360;
+}
+.congrats-form-btn{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 10px;
+
+    background: #FE3360;
+    border-radius: 10px;
+    height: 52px;
+    color: white;
+
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 700;
+    /* font-size: 14px; */
+    line-height: 22px;
+}
+.congrats-input{
+    width: 100%;
+    min-height: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
+
+.congrats-photo-btn{
+    width: inherit-20px;
+    height: 150px;
+    border: solid 1px #FE3360;
+    border-radius: 8px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.congrats-photo-btn h1{
+    font-size: 88px;
+    color: #fe335f;
+}
+
+.middle-line-vertical{
+    width: 0px;
+    height: 80%;
+    border: 1px dashed #FE3360;
+    /* background-color: #fe335f; */
+}
+
+.gift-loading p{
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 14px;
+    margin-top: 20px;
+    color: #A1A3A2;
+}
+
+.gift-loading{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+.gift-loading>img{
+    min-width: 20px;
+    margin-bottom: 40px;
+}
+.gift-info{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+}
+
+.gift-info img{
+    width: fit-content;
+}
+
+.name_and_price{
+    display: flex;
+    justify-content: space-between;
+    padding-left:2px;
+    padding-right: 2px;
+
+    margin-top: 30px;
+}
+.name_and_price h1{
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 22.652px;
+    line-height: 22px;
+}
+.underline{
+    width: 100%;
+    height: 0px;
+    border: 1px solid black;
+    /* margin-bottom: 60px; */
+}
+.policy{
+    display: flex;
+    justify-content: left;
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 5px;
+}
+.pay-amount-selection{
+    margin-top: 10px;
+}
+.pay-amount-selection-btns{
+    display: flex;
+    justify-content:space-between;
+    margin-bottom: 30px;
+}
+
+.pay-amount-selection-btns button{
+    /* width: 90px; */
+    height: 42px;
+    background: #D9D9D9;
+    border-radius: 10px;
+    width: 22%;
+}
+
+.selection-label{
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 14px;
+    color: #4F5150;
+    margin-bottom: 10px;
+}
+
+.pay-amount-selected{
+    width: 100%;
+    height: 52px;
+
+    text-align: center;
+
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22.652px;
+    line-height: 23px;
+    color: #828483;
+
+    margin-bottom: 60px;
+}
+.pay-amount-selected input{
+    width: 100%;
+    height: 100%;
+    border: 1px solid #C7C8D2;
+    border-radius: 10px;
+    text-align: center;
+}
+.payment-selection{
+    width: 420px;
+}
+.payment-btn {
+    width: 100%;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+    border-radius: 7px;
+    height: 52px;
+    margin-bottom: 10px;
+
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 14px;
+    color: #3A2929;
+    /* text-align: center; */
+    display: flex;
+    align-items:center; 
+    justify-content: center;
+}
+
+.kakao{
+    background: #FDDC3F;
+}
+.card-pay{
+    
+}
+.selected-payment{
+    border: solid 1px #FE3360;
+    zoom: 110%;
+}
+
+.gift-img-box-con{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 로딩바 */
+.donut {
+    position: absolute;
+    /* width: calc(100% - 16px);
+    height: calc(100% - 16px); */
+    width: 170px;
+    height: 170px;
+    margin: 0 auto;
+    border-radius: 50%;
+    position: relative;
+    text-align: center;
+  }
+
+  .donut-container {
+    width: 200px;
+    height: 200px;
+  }
+
+.donut > svg{
+    position: relative;
+    left: 50%;
+    top: 50%;
+    width: 102;
+    height: 102%;
+    transform: translate(-50%, -50%);
+}
+
+.concard-policy > .css-1wnsr1i{
+    width: auto;
+    height: 100%;
+    overflow: scroll;
+}
+.concard-policy h1{
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-top: 20px;
+}
+.concard-policy h2{
+    font-size: 18px;
+    font-weight: bold;
+}
+  * , .concard-info *{
+    line-height: 1.66;
+}
+.concard-info h1{
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #828483;
+}
+.concard-info button{
+    font-size: 22px;
+    font-weight: bold;
+    border:1px solid #828483;
+    padding: 4px 10% 4px 10%;
+    color: #828483;
+    border-radius: 8px;
+    width: 100%;
+}
+.concard-info button:hover{
+    background-color: #FE3360;
+    color: white;
+}
+.css-1qh5tm1{
+    border-radius: 8px;
+}
+.cursor{
+    cursor: pointer;
+}
+.txt-underline{
+    text-decoration: underline;
+}
+.gray{
+    color: #C7C8D2;
+}
+
+.pb10{
+    padding-bottom: 10px;
+}
+.pt10{
+    padding-top: 10px;
+}
+.diable-btn{
+    color: rgb(204, 204, 204);
+}
+.font-sm{
+    font-size: 16px;
+}
+.font-red{
+    color: #FE3360;
+}
+
+@media (min-width : 1025px)
+{
+
+}
+@media (max-width : 1024px)
+{
+
+}
+@media (max-width : 768px)
+{
+    .middle-line-vertical{
+        display: none;
+    }
+    .congrats-card-page-containger-border{
+        flex-wrap: wrap;
+    }
+    .congrats-card-page-right, .congrats-card-page-left{
+        width: 90%;
+    }
+    .tap-box{
+        margin-left: 2em;
+    }
+}

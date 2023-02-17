@@ -1,8 +1,12 @@
 package com.tify.back.model.friend;
 
 import javax.persistence.*;
+
+import com.tify.back.model.users.User;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Optional;
 
 @Entity
 @Table(name = "friends")
@@ -23,6 +27,15 @@ public class Friend {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private FriendStatus status;
+
+    @Transient
+    private User user;
+
+    public void setUser(Optional<User> userOptional) {
+        if (userOptional.isPresent()) {
+            this.user = userOptional.get();
+        }
+    }
 
     // getters and setters
 }

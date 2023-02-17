@@ -4,50 +4,38 @@ package com.tify.back.service.phonebook;
 import com.tify.back.dto.phonebook.PhonebookDto;
 import com.tify.back.model.phonebook.Phonebook;
 import com.tify.back.repository.phonebook.PhonebookRepository;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
+@RequiredArgsConstructor
 public class PhonebookService {
-
     private final PhonebookRepository phonebookRepository;
 
-    public PhonebookService(PhonebookRepository phonebookRepository) {
-        this.phonebookRepository = phonebookRepository;
+    // Phonebook 데이터 저장 서비스
+    public Phonebook findPhonebookByMyId(Long myId) {
+        return phonebookRepository.findById(myId).orElse(null);
     }
 
-    public List<PhonebookDto> getAllPhonebookEntries() {
-        List<Phonebook> phonebookEntries = phonebookRepository.findAll();
-        return phonebookEntries.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+    public boolean savePhonebook(PhonebookDto dto) {
+        Phonebook phonebook = dto.toEntity(phonebookRepository);
+        phonebookRepository.save(phonebook);
+        try {
+            phonebookRepository.save(phonebook);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
-    public PhonebookDto addPhonebookEntry(PhonebookDto phonebookDto) {
-        Phonebook phonebook = convertToEntity(phonebookDto);
-        Phonebook savedPhonebook = phonebookRepository.save(phonebook);
-        return convertToDto(savedPhonebook);
+    public List<Phonebook> getPhonebookByMyId(long myId) {
+        return phonebookRepository.findByMyId(myId);
     }
 
-    private PhonebookDto convertToDto(Phonebook phonebook) {
-        PhonebookDto phonebookDto = new PhonebookDto();
-        phonebookDto.setUserId(phonebook.getUserId());
-        phonebookDto.setName(phonebook.getName());
-        phonebookDto.setPhoneNumber(phonebook.getPhoneNumber());
-        return phonebookDto;
-    }
-
-    private Phonebook convertToEntity(PhonebookDto phonebookDto) {
-        Phonebook phonebook = new Phonebook();
-        phonebook.setId(phonebookDto.getUserId());
-        phonebook.setName(phonebookDto.getName());
-        phonebook.setPhoneNumber(phonebookDto.getPhoneNumber());
-        return phonebook;
-    }
-
-    public void deletePhonebookEntry(Long id) {
-        phonebookRepository.deleteById(id);
+    public String deletePhonebookById(Long id) {
+        Phonebook phonebook = phonebookRepository.findById(id).orElse(null);
+        phonebookRepository.delete(phonebook);
+        return "phonebook deleted";
     }
 }

@@ -15,7 +15,9 @@ import com.tify.back.model.gifthub.Img;
 import com.tify.back.model.gifthub.Product;
 import com.tify.back.model.gifthub.ProductOption;
 import com.tify.back.model.gifthub.ProductOptionDetail;
+import com.tify.back.repository.gifthub.ImgRepository;
 import com.tify.back.repository.gifthub.ProductOptionDetailRepository;
+import com.tify.back.repository.gifthub.ProductOptionRepository;
 import com.tify.back.repository.gifthub.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
@@ -24,11 +26,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ProductService {
     private final ProductRepository productRepository;
     private final ImgService imgService;
@@ -36,6 +41,8 @@ public class ProductService {
     private final ProductOptionDetailService productOptionDetailService;
     ObjectMapper objectMapper = new ObjectMapper();
     private final ProductOptionDetailRepository productOptionDetailRepository;
+    private final ImgRepository imgRepository;
+    private final ProductOptionRepository productOptionRepository;
 
     public Product saveProduct(Product product) {
         return productRepository.save(product);
@@ -91,12 +98,17 @@ public class ProductService {
         Product product = dto.toEntity();
         productRepository.save(product);
 
-        List<Img> imgList = product.getImgList();
-        for (ImgDto imgDto : dto.getImages()) {
-            Img img = imgDto.toEntity();
-            img.setProduct(product);
-            imgService.saveImg(img);
-            imgList.add(img);
+        product.setRepImg(dto.getRepImg());
+
+        if (dto.getImgList().size() > 0) {
+            List<Img> imgList = new ArrayList<>();
+            for (ImgDto imgDto : dto.getImgList()) {
+                Img img = imgDto.toEntity();
+                img.setProduct(product);
+                imgService.saveImg(img);
+                imgList.add(img);
+            }
+            product.setImgList(imgList);
         }
 
         List<ProductOption> options = new ArrayList<>();
@@ -117,10 +129,62 @@ public class ProductService {
             options.add(productOption);
         }
         product.setOptions(options);
-        product.setImgList(imgList);
         return productRepository.save(product);
     }
+    @Transactional
+    public Product pyProductUpdate(ProductDto dto) {
+        Product pdto = dto.toEntity();
+        Product product = productRepository.findById(dto.getId()).orElse(null);
+        product.setName(pdto.getName());
+        product.setDescription(pdto.getDescription());
+        System.out.println("--------------------------------111111111111");
+        System.out.println(dto.getRepImg());
+        System.out.println(dto.getImgList().size());
+        System.out.println("--------------------------------900432432");
+        product.setRepImg(dto.getRepImg());
 
+        product.setPrice(pdto.getPrice());
+        product.setCategory(pdto.getCategory());
+        product.setQuantity(pdto.getQuantity());
+        //기존 이미지 삭제
+        if (dto.getImgList().size() > 0) {
+            for (Img img:product.getImgList()) {
+                imgRepository.deleteById(img.getId());
+            }
+            List<Img> imgList = new ArrayList<>();
+            for (ImgDto imgDto : dto.getImgList()) {
+                Img img = imgDto.toEntity();
+                img.setProduct(product);
+                imgService.saveImg(img);
+                imgList.add(img);
+            }
+            product.setImgList(imgList);
+        }
+
+        for (ProductOption option : product.getOptions()) {
+            productOptionRepository.deleteById(option.getId());
+        }
+
+        List<ProductOption> options = new ArrayList<>();
+        for (ProductOptionDto optionDto : dto.getOptions()) {
+            ProductOption productOption = optionDto.toEntity();
+            productOption.setProduct(product);
+            productOptionService.saveProductOption(productOption);
+            List<ProductOptionDetail> details = new ArrayList<>();
+
+            for (ProductOptionDetailDto detailDto : optionDto.getDetails()) {
+                ProductOptionDetail productOptionDetail = detailDto.toEntity();
+                productOptionDetail.setProductOption(productOption);
+                productOptionDetailService.saveProductOptionDetail(productOptionDetail);
+                details.add(productOptionDetail);
+            }
+            productOption.setDetails(details);
+            productOptionService.saveProductOption(productOption);
+            options.add(productOption);
+        }
+        product.setOptions(options);
+        return productRepository.save(product);
+    }
     @Transactional
     public Product createProduct(String message) throws Exception {
 //        TypeReference<Map<String, String>> typeReference = new TypeReference<Map<String,String>>() {};
@@ -196,6 +260,8 @@ public class ProductService {
             imgService.deleteImg(img.getId());
         }
         // 일단 귀차나서 새로 생성하는 식으로 해버렸음.
+        System.out.println(map.get("options"));
+        System.out.println("000000000000000000000000000000000000000000000");
         for(int i=0; i<optionlist.length() ; i++){
             JSONObject option = optionlist.getJSONObject(i);
             List<JSONObject> details = new ArrayList<>();
@@ -210,7 +276,7 @@ public class ProductService {
         }
 
         // 일단 귀찮아서 새로 생성하는 식으로 해버렸음.
-        JSONArray imagelist = map.getJSONArray("images");
+        JSONArray imagelist = map.getJSONArray("imgList");
         List<Img> images = new ArrayList<>();
         for (int i = 0; i < imagelist.length(); i++) {
             JSONObject image = imagelist.getJSONObject(i);
@@ -227,5 +293,52 @@ public class ProductService {
         existingProduct.setOptions(opts);
         existingProduct.setRepImg(map.getString("repImg"));
         return productRepository.save(existingProduct);
+    }
+
+    @Transactional
+    public Product testUpdateProduct(ProductDto dto) {
+        Product newpr = dto.toEntity();
+        Product exproduct = productRepository.findById(dto.getId()).orElse(null);
+        exproduct.setName(newpr.getName());
+        exproduct.setPrice(newpr.getPrice());
+        exproduct.setQuantity(newpr.getQuantity());
+        exproduct.setDescription(newpr.getDescription());
+        exproduct.setRepImg(newpr.getRepImg());
+        exproduct.setCategory(dto.getCategory());
+        // 새 이미지 들이 올라왔다면.
+        if (dto.getImgList().size() > 0) {
+            List<Img> imgList = exproduct.getImgList();
+            for (Img img : exproduct.getImgList()) {
+                imgService.deleteImg(img.getId());
+            }
+            imgList.clear();
+            for (ImgDto imgDto : dto.getImgList()) {
+                Img img = imgDto.toEntity();
+                img.setProduct(exproduct);
+                imgService.saveImg(img);
+                imgList.add(img);
+            }
+            exproduct.setImgList(imgList);
+        }
+//        List<ProductOption> options = new ArrayList<>();
+//        for (ProductOptionDto optionDto : dto.getOptions()) {
+//            ProductOption productOption = optionDto.toEntity();
+//            productOption.setProduct(exproduct);
+//            productOptionService.saveProductOption(productOption);
+//            List<ProductOptionDetail> details = new ArrayList<>();
+//
+//            for (ProductOptionDetailDto detailDto : optionDto.getDetails()) {
+//                ProductOptionDetail productOptionDetail = detailDto.toEntity();
+//                productOptionDetail.setProductOption(productOption);
+//                productOptionDetailService.saveProductOptionDetail(productOptionDetail);
+//                details.add(productOptionDetail);
+//            }
+//            productOption.setDetails(details);
+//            productOptionService.saveProductOption(productOption);
+//            options.add(productOption);
+//        }
+//        product.setOptions(options);
+
+        return productRepository.save(exproduct);
     }
 }

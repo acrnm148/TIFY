@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 public class AddWishDto {
+    private Long wishId;
     private Long userId;
     private List<GiftDto> giftItems;
     private Integer totalPrice;
@@ -37,7 +38,7 @@ public class AddWishDto {
         wish.setTitle(this.wishTitle);
         wish.setContent(this.wishContent);
         wish.setCategory(this.category);
-        wish.setFinishYN(this.finishYN);
+        wish.setFinishYN(this.finishYN == null ? "N" : this.finishYN);
         wish.setStartDate(this.startDate);
         wish.setEndDate(this.endDate);
         wish.setCardImageCode(this.wishCard);

@@ -1,0 +1,265 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+.back-botton{
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.4em;
+    line-height: 22px;
+    color: #A1A3A2;
+}
+.thanks-page-con-container{
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.thanks-page-container{
+    width: 90%;
+    /* border: 1px solid gray; */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.con-thanks-container{
+    width: 100%;
+    /* border: 1px solid rgb(72, 96, 182); */
+    min-height: 800px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.con-card-detail{
+    display: flex;
+    align-items: center;
+    width: 50%;
+    min-width: 519px;
+    height: auto;
+}
+.con-card{
+    background-image: url('../assets/conCard.svg');
+    min-height: 25vw;
+    width: 100%;
+    padding: 10px;
+    background-size: cover;
+    border-radius: 8px;
+}
+.con-photo{
+    width: 100%;
+    /* height: 25vw; */
+    min-height: 15em;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: white;
+    border-radius: 10px;
+}
+.con-text{
+    width: inherit - 20px;
+    min-height: 17em;
+    margin-top: 1em;
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 400;
+    color: #636564;
+    font-size: 16px;
+    line-height: 2;
+    padding: 10px;
+}
+.userName{
+    width: inherit - 20px;
+    text-align: end;
+}
+
+.tofrom{
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 14px;
+    color: #828483;
+    
+}
+
+.thanks-card-container{
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    width: 100%;
+    
+}.thanks-card-con-container{
+    width: 40%;
+    min-width: 300px;
+}
+.thanks-card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.thanks-input{
+    width: inherit;
+    min-height: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    margin-top: 10px;
+    width: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.thanks-input textarea{
+    min-height: 150px;
+}
+.thanks-input label{
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 14px;
+    /* identical to box height */
+
+
+    /* text/600 */
+
+    color: #4F5150;
+    padding: 5px;
+}
+.thanks-input input{
+    height: 52px;
+    border: solid 1px #C1C1C1;
+    border-radius: 8px;
+    margin-top: 7px;
+    padding: 10px;
+}
+.thanks-input textarea{
+    border: solid 1px #C1C1C1;
+    border-radius: 8px;
+    margin-top: 7px;
+    padding: 10px;
+}
+
+.thanks-photo-btn{
+    width: 100%;
+    min-height: 300px;
+    border: solid 1px #BBDAF7;
+    border-radius: 8px;
+    margin-top: 7px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.thanks-photo-btn h1{
+    font-size: 88px;
+    color: #BBDAF7;
+}
+
+.thanks-form-btn{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 10px;
+
+    background: #BBDAF7;
+    border-radius: 10px;
+    height: 52px;
+    margin-top: 20px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+    color: #ffffff;
+    font-size: 18px;
+    
+}
+.thanks-form-btn:hover{
+    /* border: 1px solid #BBDAF7; */
+    background: #bbdaf77d;
+    color: #5a646d;
+}
+
+.form-title{
+    color: #96AEC6;
+    font-family: 'NanumGothic';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22.652px;
+    line-height: 23px;
+    /* margin-bottom: 25px; */
+    padding: 2%;
+}
+
+.img-input{
+    display: none;
+    min-height: 150px;
+}
+.arrow{
+    height: inherit;
+    width: 50px;
+}
+.disp-flex{
+    display: flex;
+}
+.align-center{
+    align-items: center;
+}
+.sent-card{
+    width: 100%;
+    height: 52px;
+    display: flex;
+    padding: 1em;
+    border-radius: 8px;
+    margin: auto;
+    background-color: #BBDAF7;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 1.4em;
+}
+
+@media (max-width : 1024px){
+    .con-thanks-container{
+        justify-content: center;
+    }
+    .sent-card-con{
+        margin-top: 10%;
+        width: 90%;
+    }
+    .con-card-detail{
+        width: 80%;
+    }
+}
+@media (max-width : 768px)
+{
+    .con-card{
+        width: 100%;
+        margin-top: 5%;
+        margin-bottom: 10%;
+    }
+    .con-card-detail{
+        width: 100%;
+        min-width: 380px;
+    }.con-thanks-container{
+        justify-content: center;
+
+    }
+    .thanks-card-con-container{
+        width: 100%;
+        margin-top: 10%;
+        margin-bottom: 10%;
+    }
+}

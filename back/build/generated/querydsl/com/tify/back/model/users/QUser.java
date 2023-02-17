@@ -30,6 +30,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath birthYear = createString("birthYear");
 
+    public final com.tify.back.model.gifthub.QCart cart;
+
     public final DateTimePath<java.time.LocalDateTime> createTime = createDateTime("createTime", java.time.LocalDateTime.class);
 
     public final StringPath email = createString("email");
@@ -78,6 +80,7 @@ public class QUser extends EntityPathBase<User> {
 
     public QUser(Class<? extends User> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.cart = inits.isInitialized("cart") ? new com.tify.back.model.gifthub.QCart(forProperty("cart"), inits.get("cart")) : null;
         this.jwtRefreshToken = inits.isInitialized("jwtRefreshToken") ? new com.tify.back.auth.jwt.refreshToken.QRefreshToken(forProperty("jwtRefreshToken")) : null;
     }
 

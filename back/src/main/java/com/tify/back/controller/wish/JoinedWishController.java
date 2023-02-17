@@ -23,7 +23,8 @@ public class JoinedWishController {
     }
     @PostMapping("/add")
     public Integer joinedWish(@RequestBody JoinedWishDto dto) {
-        joinedWishService.saveJoinedWish(dto);
+        //joinedWishService.saveJoinedWish(dto);
         return 0;
     }
+
 }

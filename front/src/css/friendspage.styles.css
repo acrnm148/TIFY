@@ -1,0 +1,346 @@
+.friends-wrap-con {
+  min-height: 20vw;
+}
+.friends-title {
+  /* display: flex; */
+  height: 50px;
+}
+.component-1 {
+  height: 262px;
+  width: 310px;
+  background-color: #ffffff;
+  border: 1px solid #000000;
+}
+.group-8-0 {
+  height: 262px;
+  width: 310px;
+}
+.rectangle-2-2 {
+  opacity: 0.4000000059604645;
+  transform: rotate(-90deg);
+  height: 310px;
+  width: 262px;
+  background-color: #ffffff;
+  border: 1px solid #000000;
+}
+.frame-7-8 {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 10px;
+  gap: 10px;
+}
+.text-1 {
+  text-align: left;
+  vertical-align: top;
+  font-size: 22.652000427246094px;
+  font-family: NanumGothic;
+  line-height: auto;
+  color: #000000;
+}
+.frame-7-9 {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 10px;
+  gap: 10px;
+}
+.text-2 {
+  text-align: center;
+  vertical-align: top;
+  font-size: 14px;
+  font-family: NanumGothic;
+  line-height: auto;
+  color: #4f5050;
+}
+.친-구-버-튼 {
+  height: 16px;
+  width: 56px;
+}
+.rectangle-2-6 {
+  border-radius: 10px;
+  height: 16px;
+  width: 56px;
+  background-color: #ffebef;
+}
+.text-3 {
+  text-align: center;
+  vertical-align: top;
+  font-size: 8.652657508850098px;
+  font-family: NanumGothic;
+  line-height: auto;
+  color: #393939;
+}
+.img-4 {
+  height: 100px;
+  width: 100px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.cardcolor {
+  background-color: white;
+}
+.backcolor {
+  background-color: white;
+  width: 100vw;
+  min-height: 45vw;
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.탭-이-름 {
+  height: 53px;
+  width: 306px;
+}
+.text-1 {
+  margin-top: 20px;
+}
+.text-2 {
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+.line-3 {
+  transform: rotate(-90deg);
+  height: 0px;
+  width: 53px;
+  border: 3px solid #fe3360;
+}
+.search-bar {
+  /* margin-top: 20px; */
+  width: 30vw;
+  height: 52px;
+  border: 1px solid #c1c1c1;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  background-color: #fff1ef;
+  /* margin-left: 10vw; */
+  text-align: center;
+}
+
+.search-btn {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  border: none;
+  background: url('https://tifyimage.s3.ap-northeast-2.amazonaws.com/e0a94402-6583-4557-9508-307e5778dd20.png')
+    no-repeat;
+}
+
+.friend-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1vw;
+  margin-bottom: 20px;
+}
+
+.rectangle-2-7 {
+  border-radius: 10px;
+  height: 16px;
+  width: 56px;
+  background-color: #ffc0ce;
+}
+
+.rectangle-2-5 {
+  border-radius: 10px;
+  height: 16px;
+  width: 56px;
+  background-color: #fe3360;
+}
+.search-bar-container {
+  /* align-items: center; */
+  /* display: flex; */
+  /* justify-content: flex-start; */
+  margin-top: 2vh;
+  width: 100vw;
+  /* margin-left: 5vw; */
+}
+.search-bar-container > input {
+  margin-top: 5vw;
+}
+.friend-list-item > img {
+  border-radius: 100%;
+  width: 10%;
+}
+.cardsize {
+  width: 15vw;
+  height: 15vw;
+  border-radius: 8px;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.friends-nickname-box {
+}
+.pagination-btn {
+  border: 1px solid #c1c1c1;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin: 0 10px;
+  background-color: #fff1ef;
+}
+
+.pagination-text {
+  font-size: 14px;
+  margin: 0 10px;
+}
+
+.pagination-btn[disabled] {
+  opacity: 0.5;
+}
+.friends-search-img {
+  width: 40px;
+  cursor: pointer;
+}
+
+.userCount {
+  justify-content: center;
+  display: flex;
+  font-weight: 100;
+  font-size: 16px;
+  color: rgb(151, 151, 151);
+  padding: 10px;
+  font-family: 'Nanum Gothic';
+  margin: 0 auto;
+  text-align: center;
+}
+.find-friends {
+  /* background-image: url('https://tifyimage.s3.ap-northeast-2.amazonaws.com/2d24a7f4-b1c3-4093-b683-2149604845cf.png'); */
+  background-repeat: no-repeat;
+  /* margin-left: 24px; */
+  height: 100px;
+}
+.friends-nickname-box {
+  display: flex;
+  padding: 10px;
+  border-radius: solid;
+  border-color: gainsboro;
+  border-width: 1px;
+  width: 40%;
+  border-radius: 10px;
+  margin: 0 auto;
+  margin-bottom: 40px;
+}
+.friends-nickname-box {
+  margin-top: 2.8vw;
+}
+.friends-nickname-input {
+  background-color: white;
+  width: 100%;
+  font-size: 16px;
+  outline: none;
+  margin-left: 2px;
+}
+.pagination-container-friends-item {
+  bottom: 0;
+  justify-content: center;
+  text-align: center;
+  padding: 2vw;
+}
+
+.friend-list > div {
+  height: 250px;
+  width: 250px;
+  margin-left: 20px;
+  margin-right: 20px;
+  text-align: center;
+  background-color: #bbdaf741;
+}
+.friend-profImg {
+  width: 55px;
+  height: 55px;
+  border-radius: 100%;
+}
+.friends-req-me {
+  cursor: pointer;
+  font-family: 'NanumGothic';
+  background-color: #fe3360;
+  color: white;
+  width: wrap;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 5px;
+}
+.friends-req-cancel {
+  cursor: pointer;
+  font-family: 'NanumGothic';
+  color: white;
+  background-color: #bbdaf7;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 5px;
+}
+.friends-req-delete {
+  cursor: pointer;
+  font-family: 'NanumGothic';
+  color: white;
+  background-color: #bbdaf7;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 5px;
+}
+.friends-req-ok {
+  cursor: pointer;
+  font-family: 'NanumGothic';
+  color: white;
+  background-color: #ff4a6e;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 5px;
+}
+.friends-req-no {
+  cursor: pointer;
+  font-family: 'NanumGothic';
+  color: white;
+  background-color: #bbdaf7;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 5px;
+}
+.friends-req {
+  cursor: pointer;
+  font-family: 'NanumGothic';
+  color: white;
+  background-color: #ff4a6e;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 5px;
+}
+.friends-paging-wrap {
+  width: 100%;
+  background-color: white;
+  position: absolute;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+}
+.friends-paging {
+  margin: 0 auto;
+  text-align: center;
+  background-color: blue;
+}
+.friends-wrap-inner-con {
+  min-height: 100px;
+}
+.userCount > img {
+  width: 50px;
+}

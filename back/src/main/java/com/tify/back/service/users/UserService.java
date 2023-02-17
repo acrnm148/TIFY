@@ -8,6 +8,7 @@ import com.tify.back.auth.jwt.JwtToken;
 import com.tify.back.auth.jwt.refreshToken.RefreshToken;
 import com.tify.back.auth.jwt.refreshToken.RefreshTokenRepository;
 import com.tify.back.auth.jwt.service.JwtProviderService;
+import com.tify.back.dto.users.SearchedUserDto;
 import com.tify.back.dto.users.UserProfileDto;
 import com.tify.back.dto.users.UserUpdateDto;
 import com.tify.back.dto.users.request.EmailAuthRequestDto;
@@ -16,13 +17,16 @@ import com.tify.back.dto.users.request.LoginRequestDto;
 import com.tify.back.dto.users.response.JoinResponseDto;
 import com.tify.back.dto.users.response.LoginResponseDto;
 import com.tify.back.exception.UserLoginException;
+import com.tify.back.model.friend.FriendStatus;
 import com.tify.back.model.gifthub.Cart;
 import com.tify.back.model.users.EmailAuth;
 import com.tify.back.model.users.User;
+import com.tify.back.model.users.UserProperties;
 import com.tify.back.repository.users.EmailAuthCustomRepository;
 import com.tify.back.repository.users.EmailAuthRepository;
 import com.tify.back.repository.users.UserRepository;
 
+import com.tify.back.service.friend.FriendService;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,12 +34,14 @@ import com.tify.back.service.gifthub.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.security.auth.login.LoginException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -44,7 +50,7 @@ import java.util.UUID;
  */
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class UserService {
 
     private final EmailService emailService;
@@ -58,6 +64,7 @@ public class UserService {
 
     private final StringRedisTemplate redisTemplate;
     private final CartService cartService;
+    private final FriendService friendService;
 
     /**
      * DTO로 들어온 값으로 회원가입
@@ -66,28 +73,29 @@ public class UserService {
     public JoinResponseDto register(JoinRequestDto requestDto) {
         //중복 유저 체크 - 중복되면 true
         if (validateDuplicated(requestDto.getUserid())) {
-            return null;
+            System.out.println("유저가 존재합니다.");
+            JoinResponseDto responseDto = new JoinResponseDto();
+            responseDto.setResult(UserProperties.EXISTED_USER);
+            return responseDto;
         }
-        /*
-        //이메일 인증 false로 초기화
-        EmailAuth emailAuth = emailRepository.save(
-                EmailAuth.builder()
-                        .email(requestDto.getEmail())
-                        .authToken(UUID.randomUUID().toString())
-                        .expired(false)
-                        .build());
-        */
 
-        Boolean emailState = false;
-        if (emailRepository.findByEmail(requestDto.getEmail()).size() != 0) {
-            emailState = true;
+        //이메일 인증 여부 확인
+        //Boolean emailState = false;
+        List<EmailAuth> emailAuths = emailRepository.findAllByEmail(requestDto.getEmail());
+
+        if (emailAuths.size() == 0 || emailAuths.get(emailAuths.size()-1).getExpired() ==false) {
+            System.out.println("이메일 인증이 필요합니다.");
+            JoinResponseDto responseDto = new JoinResponseDto();
+            responseDto.setResult(UserProperties.NO_CHECKED_EMAIL);
+            return responseDto;
         }
+        //emailState = true;
 
         //회원가입
         User user = userRepository.save(
                 User.builder()
                         .userid(requestDto.getUserid())
-                        .profileImg("/no_img.png")
+                        .profileImg(requestDto.getProfile_img())
                         .tel(requestDto.getTel())
                         .username(requestDto.getUsername())
                         .nickname(requestDto.getNickname())
@@ -101,22 +109,11 @@ public class UserService {
                         .email(requestDto.getEmail())
                         .password(bCryptPasswordEncoder.encode(requestDto.getPassword()))
                         .provider(requestDto.getProvider())
-                        .emailAuth(emailState)
+                        .emailAuth(true)
                         .createTime(LocalDateTime.now())
                         .build());
 
-        //이메일 인증
-        //System.out.println("emailAuth 저장된 내용: "+emailAuth.getAuthToken()+" ");
-        //emailService.send(emailAuth.getEmail(), emailAuth.getAuthToken());
-        //String authToken = sendEmailAuth(requestDto.getEmail());
-        List<EmailAuth> emailAuth = new ArrayList<>();
-        emailAuth = emailRepository.findByEmail(requestDto.getEmail());
-        if (emailAuth.size() == 0) {
-            System.out.println("이메일 인증이 필요합니다.");
-            throw new UserLoginException("이메일 인증이 필요합니다.");
-            //return null;
-        }
-        String authToken = emailAuth.get(0).getAuthToken();
+        String authToken = emailAuths.get(emailAuths.size()-1).getAuthToken();
         System.out.println("회원가입 중 authToken 확인: "+authToken);
 
         // 유저 고유 cart 생성.
@@ -127,6 +124,7 @@ public class UserService {
         return JoinResponseDto.builder()
                 .userid(user.getUserid())
                 .email(user.getEmail())
+                .result(UserProperties.SUCCESS)
                 //.authToken(emailAuth.getAuthToken())
                 .authToken(authToken)
                 .build();
@@ -155,11 +153,21 @@ public class UserService {
      * 이메일 인증 성공
      */
     @Transactional
-    public String confirmEmail(EmailAuthRequestDto requestDto) {
-        System.out.println("요청 이메일:"+requestDto.getEmail());
-        EmailAuth emailAuth = emailCustomRepository.findValidAuthByEmail(requestDto.getEmail(), requestDto.getAuthToken(), LocalDateTime.now()).get();
-        emailAuth.useToken(); //이메일 인증 상태 true 로 바꿔줌
-        return emailAuth.getAuthToken();
+    public String confirmEmail(String email) {
+        System.out.println("요청 이메일:"+email);
+        List<EmailAuth> list = emailRepository.findAllByEmail(email);
+        String authToken = list.get(list.size()-1).getAuthToken();
+        Optional<EmailAuth> option = emailCustomRepository.findValidAuthByEmail(email, authToken, LocalDateTime.now());
+        if (option.isPresent()) {
+            EmailAuth emailAuth = option.get();
+            emailAuth.useToken(); //이메일 인증 상태 true 로 바꿔줌
+        } else {
+            return null;
+        }
+        String successAuthHtml2 = "<div style=\"font-family: 'Nanum Gothic', 'sans-serif' !important; width: 100%;\">"
+                +	"<img src=\"https://tifyimage.s3.ap-northeast-2.amazonaws.com/beadedaf-bd8c-4765-b097-f9cd6d545db1.png\" style=\"width:89%;\"/>"
+                +"</div>";
+        return successAuthHtml2;
     }
 
     /**
@@ -171,13 +179,8 @@ public class UserService {
         if (user != null) {
             //비밀번호 안맞을 때
             if (!bCryptPasswordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-                //throw new UserLoginException();
+                System.out.println("저장된pw:"+user.getPassword()+" / 날아온pw:"+requestDto.getPassword());
                 System.out.println("비밀번호가 일치하지 않습니다.");
-                return null;
-            }
-            //이메일 인증 안했을 때
-            if (!user.getEmailAuth()) {
-                System.out.println("이메일 인증이 필요합니다.");
                 return null;
             }
             JwtToken newJwtToken = jwtProviderService.createJwtToken(user.getId(), user.getUserid());
@@ -186,7 +189,7 @@ public class UserService {
                     .userid(user.getUserid())
                     .build();
             user.updateRefreshToken(refreshToken);
-            return new LoginResponseDto(user.getId(), user.getUserid(), newJwtToken.getAccessToken(), newJwtToken.getRefreshToken());
+            return new LoginResponseDto(user.getId(), user.getUserid(), user.getEmail(), newJwtToken.getAccessToken(), newJwtToken.getRefreshToken(), user.getRoles());
         }
         System.out.println("유저가 존재하지 않습니다.");
         return null;
@@ -199,15 +202,17 @@ public class UserService {
     @Transactional
     public UserProfileDto getUser(String accessToken) {
         System.out.println("getUser 함수 진입");
-        try {
+        //try {
             //복호화된 JWT
             DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(accessToken);
             String userid = decodedJWT.getClaim("userid").asString();
+            System.out.println("userid:"+userid);
             User user = userRepository.findByUserid(userid);
 
             System.out.println("현재 암호화된 비밀번호: "+user.getPassword());
 
             UserProfileDto userProfileDto = UserProfileDto.builder()
+                    .id(user.getId())
                     .userid(user.getUserid())
                     .profileImg(user.getProfileImg())
                     .tel(user.getTel())
@@ -229,14 +234,13 @@ public class UserService {
 
             System.out.println("유저 프로필 : "+userProfileDto);
             return userProfileDto;
-        }catch (Exception e) {
-            return null;
-        }
+//        }catch (Exception e) {
+//            return null;
+//        }
     }
 
     /**
      * 유저 정보 수정
-     * 프로필이미지 변경, 비밀번호 변경
      */
     @Transactional
     public User updateUserInfo(UserUpdateDto dto) {
@@ -247,43 +251,44 @@ public class UserService {
             System.out.println("입력란이 비었습니다.");
             return null;
         }
+        user.setUsername(dto.getUsername());
         user.setTel(dto.getTel());
         user.setZipcode(dto.getZipcode());
         user.setNickname(dto.getNickname());
         user.setAddr1(dto.getAddr1());
         user.setAddr2(dto.getAddr2());
 
-        //프로필사진 변경
-        if (dto.getProfileImg()==null || dto.getProfileImg().equals("")) {
-            user.setProfileImg("/no_img.png");
-        } else {
-            user.setProfileImg(dto.getProfileImg());
-        }
-
-        //비밀번호 변경
-        System.out.println("현재 암호화된 비밀번호: "+user.getPassword());
-        User userById = userRepository.findByUserid(dto.getUserid());
-        User userByPw = userRepository.findByPassword(user.getPassword());
-        if (userById.equals(userByPw)) { //id와 pw가 일치하면
-            user.setPassword(bCryptPasswordEncoder.encode(dto.getNewPassword()));
-        } else {
-            System.out.println("현재 비밀번호가 일치하지 않습니다.");
-            return null;
-        }
-
         userRepository.save(user);
         return user;
     }
 
+    /**
+     * 프로필이미지 변경
+     */
+    @Transactional
+    public User updateProfImg(User user, String imgUrl) {
+        if (imgUrl==null || imgUrl.equals("")) {
+            user.setProfileImg("https://tifyimage.s3.ap-northeast-2.amazonaws.com/5e1dc3dc-12c3-4363-8e91-8676c44f122b.png");
+        } else {
+            user.setProfileImg(imgUrl);
+        }
+        userRepository.save(user);
+        return user;
+    }
 
     /**
      * 회원 탈퇴
      */
     @Transactional
     public void deleteUser(String userid) {
-        //refreshTokenRepository.deleteBy()
-        emailRepository.deleteByEmail(userid);
-        userRepository.deleteByUserid(userid);
+        User user = userRepository.findByUserid(userid);
+        refreshTokenRepository.deleteById(user.getJwtRefreshToken().getId());
+        //user.setJwtRefreshToken(null);
+        user.setRoles("DELETED_USER");
+        user.setUserid("!"+user.getUserid());
+        user.setEmail("!"+user.getEmail());
+        //emailRepository.deleteByEmail(userid);
+        //userRepository.deleteByUserid(userid);
     }
 
     /**
@@ -292,7 +297,15 @@ public class UserService {
     @Transactional
     public void logout(String accessToken) {
         UserProfileDto user = getUser(accessToken);
+        if (user == null) {
+            System.out.println("해당 엑세스토큰을 가진 유저가 없습니다.");
+            throw new UserLoginException("잘못된 접근");
+        }
         String refreshToken = user.getRefreshToken();
+        if (refreshToken == null) {
+            System.out.println("이미 로그아웃한 사용자입니다.");
+            throw new UserLoginException("이미 로그아웃한 사용자입니다.");
+        }
 
         //1. accessToken redisTemplate 블랙리스트 추가
         ValueOperations<String, String> logoutValueOperations = redisTemplate.opsForValue();
@@ -336,21 +349,65 @@ public class UserService {
     }
 
     /**
+     * 메일 내용을 생성하고 임시 비밀번호로 회원 비밀번호를 변경
+     */
+    public void sendMailAndChangePassword(User user) {
+        String newPw = emailService.sendPwMail(user.getEmail(), user.getUsername());
+        updatePassword(user, newPw);
+    }
+
+
+    /**
      * 유저 비밀번호 변경
      */
-    //public void updatePassword
+    @Transactional
+    public void updatePassword(User user, String tempPw){
+        // test
+        System.out.println("수정 전 비밀번호:"+user.getPassword());
+        String encodedPw = bCryptPasswordEncoder.encode(tempPw);
+        System.out.println("수정 후 비밀번호:"+encodedPw);
+
+        user.setPassword(encodedPw);
+        userRepository.save(user);
+        System.out.println("수정된 유저:"+user);
+        System.out.println("수정된 비밀번호:"+user.getPassword());
+
+        System.out.println("비밀번호 변경 완료 "+tempPw);
+    }
 
     // test용 계정 생성
     @Transactional
     public User save(User user) {
-        user.setRoles("USER");
         return userRepository.save(user);
     }
 
 
-    public List<User> searchUserByNickname(String nickname) {
-        return userRepository.findByNicknameLike(nickname);
+    public List<SearchedUserDto> searchUserByNickname(String nickname, Long myId) {
+        List<User> users = userRepository.findByNicknameLike(nickname);
+        List<SearchedUserDto> searchedUsers = new ArrayList<>();
+        if (searchedUsers != null) {
+            for (User user : users) {
+                //SearchedUserDto searchedUser = new SearchedUserDto();
+                //Long id = userRepository.findByEmail(myId)
+                FriendStatus friendStatus = friendService.getFriendshipStatus(myId, user.getId());
+                Long friendshipId = friendService.getFriendshipId(myId, user.getId());
+                SearchedUserDto searchedUser = SearchedUserDto.builder()
+                    .id(user.getId())
+                    .profileImg(user.getProfileImg())
+                    .name(user.getUsername())
+                    .nickname(user.getNickname())
+                    .email(user.getEmail())
+                    .friendshipId(friendshipId)
+                    .state(friendStatus)
+                    .build();
+
+                searchedUsers.add(searchedUser);
+            }
+        }
+
+        return searchedUsers;
     }
+
 
 
 }

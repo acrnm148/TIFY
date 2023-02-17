@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+.main-container {
+  display: inline-block;
+  width: 100vw;
+}
+.main-components {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  max-height: 100vh;
+  padding-bottom: 7vh;
+}
+.catch-prase * {
+  text-align: right;
+}
+.catch-prase > h1 {
+  /* font-family: 'Roboto'; */
+  font-family: 'Nanum Gothic';
+  font-style: normal;
+  text-align: right;
+  font-variant: small-caps;
+}
+
+.catch-prase div {
+  display: flex;
+  justify-content: center;
+  float: right;
+}
+.catch-prase button {
+  color: white;
+  font-weight: 600;
+}
+/* media */
+@media (min-width: 1025px) {
+  .catch-prase {
+    min-width: 52%;
+    max-width: 55%;
+    width: max-content;
+    padding-top: 20vh;
+  }
+  .phone-image {
+    width: 24vw;
+    margin: 5vh;
+    margin-top: 1vh;
+  }
+
+  .catch-prase > h1 {
+    font-weight: 900;
+    font-size: 3em;
+    line-height: 1.25em;
+    white-space: nowrap;
+  }
+}
+@media (max-width: 1024px) {
+  .catch-prase {
+    width: 50%;
+    padding-top: 15vh;
+    margin-left: 24px;
+  }
+  .phone-image {
+    width: 23vw;
+    margin: 2vh;
+  }
+
+  .catch-prase > h1 {
+    font-weight: 800;
+    font-size: 2em;
+    line-height: 40px;
+  }
+  .catch-prase button {
+    font-weight: 500;
+    font-size: 95%;
+  }
+}
+@media (max-width: 768px) {
+  .catch-prase {
+    width: 50%;
+    padding-top: 5vh;
+    margin-left: 24px;
+  }
+  .phone-image {
+    width: 27vw;
+    margin: 2vh;
+  }
+
+  .catch-prase > h1 {
+    font-weight: 800;
+    font-size: 1.6em;
+    line-height: 40px;
+  }
+  .catch-prase button {
+    font-weight: 500;
+    font-size: 80%;
+  }
+}
+.main-navlink{
+  font-size: 40px;
+  display: inline-block;
+  padding: 50px;
+  color: gray;
+}
+.gomin{
+  /* border: 1px solid black; */
+  padding: 30px;
+  border-radius: 0 50px 50px 50px;
+  background-color: #6ba4e936;
+  /* display: block; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+.gomin-right{
+  border-radius: 50px 0 50px 50px;
+}
+.no-gomin{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 100px;
+  height: 500px;
+}
+.messages-con{
+  padding: 50px;
+  /* height: fit-content; */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  /* height: 900px; */
+    margin: 20px;
+    display: flex;
+}
+.make-your-wish{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  height: 80%;
+  justify-content: space-around;
+  background-color: rgb(255 88 97);
+}
+.myw-text{
+  font-weight: 700;
+    font-size: 2em;
+    color: white;
+}
+.myw-text h1{
+  font-size: 3em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.wish-preview{
+  height: 80%;
+  background-repeat: no-repeat;
+  /* background-position: left; */
+  /* background-size: 110%; */
+  padding: 10%;
+  /* border-radius: 10px; */
+  z-index: 1;
+  position: relative;
+  margin-left: 10%;
+}
+.wish-preview img{
+  height: 90%;
+  width: 100%;
+  position: absolute;
+  left: 15%;
+  top: 15%;
+  z-index: 5;
+}
+.gift-recommend-list>div>div>a>div{
+  width: 240px;
+
+}
+.gift-recommend-list .gift-image > img{
+  width: auto;
+  height: 10vw;
+}
+.gift-recommend-list .gift-recommend-list{
+  margin: 0;
+}

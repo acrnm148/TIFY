@@ -4,15 +4,18 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
+import com.tify.back.exception.AlreadyExistException;
 import com.tify.back.model.gifthub.Cart;
 import com.tify.back.model.gifthub.CartItem;
 import com.tify.back.model.gifthub.Product;
 import com.tify.back.model.gifthub.ProductOptionDetail;
+import com.tify.back.repository.gifthub.CartItemRepository;
 import com.tify.back.repository.gifthub.CartRepository;
 import com.tify.back.repository.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CartService {
     private final CartRepository cartRepository;
     private final ProductService productService;
@@ -28,6 +32,7 @@ public class CartService {
     private final ProductOptionDetailService productOptionDetailService;
     ObjectMapper objectMapper = new ObjectMapper();
     private final UserRepository userRepository;
+    private final CartItemRepository cartItemRepository;
 
     public Cart saveCart(Cart cart) {
         return cartRepository.save(cart);
@@ -52,32 +57,37 @@ public class CartService {
         JSONObject map = new JSONObject(message);
         Cart cart = cartRepository.findByUserId(map.getLong("userId"));
         Product product = productService.getProductById(map.getLong("productId"));
-        CartItem cartItem = cartItemService.createCartItem(product, cart, map.getInt("quantity"), map.getString("options"));
+//        CartItem cartItem = cartItemService.createCartItem(product, cart, map.getInt("quantity"), map.getString("options"));
+        CartItem check = cartItemRepository.findByProductAndOptionsAndCart(product, map.getString("options"),cart);
+        // System.out.println(check.getId());
+        if (check != null) { throw new AlreadyExistException("이미 존재하는 상품입니다.."); }
+        else {
+            CartItem cartItem = cartItemService.createCartItem(product, cart, 1, map.getString("options"));
+            List<CartItem> cartItems = cart.getCartItems();
+            Integer price = cartItem.getProduct().getPrice();
+            Integer total = cart.getPrice();
 
-        List<CartItem> cartItems = cart.getCartItems();
-        Integer price = cartItem.getProduct().getPrice();
-        Integer total = cart.getPrice();
-
-        JSONObject item_options = new JSONObject(map.getString("options"));
-        for (Iterator it = item_options.keys(); it.hasNext(); ) {
-            String key = (String) it.next();
-            List<ProductOptionDetail> pods = productOptionDetailService.findOptionDetailsByProductAndOptionTitle(product, key);
-            for (ProductOptionDetail pod : pods) {
-                if ( item_options.getString(key).equals(pod.getContent()) ) {
-                    price += pod.getValue();
-                    break;
+            JSONObject item_options = new JSONObject(map.getString("options"));
+            for (Iterator it = item_options.keys(); it.hasNext(); ) {
+                String key = (String) it.next();
+                List<ProductOptionDetail> pods = productOptionDetailService.findOptionDetailsByProductAndOptionTitle(product, key);
+                for (ProductOptionDetail pod : pods) {
+                    if ( item_options.getString(key).equals(pod.getContent()) ) {
+                        price += pod.getValue();
+                        break;
+                    }
                 }
             }
-        }
-        cartItem.setValue(price * map.getInt("quantity"));
-        cartItemService.saveCartItem(cartItem);
+            cartItem.setValue(price * map.getInt("quantity"));
+            cartItemService.saveCartItem(cartItem);
 //        return productRepository.findByPriceBetweenAndNameContainingAndCategory(minPrice, maxPrice, name, category);
-        cartItems.add(cartItem);
-        cart.setPrice(total + cartItem.getValue());
-        cart.setQuantity(cart.getQuantity() + 1);
-        cart.setCartItems(cartItems);
-        saveCart(cart);
-        return cartItem;
+            cartItems.add(cartItem);
+            cart.setPrice(total + cartItem.getValue());
+            cart.setQuantity(cart.getQuantity() + 1);
+            cart.setCartItems(cartItems);
+            saveCart(cart);
+            return cartItem;
+        }
     }
 
     public Cart deleteItemInCart(Long cartId, Long cartItemId) throws Exception {

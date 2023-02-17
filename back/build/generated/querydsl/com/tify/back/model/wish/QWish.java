@@ -26,7 +26,9 @@ public class QWish extends EntityPathBase<Wish> {
 
     public final StringPath addr2 = createString("addr2");
 
-    public final NumberPath<Integer> cardImageCode = createNumber("cardImageCode", Integer.class);
+    public final StringPath cardImageCode = createString("cardImageCode");
+
+    public final StringPath cardopen = createString("cardopen");
 
     public final StringPath Category = createString("Category");
 

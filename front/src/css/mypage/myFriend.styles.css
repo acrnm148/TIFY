@@ -1,0 +1,210 @@
+#base-div {
+  /* width: 1200px; */
+  width: 70vw;
+  height: 1200px;
+  /* background-color: #c1c1c1; */
+}
+#base-div > .carousel-div {
+  /* width: 1100px; */
+}
+
+.ongoing-wishes {
+  /* border: 1px solid black; */
+  margin-bottom: 80px;
+}
+
+.ongoing-wishes .ongoing-wish {
+  border: 1px solid #c1c1c1;
+  border-radius: 10px;
+  padding: 20px;
+  /* width: 240px; */
+  /* height: 150px; */
+  height: 180px;
+  margin-right: 10px;
+  /* box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1); */
+  box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+/* border-radius: 50%; */
+
+.ongoing-wish > .wish-profile-div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.ongoing-wish .wish-profile-img {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+}
+
+.name-div > .friend-wish-username {
+  font-size: 22.65px;
+  font-weight: bold;
+}
+
+.ongoing-wish > .profile-img {
+  display: flex;
+}
+.wish-profile-div > .name-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.ongoing-wish > .friend-wish-title {
+  display: flex;
+  justify-content: center;
+  color: #a1a3a2;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+}
+
+/* 슬라이더 */
+.horizontal-slider-myfriend {
+  height: 100%;
+  max-height: 500px;
+  width: 100%;
+  margin: auto;
+  padding-bottom: 5px;
+  border-radius: 2px;
+}
+
+.horizontal-slider-myfriend .example-track {
+  top: 20px;
+  height: 5px;
+}
+
+.wish-slider-and-label-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  font-family: 'Nanum Gothic';
+}
+
+.progress-span {
+  color: #fe3360;
+  font-size: 12px;
+  font-weight: 300;
+  margin-top: 8px;
+}
+
+.wish-slider-and-label {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  font-family: 'Nanum Gothic';
+}
+
+.lower-side-friends-div {
+  display: flex;
+  justify-content: center;
+}
+
+.friends-div {
+  border-radius: 10px;
+  border: 1px solid gray;
+  /* width: 65vw; */
+  width: 630px;
+  min-width: 600px;
+  height: 600px;
+  overflow-y: scroll;
+}
+
+.test-div {
+  width: 100%;
+  height: 200px;
+  border: 1px solid gray;
+}
+
+.friends-div ::-webkit-scrollbar {
+  width: 8px; /* 스크롤바의 너비 */
+}
+
+.friends-div ::-webkit-scrollbar-thumb {
+  height: 30%; /* 스크롤바의 길이 */
+  background: #217af4; /* 스크롤바의 색상 */
+
+  border-radius: 10px;
+}
+
+.friends-div ::-webkit-scrollbar-track {
+  background: rgba(33, 122, 244, 0.1); /*스크롤바 뒷 배경 색상*/
+}
+
+.list-group-item {
+  height: 70px;
+  display: flex !important;
+  align-items: center;
+}
+
+.friend-profile {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-left: 10px;
+  margin-right: 20px;
+}
+
+.blur-profile {
+  filter: brightness(50%);
+}
+
+.friend-nickname {
+  margin-right: 50px;
+  font-weight: bold;
+  width: 120px;
+}
+
+.friend-username {
+  margin-right: 100px;
+  font-weight: bold;
+  width: 120px;
+}
+
+.friend-delete-button {
+  background-color: #c1c1c1;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  margin-left: 47px;
+}
+.friend-agree-button {
+  background-color: #0084ff;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  margin-right: 5px;
+}
+.friend-deny-button {
+  background-color: #c1c1c1;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.change-delete-button-div {
+  margin-left: 60px;
+}
+
+.friend-request-switch-buttom {
+  background-color: #0084ff;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  width: 40px;
+}
+.slick-prev:before,
+.slick-next:before {
+  font-size: 25px;
+  line-height: 1;
+  opacity: 0.75;
+  color: #808080;
+}

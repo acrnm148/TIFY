@@ -4,11 +4,17 @@ import com.tify.back.dto.admin.EditWishDto;
 import com.tify.back.dto.admin.OrderStateDto;
 import com.tify.back.dto.admin.UserListMap;
 import com.tify.back.dto.admin.createUserDto;
+import com.tify.back.model.customerservice.FAQ;
+import com.tify.back.model.customerservice.QnA;
 import com.tify.back.model.gifthub.Cart;
+import com.tify.back.model.gifthub.Gift;
 import com.tify.back.model.gifthub.Order;
-import com.tify.back.model.gifthub.Product;
 import com.tify.back.model.users.User;
 import com.tify.back.model.wish.Wish;
+import com.tify.back.repository.customerservice.FAQRepository;
+import com.tify.back.repository.customerservice.QnARepository;
+import com.tify.back.repository.gifthub.GiftRepository;
+import com.tify.back.repository.gifthub.OrderRepository;
 import com.tify.back.repository.users.UserRepository;
 import com.tify.back.repository.wish.WishRepository;
 import com.tify.back.service.gifthub.CartService;
@@ -20,12 +26,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,6 +41,10 @@ public class AdminController {
     private final WishService wishService;
     private final CartService cartService;
     private final OrderService orderService;
+    private final GiftRepository giftRepository;
+    private final QnARepository qnARepository;
+    private final FAQRepository fAQRepository;
+    private final OrderRepository orderRepository;
 //    @GetMapping("/userlist")
 //    public List<User> getUserList() {}
 
@@ -65,6 +73,16 @@ public class AdminController {
         return userRepository.findAllUsers(pageable);
     }
 
+    @GetMapping("/usersearch/{email}")
+    public  Page<UserListMap> searchUserListByEmail(@RequestParam(value = "page", required = false) Integer page,
+                                          @RequestParam(value = "max_result", required = false) Integer max_result,
+                                        @PathVariable String email) {
+        if (page == null) { page = 0; }
+        if (max_result == null) {max_result = 0; }
+        Pageable pageable = PageRequest.of(page, Math.max(10, max_result));
+        return userRepository.findAllUsersByEmail(pageable, email);
+    }
+
     @Operation(summary = "admin page userDetail", description = "관리자페이지 유저상세")
     @GetMapping("/user/{id}")
     public User getUser(@PathVariable Long id) {
@@ -75,7 +93,6 @@ public class AdminController {
     public User updateUser(@PathVariable Long id, @RequestBody User user) {
         User existedUser = userRepository.findById(id).orElse(null);
         existedUser.setUserid(user.getUserid());
-        existedUser.setPassword(user.getPassword());
         existedUser.setUsername(user.getUsername());
         existedUser.setRoles(user.getRoles());
         existedUser.setNickname(user.getNickname());
@@ -111,6 +128,17 @@ public class AdminController {
         return wishRepository.findAllWishes(pageable);
     }
 
+    @Operation(summary = "admin page search wishList", description = "관리자페이지 wish 목록")
+    @GetMapping("/wishsearch/{search}")
+    public Page<Wish> getWishList(@RequestParam(value = "page", required = false) Integer page,
+                                  @RequestParam(value = "max_result", required = false) Integer max_result,
+                                  @PathVariable String search) {
+        if (page == null) { page = 0; }
+        if (max_result == null) {max_result = 0; }
+        Pageable pageable = PageRequest.of(page, Math.max(10, max_result));
+        return wishRepository.findByUserEmailContaining(search, pageable);
+    }
+
     @Operation(summary = "admin page wish detail", description = "관리자페이지 wish detail")
     @GetMapping("/wish/{id}")
     public Wish getWishDetail(@PathVariable Long id) {
@@ -119,6 +147,9 @@ public class AdminController {
 
     @PutMapping("/wish/{id}")
     public Wish updateWish(@PathVariable Long id, @RequestBody EditWishDto dto) {
+        System.out.println(dto.getTitle());
+        System.out.println(dto.getAddr2());
+        System.out.println("--------------------------");
         Wish existedWish = wishRepository.findById(id).orElse(null);
         existedWish.setTotPrice(dto.getTotPrice());
         existedWish.setNowPrice(dto.getNowPrice());
@@ -152,4 +183,61 @@ public class AdminController {
         System.out.println("수정 완료:"+order);
         return ResponseEntity.ok().body(order);
     }
+
+    @Operation(summary = "admin page gift search ", description = "관리자페이지 gift search")
+    @GetMapping("/giftsearch/{search}")
+    public Page<Gift> getGiftSearch(@RequestParam(value = "page", required = false) Integer page,
+                                    @RequestParam(value = "max_result", required = false) Integer max_result,
+                                    @PathVariable String search) {
+        if (page == null) { page = 0; }
+        if (max_result == null) {max_result = 0; }
+        Pageable pageable = PageRequest.of(page, Math.max(10, max_result));
+        return giftRepository.findByGiftnameContaining(search,pageable);
+    }
+
+    @Operation(summary = "admin page qna search ", description = "관리자페이지 qna search")
+    @GetMapping("/qnasearch/{search}")
+    public Page<QnA> getQnASearch(@RequestParam(value = "page", required = false) Integer page,
+                                   @RequestParam(value = "max_result", required = false) Integer max_result,
+                                   @PathVariable String search) {
+        if (page == null) { page = 0; }
+        if (max_result == null) {max_result = 0; }
+        Pageable pageable = PageRequest.of(page, Math.max(10, max_result));
+        return qnARepository.findByUserEmailContainingOrTitleContaining(search,pageable);
+    }
+
+    @Operation(summary = "admin page faq search ", description = "관리자페이지 faq search")
+    @GetMapping("/faqsearch/{search}")
+    public Page<FAQ> getFAQSearch(@RequestParam(value = "page", required = false) Integer page,
+                                  @RequestParam(value = "max_result", required = false) Integer max_result,
+                                  @PathVariable String search) {
+        if (page == null) { page = 0; }
+        if (max_result == null) {max_result = 0; }
+        Pageable pageable = PageRequest.of(page, Math.max(10, max_result));
+        return fAQRepository.findFAQByTitle(search, pageable);
+    }
+
+    @Operation(summary = "admin page order search ", description = "관리자페이지 order search")
+    @GetMapping("/ordersearch/{email}")
+    public Page<Order> getOrderSearch(@RequestParam(value = "page", required = false) Integer page,
+                                  @RequestParam(value = "max_result", required = false) Integer max_result,
+                                  @PathVariable String email) {
+        if (page == null) { page = 0; }
+        if (max_result == null) {max_result = 0; }
+        Pageable pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("createdTime").ascending());
+
+        return orderRepository.findByUserEmail(email, pageable);
+    }
+
+    @Operation(summary = "admin page order", description = "관리자페이지 order")
+    @GetMapping("/order")
+    public Page<Order> getOrderSearch(@RequestParam(value = "page", required = false) Integer page,
+                                      @RequestParam(value = "max_result", required = false) Integer max_result) {
+        if (page == null) { page = 0; }
+        if (max_result == null) {max_result = 0; }
+        Pageable pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("createdTime").ascending());
+        return orderRepository.findAll(pageable);
+    }
+
 }
+

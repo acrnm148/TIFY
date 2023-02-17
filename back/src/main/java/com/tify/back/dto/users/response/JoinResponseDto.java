@@ -1,6 +1,7 @@
 package com.tify.back.dto.users.response;
 
 import com.tify.back.auth.jwt.refreshToken.RefreshToken;
+import com.tify.back.model.users.UserProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class JoinResponseDto {
+    private UserProperties result;
     private String id;
     private String userid; //일반사용자-입력한 아이디, 카카오 사용자-카카오 고유 id(provider id)
     private String password;

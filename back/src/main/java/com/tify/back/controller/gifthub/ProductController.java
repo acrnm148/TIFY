@@ -9,6 +9,7 @@ import com.tify.back.repository.gifthub.ProductRepository;
 import com.tify.back.service.gifthub.CartService;
 import com.tify.back.service.gifthub.ImgService;
 import com.tify.back.service.gifthub.ProductService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -40,8 +41,8 @@ public class ProductController {
     //https://devjaewoo.tistory.com/88 error 참고.
     // 상품 등록 단일 json 형태
     @PostMapping("/product")
-    public Product addProduct(@RequestBody String message) throws Exception {
-        return productService.createProduct(message);
+    public Product addProduct(@RequestBody ProductDto dto) {
+        return productService.pyProduct(dto);
     }
 
     @PostMapping("/pyproduct")
@@ -76,6 +77,19 @@ public class ProductController {
         return productService.getProducts(pageable);
     }
 
+    @GetMapping("/search/{name}")
+    public Page<Product> searchProductsByConditions(@RequestParam(value = "page", required = false) Integer page,
+                                                    @RequestParam(value = "max_result", required = false) Integer max_result,
+                                                    @PathVariable String name) {
+        if (page == null) { page = 0;}
+        if (max_result == null) { max_result = 10;}
+
+//        Pageable pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("fieldName1").ascending().and(Sort.by("fieldName2").descending()));
+        Pageable pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("name").ascending());
+        return productRepository.findByNameContaining(pageable, name);
+//        return productService.getProducts();
+    }
+
     // 이름, 가경, 대표이미지 정보만 가져온다. (like count 정렬 완료)
     @GetMapping("/main")
     public List<ProductSummary> getGifthubList() throws Exception { return productRepository.findAllProjectedBy();}
@@ -92,23 +106,29 @@ public class ProductController {
     }
 
     //검색, 필터링.
+    @ApiOperation(value = "sortingCode 0=인기순, 1=가격 오름차 , 2=가격 내림차")
     @GetMapping("/search")
     public Page<Product> searchProductsByConditions(@RequestParam(value = "minPrice", required = false) Integer minPrice,
                                                     @RequestParam(value = "maxPrice", required = false) Integer maxPrice,
                                                     @RequestParam(value = "name", required = false) String name,
                                                     @RequestParam(value = "category", required = false) Integer category,
                                                     @RequestParam(value = "page", required = false) Integer page,
-                                                    @RequestParam(value = "max_result", required = false) Integer max_result) {
+                                                    @RequestParam(value = "max_result", required = false) Integer max_result,
+                                                    @RequestParam(value = "sortingCode", required = false) Integer sortingCode) {
         Integer min = 0;
         Integer maxp = 999999999;
+        Page<Product> products;
+
         if (page == null) { page = 0;}
         if (max_result == null) { max_result = 10;}
-
-        Page<Product> products;
-        Pageable pageable = PageRequest.of(page, Math.max(10, max_result));
-
+        if (sortingCode == null || sortingCode < -1 || sortingCode > 2) { sortingCode = 0;}
         if (minPrice == null) { minPrice = 0;}
         if (maxPrice == null) { maxPrice = 999999999;}
+
+//        Pageable pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("fieldName1").ascending().and(Sort.by("fieldName2").descending()));
+        Pageable pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("likeCount").descending());
+        if (sortingCode == 1) {pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("price").ascending());}
+        else if (sortingCode == 2) {pageable = PageRequest.of(page, Math.max(10, max_result), Sort.by("price").descending());}
 
         if (category!= null) {products = productService.searchProducts(minPrice, maxPrice, name, category, pageable);}
         else {products = productService.searchProducts2(minPrice, maxPrice, name, pageable);} // 변수 이름도 다 맞춰야 한다...
@@ -119,8 +139,8 @@ public class ProductController {
 
     // 상품 정보 update
     @PutMapping("/product")
-    public Product updateProduct(@RequestBody String message) throws Exception {
-        return productService.updateProduct(message);
+    public Product updateProduct(@RequestBody ProductDto dto) throws Exception {
+        return productService.pyProductUpdate(dto);
     }
 
     // 상품 삭제.

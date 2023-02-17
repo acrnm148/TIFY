@@ -1,6 +1,7 @@
 package com.tify.back.model.gifthub;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tify.back.model.pay.Pay;
 import com.tify.back.model.wish.Wish;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,17 +23,19 @@ public class Gift {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "gift_id")
     private Long id;
-    @OneToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+
+    @Column(name = "product_id")
+    private Long productId;
     @JsonIgnore // json 할때 무시하고 json 생성, image에서 product는 mapping용이면 충분
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="wish_id") //OrderItem은 하나의 Order만 가진다. => order_id 매핑
     private Wish wish;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "gift")
-    @JoinColumn(name = "order_id")
+//    @JsonIgnore
+//    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "order_id")
+
+    @OneToOne(mappedBy= "gift")
     private Order order;
 
 //    @OneToMany
@@ -41,7 +44,8 @@ public class Gift {
     private int quantity; // 수량
     //state
     @Column(name = "user_option")
-    private String userOption;// json 형태
+    private String userOption;
+    private String giftname;
     private String type;
     private String finishYN;
     @Column(name = "max_amount")
@@ -51,11 +55,9 @@ public class Gift {
     private int gathered; // 모인 돈
     private String successYN;
     private Integer idx;
-
     private LocalDateTime finishDate;
     private String giftImgUrl;
     private String giftUrl;
-
     @OneToMany(mappedBy= "gift")
-    private List<GiftOption> giftOption = new ArrayList<>();
+    private List<Pay> payList = new ArrayList<>();
 }

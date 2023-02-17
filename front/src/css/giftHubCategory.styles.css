@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+.gift-category-icon {
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  /* margin-top: 20vh; */
+  width: 100%;
+}
+.gift-category-icon > img {
+  margin: 5px;
+  cursor: pointer;
+}
+.gift-category-icon p {
+  /* 한글 sm */
+  font-family: 'NanumGothic';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 9px;
+  text-align: center;
+  font-variant: small-caps;
+  color: #a1a3a2;
+}
+
+.gh-icon {
+  background-color: hsl(0, 0%, 89%);
+  width: 52px;
+  height: 52px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  margin: 8px;
+  cursor: pointer;
+}
+.gh-icon img {
+  width: 52%;
+}
+.selectedCategory {
+  border-radius: 100%;
+  /* background-color: rgb(255, 55, 95); */
+  background-color: #ff4a6e;
+}

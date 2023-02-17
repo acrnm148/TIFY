@@ -9,7 +9,6 @@ import javax.persistence.*;
 
 @Setter
 @Getter
-@RequiredArgsConstructor
 @Entity
 @Table(name = "faq")
 public class FAQ extends BaseEntity {
@@ -20,6 +19,7 @@ public class FAQ extends BaseEntity {
     private String title;
     private String content;
     private int idx;
-
+    private int type;
+    private String imgUrl;
 }
 

@@ -1,0 +1,46 @@
+.companyInfo{
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 12px;
+}
+.navbar-footer{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 10px;
+    /* position: static; */
+}
+.footer-middle{
+    margin-top: 20px;
+    display: flex;
+}
+
+.footer-navigation, .footer-legal{
+    display: flex;
+    flex-direction: column;
+    margin: 1em;
+}
+.footer-navigation a, .footer-legal a{
+    padding-top: 15px;
+}
+
+.footer-navigation-row{
+    display: flex;
+    flex-direction: row;
+}
+
+.footer-title{
+    padding-left: 15px;
+}
+
+.company-info{
+    padding-left: 30px;
+}
+@media (max-width : 768px)
+{
+    .footer-middle{
+        display: none;
+    }
+}
