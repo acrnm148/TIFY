@@ -63,19 +63,11 @@ export function MainPage() {
     throw new Error('Function not implemented.');
   }
 
-  // <div className="main-container">
-  //   <div className="main-components">
-  //     <CatchPrase />
-  //     <div className="phone-video">
-  //       <img src={phone} className="phone-image" alt="phone image" />
-  //     </div>
-  //   </div>
-  //   <div>
-  //     <GiftHubCategory propFunction={propFunction} goCategory={undefined}/>
-  //     <SearchBar propFunction={getQuery} initailQuery={''}/>
-  //     {/* <GiftRecommendList giftList={giftList} /> */}
-  //   </div>
-  // </div>
+  const MoveToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  const TO_TOP_IMG =
+    'https://tifyimage.s3.ap-northeast-2.amazonaws.com/31163872-7117-4801-b62a-4d4dffa3097e.png';
   return (
     <div style={{}}>
       <ScrollContainer>
@@ -244,6 +236,9 @@ export function MainPage() {
           </div>
         </ScrollPage>
       </ScrollContainer>
+      <div className="to-top">
+        <img src={TO_TOP_IMG} onClick={MoveToTop} />
+      </div>
     </div>
   );
 }

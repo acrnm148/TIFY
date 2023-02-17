@@ -27,7 +27,7 @@ let paying = {
             userId : 0, // userId 없을 때 0 : 비회원축하
 }
 let tk: string | null = null
-export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:number) {
+export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:number, wishId:number|undefined) {
   console.log(congratsInfo.giftId)
   paying = congratsInfo
   /* 1. 가맹점 식별하기 */
@@ -127,7 +127,7 @@ export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:
               // 비회원이면 기본 프로필 이미지
               pushData(defaultProfile)
             }
-            history.go(-1)
+            window.location.href =`https://i8e208.p.ssafy.io/congrats/${wishId}`
             console.log('축하결제성공', data)
           }).catch((err:any) => {
             console.log('축하 결제 실패', err)

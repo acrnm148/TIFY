@@ -396,7 +396,28 @@
   color: rgb(255, 255, 255);
 }
 .finished-wish-text span{
-  font-size: 1.2em;
+  font-size: 1.5em;
   font-weight: 700;
-  color: #ffffff;
+  color: #fb9292;
+}
+.finished-wish-text{
+  color: #fb9292;
+}
+#lottie{
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 0px auto;
+    outline: none;
+    overflow: hidden;
+    
+}
+
+#lottie svg{
+      width: 72%;
+    height: 80%;
+    transform: translate3d(0px, 0px, 0px);
+    content-visibility: visible;
 }

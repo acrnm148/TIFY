@@ -19,23 +19,26 @@
   width: 70%;
   height: auto;
   /* border: 3px solid pink; */
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 2%;
   font-family: 'Nanum Gothic' sans-serif;
+  box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+  border-radius: 10px;
 }
-.wish-components-title {
+
+.wish-compo-title {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   width: 100%;
 }
-.wish-components-title h1 {
+.wish-compo-title h1 {
   font-family: ui-monospace;
   font-style: normal;
-  font-weight: 200;
-  font-size: 41px;
+  font-weight: 400;
+  font-size: 30px;
   line-height: 54px;
   background: linear-gradient(180deg, #fe3360 44%, #fad5d9 91.67%);
   -webkit-background-clip: text;
@@ -51,10 +54,10 @@
   flex-wrap: wrap;
 }
 .wish-card {
-  /* width: 523px; */
-  max-height: 312px;
-  /* border: 1px solid #FE3360; */
+  min-width: 430px;
+  height: 430px;
   border-radius: 8px;
+  width: 100%;
 }
 .wish-card-cover {
   /* background-image: url('https://user-images.githubusercontent.com/87971876/215254369-d144dcd7-00ae-4f1c-b740-c219c6e30821.png'); */
@@ -98,9 +101,11 @@
   /* background: #dddddd; */
   padding-top: 15px;
   padding-bottom: 15px;
+  flex-wrap: wrap;
+  backGround-color: #cfcfcf;
 }
 .wish-gift {
-  width: 266px;
+  width: 216px;
   /* min-height: 266px; */
   font-size: x-small;
   color: white;
@@ -110,6 +115,11 @@
   align-items: center;
   margin: 5px;
   /* border: 1px solid black; */
+}
+.wish-gift:hover{
+  border: 0.5px inner #e52e56;
+  
+  /* background-color: #828483; */
 }
 .wish-congrats-btns {
   width: 100%;
@@ -231,4 +241,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.wish-components-title h1 {
+  font-family: ui-monospace;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 54px;
+  background: linear-gradient(180deg, #fe3360 44%, #fad5d9 91.67%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

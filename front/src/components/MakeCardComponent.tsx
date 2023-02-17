@@ -7,7 +7,9 @@ type UploadImage = {
   thumbnail: string;
   type: string;
 };
-const MakeCardComponent = (props:{phone: string,payId:string|undefined, userId:number|string|undefined, propFunction:(arg0:boolean)=>void,}) => {
+const MakeCardComponent = (props:{
+  from: string | number | readonly string[] | undefined;phone: string,payId:string|undefined, userId:number|string|undefined, propFunction:(arg0:boolean)=>void,
+}, from: string) => {
   // 사진 업로드하는 html 버튼에 직접 접근해서 값을 가져오는 inputRef
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [title, setTitle] = useState<string>()
@@ -82,14 +84,14 @@ const MakeCardComponent = (props:{phone: string,payId:string|undefined, userId:n
       "title":title,
       "phoneNumber":iphone,
       "content":contents,
-      "imageURL":image,
+      "imageUrl":image,
       "userId":Number(props.userId),
       "payId":Number(props.payId)
     }
     axios.post(API_URL, data
       ).then((res) =>{
         console.log('감사메세지 보내기 성공!!!', res)
-        Swal.fire("감사카드가 <br/>연락처로 <br/>문자 전송될 예정")
+        Swal.fire("감사카드가 <br/>연락처로 <br/>문자 전송될 예정입니다")
         props.propFunction(true)
       }).catch((err) => {
         console.log('감사메세지 보내기 실패', err)
@@ -103,6 +105,19 @@ const MakeCardComponent = (props:{phone: string,payId:string|undefined, userId:n
   return (
     <div className="thanks-card-container">
       <div className="thanks-card">
+      <div className="thanks-input">
+          <label htmlFor="받는사람">
+            받는사람
+          </label>
+          <input
+            className="input-small"
+            type="text"
+            name="받는사람"
+            value={props.from}
+            // onKeyUp={(e)=>setTitleFunc(e)}
+            disabled
+          />
+        </div>
         <div className="thanks-input">
           <label htmlFor="제목">
             제목
@@ -133,7 +148,7 @@ const MakeCardComponent = (props:{phone: string,payId:string|undefined, userId:n
             placeholder="카드 내용을 입력하세요"
           ></textarea>
         </div>
-        <div className="thanks-input" style={{"backgroundImage":`url(${image})`}}>
+        <div className="thanks-input">
           <label htmlFor="">사진</label>
           <input
             className="img-input"
@@ -146,6 +161,7 @@ const MakeCardComponent = (props:{phone: string,payId:string|undefined, userId:n
           <div
             className={`thanks-photo-btn`}
             onClick={onUploadImageButtonClick}
+            style={{"backgroundImage":`url(${image})`}}
           >
           </div>
         </div>

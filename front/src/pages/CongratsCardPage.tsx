@@ -23,7 +23,7 @@ import Swal from "sweetalert2";
 export function CongratsCardPage() {
   const userId = useSelector((state: RootState) => state.authToken.userId);
   const params = useParams();
-  const wishId = params.wishId;
+  const wishId = Number(params.wishId);
   const payAmount = ['5,000', '10,000', '50,000', '100,000'];
   const payAmountNum = [5000, 10000, 50000, 100000];
   const [amount, setAmount] = useState<any>();
@@ -141,7 +141,8 @@ export function CongratsCardPage() {
       Swal.fire('상품가격을 초과하여 축하할 수 없습니다!')
       return;
     }
-    if(!cardPhone){
+    if(!cardPhone && state.userPhone){setCardPhone(state.userPhone)}
+    else if(!cardPhone){
       let res = confirm('연락처를 입력하시면 감사카드를 받을 수 있습니다!')
       if(res){return}
     }
@@ -154,6 +155,11 @@ export function CongratsCardPage() {
       Swal.fire('이용약관에 동의해주세요!');
       return;
     }
+    if(!cardFrom && state.userName){
+      setCardFrom(state.userName)
+     } else if(!cardFrom && !state.userName){
+       alert('보내는 사람 이름을 작성해주세요')
+     }
     setOpenPayInfo(true)
   
   }
@@ -172,7 +178,7 @@ export function CongratsCardPage() {
     setIsChecked(!isChecked);
     console.log('이용약관..', isChecked);
   }
-
+ 
   const showPolicy=()=>{
     setOpen(true)
   }
@@ -180,15 +186,15 @@ function GogoPay(){
   const congratsInfo: Paying = {
     amount: amount,
     payType: '',
-    celebFrom: cardFrom,
-    celebTel: cardPhone,
+    celebFrom: !cardFrom && state.userName?state.userName: cardFrom ,
+    celebTel: !cardPhone && state.userPhone?state.userPhone: cardPhone,
     celebContent: cardContents,
     celebImgUrl: imgUrl,
     giftId: state.selectGift.giftId,
     userId: userId?userId:0,
   };
   // Paying 자료형 >> 결제창으로 넘어갈때 결제정보 인자로 넘기기
-  PayingPort.onClickPayment(congratsInfo, state.selectGift.name, state.wishUserId);
+  PayingPort.onClickPayment(congratsInfo, state.selectGift.name, state.wishUserId, wishId);
 }
 
 const PayInfo = () =>{
@@ -233,7 +239,7 @@ const PayInfo = () =>{
               </div>
               <div className="name_and_price">
                 <h1>{state.selectGift.name}</h1>
-                <p>{state.selectGift.price}</p>
+                <p>{state.selectGift.price.toLocaleString('ko-KR')}</p>
               </div>
               <div className="underline"></div>
               <div className="pay-amount-selection">
@@ -257,12 +263,11 @@ const PayInfo = () =>{
                   className=""
                   type="text"
                   placeholder="축하금액"
-                  value={amount}
+                  value={amount?amount.toLocaleString('ko-KR'):0}
                   onChange={getAmount}
                 />
                 {priceOver&&
-                  <p className='font-sm font-red'>축하금액은 상품가격을 초과할 수 없습니다.</p>
-                }
+cardFrom                }
               </div>
             </div>
           </div>
@@ -319,9 +324,10 @@ const PayInfo = () =>{
                     className="input-small"
                     type="text"
                     name="연락처"
-                    value={cardPhone}
+                    value={state.userPhone? state.userPhone:cardPhone}
                     onChange={onChangePhone}
-                    placeholder="000-0000-0000"
+                    disabled={state.userPhone?true:false}
+                    // placeholder="000-0000-0000"
                   />
                 </div>
               </div>
