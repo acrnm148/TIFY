@@ -51,7 +51,7 @@ public class WishService {
     }
 
     // gift datas come in shape of JsonArray
-    public boolean saveWish(AddWishDto dto) throws IOException {
+    public Wish saveWish(AddWishDto dto) throws IOException {
         Wish wish = dto.toEntity(userRepository);
         wish.setNowPrice(0);
         wishRepository.save(wish);
@@ -66,12 +66,14 @@ public class WishService {
         }
         wish.setJoinCount(0);
         wish.setGiftItems(gifts);
-        try {
-            wishRepository.save(wish);
-            return true;
-        } catch (Exception ex) {
-            return false;
+        if (gifts.size() > 0) {
+            try {
+                return wishRepository.save(wish);
+            } catch (Exception ex) {
+                return null;
+            }
         }
+        return null;
     }
 
     public List<Wish> getWish(long userId) {

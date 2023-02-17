@@ -15,7 +15,6 @@ public class ThkcardDto {
 	private String imageUrl;
 	private Long userId;
 	private Long payId;
-
 	public Thkcard toEntity(PayRepository payRepository) {
 		Thkcard card = new Thkcard();
 		card.setTitle(this.title);
