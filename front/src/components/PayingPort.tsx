@@ -39,7 +39,7 @@ export function onClickPayment(congratsInfo:Paying, giftName:string, wishUserId:
       pg: 'html5_inicis.INIpayTest',                           // PG사
       pay_method: 'card',                                     // 결제수단
       merchant_uid: `mid_${new Date().getTime()}`,            // 주문번호
-      amount: 100,                                            // 결제금액
+      amount: paying.amount,                                            // 결제금액
       name: giftName,                                         // 주문명
       buyer_name: congratsInfo.celebFrom,                    // 구매자 이름
       buyer_tel: congratsInfo.celebTel,                     // 구매자 전화번호

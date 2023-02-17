@@ -844,10 +844,28 @@ abbr[title] {
   .wish-components{
     width: 100%;
   }
+  .make-wish-container{
+    width: 100%;
+  }
+  .make-wish-form{
+    padding-left: 2%;
+    padding-right: 2%;
+  }
+  .make-wish-part{
+    padding: 30px;
+  }
+  .carousel .slider{
+    width: auto;
+  }
   .congrats-page-container{
     margin: 0;
+    padding: 0;
+    width: 100%;
   }
   .finish-wish-con{
     margin-top: 10%;
+  }
+  .wish-page-container{
+    width: auto;
   }
 }

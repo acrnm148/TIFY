@@ -197,7 +197,7 @@
   cursor: pointer;
   width: 100%;
   background-size: cover;
-  border-radius: 8px;
+  border-radius: 8px 8px 0 0;
 }
 .gift-bar-gray {
   width: 81px;
@@ -252,4 +252,27 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+@media (min-width: 1025px) {
+  .wish-card{
+    width: 50%;
+  }
+}
+@media (max-width: 1024px) {
+  .wish-card{
+    width: 50%;
+  }
+}
+@media (max-width: 768px) {
+  .wish-card{
+    width: 100%;
+    height: 20em;
+    min-width:100px;
+  }
+  .wish-gift-list{
+    background-color: none;
+  }
+  .wish-gift{
+    max-width: 45%;
+  }
 }

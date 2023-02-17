@@ -267,18 +267,19 @@ export function CongratsPage() {
             WISH_CATEGORY_DATA.indexOf(category) !== -1 ? (
               <div>
                 <h1>
-                  {userName}님의 {category}을 축하해주세요!
+                <iframe src={`https://readme-typing-svg.herokuapp.com?font=Black+Han+Sans&size=54&color=FE3360&size=30&center=true&lines=${userName}님의+${category}을+축하해주세요.&nbsp;+I'm+Hye+Ji+˙ᵕ˙+&nbsp;`} aria-label="킹 (체스 말)"></iframe>
+                {/* {userName}님의 {category}을 축하해주세요! */}
                 </h1>
               </div>
             ) : (
               <div>
-                <h1>
-                  {userName}님의 {category} 축하해주세요!
-                </h1>
+                <iframe src={`https://readme-typing-svg.herokuapp.com?font=Black+Han+Sans&size=54&color=FE3360&size=30&center=true&lines=${userName}님의+${category}을+축하해주세요.&nbsp;+I'm+Hye+Ji+˙ᵕ˙+&nbsp;`} aria-label="킹 (체스 말)"></iframe>
               </div>
             )
           ) : (
-            <h1>{userName}님을 축하해주세요!</h1>
+            <div>
+                <iframe src={`https://readme-typing-svg.herokuapp.com?font=Black+Han+Sans&size=54&color=FE3360&size=30&center=true&lines=${userName}님의+${category}을+축하해주세요.&nbsp;+I'm+Hye+Ji+˙ᵕ˙+&nbsp;`} aria-label="킹 (체스 말)"></iframe>
+            </div>
           )}
         </div>
         <div className="wish-card-box">
