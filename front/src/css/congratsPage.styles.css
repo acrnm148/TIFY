@@ -54,7 +54,7 @@
   flex-wrap: wrap;
 }
 .wish-card {
-  min-width: 430px;
+  /* min-width: 430px; */
   height: 430px;
   border-radius: 8px;
   width: 100%;
@@ -215,8 +215,8 @@
 }
 .wish-card wish-card-content h1 {
 }
-.wish-card-content p {
-  font-size: 14px;
+.wish-card-content pre {
+  font-size: 16px;
   color: #3f3f3f;
   font-family: ui-monospace;
 }
@@ -253,14 +253,17 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+.wish-gift-list{
+  background-color: #cfcfcf99;
+}
 @media (min-width: 1025px) {
   .wish-card{
-    width: 50%;
+    width: 49%;
   }
 }
 @media (max-width: 1024px) {
   .wish-card{
-    width: 50%;
+    width: 45%;
   }
 }
 @media (max-width: 768px) {
@@ -269,9 +272,7 @@
     height: 20em;
     min-width:100px;
   }
-  .wish-gift-list{
-    background-color: none;
-  }
+  
   .wish-gift{
     max-width: 45%;
   }
