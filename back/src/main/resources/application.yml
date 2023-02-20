@@ -9,7 +9,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: acrnm148@gmail.com
-    password: tpmbhfmjsahfulvv
+    password: 
     properties:
       mail:
         smtp:
@@ -26,8 +26,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://i8e208.p.ssafy.io:3306/tify?useSSL=false&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
-    username: tify
-    password: tify88rising!
+    username: 
+    password: 
     hikari:
       pool-name: jpa-hikari-pool
       maximum-pool-size: 5
@@ -67,8 +67,8 @@ file:
 
 #aws s3
 aws:
-  access_key: AKIA2CCTTED2IIZLQOHS
-  secret_key: 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
+  access_key: 
+  secret_key: 
   s3:
     bucket: tifyimage
 
@@ -82,8 +82,8 @@ app:
 
 # naver kgh key
 naver-cloud-sms:
-  accessKey: Ins3y4evD9z8sY45fTXN
-  secretKey: 5Xz1XV8TnS5EmRnQo6PAKJISbDt2xHAvrX2JJhzb
+  accessKey: 
+  secretKey: 
   serviceId: ncp:sms:kr:299557230184:tify
-  senderPhone: 01049221157
+  senderPhone: 
 
