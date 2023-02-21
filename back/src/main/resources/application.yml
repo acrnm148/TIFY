@@ -8,7 +8,7 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: acrnm148@gmail.com
+    username: 
     password: 
     properties:
       mail:
@@ -73,8 +73,8 @@ aws:
     bucket: tifyimage
 
 #iamport Keys
-imp_key: 8753437
-imp_secret: fec4af82c2d97e8fa4ebdb2c6a8ffb5d021b5794
+imp_key: 
+imp_secret: 
 
 #firebase
 app:
@@ -84,6 +84,6 @@ app:
 naver-cloud-sms:
   accessKey: 
   secretKey: 
-  serviceId: ncp:sms:kr:299557230184:tify
+  serviceId: 
   senderPhone: 
 
