@@ -30,7 +30,12 @@
 👉[기획배경](https://sunakang.notion.site/TIFY-This-Is-For-You-cb5f1654b408402c8b9abfca9c1d6cc3)<br/>
 지인의 생일날, 적합한 선물이 떠오르지 않거나 먼 거리에 있는 경우 우리는 기프티콘을 자주 선물하곤 합니다.<br/>
 생일날 받은 기프티콘은 쌓이고 쌓여 환불이 되는 상황까지 오는데요,<br/>
-또 기프티콘, 형식적인 선물, 애매한 선물 말고 정말 원하는 선물을 해주기 위해 저희는 TIFY를 만들었습니다.<br/><br/>
+또 기프티콘, 형식적인 선물, 애매한 선물 말고 정말 원하는 선물을 해주기 위해 저희는 *TIFY*를 만들었습니다.<br/>
+<br/>
+**특별한 날 갖고 싶은 선물을 *TIFY*에 업로드하면 지인들에게 알림이 가고, 지인들은 원하는 금액으로 결제하여 돈이 모이게 됩니다.<br/>
+🎁펀딩 금액이 다 모이면 선물이 결제되고 주문됩니다.** <br/>
+특별한 날 내가 갖고 싶은 선물을 받을 수 있고, 지인들도 원하는 선물을 해주며 선물에 대한 부담도 줄어들게 됩니다.<br/>
+
 
 </br></br>
 
@@ -59,30 +64,7 @@
 
 </br></br>
 
-## 4️⃣ 맡은 역할
-**서버**
-- AWS 서버 구축
-- NginX 리버스 프록시 설정
-- HTTPS 설정<br/>
-
-**배포 & CI/CD**
-- 배포, GitLab Jenkins Docker 연동하여 CI/CD구축<br/>
-
-**백엔드**
-- ERD 설계
-- OAuth 소셜로그인
-- JWT 인증, Redis를 사용한 인증
-- 이메일 인증( 회원가입, 임시비밀번호 발송 )
-- 결제, 배송 조회, 환불 기능 구현
-
-**프론트엔드**
-
-- 결제, 환불 페이지
-- 배송조회 페이지( 스마트택배 API 사용 )
-
-</br></br>
-
-## 5️⃣ 프로젝트 산출물
+## 4️⃣ 프로젝트 산출물
 - [기획서](https://sunakang.notion.site/TIFY-This-Is-For-You-cb5f1654b408402c8b9abfca9c1d6cc3)
 - [컨벤션](https://sunakang.notion.site/c0466b33a25c4861afe5eb71dcef1735)
 - [간트차트](https://docs.google.com/spreadsheets/d/1YI4T3lw5ymK10bgg_eFxfEI6xh_cS6oE1Ns5NaXdgkM/edit#gid=1219227786)
@@ -95,8 +77,7 @@
 
 </br></br>
 
-
-## 6️⃣ 팀 구성
+## 5️⃣ 팀 구성
 |이름|역할|
 |---|---|
 |강기한|팀장, 백엔드|
@@ -105,7 +86,31 @@
 |김혜지|프론트엔드|
 |고영일|프론트엔드|
 
-
 </br></br>
 
-## 7️⃣ 배포환경
+
+## 6️⃣ 맡은 역할
+**서버**
+- AWS 서버 구축
+- NginX 리버스 프록시 설정
+- HTTPS 설정<br/>
+
+**배포 & CI/CD**<br/>
+- 배포, GitLab Jenkins Docker 연동하여 CI/CD구축<br/>
+👉[배포 과정](https://sunakang.notion.site/CI-CD-Gitlab-Docker-Jenkins-f5687a54bd0c49c8b36f489194316484)<br/>
+👉[HTTPS 설정 과정](https://sunakang.notion.site/HTTP-HTTPS-redirect-2e0ca2c7c5c44cd082efc0dd8e2b91df)
+
+**백엔드**
+- ERD 설계
+- OAuth 소셜로그인
+- JWT 인증, Redis를 사용한 인증
+- 이메일 인증( 회원가입, 임시비밀번호 발송 )
+- 결제, 배송 조회, 환불 기능 구현<br/>
+👉[JWT,OAuth인증 구현](https://sunakang.notion.site/SpringBoot-Jwt-OAuth-React-a226219ff58244d79c77c05a9086ac4d)
+
+**프론트엔드**
+
+- 결제, 환불 페이지
+- 배송조회 페이지( 스마트택배 API 사용 )
+</br></br>
+
