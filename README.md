@@ -98,7 +98,7 @@
 
 **CI/CD**<br/>
 - GitLab Jenkins Docker 연동하여 CI/CD구축<br/>
-👉[배포 기록](https://sunakang.notion.site/CI-CD-Gitlab-Docker-Jenkins-f5687a54bd0c49c8b36f489194316484)<br/>
+👉[배포 & CI/CD 기록](https://sunakang.notion.site/CI-CD-Gitlab-Docker-Jenkins-f5687a54bd0c49c8b36f489194316484)<br/>
 
 **백엔드**
 - ERD 설계
