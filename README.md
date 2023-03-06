@@ -89,7 +89,7 @@
 - [기능명세서](https://sunakang.notion.site/15c852921e0b4de890261ccf555fcfd6?v=18ab58b756af42329c40753530e12a32)
 - [와이어프레임 & 화면설계](https://www.figma.com/file/ZRSCIzcG5HqeaiF2akZlJe/Figma-TIFY?node-id=0%3A1&t=a9VpXXNPXOUvDd4J-0)
 - [시스템 아키텍처]()
-- [ERD]()
+- [ERD](https://sunakang.notion.site/ERD-321997881c9544dab5a979519865c9a2)
 - [회의록](https://sunakang.notion.site/c5f830e046f1417097c2d12df5235380)
 - [시퀀스 다이어그램](https://sunakang.notion.site/d9b8eb1bde3941ef9e266d55003a03c2)
 
