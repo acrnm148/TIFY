@@ -44,7 +44,7 @@
 
 </br></br>
 
-## 4️⃣ 사용 기술 스택
+## 3️⃣ 사용 기술 스택
 ![image](https://user-images.githubusercontent.com/67724306/222994464-d8272786-206c-4176-afd5-e58ff9bc4a9c.png)
 ### Front
 - React,vite, typescript, tailwindcss, Redux, node.js
@@ -59,7 +59,7 @@
 
 </br></br>
 
-## 5️⃣ 맡은 역할
+## 4️⃣ 맡은 역할
 서버
 - AWS 서버 구축
 - NginX 리버스 프록시 설정
@@ -82,13 +82,13 @@
 
 </br></br>
 
-## 6️⃣ 프로젝트 산출물
+## 5️⃣ 프로젝트 산출물
 - [기획서](https://sunakang.notion.site/TIFY-This-Is-For-You-cb5f1654b408402c8b9abfca9c1d6cc3)
 - [컨벤션](https://sunakang.notion.site/c0466b33a25c4861afe5eb71dcef1735)
 - [간트차트](https://docs.google.com/spreadsheets/d/1YI4T3lw5ymK10bgg_eFxfEI6xh_cS6oE1Ns5NaXdgkM/edit#gid=1219227786)
 - [기능명세서](https://sunakang.notion.site/15c852921e0b4de890261ccf555fcfd6?v=18ab58b756af42329c40753530e12a32)
 - [와이어프레임 & 화면설계](https://www.figma.com/file/ZRSCIzcG5HqeaiF2akZlJe/Figma-TIFY?node-id=0%3A1&t=a9VpXXNPXOUvDd4J-0)
-- [시스템 아키텍처]()
+- [시스템 아키텍처](https://github.com/acrnm148/TIFY/blob/main/exec/%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.png)
 - [ERD](https://sunakang.notion.site/ERD-321997881c9544dab5a979519865c9a2)
 - [회의록](https://sunakang.notion.site/c5f830e046f1417097c2d12df5235380)
 - [시퀀스 다이어그램](https://sunakang.notion.site/d9b8eb1bde3941ef9e266d55003a03c2)
@@ -96,7 +96,7 @@
 </br></br>
 
 
-## 7️⃣ 팀 구성
+## 6️⃣ 팀 구성
 |이름|역할|
 |---|---|
 |강기한|팀장, 백엔드|
@@ -108,4 +108,4 @@
 
 </br></br>
 
-## 5️⃣ 배포환경
+## 7️⃣ 배포환경
