@@ -60,15 +60,15 @@
 </br></br>
 
 ## 4️⃣ 맡은 역할
-서버
+**서버**
 - AWS 서버 구축
 - NginX 리버스 프록시 설정
 - HTTPS 설정<br/>
 
-배포 & CI/CD
+**배포 & CI/CD**
 - 배포, GitLab Jenkins Docker 연동하여 CI/CD구축<br/>
 
-백엔드
+**백엔드**
 - ERD 설계
 - OAuth 소셜로그인
 - JWT 인증, Redis를 사용한 인증
