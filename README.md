@@ -56,6 +56,8 @@
 ### Back
 - Java, SpringBoot, JPA, Spring Security, JWT, Redis, QueryDSL, MySQL, OAuth
 - Python, django
+- Amazone S3
+- Firebase
 ### CI/CD
 - Jenkins
 - Docker, docker-compose
