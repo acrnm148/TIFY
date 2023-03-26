@@ -54,7 +54,7 @@
 ### Front
 - React,vite, typescript, tailwindcss, Redux, node.js
 ### Back
-- Java, SpringBoot, JPA, Spring Security, JWT, Redis, QueryDSL, MySQL, OAuth
+- Java, SpringBoot, JPA, Spring Security, JWT, Redis, QueryDSL, MySQL, OAuth, Jenkins
 - Python, django
 - Amazone S3
 - Firebase
